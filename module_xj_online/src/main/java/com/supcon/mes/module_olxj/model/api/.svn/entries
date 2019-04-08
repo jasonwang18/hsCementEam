@@ -1,0 +1,84 @@
+10
+
+dir
+0
+svn://wangshizhan@localhost/hsCementEam/module_xj_online/src/main/java/com/supcon/mes/module_olxj/model/api
+svn://wangshizhan@localhost/hsCementEam
+add
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+d20b5b59-2a04-4219-900c-e95bcb4f6dd2
+
+OLXJTempTaskAPI.java
+file
+
+
+
+add
+
+OLXJAreaAPI.java
+file
+
+
+
+add
+
+OLXJGroupAPI.java
+file
+
+
+
+add
+
+OLXJWorkListAPI.java
+file
+
+
+
+add
+
+OLXJTaskAPI.java
+file
+
+
+
+add
+
+OLXJWorkSubmitAPI.java
+file
+
+
+
+add
+
+OLXJTaskStatusAPI.java
+file
+
+
+
+add
+
+OLXJTaskCreateAPI.java
+file
+
+
+
+add
+

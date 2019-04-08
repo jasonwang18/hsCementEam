@@ -1,0 +1,182 @@
+10
+
+dir
+0
+svn://wangshizhan@localhost/hsCementEam
+svn://wangshizhan@localhost/hsCementEam
+
+
+
+2019-04-07T15:14:38.706299Z
+0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+d20b5b59-2a04-4219-900c-e95bcb4f6dd2
+
+module_sbda_online
+dir
+
+
+
+add
+
+gradlew
+file
+
+
+
+add
+
+local.properties
+file
+
+
+
+add
+
+module_xj
+dir
+
+
+
+add
+
+module_data_manage
+dir
+
+
+
+add
+
+gradle.properties
+file
+
+
+
+add
+
+module_xj_online
+dir
+
+
+
+add
+
+gradlew.bat
+file
+
+
+
+add
+
+build.gradle
+file
+
+
+
+add
+
+settings.gradle
+file
+
+
+
+add
+
+mogu_viber
+dir
+
+
+
+add
+
+module_tsd
+dir
+
+
+
+add
+
+library.gradle
+file
+
+
+
+add
+
+hsShell
+dir
+
+
+
+add
+
+nfc
+dir
+
+
+
+add
+
+shell
+dir
+
+
+
+add
+
+module_yhgl
+dir
+
+
+
+add
+
+module_zz
+dir
+
+
+
+add
+
+module_login
+dir
+
+
+
+add
+
+middleware
+dir
+
+
+
+add
+
+module_sbda
+dir
+
+
+
+add
+
+module_wxgd
+dir
+
+
+
+add
+

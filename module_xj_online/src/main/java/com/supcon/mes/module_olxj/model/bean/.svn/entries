@@ -1,0 +1,112 @@
+10
+
+dir
+0
+svn://wangshizhan@localhost/hsCementEam/module_xj_online/src/main/java/com/supcon/mes/module_olxj/model/bean
+svn://wangshizhan@localhost/hsCementEam
+add
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+d20b5b59-2a04-4219-900c-e95bcb4f6dd2
+
+OLXJAreaEntity.java
+file
+
+
+
+add
+
+OLXJHistorySheetEntity.java
+file
+
+
+
+add
+
+OLXJWorkItemDto.java
+file
+
+
+
+add
+
+OLXJArea.java
+file
+
+
+
+add
+
+OLXJGroupEntity.java
+file
+
+
+
+add
+
+OLXJTaskListEntity.java
+file
+
+
+
+add
+
+OLXJWorkListEntity.java
+file
+
+
+
+add
+
+OLXJWorkItemEntity.java
+file
+
+
+
+add
+
+OLXJTaskEntity.java
+file
+
+
+
+add
+
+OLXJInputStandard.java
+file
+
+
+
+add
+
+OLXJAreaListEntity.java
+file
+
+
+
+add
+
+OLXJWorkItem.java
+file
+
+
+
+add
+

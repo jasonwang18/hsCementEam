@@ -1,0 +1,77 @@
+10
+
+dir
+0
+svn://wangshizhan@localhost/hsCementEam/hsShell
+svn://wangshizhan@localhost/hsCementEam
+add
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+d20b5b59-2a04-4219-900c-e95bcb4f6dd2
+
+dictionary.txt
+file
+
+
+
+add
+
+src
+dir
+
+
+
+add
+
+libs
+dir
+
+
+
+add
+
+proguard-rules.pro
+file
+
+
+
+add
+
+build.gradle
+file
+
+
+
+add
+
+mobile.jks
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+

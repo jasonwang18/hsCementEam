@@ -1,0 +1,91 @@
+10
+
+dir
+0
+svn://wangshizhan@localhost/hsCementEam/module_wxgd/src/main/res/drawable
+svn://wangshizhan@localhost/hsCementEam
+add
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+d20b5b59-2a04-4219-900c-e95bcb4f6dd2
+
+sh_text_view_bg.xml
+file
+
+
+
+add
+
+sh_checkrepair_bg.xml
+file
+
+
+
+add
+
+sl_checkbox_selector.xml
+file
+
+
+
+add
+
+sh_maintenace_bg.xml
+file
+
+
+
+add
+
+sh_bigrepair_bg.xml
+file
+
+
+
+add
+
+sh_title_pic.xml
+file
+
+
+
+add
+
+sh_faultinfo_bg.xml
+file
+
+
+
+add
+
+sh_lubricate_bg.xml
+file
+
+
+
+add
+
+sl_refresh_sparepart.xml
+file
+
+
+
+add
+

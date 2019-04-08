@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal">
+    <include layout="@layout/ly_times_layout"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/white"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_5"
+            >
+            <com.supcon.mes.mbap.view.CustomVerticalTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingRight="10dp"
+                app:key="验收人编码"
+                android:id="@+id/acceptanceStaffCode"
+                android:tag="acceptanceStaffCode"
+                app:editable="false"
+                app:necessary="false"/>
+            <include layout="@layout/ly_vertical_line"/>
+            <com.supcon.mes.mbap.view.CustomVerticalTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingStart="@dimen/dp_10"
+                app:key="验收人名称"
+                app:text_size="15"
+                app:necessary="false"
+                android:id="@+id/acceptanceStaffName"
+                android:tag="acceptanceStaffName"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="@dimen/dp_1"
+            android:background="@color/white"
+            android:paddingLeft="@dimen/dp_10"
+            >
+            <com.supcon.mes.mbap.view.CustomVerticalDateView
+                style="@style/CustomStyle"
+                android:id="@+id/acceptanceTime"
+                android:tag="acceptanceTime"
+                android:paddingRight="@dimen/dp_10"
+                app:text="验收时间"
+                app:text_size="15"
+                app:editable="false"/>
+            <include layout="@layout/ly_vertical_line"/>
+            <com.supcon.mes.mbap.view.CustomVerticalSpinner
+                style="@style/CustomStyle"
+                android:paddingStart="@dimen/dp_10"
+                android:id="@+id/acceptanceResult"
+                android:tag="acceptanceResult"
+                app:text="验收结论"
+                app:text_size="15"
+                app:necessary="false"
+                app:editable="false"/>
+        </LinearLayout>
+
+        <com.supcon.mes.mbap.view.CustomVerticalEditText
+            android:id="@+id/remark"
+            android:tag="remark"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_1"
+            app:edit_hint=" "
+            app:edit_maxLine="4"
+            app:text_size="15"
+            app:text_height="0dp"
+            android:paddingBottom="@dimen/dp_10"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingLeft="20dp"
+            app:editable="false"
+            android:visibility="gone"/>
+    </LinearLayout>
+    
+
+</LinearLayout>

@@ -1,0 +1,623 @@
+10
+
+dir
+0
+svn://wangshizhan@localhost/hsCementEam/middleware/src/main/java/com/supcon/mes/middleware/model/bean
+svn://wangshizhan@localhost/hsCementEam
+add
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+d20b5b59-2a04-4219-900c-e95bcb4f6dd2
+
+StaffDetailInfoEntity.java
+file
+
+
+
+add
+
+XJHistoryEntity.java
+file
+
+
+
+add
+
+XJWorkItemEntity.java
+file
+
+
+
+add
+
+RunStateEntity.java
+file
+
+
+
+add
+
+Department.java
+file
+
+
+
+add
+
+Staff.java
+file
+
+
+
+add
+
+EamType.java
+file
+
+
+
+add
+
+QXGLEntity.java
+file
+
+
+
+add
+
+BooleanEntity.java
+file
+
+
+
+add
+
+SystemCodeEntity.java
+file
+
+
+
+add
+
+EamHistoryEntity.java
+file
+
+
+
+add
+
+YXJLEntity.java
+file
+
+
+
+add
+
+AttachmentEntity.java
+file
+
+
+
+add
+
+LinkListEntity.java
+file
+
+
+
+add
+
+IDEntity.java
+file
+
+
+
+add
+
+SingleConnectWithDecorator.java
+file
+
+
+
+add
+
+SubcondEntity.java
+file
+
+
+
+add
+
+RoleListEntity.java
+file
+
+
+
+add
+
+XJPathEntity.java
+file
+
+
+
+add
+
+RepairGroupEntity.java
+file
+
+
+
+add
+
+WXGDEam.java
+file
+
+
+
+add
+
+ModuleAuthorizationListEntity.java
+file
+
+
+
+add
+
+AreaListEntity.java
+file
+
+
+
+add
+
+CommonDeviceEntity.java
+file
+
+
+
+add
+
+ModuleAuthorization.java
+file
+
+
+
+add
+
+Area.java
+file
+
+
+
+add
+
+MainPosition.java
+file
+
+
+
+add
+
+CommonSearchEntity.java
+file
+
+
+
+add
+
+CommonFilterSearchListEntity.java
+file
+
+
+
+add
+
+YHEntity.java
+file
+
+
+
+add
+
+LubricateOil.java
+file
+
+
+
+add
+
+Unit.java
+file
+
+
+
+add
+
+DepartmentInfo.java
+file
+
+
+
+add
+
+CheckNil.java
+file
+
+
+
+add
+
+RunStateDeviceEntity.java
+file
+
+
+
+add
+
+OfflineStaffInfo.java
+file
+
+
+
+add
+
+BaseSubcondEntity.java
+file
+
+
+
+add
+
+CommonLabelEntity.java
+file
+
+
+
+add
+
+CommonEntity.java
+file
+
+
+
+add
+
+BaseSearchListEntity.java
+file
+
+
+
+add
+
+CommonSearchStaffListEntity.java
+file
+
+
+
+add
+
+StaffDetailInfoListEntity.java
+file
+
+
+
+add
+
+ContractStaffEntity.java
+file
+
+
+
+add
+
+CommonSearchStaff.java
+file
+
+
+
+add
+
+ContractListEntity.java
+file
+
+
+
+add
+
+XJExemptionEntity.java
+file
+
+
+
+add
+
+XJAreaEntity.java
+file
+
+
+
+add
+
+SystemCodeListEntity.java
+file
+
+
+
+add
+
+TagEntity.java
+file
+
+
+
+add
+
+JoinSubcondEntity.java
+file
+
+
+
+add
+
+ResultEntity.java
+file
+
+
+
+add
+
+CommonDeviceFilterType.java
+file
+
+
+
+add
+
+AttachmentListEntity.java
+file
+
+
+
+add
+
+PendingEntity.java
+file
+
+
+
+add
+
+YHEntityVo.java
+file
+
+
+
+add
+
+FastQueryCondEntity.java
+file
+
+
+
+add
+
+Team.java
+file
+
+
+
+add
+
+CommonSearchDeviceListEntity.java
+file
+
+
+
+add
+
+QXTypeEntity.java
+file
+
+
+
+add
+
+FaultInfo.java
+file
+
+
+
+add
+
+RepairGroupListEntity.java
+file
+
+
+
+add
+
+SearchContentListEntity.java
+file
+
+
+
+add
+
+LinkEntity.java
+file
+
+
+
+add
+
+LongResultEntity.java
+file
+
+
+
+add
+
+RoleEntity.java
+file
+
+
+
+add
+
+BapResultEntity.java
+file
+
+
+
+add
+
+MyInfo.java
+file
+
+
+
+add
+
+WorkFlowListEntity.java
+file
+
+
+
+add
+
+CommonBAPListEntity.java
+file
+
+
+
+add
+
+Company.java
+file
+
+
+
+add
+
+CommonSearchListEntity.java
+file
+
+
+
+add
+
+DepartmentInfoListEntity.java
+file
+
+
+
+add
+
+AccountInfo.java
+file
+
+
+
+add
+
+ValueEntity.java
+file
+
+
+
+add
+
+WorkFlow.java
+file
+
+
+
+add
+
+QXDealTypeEntity.java
+file
+
+
+
+add
+
+CommonListEntity.java
+file
+
+
+
+add
+
+CommonFilterSearchEntity.java
+file
+
+
+
+add
+
+CommonLabelListEntity.java
+file
+
+
+
+add
+
+UserInfoListEntity.java
+file
+
+
+
+add
+
+TransitionListEntity.java
+file
+
+
+
+add
+
+YHEntityDto.java
+file
+
+
+
+add
+
+JWXItem.java
+file
+
+
+
+add
+
+Good.java
+file
+
+
+
+add
+
+UserInfo.java
+file
+
+
+
+add
+

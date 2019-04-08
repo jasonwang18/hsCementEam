@@ -1,0 +1,91 @@
+10
+
+dir
+0
+svn://wangshizhan@localhost/hsCementEam/module_login/src/main/java/com/supcon/mes/module_login/model/bean
+svn://wangshizhan@localhost/hsCementEam
+add
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+d20b5b59-2a04-4219-900c-e95bcb4f6dd2
+
+WorkNumEntity.java
+file
+
+
+
+add
+
+WorkEntity.java
+file
+
+
+
+add
+
+LicenseEntity.java
+file
+
+
+
+add
+
+AccountInfoListEntity.java
+file
+
+
+
+add
+
+PendingNumEntity.java
+file
+
+
+
+add
+
+LoginEntity.java
+file
+
+
+
+add
+
+UserEntity.java
+file
+
+
+
+add
+
+HeartBeatEntity.java
+file
+
+
+
+add
+
+WorkInfo.java
+file
+
+
+
+add
+

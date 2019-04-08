@@ -1,0 +1,189 @@
+10
+
+dir
+0
+svn://wangshizhan@localhost/hsCementEam/module_sbda_online/src/main/res/layout
+svn://wangshizhan@localhost/hsCementEam
+add
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+d20b5b59-2a04-4219-900c-e95bcb4f6dd2
+
+ly_filter_area.xml
+file
+
+
+
+add
+
+ly_sbda_online_doc_info.xml
+file
+
+
+
+add
+
+fragment_archives_list.xml
+file
+
+
+
+add
+
+ly_sbda_online_device_regu.xml
+file
+
+
+
+add
+
+ly_sbda_online_install_info.xml
+file
+
+
+
+add
+
+ly_sbda_online_factory_info.xml
+file
+
+
+
+add
+
+ac_spare_part_ledger.xml
+file
+
+
+
+add
+
+ly_sbda_online_divider.xml
+file
+
+
+
+add
+
+ly_filter_type.xml
+file
+
+
+
+add
+
+item_lubri.xml
+file
+
+
+
+add
+
+item_online_sbda.xml
+file
+
+
+
+add
+
+item_subsidiary.xml
+file
+
+
+
+add
+
+ly_filter_status.xml
+file
+
+
+
+add
+
+ly_sbda_online_runtime_info.xml
+file
+
+
+
+add
+
+item_repair.xml
+file
+
+
+
+add
+
+item_maintenance.xml
+file
+
+
+
+add
+
+ac_sbda_online_detail.xml
+file
+
+
+
+add
+
+fragment_routine.xml
+file
+
+
+
+add
+
+item_spare_ledger.xml
+file
+
+
+
+add
+
+ac_sbda_online_list.xml
+file
+
+
+
+add
+
+ly_sbda_online_device_info.xml
+file
+
+
+
+add
+
+ac_score.xml
+file
+
+
+
+add
+
+item_spare_part.xml
+file
+
+
+
+add
+

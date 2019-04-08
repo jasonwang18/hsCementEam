@@ -1,0 +1,266 @@
+10
+
+dir
+0
+svn://wangshizhan@localhost/hsCementEam/module_sbda/src/main/res/layout
+svn://wangshizhan@localhost/hsCementEam
+add
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+d20b5b59-2a04-4219-900c-e95bcb4f6dd2
+
+ac_common_search.xml
+file
+
+
+
+add
+
+item_search_depart.xml
+file
+
+
+
+add
+
+fragment_base_search.xml
+file
+
+
+
+add
+
+item_add_device.xml
+file
+
+
+
+add
+
+item_sbda.xml
+file
+
+
+
+add
+
+item_search_nav.xml
+file
+
+
+
+add
+
+ly_filter_type.xml
+file
+
+
+
+add
+
+fragment_add_device.xml
+file
+
+
+
+add
+
+item_common_search.xml
+file
+
+
+
+add
+
+ly_filter_status.xml
+file
+
+
+
+add
+
+ly_sbda_detail_doc_info.xml
+file
+
+
+
+add
+
+ac_sbda_search_depart.xml
+file
+
+
+
+add
+
+ly_sbda_detail_install_info.xml
+file
+
+
+
+add
+
+ly_sbda_detail_factory_info.xml
+file
+
+
+
+add
+
+ac_sbda_add_device.xml
+file
+
+
+
+add
+
+frag_yxjl_recent_device.xml
+file
+
+
+
+add
+
+item_sbda_base_search.xml
+file
+
+
+
+add
+
+frag_yxjl_my_device.xml
+file
+
+
+
+add
+
+item_base_search.xml
+file
+
+
+
+add
+
+ac_yxjl_add_device.xml
+file
+
+
+
+add
+
+item_qxgl_add_device.xml
+file
+
+
+
+add
+
+ly_filter_area.xml
+file
+
+
+
+add
+
+ac_sbda_search_department.xml
+file
+
+
+
+add
+
+ly_sbda_detail_device_info.xml
+file
+
+
+
+add
+
+frag_device_list.xml
+file
+
+
+
+add
+
+item_yxjl_add_device.xml
+file
+
+
+
+add
+
+ly_sbda_detail_device_regu.xml
+file
+
+
+
+add
+
+item_common_search_new.xml
+file
+
+
+
+add
+
+ly_sbda_detail_divider.xml
+file
+
+
+
+add
+
+ac_sbda_view.xml
+file
+
+
+
+add
+
+ac_sbda_list.xml
+file
+
+
+
+add
+
+item_common_search_device.xml
+file
+
+
+
+add
+
+ly_sbda_detail_runtime_info.xml
+file
+
+
+
+add
+
+fragment_common_search_device.xml
+file
+
+
+
+add
+

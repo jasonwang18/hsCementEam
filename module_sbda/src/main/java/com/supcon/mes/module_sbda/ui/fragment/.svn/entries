@@ -1,0 +1,63 @@
+10
+
+dir
+0
+svn://wangshizhan@localhost/hsCementEam/module_sbda/src/main/java/com/supcon/mes/module_sbda/ui/fragment
+svn://wangshizhan@localhost/hsCementEam
+add
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+d20b5b59-2a04-4219-900c-e95bcb4f6dd2
+
+CommonSearchDeviceFragment.java
+file
+
+
+
+add
+
+BaseSearchFragment.java
+file
+
+
+
+add
+
+RecentDeviceFragment.java
+file
+
+
+
+add
+
+MyDeviceFragment.java
+file
+
+
+
+add
+
+AddDeviceFragment.java
+file
+
+
+
+add
+

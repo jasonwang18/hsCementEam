@@ -1,0 +1,175 @@
+10
+
+dir
+0
+svn://wangshizhan@localhost/hsCementEam/module_xj/src/main/res/layout
+svn://wangshizhan@localhost/hsCementEam
+add
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+d20b5b59-2a04-4219-900c-e95bcb4f6dd2
+
+item_xj_history.xml
+file
+
+
+
+add
+
+ac_work_item_handled.xml
+file
+
+
+
+add
+
+ly_xj_history_dialog.xml
+file
+
+
+
+add
+
+ac_work_item_unhandled.xml
+file
+
+
+
+add
+
+ly_xj_title.xml
+file
+
+
+
+add
+
+ly_filter_date.xml
+file
+
+
+
+add
+
+item_xj_area.xml
+file
+
+
+
+add
+
+item_xj_work_item_finished.xml
+file
+
+
+
+add
+
+ly_filter.xml
+file
+
+
+
+add
+
+ly_xj_item_titlebar.xml
+file
+
+
+
+add
+
+item_xj_work_item_unfinished.xml
+file
+
+
+
+add
+
+ac_xjpath_list.xml
+file
+
+
+
+add
+
+ly_work_item_recycler.xml
+file
+
+
+
+add
+
+item_xj_work_item_history.xml
+file
+
+
+
+add
+
+ac_work_item.xml
+file
+
+
+
+add
+
+item_xj_path.xml
+file
+
+
+
+add
+
+ly_filter_xj_work_handled.xml
+file
+
+
+
+add
+
+ac_area.xml
+file
+
+
+
+add
+
+frag_xj_item_unhandle.xml
+file
+
+
+
+add
+
+frag_xj_item_handled.xml
+file
+
+
+
+add
+
+ly_filter_xj_work_unhandled.xml
+file
+
+
+
+add
+

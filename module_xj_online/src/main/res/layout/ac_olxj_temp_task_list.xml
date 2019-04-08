@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray"
+    android:orientation="vertical">
+
+    <include layout="@layout/ly_olxj_title" />
+
+    <include
+        layout="@layout/ly_recyclerview_with_scrollbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="@dimen/dp_10"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="@drawable/sh_white_stroke"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        >
+        <Button
+            android:layout_width="120dp"
+            android:layout_height="35dp"
+            android:background="@drawable/sl_blue_radius_btn"
+            android:text="结束任务"
+            style="@style/BlueButtonRadius"
+            android:textSize="@dimen/fontSize_16sp"
+            android:id="@+id/olxjTempFinishBtn"
+            android:tag="olxjTempFinishBtn" />
+        <Button
+            android:layout_width="120dp"
+            android:layout_height="35dp"
+            android:text="终止任务"
+            style="@style/OrangeButtonRadius"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:textSize="@dimen/fontSize_16sp"
+            android:id="@+id/olxjTempAbortBtn"
+            android:tag="olxjTempAbortBtn" />
+
+    </LinearLayout>
+</RelativeLayout>

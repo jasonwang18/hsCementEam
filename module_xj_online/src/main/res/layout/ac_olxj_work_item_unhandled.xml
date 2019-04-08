@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray2"
+    >
+    <include layout="@layout/ly_recyclerview_with_scrollbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/dp_50"
+        />
+
+    <include layout="@layout/ly_olxj_work_title"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:paddingLeft="@dimen/dp_20"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/xjBtnLayout"
+        android:background="@drawable/sh_white_stroke"
+        android:tag="xjBtnLayout">
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="@color/customBlue4"
+            android:textSize="@dimen/fontSize_16sp"
+            android:text="已完成巡检项"
+            android:id="@+id/finishedBottomBtn"
+            android:tag="finishedBottomBtn" />
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="@dimen/dp_30"
+            android:layout_marginRight="@dimen/dp_10"
+            android:gravity="center"
+            android:text="提交结果"
+            android:id="@+id/submitBottomBtn"
+            android:tag="submitBottomBtn"
+            style="@style/BlueButtonRadius"
+            />
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="@dimen/dp_5"
+            android:gravity="center"
+            android:text="一键完成"
+            style="@style/OrangeButtonRadius"
+            android:id="@+id/oneKeyFinishBottomBtn"
+            android:tag="oneKeyFinishBottomBtn" />
+    </LinearLayout>
+</RelativeLayout>

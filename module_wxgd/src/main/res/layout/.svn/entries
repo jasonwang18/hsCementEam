@@ -1,0 +1,259 @@
+10
+
+dir
+0
+svn://wangshizhan@localhost/hsCementEam/module_wxgd/src/main/res/layout
+svn://wangshizhan@localhost/hsCementEam
+add
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+d20b5b59-2a04-4219-900c-e95bcb4f6dd2
+
+ac_wxgd_dispatcher.xml
+file
+
+
+
+add
+
+item_wxgd_list.xml
+file
+
+
+
+add
+
+ly_worksource_tablestatus.xml
+file
+
+
+
+add
+
+ly_spare_part_export_operate.xml
+file
+
+
+
+add
+
+ly_nofaultinfo.xml
+file
+
+
+
+add
+
+fragment_repairstaff.xml
+file
+
+
+
+add
+
+ly_nofaultinfo_title.xml
+file
+
+
+
+add
+
+ly_faultinfo.xml
+file
+
+
+
+add
+
+ly_acceptance_title.xml
+file
+
+
+
+add
+
+ly_faultinfo_title.xml
+file
+
+
+
+add
+
+ac_wxgd_repair_staff_list.xml
+file
+
+
+
+add
+
+item_acceptance.xml
+file
+
+
+
+add
+
+fragment_spareparts.xml
+file
+
+
+
+add
+
+ly_worksource_filter.xml
+file
+
+
+
+add
+
+ly_wxgd_vertical_line.xml
+file
+
+
+
+add
+
+item_lubricate_oils.xml
+file
+
+
+
+add
+
+item_sparepart.xml
+file
+
+
+
+add
+
+ac_wxgd_accptence.xml
+file
+
+
+
+add
+
+ly_times_layout.xml
+file
+
+
+
+add
+
+ly_eaminfo.xml
+file
+
+
+
+add
+
+ly_eaminfo_title.xml
+file
+
+
+
+add
+
+fragment_lubricate_oils.xml
+file
+
+
+
+add
+
+item_repairstaff.xml
+file
+
+
+
+add
+
+ac_recycle.xml
+file
+
+
+
+add
+
+ly_wxgd_horizontal_line.xml
+file
+
+
+
+add
+
+ac_wxgd_execute.xml
+file
+
+
+
+add
+
+item_product.xml
+file
+
+
+
+add
+
+ly_titlebar_wxgd_datagrid.xml
+file
+
+
+
+add
+
+ly_repairinfo_title.xml
+file
+
+
+
+add
+
+ly_wxgd_titlebar.xml
+file
+
+
+
+add
+
+ac_wxgd_list.xml
+file
+
+
+
+add
+
+item_dialog.xml
+file
+
+
+
+add
+
+ac_wxgd_receive.xml
+file
+
+
+
+add
+

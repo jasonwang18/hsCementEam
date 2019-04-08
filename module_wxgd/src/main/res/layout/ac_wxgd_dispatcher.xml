@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/bgGray">
+
+    <include layout="@layout/ly_wxgd_titlebar"/>
+    <com.supcon.common.view.ptr.PtrFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:core_ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/refreshFrameLayout"
+        android:tag="refreshFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        core_ptr:ptr_keep_header_when_refresh="true"
+        core_ptr:ptr_pull_to_fresh="false"
+        core_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
+        core_ptr:ptr_resistance="1.7"
+        android:layout_marginTop="@dimen/dp_50"
+        android:layout_marginBottom="100dp">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/contentView"
+            android:tag="contentView"
+            android:fillViewport="true">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/themeColor">
+                    <include layout="@layout/ly_wxgd_horizontal_line"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/repairLl"
+                    android:tag="repairLl"
+                    android:orientation="horizontal"
+                    android:background="@color/themeColor"
+                    android:gravity="center">
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/bigRepair"
+                        android:tag="bigRepair"
+                        android:background="@drawable/sl_transparent_press_no_stroke"
+                        android:text="@string/bigRepair"
+                        android:drawableLeft="@drawable/ic_big_repair"
+                        android:drawablePadding="0dp"
+                        android:paddingLeft="45dp"
+                        android:paddingRight="45dp"
+                        android:textColor="@color/white"
+                        />
+                    <include layout="@layout/ly_wxgd_vertical_line"/>
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/checkRepair"
+                        android:tag="checkRepair"
+                        android:background="@drawable/sl_transparent_press_no_stroke"
+                        android:text="@string/checkRepair"
+                        android:drawableStart="@drawable/ic_check_repair"
+                        android:paddingStart="45dp"
+                        android:paddingEnd="45dp"
+                        android:textColor="@color/white"/>
+                </LinearLayout>
+
+                <include layout="@layout/ly_eaminfo"/>
+
+                <include layout="@layout/ly_faultinfo"/>
+
+                <include layout="@layout/ly_nofaultinfo"/>
+
+                <include layout="@layout/ly_line_light_light"/>
+
+                <include layout="@layout/ly_repairinfo_title" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_70"
+                    android:background="@color/white"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:paddingStart="@dimen/dp_10">
+                    <com.supcon.mes.mbap.view.CustomVerticalTextView
+                        style="@style/CustomStyle"
+                        android:id="@+id/repairGroup"
+                        android:tag="repairGroup"
+                        app:key="@string/repairGroup"
+                        app:editable="true"/>
+                    <include layout="@layout/ly_vertical_line"/>
+                    <com.supcon.mes.mbap.view.CustomVerticalTextView
+                        style="@style/CustomStyle"
+                        android:paddingStart="@dimen/dp_10"
+                        android:id="@+id/chargeStaff"
+                        android:tag="chargeStaff"
+                        app:key="@string/chargeStaff"
+                        app:editable="true"/>
+                </LinearLayout>
+                <include layout="@layout/ly_line_light_light"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:background="@color/white"
+                    android:layout_marginBottom="@dimen/dp_5"
+                    android:paddingStart="@dimen/dp_10">
+                    <com.supcon.mes.mbap.view.CustomVerticalDateView
+                        style="@style/CustomStyle"
+                        android:id="@+id/planStartTime"
+                        android:tag="planStartTime"
+                        app:text="@string/planStartTime"
+                        app:editable="true"/>
+                    <include layout="@layout/ly_vertical_line"/>
+                    <com.supcon.mes.mbap.view.CustomVerticalDateView
+                        style="@style/CustomStyle"
+                        android:paddingStart="@dimen/dp_10"
+                        android:id="@+id/planEndTime"
+                        android:tag="planEndTime"
+                        app:text="@string/planEndTime"
+                        app:editable="true"/>
+                </LinearLayout>
+
+                <!--<com.supcon.mes.mbap.view.CustomTab
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:id="@+id/itemTab"
+                    android:tag="itemTab"
+                    app:indicator_visible="true"
+                    app:indicator_color="@color/red"
+                    app:select_text_color="@color/red"
+                    app:unselect_text_color="@color/black"
+                    app:select_bg_color="@color/transparent"
+                    app:unselect_bg_color="@color/transparent"/>
+
+                <com.supcon.mes.mbap.view.NoScrollViewPager
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:id="@+id/itemVp"
+                    android:tag="itemVp"/>-->
+
+                <com.supcon.mes.mbap.view.CustomListWidget
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/sparePartListWidget"
+                    android:tag="sparePartListWidget"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    app:icon_res="@drawable/ic_bj"
+                    app:text_size="14"
+                    app:is_addable="false"
+                    app:is_editable="false"
+                    app:title_bg_color="@color/white"
+                    app:widget_name="备件"/>
+                <com.supcon.mes.mbap.view.CustomListWidget
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/repairStaffListWidget"
+                    android:tag="repairStaffListWidget"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    app:icon_res="@drawable/ic_wxry"
+                    app:text_size="14"
+                    app:is_addable="false"
+                    app:is_editable="false"
+                    app:title_bg_color="@color/white"
+                    app:widget_name="维修人员"/>
+                <com.supcon.mes.mbap.view.CustomListWidget
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/lubricateOilsListWidget"
+                    android:tag="lubricateOilsListWidget"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    app:icon_res="@drawable/ic_rhy"
+                    app:is_addable="false"
+                    app:is_editable="false"
+                    app:text_size="14"
+                    app:title_bg_color="@color/white"
+                    app:widget_name="润滑油"/>
+                <com.supcon.mes.mbap.view.CustomListWidget
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/acceptanceCheckListWidget"
+                    app:title_bg_color="@color/white"
+                    app:icon_res="@drawable/ic_ys"
+                    app:text_size="15"
+                    app:widget_name="验收"
+                    android:tag="acceptanceCheckListWidget" />
+
+            </LinearLayout>
+        </ScrollView>
+    </com.supcon.common.view.ptr.PtrFrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/workFlowBar"
+        android:tag="workFlowBar"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/sh_white_stroke"
+        android:orientation="vertical">
+
+        <com.supcon.mes.mbap.view.CustomEditText
+            android:id="@+id/commentInput"
+            style="@style/HintTextColor"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingBottom="@dimen/dp_3"
+            android:paddingLeft="20dp"
+            android:paddingTop="@dimen/dp_3"
+            android:tag="commentInput"
+            app:edit_hint="填写意见"
+            app:text_color="@color/textColorlightblack"
+            app:text_size="14" />
+
+        <!--<com.supcon.mes.mbap.view.CustomPopTransation
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/transition"
+            android:tag="transition" />-->
+        <com.supcon.mes.mbap.view.CustomWorkFlowView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/transition"
+            android:tag="transition"
+            app:commentable="false"/>
+    </LinearLayout>
+
+</RelativeLayout>
