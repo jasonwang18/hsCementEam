@@ -122,7 +122,7 @@ public class WorkHelper {
                     break;
                 case Constant.WorkType.STOP_POLICE:
 
-                    workInfo.iconResId = R.drawable.ic_data_sbda;
+                    workInfo.iconResId = R.drawable.ic_work_stop;
                     workInfo.router = Constant.Router.STOP_POLICE;
                     break;
                 case Constant.WorkType.XJLX:

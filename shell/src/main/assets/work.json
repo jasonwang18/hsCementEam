@@ -20,7 +20,7 @@
   {"name":"基础数据","viewType":1,"num":0,"type":-2,"router":"", "isOpen":true},
   {"name":"设备档案离线","viewType":0,"num":0,"type":1,"router":"", "isOpen":false},
   {"name":"设备档案","viewType":0,"num":0,"type":19,"router":"", "isOpen":true},
-  {"name":"停机报警","viewType":0,"num":0,"type":20,"router":"", "isOpen":true},
+  {"name":"停机记录","viewType":0,"num":0,"type":20,"router":"", "isOpen":true},
   {"name":"巡检线路","viewType":0,"num":0,"type":16,"router":"", "isOpen":true},
   {"name":"巡检区域","viewType":0,"num":0,"type":17,"router":"", "isOpen":true},
   {"name":"巡检报表","viewType":0,"num":0,"type":18,"router":"", "isOpen":false}
