@@ -54,16 +54,16 @@ public class WorkHelper {
                     workInfo.router = Constant.Router.XJGL_LIST;
                     break;
                 case Constant.WorkType.JHXJ:
-                    workInfo.iconResId =  R.drawable.ic_work_jhxj;
-                    workInfo.router    =    Constant.Router.JHXJ_LIST;
+                    workInfo.iconResId = R.drawable.ic_work_jhxj;
+                    workInfo.router = Constant.Router.JHXJ_LIST;
                     break;
                 case Constant.WorkType.LSXJ:
-                    workInfo.iconResId =  R.drawable.ic_work_lsxj;
-                    workInfo.router    =    Constant.Router.LSXJ_LIST;
+                    workInfo.iconResId = R.drawable.ic_work_lsxj;
+                    workInfo.router = Constant.Router.LSXJ_LIST;
                     break;
                 case Constant.WorkType.BJSQ:
-                    workInfo.iconResId =  R.drawable.ic_work_bjsq2;
-                    workInfo.router    =    Constant.Router.BJSQ_LIST;
+                    workInfo.iconResId = R.drawable.ic_work_bjsq2;
+                    workInfo.router = Constant.Router.BJSQ_LIST;
                     break;
                 case Constant.WorkType.YXJL:
                     workInfo.iconResId = R.drawable.ic_work_yxjl_small;
@@ -74,12 +74,12 @@ public class WorkHelper {
 //                        object.put("router", Constant.Router.QXGL_LIST);
 //                        break;
                 case Constant.WorkType.YHGL:
-                    workInfo.iconResId =  R.drawable.ic_work_yh;
-                    workInfo.router    =    Constant.Router.YH_LIST;
+                    workInfo.iconResId = R.drawable.ic_work_yh;
+                    workInfo.router = Constant.Router.YH_LIST;
                     break;
                 case Constant.WorkType.WXGD:
-                    workInfo.iconResId =  R.drawable.ic_work_wxgd;
-                    workInfo.router    =    Constant.Router.WXGD_LIST;
+                    workInfo.iconResId = R.drawable.ic_work_wxgd;
+                    workInfo.router = Constant.Router.WXGD_LIST;
                     break;
                 case Constant.WorkType.SJSC:
                     workInfo.iconResId = R.drawable.ic_work_sjsc_small;
@@ -112,28 +112,33 @@ public class WorkHelper {
 
                 case Constant.WorkType.SBDA:
 
-                    workInfo.iconResId =  R.drawable.ic_data_sbda;
-                    workInfo.router    =    Constant.Router.SBDA_LIST;
+                    workInfo.iconResId = R.drawable.ic_data_sbda;
+                    workInfo.router = Constant.Router.SBDA_LIST;
                     break;
                 case Constant.WorkType.SBDA_ONLINE:
 
                     workInfo.iconResId = R.drawable.ic_data_sbda;
                     workInfo.router = Constant.Router.SBDA_ONLINE_LIST;
                     break;
+                case Constant.WorkType.STOP_POLICE:
+
+                    workInfo.iconResId = R.drawable.ic_work_stop;
+                    workInfo.router = Constant.Router.STOP_POLICE;
+                    break;
                 case Constant.WorkType.XJLX:
 
-                    workInfo.iconResId =  R.drawable.ic_data_xjlx;
-                    workInfo.router    =    Constant.Router.XJLX_LIST;
+                    workInfo.iconResId = R.drawable.ic_data_xjlx;
+                    workInfo.router = Constant.Router.XJLX_LIST;
                     break;
                 case Constant.WorkType.XJQY:
 
-                    workInfo.iconResId =  R.drawable.ic_data_xjqy;
-                    workInfo.router    =    Constant.Router.XJQY_LIST;
+                    workInfo.iconResId = R.drawable.ic_data_xjqy;
+                    workInfo.router = Constant.Router.XJQY_LIST;
                     break;
                 case Constant.WorkType.XJBB:
 
-                    workInfo.iconResId =  R.drawable.ic_data_xjbb;
-                    workInfo.router    =    Constant.Router.XJBB;
+                    workInfo.iconResId = R.drawable.ic_data_xjbb;
+                    workInfo.router = Constant.Router.XJBB;
                     break;
                 default:
 

@@ -138,6 +138,7 @@ public class WorkAdapter extends HeaderRecyclerViewAdapter<WorkInfo> {
                             break;
                         case Constant.Router.SBDA_LIST:
                         case Constant.Router.SBDA_ONLINE_LIST:
+                        case Constant.Router.STOP_POLICE:
                         case Constant.Router.YH_LIST:
                         case Constant.Router.WXGD_LIST:
                         case Constant.Router.OFFLINE_YH_LIST:
