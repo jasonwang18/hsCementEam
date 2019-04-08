@@ -407,6 +407,8 @@ public interface Constant {
         String EAM_TYPE = "EAM_TYPE";//设备类型
         String EAM_AREA = "EAM_AREA";//区域类型
 
+        String OPEN_TIME_START = "OPEN_TIME_START";//时间
+        String OPEN_TIME_STOP = "OPEN_TIME_STOP";//时间
         String OPEN_TIME = "OPEN_TIME";//时间
         String ON_OR_OFF = "ON_OR_OFF";//开关状态
     }

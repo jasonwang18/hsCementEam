@@ -2,18 +2,27 @@ package com.supcon.mes.module_sbda_online.ui;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Toast;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
+import com.supcon.common.view.listener.OnChildViewClickListener;
+import com.supcon.common.view.util.ToastUtils;
+import com.supcon.common.view.view.picker.DateTimePicker;
 import com.supcon.mes.mbap.beans.LoginEvent;
+import com.supcon.mes.mbap.constant.ViewAction;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.utils.controllers.DatePickController;
 import com.supcon.mes.mbap.view.CustomFilterView;
+import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomTitleBar;
+import com.supcon.mes.mbap.view.CustomVerticalDateView;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
@@ -34,6 +43,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,8 +62,15 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
     @BindByTag("listEamNameFilter")
     CustomFilterView listEamNameFilter;
 
+    @BindByTag("stopPoliceStartTime")
+    CustomVerticalDateView stopPoliceStartTime;
+    @BindByTag("stopPoliceStopTime")
+    CustomVerticalDateView stopPoliceStopTime;
+
     private Map<String, Object> queryParam = new HashMap<>();
     private DatePickController datePickController;
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd hh:m");
 
     @Override
     protected IListAdapter createAdapter() {
@@ -83,11 +102,15 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
 
         listEamNameFilter.setData(FilterHelper.createEamNameFilter());
 
-//        datePickController = new DatePickController(this);
-//        datePickController.setCycleDisable(true);
-//        datePickController.setCanceledOnTouchOutside(true);
-//        datePickController.setSecondVisible(false);
-//        datePickController.textSize(18);
+        datePickController = new DatePickController(this);
+        datePickController.setCycleDisable(true);
+        datePickController.setCanceledOnTouchOutside(true);
+        datePickController.setSecondVisible(false);
+        datePickController.textSize(18);
+        stopPoliceStartTime.setDate("2019-04-01 00:00");
+        stopPoliceStopTime.setDate(dateFormat1.format(System.currentTimeMillis()));
+        queryParam.put(Constant.BAPQuery.OPEN_TIME_START, "2019-04-01 00:00:00");
+        queryParam.put(Constant.BAPQuery.OPEN_TIME_STOP, dateFormat.format(System.currentTimeMillis()));
     }
 
     @Override
@@ -106,9 +129,6 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
         });
 
         refreshListController.setOnRefreshPageListener((page) -> {
-            if (!queryParam.containsKey(Constant.BAPQuery.OPEN_TIME)) {
-                queryParam.put(Constant.BAPQuery.OPEN_TIME, "2019-04-01 00:00:00");
-            }
             if (!queryParam.containsKey(Constant.BAPQuery.ON_OR_OFF)) {
                 queryParam.put(Constant.BAPQuery.ON_OR_OFF, "BEAM020/02");
             }
@@ -118,6 +138,31 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
             queryParam.put(Constant.BAPQuery.EAM_NAME, !((ScreenEntity) filterBean).name.equals("设备不限") ? ((ScreenEntity) filterBean).name : "");
             doRefresh();
         });
+        stopPoliceStartTime.setOnChildViewClickListener((childView, action, obj) -> {
+            datePickController.listener((year, month, day, hour, minute, second) -> {
+                stopPoliceStartTime.setDate(year + "-" + month + "-" + day + " " + hour + ":" + minute);
+                if (compareTime(stopPoliceStartTime.getContent(), stopPoliceStopTime.getContent())) {
+                    if (!queryParam.containsKey(Constant.BAPQuery.OPEN_TIME_START)) {
+                        queryParam.remove(Constant.BAPQuery.OPEN_TIME_START);
+                    }
+                    queryParam.put(Constant.BAPQuery.OPEN_TIME_START, year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + "00");
+                    doRefresh();
+                }
+
+            }).show(System.currentTimeMillis());
+        });
+
+        stopPoliceStopTime.setOnChildViewClickListener((childView, action, obj) ->
+                datePickController.listener((year, month, day, hour, minute, second) -> {
+                    stopPoliceStopTime.setDate(year + "-" + month + "-" + day + " " + hour + ":" + minute);
+                    if (compareTime(stopPoliceStartTime.getContent(), stopPoliceStopTime.getContent())) {
+                        if (!queryParam.containsKey(Constant.BAPQuery.OPEN_TIME_STOP)) {
+                            queryParam.remove(Constant.BAPQuery.OPEN_TIME_STOP);
+                        }
+                        queryParam.put(Constant.BAPQuery.OPEN_TIME_STOP, year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + "00");
+                        doRefresh();
+                    }
+                }).show(System.currentTimeMillis()));
     }
 
     private void doRefresh() {
@@ -145,6 +190,24 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
     public void onRefresh(RefreshEvent event) {
 
         refreshListController.refreshBegin();
+    }
+
+    private boolean compareTime(String start, String stop) {
+        if (TextUtils.isEmpty(start) || TextUtils.isEmpty(stop)) {
+            ToastUtils.show(this, "请选择时间!");
+            return false;
+        }
+        try {
+            long startTime = dateFormat1.parse(start).getTime();
+            long stopTime = dateFormat1.parse(stop).getTime();
+            if (stopTime > startTime) {
+                return true;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        ToastUtils.show(this, "开始时间不能大于结束时间!");
+        return false;
     }
 
     @Override

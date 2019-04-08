@@ -8,7 +8,6 @@ import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.JoinSubcondEntity;
 import com.supcon.mes.middleware.util.BAPQueryParamsHelper;
 import com.supcon.mes.module_sbda_online.model.bean.StopPoliceListEntity;
-import com.supcon.mes.module_sbda_online.model.bean.SubsidiaryListEntity;
 import com.supcon.mes.module_sbda_online.model.contract.StopPoliceContract;
 import com.supcon.mes.module_sbda_online.model.network.SBDAOnlineHttpClient;
 
@@ -20,9 +19,10 @@ public class StopPolicePresenter extends StopPoliceContract.Presenter {
     @Override
     public void runningGatherList(Map<String, Object> params, int page) {
         FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap());
-        if (params.containsKey(Constant.BAPQuery.OPEN_TIME)) {
+        if (params.containsKey(Constant.BAPQuery.OPEN_TIME_START) || params.containsKey(Constant.BAPQuery.OPEN_TIME_STOP)) {
             Map<String, Object> timeParam = new HashMap();
-            timeParam.put(Constant.BAPQuery.OPEN_TIME, params.get(Constant.BAPQuery.OPEN_TIME));
+            timeParam.put(Constant.BAPQuery.OPEN_TIME_START, params.get(Constant.BAPQuery.OPEN_TIME_START));
+            timeParam.put(Constant.BAPQuery.OPEN_TIME_STOP, params.get(Constant.BAPQuery.OPEN_TIME_STOP));
             List<BaseSubcondEntity> baseSubcondEntities = BAPQueryParamsHelper.crateSubcondEntity(timeParam);
             fastQuery.subconds.addAll(baseSubcondEntities);
         }
