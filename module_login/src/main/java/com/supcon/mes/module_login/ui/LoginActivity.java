@@ -315,7 +315,7 @@ public class LoginActivity extends BasePresenterActivity implements LoginContrac
 
     @Override
     public void getAccountInfoSuccess() {
-        downloadBase();
+//        downloadBase();
         //跳转到主页
         goMain();
     }
