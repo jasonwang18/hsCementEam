@@ -97,13 +97,13 @@ public class MainActivity extends BaseMultiFragmentActivity {
     }
 
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+/*    @Subscribe(threadMode = ThreadMode.MAIN)
     public void downloadModules(DownloadDataEvent event) {
         List<String> modules = event.getModules();
         Bundle bundle = new Bundle();
         bundle.putStringArrayList(Constant.IntentKey.DOWNLOAD_MODULES, (ArrayList<String>) modules);
         IntentRouter.go(context, Constant.Router.SJXZ, bundle);
-    }
+    }*/
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAppExit(AppExitEvent event) {

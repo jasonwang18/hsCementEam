@@ -15,10 +15,12 @@ import android.widget.TextView;
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.bluetron.rxretrohttp.exception.ApiException;
+import com.bluetron.zhizhi.BuildConstants;
 import com.bluetron.zhizhi.domain.bean.response.workstation.OwnMinAppItem;
 import com.bluetron.zhizhi.domain.event.login.LogOutEventSDK;
 import com.bluetron.zhizhi.domain.event.login.LoginEventSDK;
 import com.bluetron.zhizhi.domain.event.minapp.MinappListEvent;
+import com.bluetron.zhizhi.domain.router.Navigation;
 import com.bluetron.zhizhi.home.presentation.HomeSDK;
 import com.bluetron.zhizhi.login.presentation.LoginUserSDK;
 import com.jdjz.coresdk14.App;
@@ -146,7 +148,14 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(MinappListEvent minappListEvent) {
-        zzApps = new ArrayList<>();
+        if(zzApps == null) {
+            zzApps = new ArrayList<>();
+        }
+        else{
+            if(zzApps.size() != 0){
+                zzApps.clear();
+            }
+        }
         List<OwnMinAppItem> minappList = minappListEvent.getList();
         for (int i = 0; i < minappList.size(); i++) {
             OwnMinAppItem appItem = minappListEvent.getList().get(i);
@@ -163,7 +172,8 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
         }
 
         if(defaultList!=null && zzApps!=null){
-            defaultList.addAll(zzApps);
+
+
             refreshList();
         }
     }
@@ -224,10 +234,21 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
     @SuppressLint("CheckResult")
     private void refreshList() {
 
-        refreshListController.refreshComplete(defaultList);
+        List<WorkInfo> list = new ArrayList<>();
+        if(zzApps!=null){
+            WorkInfo workInfo = new WorkInfo();
+            workInfo.viewType = 1;
+            workInfo.name = "生产管理";
+            workInfo.type = -2;
+            workInfo.isOpen = true;
+            list.add(workInfo);
+            list.addAll(zzApps);
+        }
+        list.addAll(defaultList);
+        refreshListController.refreshComplete(list);
         height =  DisplayUtil.dip2px(12, context);
         count = 0;
-        Flowable.fromIterable(defaultList)
+        Flowable.fromIterable(list)
                 .compose(RxSchedulers.io_main())
                 .filter(workInfo -> {
                     if(workInfo.viewType == WorkInfo.VIEW_TYPE_TITLE){
@@ -322,7 +343,7 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
                     IntentRouter.go(context, workInfo.router, bundle);
                 }
                 else if(workInfo.zzAppType !=0){
-//                    goZZApp(workInfo);
+                    goZZApp(workInfo);
                 }
                 else
                     IntentRouter.go(getContext(), workInfo.router);
@@ -338,7 +359,7 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
         });
     }
 
-/*    private void goZZApp(WorkInfo workInfo) {
+    private void goZZApp(WorkInfo workInfo) {
 
         switch (workInfo.zzAppType){
             case 1:
@@ -356,7 +377,7 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
 
         }
 
-    }*/
+    }
 
     @SuppressLint("CheckResult")
     @Override
