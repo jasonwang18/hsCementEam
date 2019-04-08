@@ -135,6 +135,7 @@ public interface Constant {
         String OLXJ_WORK_LIST_HANDLED = "OLXJ_WORK_LIST_HANDLED";
 
         String STOP_POLICE = "STOP_POLICE";//停机报警
+
     }
 
 
@@ -246,6 +247,8 @@ public interface Constant {
         int XJBB = 18;  //巡检报表
         int SBDA_ONLINE = 19;  //设备档案
         int STOP_POLICE = 20;  //停机报警
+        int DXJH = 22;
+        int JXJH = 21;
     }
 
     interface SPKey {

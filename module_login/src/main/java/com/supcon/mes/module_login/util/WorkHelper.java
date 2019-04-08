@@ -125,6 +125,16 @@ public class WorkHelper {
                     workInfo.iconResId = R.drawable.ic_work_stop;
                     workInfo.router = Constant.Router.STOP_POLICE;
                     break;
+                case Constant.WorkType.JXJH:
+
+                    workInfo.iconResId = R.drawable.ic_work_jxjh;
+//                    workInfo.router = Constant.Router.STOP_POLICE;
+                    break;
+                case Constant.WorkType.DXJH:
+
+                    workInfo.iconResId = R.drawable.ic_work_dxjh;
+//                    workInfo.router = Constant.Router.STOP_POLICE;
+                    break;
                 case Constant.WorkType.XJLX:
 
                     workInfo.iconResId = R.drawable.ic_data_xjlx;
