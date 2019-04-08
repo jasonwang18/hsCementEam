@@ -14,4 +14,6 @@ public class ScreenEntity extends FilterBean {
 
     public String code;
 
+    public Long id;
+
 }

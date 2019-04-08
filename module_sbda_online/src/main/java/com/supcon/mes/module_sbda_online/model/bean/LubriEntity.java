@@ -43,7 +43,7 @@ public class LubriEntity extends BaseEntity {
 
     //是否润滑时长
     public boolean isDuration() {
-        if (periodType.id.equals("BEAM014/02")) {
+        if (periodType != null && periodType.id.equals("BEAM014/02")) {
             return true;
         }
         return false;

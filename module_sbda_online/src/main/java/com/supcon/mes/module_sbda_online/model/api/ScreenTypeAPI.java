@@ -11,6 +11,6 @@ import com.supcon.mes.module_sbda_online.model.bean.ScreenListEntity;
  * ------------- Description -------------
  */
 @ContractFactory(entites = ScreenListEntity.class)
-public interface ScreenAPI {
-    void screenPart(CustomFilterView customFilterView, int type);
+public interface ScreenTypeAPI {
+    void screenPart(CustomFilterView customFilterView);
 }

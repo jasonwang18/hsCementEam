@@ -28,13 +28,15 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_sbda_online.IntentRouter;
 import com.supcon.mes.module_sbda_online.R;
 import com.supcon.mes.module_sbda_online.model.api.SBDAOnlineListAPI;
-import com.supcon.mes.module_sbda_online.model.api.ScreenAPI;
+import com.supcon.mes.module_sbda_online.model.api.ScreenAreaAPI;
+import com.supcon.mes.module_sbda_online.model.api.ScreenTypeAPI;
 import com.supcon.mes.module_sbda_online.model.bean.SBDAOnlineEntity;
 import com.supcon.mes.module_sbda_online.model.bean.SBDAOnlineListEntity;
 import com.supcon.mes.module_sbda_online.model.bean.ScreenEntity;
 import com.supcon.mes.module_sbda_online.model.contract.SBDAOnlineListContract;
 import com.supcon.mes.module_sbda_online.presenter.SBDAOnlineListPresenter;
-import com.supcon.mes.module_sbda_online.presenter.ScreenPresenter;
+import com.supcon.mes.module_sbda_online.presenter.ScreenAreaPresenter;
+import com.supcon.mes.module_sbda_online.presenter.ScreenTypePresenter;
 import com.supcon.mes.module_sbda_online.screen.FilterHelper;
 import com.supcon.mes.module_sbda_online.ui.adapter.SBDAOnlineListAdapter;
 
@@ -46,16 +48,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static com.supcon.mes.module_sbda_online.presenter.ScreenPresenter.AREA;
-import static com.supcon.mes.module_sbda_online.presenter.ScreenPresenter.TYPE;
-
 
 /**
  * Environment: hongruijun
  * Created by Xushiyun on 2018/3/30.
  */
 @Router(Constant.Router.SBDA_ONLINE_LIST)
-@Presenter(value = {SBDAOnlineListPresenter.class, ScreenPresenter.class})
+@Presenter(value = {SBDAOnlineListPresenter.class, ScreenAreaPresenter.class, ScreenTypePresenter.class})
 public class SBDAOnlineListActivity extends BaseRefreshRecyclerActivity<SBDAOnlineEntity> implements SBDAOnlineListContract.View {
     @BindByTag("contentView")
     RecyclerView contentView;
@@ -110,8 +109,8 @@ public class SBDAOnlineListActivity extends BaseRefreshRecyclerActivity<SBDAOnli
     }
 
     private void initFilterView() {
-        presenterRouter.create(ScreenAPI.class).screenPart(listAreaFilter, AREA);
-        presenterRouter.create(ScreenAPI.class).screenPart(listTypeFilter, TYPE);
+        presenterRouter.create(ScreenAreaAPI.class).screenPart(listAreaFilter);
+        presenterRouter.create(ScreenTypeAPI.class).screenPart(listTypeFilter);
         listStatusFilter.setData(FilterHelper.createStateFilter());
 
     }
@@ -189,7 +188,7 @@ public class SBDAOnlineListActivity extends BaseRefreshRecyclerActivity<SBDAOnli
             doRefresh();
         });
         listAreaFilter.setFilterSelectChangedListener(filterBean -> {
-            queryParam.put(Constant.BAPQuery.EAM_AREA, ((ScreenEntity) filterBean).layRec != null ? ((ScreenEntity) filterBean).layRec : "");
+            queryParam.put(Constant.BAPQuery.EAM_AREA, ((ScreenEntity) filterBean).id != null ? ((ScreenEntity) filterBean).id : "");
             doRefresh();
         });
 
