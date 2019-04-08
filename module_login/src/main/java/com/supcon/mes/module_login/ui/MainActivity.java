@@ -53,7 +53,7 @@ import io.reactivex.functions.Consumer;
  */
 
 @Router(Constant.Router.MAIN)
-@Controller(value = {SystemCodeController.class, AreaController.class, RepairGroupController.class, SB2Controller.class, UserInfoListController.class, DepartmentController.class})
+@Controller(value = {SystemCodeController.class, AreaController.class, RepairGroupController.class, /*SB2Controller.class,*/ UserInfoListController.class, DepartmentController.class})
 public class MainActivity extends BaseMultiFragmentActivity {
 
     @BindByTag("drawerLayout")
