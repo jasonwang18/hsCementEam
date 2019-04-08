@@ -27,10 +27,7 @@ public class ScreenAreaPresenter extends ScreenAreaContract.Presenter {
     @SuppressLint("CheckResult")
     @Override
     public void screenPart(CustomFilterView customFilterView) {
-        ScreenEntity screenEntity = new ScreenEntity();
-        screenEntity.name = "区域不限";
         List<ScreenEntity> screenEntities = new LinkedList<>();
-        screenEntities.add(screenEntity);
         url = "/BEAM/area/area/areaList-query.action?page.pageSize=500";
         mCompositeSubscription.add(SBDAOnlineHttpClient.screenPart(url)
                 .onErrorReturn(throwable -> {
