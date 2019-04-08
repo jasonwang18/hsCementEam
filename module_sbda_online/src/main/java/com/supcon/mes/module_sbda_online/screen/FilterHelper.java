@@ -24,5 +24,14 @@ public class FilterHelper {
         list.add(ScreenState.SCRAP.getScreenEntity());
         return list;
     }
-
+    @SuppressLint("CheckResult")
+    public static List<ScreenEntity> createEamNameFilter() {
+        List<ScreenEntity> list = new ArrayList<>();
+        list.add(EamName.CRUSHER.getScreenEntity());
+        list.add(EamName.RAWMILL.getScreenEntity());
+        list.add(EamName.CEMENTMILL.getScreenEntity());
+        list.add(EamName.ROLLERPRESS.getScreenEntity());
+        list.add(EamName.ROTARYCELLAR.getScreenEntity());
+        return list;
+    }
 }

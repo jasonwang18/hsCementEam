@@ -19,6 +19,8 @@ import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.speedata.libuhf.utils.StringUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -343,4 +345,25 @@ public class Util {
         // 四舍五入,保留2位小数
         return d1.divide(d2, 2, BigDecimal.ROUND_HALF_UP).toString();
     }
+
+    /**
+     * 判断str1中包含str2的个数
+     *
+     * @param str1
+     * @param str2
+     * @return counter
+     */
+    private static int counter = 0;
+
+    public static int countStr(String str1, String str2) {
+        int index = 0; //定义变量。记录每一次找到的key的位置。
+        int count = 0; //定义变量，记录出现的次数。
+
+        while ((index = str1.indexOf(str2, index)) != -1) {
+            index = index + str2.length();
+            count++;
+        }
+        return count;
+    }
+
 }

@@ -282,6 +282,15 @@ public class BAPQueryParamsHelper {
                 subcondEntity.paramStr = LIKE_OPT_BLUR;
                 subcondEntity.value = String.valueOf(value);
                 break;
+            case Constant.BAPQuery.EAM_NAME:
+                subcondEntity = new SubcondEntity();
+                subcondEntity.columnName = key;
+                subcondEntity.type = TYPE_NORMAL;
+                subcondEntity.dbColumnType = Constant.BAPQuery.TEXT;
+                subcondEntity.operator = Constant.BAPQuery.LIKE;
+                subcondEntity.paramStr = LIKE_OPT_BLUR;
+                subcondEntity.value = String.valueOf(value);
+                break;
             case Constant.BAPQuery.EAM_STATE:
                 subcondEntity = new SubcondEntity();
                 subcondEntity.columnName = key;
@@ -306,6 +315,24 @@ public class BAPQueryParamsHelper {
                 subcondEntity.type = TYPE_NORMAL;
                 subcondEntity.dbColumnType = Constant.BAPQuery.TEXT;
                 subcondEntity.operator = Constant.BAPQuery.BE;
+                subcondEntity.paramStr = LIKE_OPT_Q;
+                subcondEntity.value = String.valueOf(value);
+                break;
+            case Constant.BAPQuery.ON_OR_OFF:
+                subcondEntity = new SubcondEntity();
+                subcondEntity.columnName = key;
+                subcondEntity.type = TYPE_NORMAL;
+                subcondEntity.dbColumnType = Constant.BAPQuery.SYSTEMCODE;
+                subcondEntity.operator = Constant.BAPQuery.BE;
+                subcondEntity.paramStr = LIKE_OPT_Q;
+                subcondEntity.value = String.valueOf(value);
+                break;
+            case Constant.BAPQuery.OPEN_TIME:
+                subcondEntity = new SubcondEntity();
+                subcondEntity.columnName = key;
+                subcondEntity.type = TYPE_NORMAL;
+                subcondEntity.dbColumnType = Constant.BAPQuery.DATETIME;
+                subcondEntity.operator = Constant.BAPQuery.GE;
                 subcondEntity.paramStr = LIKE_OPT_Q;
                 subcondEntity.value = String.valueOf(value);
                 break;

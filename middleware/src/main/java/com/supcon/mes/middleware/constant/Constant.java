@@ -133,6 +133,8 @@ public interface Constant {
         String JHXJ_LX_LIST = "JHXJ_LX_LIST";
         String OLXJ_WORK_LIST_UNHANDLED = "OLXJ_WORK_LIST_UNHANDLED";
         String OLXJ_WORK_LIST_HANDLED = "OLXJ_WORK_LIST_HANDLED";
+
+        String STOP_POLICE = "STOP_POLICE";//停机报警
     }
 
 
@@ -243,6 +245,7 @@ public interface Constant {
         int XJQY = 17;  //巡检区域
         int XJBB = 18;  //巡检报表
         int SBDA_ONLINE = 19;  //设备档案
+        int STOP_POLICE = 20;  //停机报警
     }
 
     interface SPKey {
@@ -403,6 +406,9 @@ public interface Constant {
         String EAM_STATE = "EAM_STATE";//设备状态
         String EAM_TYPE = "EAM_TYPE";//设备类型
         String EAM_AREA = "EAM_AREA";//区域类型
+
+        String OPEN_TIME = "OPEN_TIME";//时间
+        String ON_OR_OFF = "ON_OR_OFF";//开关状态
     }
 
 

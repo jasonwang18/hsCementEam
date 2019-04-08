@@ -10,6 +10,7 @@ import com.supcon.mes.module_sbda_online.model.bean.SBDAOnlineListEntity;
 import com.supcon.mes.module_sbda_online.model.bean.ScreenListEntity;
 import com.supcon.mes.module_sbda_online.model.bean.SparePartListEntity;
 import com.supcon.mes.module_sbda_online.model.bean.SparePartsLedgerListEntity;
+import com.supcon.mes.module_sbda_online.model.bean.StopPoliceListEntity;
 import com.supcon.mes.module_sbda_online.model.bean.SubsidiaryListEntity;
 
 import java.util.Map;
@@ -61,6 +62,10 @@ public interface ApiService {
 
     //查看设备
     @GET("/BEAM/baseInfo/baseInfo/baseInfoProduct-query.action")
-    Flowable<SparePartsLedgerListEntity> baseInfoProduct(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity,@Query("productID") Long productID, @QueryMap Map<String, Object> pageQueryMap);
+    Flowable<SparePartsLedgerListEntity> baseInfoProduct(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @Query("productID") Long productID, @QueryMap Map<String, Object> pageQueryMap);
+
+    //查看设备
+    @GET("/BEAM2/runningGather/runningGathers/runningGatherList-query.action")
+    Flowable<StopPoliceListEntity> runningGatherList(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
 }

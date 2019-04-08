@@ -3,6 +3,7 @@ package com.supcon.mes.module_sbda_online.presenter;
 import android.annotation.SuppressLint;
 
 import com.supcon.mes.mbap.view.CustomFilterView;
+import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_sbda_online.model.bean.ScreenEntity;
 import com.supcon.mes.module_sbda_online.model.bean.ScreenListEntity;
 import com.supcon.mes.module_sbda_online.model.contract.ScreenAreaContract;
@@ -40,7 +41,7 @@ public class ScreenAreaPresenter extends ScreenAreaContract.Presenter {
                     if (screenListEntity.result != null && screenListEntity.result.size() > 0) {
                         Flowable.fromIterable(screenListEntity.result)
                                 .filter(screenEntity12 -> {
-                                    if (screenEntity12.name.equals("主设备") || screenEntity12.name.equals("附属设备")) {
+                                    if (Util.countStr(screenEntity12.layRec, "-") > 1) {
                                         return false;
                                     } else {
                                         return true;
