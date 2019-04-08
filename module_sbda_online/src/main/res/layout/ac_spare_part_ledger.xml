@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:tag="searchTitleBar"
         app:title_background_color="@color/themeColor"
-        app:title_text="备件台账" />
+        app:title_text="关联设备" />
 
     <include layout="@layout/ly_recyclerview_with_scrollbar" />
 

@@ -3,7 +3,7 @@ package com.supcon.mes.module_sbda_online.presenter;
 import com.supcon.mes.mbap.view.CustomFilterView;
 import com.supcon.mes.module_sbda_online.model.bean.ScreenEntity;
 import com.supcon.mes.module_sbda_online.model.bean.ScreenListEntity;
-import com.supcon.mes.module_sbda_online.model.contract.ScreenContract;
+import com.supcon.mes.module_sbda_online.model.contract.ScreenTypeContract;
 import com.supcon.mes.module_sbda_online.model.network.SBDAOnlineHttpClient;
 
 import java.util.LinkedList;
@@ -15,28 +15,19 @@ import java.util.List;
  * @date 2019/4/1
  * ------------- Description -------------
  */
-public class ScreenPresenter extends ScreenContract.Presenter {
-    public static int AREA = 0x01;
-    public static int TYPE = 0x02;
+public class ScreenTypePresenter extends ScreenTypeContract.Presenter {
+
     private String url;
 
     @Override
-    public void screenPart(CustomFilterView customFilterView, int type) {
+    public void screenPart(CustomFilterView customFilterView) {
 
         ScreenEntity screenEntity = new ScreenEntity();
-        if (type == TYPE) {
-            screenEntity.name = "类型不限";
-        } else if (type == AREA) {
-            screenEntity.name = "区域不限";
-        }
+        screenEntity.name = "类型不限";
         List<ScreenEntity> screenEntities = new LinkedList<>();
         screenEntities.add(screenEntity);
+        url = "/BEAM/eamType/eamType/typePart-query.action?page.pageSize=500";
 
-        if (type == AREA) {
-            url = "/BEAM/area/area/areaList-query.action";
-        } else if (type == TYPE) {
-            url = "/BEAM/eamType/eamType/typePart-query.action";
-        }
         mCompositeSubscription.add(SBDAOnlineHttpClient.screenPart(url)
                 .onErrorReturn(throwable -> {
                     ScreenListEntity screenListEntity = new ScreenListEntity();
