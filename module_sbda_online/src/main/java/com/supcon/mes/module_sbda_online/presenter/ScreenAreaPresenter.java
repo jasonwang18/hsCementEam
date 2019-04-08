@@ -28,7 +28,8 @@ public class ScreenAreaPresenter extends ScreenAreaContract.Presenter {
     @Override
     public void screenPart(CustomFilterView customFilterView) {
         ScreenEntity screenEntity = new ScreenEntity();
-        screenEntity.name = "区域不限";
+        screenEntity.name = "3#生产线";
+        screenEntity.id = 1028L;
         List<ScreenEntity> screenEntities = new LinkedList<>();
         screenEntities.add(screenEntity);
         url = "/BEAM/area/area/areaList-query.action?page.pageSize=500";
@@ -41,7 +42,7 @@ public class ScreenAreaPresenter extends ScreenAreaContract.Presenter {
                     if (screenListEntity.result != null && screenListEntity.result.size() > 0) {
                         Flowable.fromIterable(screenListEntity.result)
                                 .filter(screenEntity12 -> {
-                                    if (Util.countStr(screenEntity12.layRec, "-") > 1) {
+                                    if (Util.countStr(screenEntity12.layRec, "-") > 1 || screenEntity12.name.equals("3#生产线")) {
                                         return false;
                                     } else {
                                         return true;

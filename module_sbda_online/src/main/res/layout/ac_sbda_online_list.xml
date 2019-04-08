@@ -22,18 +22,18 @@
         android:paddingLeft="@dimen/dp_5">
 
         <include
-            layout="@layout/ly_filter_type"
+            layout="@layout/ly_filter_online_type"
             android:layout_width="wrap_content"
             android:layout_height="40dp" />
 
         <include
-            layout="@layout/ly_filter_area"
+            layout="@layout/ly_filter_online_area"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginLeft="@dimen/dp_5" />
 
         <include
-            layout="@layout/ly_filter_status"
+            layout="@layout/ly_filter_online_status"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginLeft="@dimen/dp_5" />
