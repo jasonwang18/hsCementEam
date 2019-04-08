@@ -9,11 +9,12 @@ import com.supcon.mes.module_sbda_online.model.bean.ScreenEntity;
  * ------------- Description -------------
  */
 public enum EamName {
-    CRUSHER("破碎机", ""),
-    RAWMILL("生料磨", "01"),
-    ROTARYCELLAR("回转窖", "02"),
-    CEMENTMILL("水泥磨", "03"),
-    ROLLERPRESS("辊压机", "04");
+    UNLIMITE("设备不限", "01"),
+    CRUSHER("破碎机", "02"),
+    RAWMILL("生料磨", "03"),
+    ROTARYCELLAR("回转窖", "04"),
+    CEMENTMILL("水泥磨", "05"),
+    ROLLERPRESS("辊压机", "06");
 
     private String name;
     private String layRec;
