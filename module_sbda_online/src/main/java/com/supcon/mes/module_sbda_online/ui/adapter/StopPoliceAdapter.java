@@ -39,6 +39,7 @@ public class StopPoliceAdapter extends BaseListDataRecyclerViewAdapter<StopPolic
         @BindByTag("itemStopPoliceTotalTime")
         CustomTextView itemStopPoliceTotalTime;
 
+
         public ViewHolder(Context context) {
             super(context);
         }
