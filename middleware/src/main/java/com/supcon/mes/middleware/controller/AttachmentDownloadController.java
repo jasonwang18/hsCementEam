@@ -225,6 +225,76 @@ public class AttachmentDownloadController extends BasePresenterController {
 
     }
 
+    @SuppressLint("CheckResult")
+    public void downloadAreaPic(AttachmentEntity entity, String entityCode, OnSuccessListener<File> successListener){
+        if (entity == null) {
+            return;
+        }
+
+        Flowable.just(entity)
+                .subscribe(
+                        attachment -> {
+                            String path = dir;
+                            if (attachment.name.contains(".jpg") || attachment.name.contains(".png") || attachment.name.contains(".PNG")) {
+
+                            } else if (attachment.name.contains(".txt") || attachment.name.contains(".doc")) {
+                            } else if (attachment.name.contains(".mp4") || attachment.name.contains(".adv")) {
+                            } else if (attachment.name.contains(".mp3") || attachment.name.contains(".wav")) {
+
+                            }
+                            String suffix = attachment.name;
+                            File pic = new File(path, suffix);
+                            if (pic.exists()) {
+                                LogUtil.w("localPath:" + pic.getAbsolutePath());
+                                if(successListener!=null){
+                                    successListener.onSuccess(pic);
+                                }
+                            } else {
+                                String finalPath = path;
+                                String key = entityCode+attachment.id;
+                                if(downloadList.contains(key)){
+                                    LogUtil.w("已经存在相同的下载任务");
+                                    return;
+                                }
+                                downloadList.add(key);
+                                mCompositeSubscription.add(Api.getInstance().retrofit.create(NetworkAPI.class).downloadFile(attachment.id, entityCode)
+                                        .subscribeOn(Schedulers.newThread())
+                                        .onErrorReturn(new Function<Throwable, ResponseBody>() {
+                                            @Override
+                                            public ResponseBody apply(Throwable throwable) throws Exception {
+                                                LogUtil.e("onErrorReturn2");
+                                                return null;
+                                            }
+                                        })
+                                        .map(new Function<ResponseBody, File>() {
+                                            @Override
+                                            public File apply(ResponseBody responseBody) throws Exception {
+                                                File file = PicUtil.writeToDisk(attachment.name, finalPath, responseBody);
+//                                                if(PicUtil.isVideo(attachment.name)) {
+//                                                    PicUtil.createThumbnail(finalPath, file);
+//                                                }
+                                                return file;
+                                            }
+                                        })
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(file -> {
+                                            LogUtil.w("save localPath:" + file.getAbsolutePath());
+                                            if (successListener != null) {
+                                                successListener.onSuccess(file);
+                                            }
+                                        }, new Consumer<Throwable>() {
+                                            @Override
+                                            public void accept(Throwable throwable) throws Exception {
+                                                LogUtil.e("downloadFile accept2 "+throwable);
+                                            }
+                                        }));
+                            }
+
+                        });
+
+    }
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -234,6 +304,7 @@ public class AttachmentDownloadController extends BasePresenterController {
     public void dispose(){
         mCompositeSubscription.dispose();
     }
+
 
 
 }

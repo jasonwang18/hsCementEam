@@ -1,6 +1,7 @@
 package com.supcon.mes.module_olxj.ui;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSmoothScroller;
@@ -15,6 +16,7 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
+import com.bumptech.glide.Glide;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.com_http.util.RxSchedulers;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
@@ -38,14 +40,19 @@ import com.supcon.mes.mbap.view.CustomSheetDialog;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.controller.AttachmentDownloadController;
 import com.supcon.mes.middleware.controller.ModifyController;
+import com.supcon.mes.middleware.model.bean.CommonDeviceEntity;
+import com.supcon.mes.middleware.model.bean.CommonDeviceEntityDao;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.XJHistoryEntity;
 import com.supcon.mes.middleware.model.bean.XJHistoryEntityDao;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.event.ThermometerEvent;
+import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.RequestOptionUtil;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
 import com.supcon.mes.module_olxj.IntentRouter;
@@ -68,6 +75,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -146,6 +154,8 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
 
     private MGViberController mViberController;
     private CustomDialog mViberDialog;
+
+    private AttachmentDownloadController mDownloadController;
 
     @Override
     protected IListAdapter<OLXJWorkItemEntity> createAdapter() {
@@ -469,9 +479,12 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
                                             if(set.contains(xjWorkItemEntity.id))
                                                 doFinish(xjWorkItemEntity);
                                         }
-                                        onLoadSuccess("完成");
-                                        doRefresh();
-                                        mOLXJWorkListAdapter.notifyDataSetChanged();
+
+                                        onLoading("正在打包并上传巡检数据，请稍后...");
+                                        presenterRouter.create(OLXJWorkSubmitAPI.class).uploadOLXJAreaData(mXJAreaEntity);
+//                                        onLoadSuccess("完成");
+//                                        doRefresh();
+//                                        mOLXJWorkListAdapter.notifyDataSetChanged();
                                     } catch (Exception e) {
                                         onLoadFailed("完成操作失败！" + e.getMessage());
                                         e.printStackTrace();
@@ -486,6 +499,23 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
 
     @SuppressLint("CheckResult")
     private void doRefresh() {
+
+        if(mDownloadController==null){
+            mDownloadController = new AttachmentDownloadController(Constant.IMAGE_SAVE_PATH);
+        }
+
+        if(mXJAreaEntity.eamInspectionGuideImageDocument!=null){
+
+            mXJAreaEntity.eamInspectionGuideImageDocument.name = mXJAreaEntity.eamInspectionGuideImageAttachementInfo;
+            mDownloadController.downloadEamPic(mXJAreaEntity.eamInspectionGuideImageDocument, "BEAM_1.0.0_baseInfo", new OnSuccessListener<File>() {
+                @Override
+                public void onSuccess(File result) {
+                    LogUtil.e("区域指导图片加载成功！");
+                    mOLXJWorkListAdapter.notifyItemChanged(0);
+                }
+            });
+        }
+
         List<OLXJWorkItemEntity> workItems = new ArrayList<>();
         Flowable.fromIterable(mXJAreaEntity.workItemEntities)
                 .subscribeOn(Schedulers.newThread())
@@ -880,7 +910,7 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
 
         List<OLXJWorkItemEntity> xjWorkItemEntities = new ArrayList<>();
         OLXJWorkItemEntity headerEntity = new OLXJWorkItemEntity();
-        headerEntity.headerPicPath = TextUtils.isEmpty(mXJAreaEntity.eamInspectionGuideImageAttachementInfo) ? "" : Constant.XJ_GUIDE_IMGPATH + mXJAreaEntity.eamInspectionGuideImageAttachementInfo;
+        headerEntity.headerPicPath = TextUtils.isEmpty(mXJAreaEntity.eamInspectionGuideImageAttachementInfo) ? "" : Constant.IMAGE_SAVE_PATH + mXJAreaEntity.eamInspectionGuideImageAttachementInfo;
         headerEntity.viewType = ListType.HEADER.value();
         xjWorkItemEntities.add(headerEntity);
         Flowable.fromIterable(entity)

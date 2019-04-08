@@ -67,7 +67,7 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
 
     public OLXJWorkListAdapter(Context context) {
         super(context);
-        initThermometer();  //初始化测温
+//        initThermometer();  //初始化测温
     }
 
     public OLXJWorkListAdapter(Context context, List<OLXJWorkItemEntity> list) {

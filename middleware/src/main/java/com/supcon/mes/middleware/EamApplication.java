@@ -8,6 +8,7 @@ import android.text.TextUtils;
 
 import com.supcon.common.view.util.SharedPreferencesUtils;
 import com.supcon.mes.mbap.MBapApp;
+import com.supcon.mes.mbap.MBapConstant;
 import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.cache.CacheUtil;
 import com.supcon.mes.middleware.alone.AloneManager;
@@ -83,6 +84,8 @@ public class EamApplication extends MBapApp {
         }
         setupDatabase();
         initRouter();
+        SharedPreferencesUtils.setParam(getApplicationContext(), MBapConstant.SPKey.IP, "218.75.97.170");
+        SharedPreferencesUtils.setParam(getApplicationContext(), MBapConstant.SPKey.PORT, "8181");
     }
 
     private void initRouter() {
