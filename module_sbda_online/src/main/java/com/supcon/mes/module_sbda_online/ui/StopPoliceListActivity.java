@@ -194,7 +194,6 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
 
     private boolean compareTime(String start, String stop) {
         if (TextUtils.isEmpty(start) || TextUtils.isEmpty(stop)) {
-            ToastUtils.show(this, "请选择时间!");
             return false;
         }
         try {
