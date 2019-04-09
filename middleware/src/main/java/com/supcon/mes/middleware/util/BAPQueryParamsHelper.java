@@ -300,15 +300,15 @@ public class BAPQueryParamsHelper {
                 subcondEntity.paramStr = LIKE_OPT_Q;
                 subcondEntity.value = String.valueOf(value);
                 break;
-//            case Constant.BAPQuery.EAM_AREA:
-//                subcondEntity = new SubcondEntity();
-//                subcondEntity.columnName = "ID";
-//                subcondEntity.type = TYPE_NORMAL;
-//                subcondEntity.dbColumnType = Constant.BAPQuery.LONG;
-//                subcondEntity.operator = "=includeCustSub#BEAM_AREAS";
-//                subcondEntity.paramStr = LIKE_OPT_Q;
-//                subcondEntity.value = String.valueOf(value);
-//                break;
+            case Constant.BAPQuery.EAM_AREA:
+                subcondEntity = new SubcondEntity();
+                subcondEntity.columnName = "ID";
+                subcondEntity.type = TYPE_NORMAL;
+                subcondEntity.dbColumnType = Constant.BAPQuery.LONG;
+                subcondEntity.operator = "=includeCustSub#BEAM_AREAS";
+                subcondEntity.paramStr = LIKE_OPT_Q;
+                subcondEntity.value = String.valueOf(value);
+                break;
             case Constant.BAPQuery.EAM_TYPE:
                 subcondEntity = new SubcondEntity();
                 subcondEntity.columnName = "EAMTYPE_CODE";
