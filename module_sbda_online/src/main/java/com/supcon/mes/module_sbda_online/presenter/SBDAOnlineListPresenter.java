@@ -49,6 +49,7 @@ public class SBDAOnlineListPresenter extends SBDAOnlineListContract.Presenter {
         if (params.containsKey(Constant.BAPQuery.EAM_AREA)) {
             Map<String, Object> areaParam = new HashMap();
             areaParam.put(Constant.BAPQuery.EAM_AREA, params.get(Constant.BAPQuery.EAM_AREA));
+            areaParam.put(Constant.BAPQuery.EAM_AREANAME, "主设备");
             JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(areaParam, "BEAM_AREAS,ID,EAM_BaseInfo,INSTALL_PLACE");
             fastQuery.subconds.add(joinSubcondEntity);
         }
