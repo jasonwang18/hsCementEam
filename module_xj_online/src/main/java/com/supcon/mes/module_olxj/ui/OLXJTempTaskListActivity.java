@@ -200,6 +200,7 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
         mOLXJTaskListAdapter.setOnItemChildViewClickListener((childView, position, action, obj) -> {
 
             String tag = (String) childView.getTag();
+            enterPosition = position;
             switch (tag){
 
                 case "taskAreaListView":
@@ -357,13 +358,6 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
             }
         }
 
-        String cache = SharedPreferencesUtils.getParam(context, Constant.SPKey.LSXJ_TASK, "");
-        if(!TextUtils.isEmpty(cache)){
-            mAreaEntities = GsonUtil.jsonToList(cache, OLXJAreaEntity.class);
-            mOLXJTaskListAdapter.setAreaEntities(mAreaEntities);
-        }
-
-
     }
 
     @Override
@@ -400,10 +394,11 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
     private  boolean isModified = false;
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAreaUpdate(OLXJAreaEntity areaEntity){
-        if(enterPosition!=-1)
+        if(enterPosition!=-1) {
             mAreaEntities.set(enterPosition, areaEntity);
-        mOLXJTaskListAdapter.setAreaEntities(mAreaEntities);
-        isModified = true;
+            mOLXJTaskListAdapter.setAreaEntities(mAreaEntities);
+            isModified = true;
+        }
     }
 
     @SuppressLint("CheckResult")
@@ -532,12 +527,15 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
             return;
         }
 
+        int index = 0;
         for(OLXJAreaEntity areaEntity : mAreaEntities){
             if(code.equals(areaEntity.signCode)){
                 updateXJAreaEntity(areaEntity);//update数据
                 LogUtil.i("BarcodeEvent1", code);
-                goArea(areaEntity);  //跳转
+                enterPosition = index;
+                doGoArea(areaEntity);  //跳转
             }
+            index++;
         }
     }
 
@@ -548,6 +546,13 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
             onLoadFailed("没有巡检任务");
             initEmptyView();
             goXL();
+        }
+        else{
+            String cache = SharedPreferencesUtils.getParam(context, Constant.SPKey.LSXJ_TASK, "");
+            if(!TextUtils.isEmpty(cache)){
+                mAreaEntities = GsonUtil.jsonToList(cache, OLXJAreaEntity.class);
+                mOLXJTaskListAdapter.setAreaEntities(mAreaEntities);
+            }
         }
 
     }
@@ -625,6 +630,17 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
         Log.i("XJArea:update", xjAreaEntity.toString());
     }
 
+    private int getEnterPosition(OLXJAreaEntity areaEntity){
+
+        int index = 0;
+        for(OLXJAreaEntity olxjAreaEntity:mAreaEntities){
+            if(olxjAreaEntity.id != null && areaEntity.id!=null && olxjAreaEntity.id.equals(areaEntity.id)){
+                return index;
+            }
+            index ++;
+        }
+        return index;
+    }
 
     /**
      * @description 跳转巡检项列表
@@ -636,6 +652,12 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
     private void goArea(OLXJAreaEntity xjAreaEntity) {
         Log.i("XJArea:", xjAreaEntity.toString());
 
+        enterPosition = getEnterPosition(xjAreaEntity);
+        doGoArea(xjAreaEntity);
+
+    }
+
+    private void doGoArea(OLXJAreaEntity xjAreaEntity) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.IntentKey.XJ_AREA_ENTITY, xjAreaEntity);
 

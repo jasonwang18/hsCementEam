@@ -14,7 +14,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/dp_10"
             >
             <com.supcon.mes.mbap.view.CustomAdView
                 android:layout_width="match_parent"
@@ -29,7 +28,6 @@
                 android:orientation="vertical"
                 android:id="@+id/workLayout"
                 android:tag="workLayout"
-                android:paddingBottom="@dimen/dp_10"
                 >
                 <include layout="@layout/ly_recyclerview"/>
 

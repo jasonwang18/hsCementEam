@@ -97,7 +97,7 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
     int height;
     volatile int count;
     private final int LINE_COUT = 4;
-    private final int ITEM_HEIGHT = 90;
+    private final int ITEM_HEIGHT = 85;
 
 
     public WorkFragment(){
@@ -136,16 +136,17 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(LoginEventSDK ex) {
-        ToastUtils.show(context, "login Success");
+        ToastUtils.show(context, "supos平台登录成功！");
         HomeSDK.getInstance().getMinppListSDK();
     }
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(LogOutEventSDK ex) {
-        ToastUtils.show(context, "logout Success");
+        LogUtil.d( "supos平台登出成功");
     }
 
+    private List<WorkInfo> sbWorkInfos = new ArrayList<>();
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(MinappListEvent minappListEvent) {
         if(zzApps == null) {
@@ -168,10 +169,28 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
             workInfo.zzAppId = appItem.getAppId();
             workInfo.isOpen = true;
             workInfo.router = appItem.getAppurl();
+            if("设备看板".equals(workInfo.name) || "润滑看板".equals(workInfo.name) || "备件看板".equals(workInfo.name)){
+                sbWorkInfos.add(workInfo);
+            }
+            else
             zzApps.add(workInfo);
         }
 
         if(defaultList!=null && zzApps!=null){
+
+            WorkInfo workInfo = new WorkInfo();
+            workInfo.name = "生产报表";
+            workInfo.iconResId = R.drawable.ic_data_xjbb;
+            workInfo.router = "nil";
+            workInfo.isOpen = true;
+            zzApps.add(workInfo);
+
+            WorkInfo workInfo2 = new WorkInfo();
+            workInfo2.viewType = 1;
+            workInfo2.name = "生产管理";
+            workInfo2.type = -2;
+            workInfo2.isOpen = true;
+            zzApps.add(0,workInfo2);
 
 
             refreshList();
@@ -204,7 +223,7 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
         });
         contentView.setLayoutManager(layoutManager);
 //        contentView.addItemDecoration(new GridSpaceItemDecoration(DisplayUtil.dip2px(1, context), LINE_COUT));
-        titleText.setText("移动设备管理");
+        titleText.setText("红狮移动平台");
         leftBtn.setImageResource(R.drawable.sl_top_menu);
 //        rightBtn.setImageResource(R.drawable.sl_top_pending);
 //        rightBtn.setVisibility(View.VISIBLE);
@@ -236,13 +255,18 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
 
         List<WorkInfo> list = new ArrayList<>();
         if(zzApps!=null){
-            WorkInfo workInfo = new WorkInfo();
-            workInfo.viewType = 1;
-            workInfo.name = "生产管理";
-            workInfo.type = -2;
-            workInfo.isOpen = true;
-            list.add(workInfo);
             list.addAll(zzApps);
+        }
+
+        WorkInfo info = new WorkInfo();
+        info.viewType = 1;
+        info.name = "设备管理";
+        info.type = -2;
+        info.isOpen = true;
+        list.add(info);
+
+        if(sbWorkInfos.size() != 0){
+            list.addAll(sbWorkInfos);
         }
         list.addAll(defaultList);
         refreshListController.refreshComplete(list);
@@ -252,7 +276,7 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
                 .compose(RxSchedulers.io_main())
                 .filter(workInfo -> {
                     if(workInfo.viewType == WorkInfo.VIEW_TYPE_TITLE){
-                        height += DisplayUtil.dip2px(30, context);
+                        height += DisplayUtil.dip2px(20, context);
                         count = 0;
                     }
                     return workInfo.viewType == WorkInfo.VIEW_TYPE_CONTENT;
@@ -312,6 +336,7 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
                 WorkInfo workInfo = (WorkInfo) obj;
 
                 if(TextUtils.isEmpty(workInfo.router) && TextUtils.isEmpty(workInfo.iconUrl)){
+                    ToastUtils.show(context, "开发中！");
                     return;
                 }
 

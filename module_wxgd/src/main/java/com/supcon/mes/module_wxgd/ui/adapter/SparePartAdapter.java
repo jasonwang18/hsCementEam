@@ -283,7 +283,7 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
             }else {
                 actualQuantity.setVisibility(View.VISIBLE);
             }
-            if (Constant.WxgdView.EXECUTE_OPEN_URL.equals(tableAction) && Constant.SparePartUseStatus.NO_USE.equals(data.useState.id) && data.timesNum == repairSum ) {
+            if (data.useState!=null && Constant.WxgdView.EXECUTE_OPEN_URL.equals(tableAction) && Constant.SparePartUseStatus.NO_USE.equals(data.useState.id) && data.timesNum == repairSum ) {
                 actualQuantity.setEditable(true);
                 actualQuantity.getNumViewInput().setEnabled(true);
             }else {
