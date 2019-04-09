@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -126,6 +127,7 @@ public class OLXJGroupListActivity extends BaseRefreshRecyclerActivity<OLXJGroup
     protected void initView() {
         super.initView();
         setStatusBarColor(R.color.themeColor);
+        ((ViewGroup)titleText.getParent()).setBackgroundResource(R.color.themeColor);
         if (isTemp) {
 
             titleText.setText("选择路线生成临时任务");

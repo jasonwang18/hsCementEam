@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -90,6 +91,8 @@ public class OLXJTaskGroupListActivity extends BaseRefreshRecyclerActivity<OLXJT
     protected void initView() {
         super.initView();
         setStatusBarColor(R.color.themeColor);
+        ((ViewGroup)titleText.getParent()).setBackgroundResource(R.color.themeColor);
+
         titleText.setText("领取巡检任务");
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(5, context)));

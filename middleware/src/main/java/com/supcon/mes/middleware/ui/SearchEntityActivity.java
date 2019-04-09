@@ -199,7 +199,7 @@ public class SearchEntityActivity extends BaseRefreshRecyclerActivity<CommonSear
     protected void initView() {
         super.initView();
         //设置状态栏背景色
-        StatusBarUtils.setWindowStatusBarColor(this, R.color.equipmentThemeColor);
+        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
 
         titleSearchView = titleBar.searchView();
         titleSearchView.setHint("请输入搜索信息");

@@ -398,10 +398,15 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
                 if("过程报警".equals(workInfo.name)){
                     BuildConstants.isInit = true;
                     BuildConstants.appId = workInfo.zzAppId;
+                    Navigation.navigateToAlarmMinapp(workInfo.pendingUrl
+                            , workInfo.name, workInfo.zzBaseServerUrl
+                            , workInfo.iconUrl);
                 }
-                Navigation.navigateToAlarmMinapp(workInfo.pendingUrl
-                        , workInfo.name, workInfo.zzBaseServerUrl
-                        , workInfo.iconUrl);
+                else if("趋势图".equals(workInfo.name)) {
+                    Navigation.navigateToTrendMinapp(workInfo.pendingUrl
+                            , workInfo.name, workInfo.zzBaseServerUrl
+                            , workInfo.iconUrl);
+                }
                 break;
 
         }
