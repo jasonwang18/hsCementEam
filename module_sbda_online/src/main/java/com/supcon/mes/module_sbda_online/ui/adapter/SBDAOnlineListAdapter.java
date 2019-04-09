@@ -106,7 +106,7 @@ public class SBDAOnlineListAdapter extends BaseListDataRecyclerViewAdapter<SBDAO
 
         @Override
         protected void update(SBDAOnlineEntity entity) {
-            itemSBDADeviceIc.setImageResource(R.drawable.ic_default_sb);
+            itemSBDADeviceIc.setImageResource(R.drawable.ic_default_pic3);
 
             new EamPicController().initEamPic(itemSBDADeviceIc, entity.id);
 

@@ -85,7 +85,7 @@ public class SBDAListAdapter extends BaseListDataRecyclerViewAdapter<CommonDevic
 
         @Override
         protected void update(CommonDeviceEntity entity) {
-            itemSBDADeviceIc.setImageResource(R.drawable.ic_default_sb);
+            itemSBDADeviceIc.setImageResource(R.drawable.ic_default_pic3);
             if(entity.eamPic!=null){
                 Glide.with(context).load(entity.eamPic).apply(RequestOptionUtil.getEamRequestOptions(context)).into(itemSBDADeviceIc);
             }

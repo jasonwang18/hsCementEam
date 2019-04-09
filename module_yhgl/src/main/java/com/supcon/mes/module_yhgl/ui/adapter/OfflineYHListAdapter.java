@@ -173,7 +173,7 @@ public class OfflineYHListAdapter extends BaseListDataRecyclerViewAdapter<YHEnti
                 mEamPicController.initEamPic(itemYHDeviceIc, data.getEamId());
             }
             else{
-                itemYHDeviceIc.setImageResource(R.drawable.ic_default_sb);
+                itemYHDeviceIc.setImageResource(R.drawable.ic_default_pic3);
             }
             if (TextUtils.isEmpty(data.getDescription())) {
                 itemYHDescription.setVisibility(View.GONE);

@@ -12,7 +12,7 @@
         android:layout_height="100dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/ic_default_sb"
+        android:src="@drawable/ic_default_pic3"
         android:layout_marginLeft="@dimen/dp_10"
         android:scaleType="centerCrop"
         />

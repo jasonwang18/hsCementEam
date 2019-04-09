@@ -15,7 +15,7 @@ public class RequestOptionUtil {
     public static RequestOptions getEamRequestOptions(Context context) {
 
         return new RequestOptions()
-                .placeholder(R.drawable.ic_default_sb)
+                .placeholder(R.drawable.ic_default_pic3)
                 .dontAnimate()
                 .override(DisplayUtil.dip2px(110, context), DisplayUtil.dip2px(110, context))
                 .centerInside();
@@ -26,7 +26,7 @@ public class RequestOptionUtil {
     public static RequestOptions getWorkRequestOptions(Context context) {
 
         return new RequestOptions()
-                .placeholder(R.drawable.ic_default_sb)
+                .placeholder(R.drawable.ic_default_pic3)
                 .dontAnimate()
                 .override(DisplayUtil.dip2px(80, context), DisplayUtil.dip2px(80, context))
                 .centerInside();

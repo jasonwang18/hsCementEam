@@ -5,14 +5,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.text.TextUtils;
 import android.widget.LinearLayout;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.apt.Router;
+import com.bluetron.zhizhi.login.presentation.LoginUserSDK;
+import com.jdjz.coresdk14.App;
 import com.supcon.common.com_http.util.RxSchedulers;
 import com.supcon.common.view.base.activity.BaseMultiFragmentActivity;
 import com.supcon.common.view.util.LogUtil;
+import com.supcon.common.view.util.SharedPreferencesUtils;
 import com.supcon.mes.mbap.network.Api;
 import com.supcon.mes.middleware.BuildConfig;
 import com.supcon.mes.middleware.EamApplication;
@@ -160,7 +164,10 @@ public class MainActivity extends BaseMultiFragmentActivity {
             getController(RepairGroupController.class).onInit();
             getController(UserInfoListController.class).onInit();
         }
+
+        workFragment.doZhiZhiLogin();
     }
+
 
     @Override
     protected void onStart() {

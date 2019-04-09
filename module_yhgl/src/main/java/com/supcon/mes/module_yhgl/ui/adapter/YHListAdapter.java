@@ -158,7 +158,7 @@ public class YHListAdapter extends BaseListDataRecyclerViewAdapter<YHEntity> {
                 new EamPicController().initEamPic(itemYHDeviceIc, data.eamID.id);
             }
             else{
-                itemYHDeviceIc.setImageResource(R.drawable.ic_default_sb);
+                itemYHDeviceIc.setImageResource(R.drawable.ic_default_pic3);
             }
 
             if (TextUtils.isEmpty(data.describe)) {

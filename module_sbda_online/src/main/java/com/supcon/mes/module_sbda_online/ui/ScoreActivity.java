@@ -24,5 +24,6 @@ public class ScoreActivity extends BaseWebViewActivity {
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
+        findViewById(R.id.titleBarLayout).setBackgroundResource(R.color.themeColor);
     }
 }

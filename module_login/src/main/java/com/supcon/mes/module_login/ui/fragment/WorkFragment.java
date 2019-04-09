@@ -119,7 +119,7 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
     }
 
 
-    private void doZhiZhiLogin() {
+    public void doZhiZhiLogin() {
         String ip = SharedPreferencesUtils.getParam(App.getAppContext(), Constant.ZZ.IP, "");
         String port = SharedPreferencesUtils.getParam(App.getAppContext(), Constant.ZZ.PORT, "");
         String userName = App.getUserName();
@@ -191,7 +191,7 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
 
             WorkInfo workInfo2 = new WorkInfo();
             workInfo2.viewType = 1;
-            workInfo2.name = "数据平台";
+            workInfo2.name = "SupOS平台";
             workInfo2.type = -2;
             workInfo2.isOpen = true;
             zzApps.add(0,workInfo2);
@@ -253,6 +253,8 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
         ads.add(galleryBean);
         workCustomAd.setGalleryBeans(ads);
     }
+
+
 
     @SuppressLint("CheckResult")
     private void refreshList() {
