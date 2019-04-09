@@ -147,7 +147,7 @@ public interface Constant {
         String MODULE = "MODULE";
         String URL = "URL";
         String DEPLOYMENT_ID = "DEPLOYMENT_ID";
-        
+
         String SBDA_ONLINE_EAMCODE = "SBDA_ONLINE_EAMCODE";
         String SBDA_ONLINE_EAMID = "SBDA_ONLINE_EAMID";
         String SBDA_ENTITY = "sbdaEntitiy";
@@ -212,7 +212,7 @@ public interface Constant {
         String XJ_IS_TEMP = "XJ_IS_TEMP";
         String XJ_TASK_ENTITY = "XJ_TASK_ENTITY";
         String XJ_AREA_ENTITY = "XJ_AREA_ENTITY";
- 		String SPARE_PART_LEDGER_ID = "SPARE_PART_LEDGER_ID";
+        String SPARE_PART_LEDGER_ID = "SPARE_PART_LEDGER_ID";
     }
 
     interface FilterSearchParam {
@@ -409,6 +409,7 @@ public interface Constant {
         String EAM_STATE = "EAM_STATE";//设备状态
         String EAM_TYPE = "EAM_TYPE";//设备类型
         String EAM_AREA = "EAM_AREA";//区域类型
+        String EAM_AREANAME = "EAM_AREANAME";//区域类型主设备
 
         String OPEN_TIME_START = "OPEN_TIME_START";//时间
         String OPEN_TIME_STOP = "OPEN_TIME_STOP";//时间
@@ -547,7 +548,7 @@ public interface Constant {
         String SCORE = "/BEAM/scoreStandard/soring/eamScoreView.action?clientType=mobile&eamID=";
     }
 
-    interface ZZ{
+    interface ZZ {
         String IP = "IP";
         String PORT = "PORT";
     }
