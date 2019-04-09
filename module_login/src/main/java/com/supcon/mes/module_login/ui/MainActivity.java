@@ -97,13 +97,13 @@ public class MainActivity extends BaseMultiFragmentActivity {
     }
 
 
-/*    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void downloadModules(DownloadDataEvent event) {
         List<String> modules = event.getModules();
         Bundle bundle = new Bundle();
         bundle.putStringArrayList(Constant.IntentKey.DOWNLOAD_MODULES, (ArrayList<String>) modules);
         IntentRouter.go(context, Constant.Router.SJXZ, bundle);
-    }*/
+    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAppExit(AppExitEvent event) {
@@ -201,7 +201,7 @@ public class MainActivity extends BaseMultiFragmentActivity {
     @Override
     protected void initData() {
         super.initData();
-        checkData();
+//        checkData();
         Flowable.timer(10, TimeUnit.MILLISECONDS)
                 .compose(RxSchedulers.io_main())
                 .subscribe(new Consumer<Long>() {
@@ -229,10 +229,10 @@ public class MainActivity extends BaseMultiFragmentActivity {
     }
 
     private void checkData() {
-        if (EamApplication.getAccountInfo().userId == 0 /*|| !EamApplication.getAccountInfo().ip.equals(MBapApp.getIp())*/) {
+        if (EamApplication.getAccountInfo().userId != 0 /*|| !EamApplication.getAccountInfo().ip.equals(MBapApp.getIp())*/) {
             List<String> downloadModules = new ArrayList<>();
-            downloadModules.add(DataModule.XJ_BASE.getModuelName());
-            downloadModules.add(DataModule.EAM_BASE.getModuelName());
+//            downloadModules.add(DataModule.XJ_BASE.getModuelName());
+//            downloadModules.add(DataModule.EAM_BASE.getModuelName());
             downloadModules.add(DataModule.EAM_DEVICE.getModuelName());
             DownloadDataEvent event = new DownloadDataEvent(downloadModules);
             EventBus.getDefault().post(event);

@@ -95,8 +95,8 @@ public class App extends EamApplication {
         }*/
 
 
-        SharedPreferencesUtils.setParam(getApplicationContext(), Constant.ZZ.IP,"192.168.9.31");
-        SharedPreferencesUtils.setParam(getApplicationContext(), Constant.ZZ.PORT,"8043");
+        SharedPreferencesUtils.setParam(getApplicationContext(), Constant.ZZ.IP,"zhizhi.hssn.hz.supos.net"/*"192.168.13.113"*/);
+        SharedPreferencesUtils.setParam(getApplicationContext(), Constant.ZZ.PORT,"8181");
 
     }
 

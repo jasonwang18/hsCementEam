@@ -45,6 +45,7 @@ import com.supcon.mes.middleware.controller.ModifyController;
 import com.supcon.mes.middleware.model.bean.CommonDeviceEntity;
 import com.supcon.mes.middleware.model.bean.CommonDeviceEntityDao;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
+import com.supcon.mes.middleware.model.bean.WXGDEam;
 import com.supcon.mes.middleware.model.bean.XJHistoryEntity;
 import com.supcon.mes.middleware.model.bean.XJHistoryEntityDao;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
@@ -625,6 +626,9 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
                 xjWorkItemEntity.conclusionID = TextUtils.isEmpty(xjWorkItemEntity.conclusionID) ? "realValue/01" : xjWorkItemEntity.conclusionID;
             }
 
+            if(xjWorkItemEntity.eamID == null) {
+                xjWorkItemEntity.eamID = new WXGDEam();
+            }
         }
     }
 
@@ -916,22 +920,23 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
         Flowable.fromIterable(entity)
                 .filter(workItemEntity -> !workItemEntity.isFinished)
                 .subscribe(workItemEntity -> {
+                    if(workItemEntity.eamID!=null) {
+                        if (TextUtils.isEmpty(workItemEntity.eamID.name)) {
+                            OLXJWorkItemEntity titleEntity = new OLXJWorkItemEntity();
+                            titleEntity.title = workItemEntity.eamID.name;
+                            titleEntity.eamID = workItemEntity.eamID;
+                            titleEntity.viewType = ListType.TITLE.value();
+                            xjWorkItemEntities.add(titleEntity);
+                        }
 
-                    if (TextUtils.isEmpty(workItemEntity.eamID.name)) {
-                        OLXJWorkItemEntity titleEntity = new OLXJWorkItemEntity();
-                        titleEntity.title = workItemEntity.eamID.name;
-                        titleEntity.eamID = workItemEntity.eamID;
-                        titleEntity.viewType = ListType.TITLE.value();
-                        xjWorkItemEntities.add(titleEntity);
-                    }
-
-                    if (deviceName == null && !TextUtils.isEmpty(workItemEntity.eamID.name) || deviceName != null && !deviceName.equals(workItemEntity.eamID.name)) {
-                        deviceName = workItemEntity.eamID.name;
-                        OLXJWorkItemEntity titleEntity = new OLXJWorkItemEntity();
-                        titleEntity.title = workItemEntity.eamID.name;
-                        titleEntity.eamID = workItemEntity.eamID;
-                        titleEntity.viewType = ListType.TITLE.value();
-                        xjWorkItemEntities.add(titleEntity);
+                        if (deviceName == null && !TextUtils.isEmpty(workItemEntity.eamID.name) || deviceName != null && !deviceName.equals(workItemEntity.eamID.name)) {
+                            deviceName = workItemEntity.eamID.name;
+                            OLXJWorkItemEntity titleEntity = new OLXJWorkItemEntity();
+                            titleEntity.title = workItemEntity.eamID.name;
+                            titleEntity.eamID = workItemEntity.eamID;
+                            titleEntity.viewType = ListType.TITLE.value();
+                            xjWorkItemEntities.add(titleEntity);
+                        }
                     }
 
                     xjWorkItemEntities.add(workItemEntity);

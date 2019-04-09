@@ -134,7 +134,7 @@ dependencies {
     implementation (name:'timeintervalpickviewlib-1.0', ext:'aar')
 
 //    implementation files('libs/AMap_Location_V4.2.0_20180809.jar')
-    api (name:'domain-debug', ext:'aar')
+    api (name:'domain-debug2', ext:'aar')
     api (name:'libbase-debug', ext:'aar')
     implementation (name:'libminappparty-debug', ext:'aar')
     implementation (name:'libthirdparty-debug', ext:'aar')
@@ -176,5 +176,6 @@ dependencies {
     annotationProcessor 'com.alibaba:arouter-compiler:1.1.0'
 
     implementation 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
+    api 'org.apache.commons:commons-lang3:3.7'
 
 }

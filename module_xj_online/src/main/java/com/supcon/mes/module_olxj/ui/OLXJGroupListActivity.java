@@ -62,9 +62,11 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
+import io.reactivex.Scheduler;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -124,6 +126,11 @@ public class OLXJGroupListActivity extends BaseRefreshRecyclerActivity<OLXJGroup
     protected void initView() {
         super.initView();
         setStatusBarColor(R.color.themeColor);
+        if (isTemp) {
+
+            titleText.setText("选择路线生成临时任务");
+        }
+        else
         titleText.setText("巡检路线");
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(5, context)));
@@ -327,11 +334,11 @@ public class OLXJGroupListActivity extends BaseRefreshRecyclerActivity<OLXJGroup
 
     @Override
     public void updateStatusSuccess() {
-        EventBus.getDefault().post(new RefreshEvent());
         onLoadSuccessAndExit("生成成功！", new OnLoaderFinishListener() {
             @Override
             public void onLoaderFinished() {
                 onBackPressed();
+                EventBus.getDefault().post(new RefreshEvent());
             }
         });
     }

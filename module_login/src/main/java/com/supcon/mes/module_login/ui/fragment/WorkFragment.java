@@ -97,7 +97,7 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
     int height;
     volatile int count;
     private final int LINE_COUT = 4;
-    private final int ITEM_HEIGHT = 85;
+    private final int ITEM_HEIGHT = 90;
 
 
     public WorkFragment(){
@@ -156,6 +156,10 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
             if(zzApps.size() != 0){
                 zzApps.clear();
             }
+
+            if(sbWorkInfos.size()!=0){
+                sbWorkInfos.clear();
+            }
         }
         List<OwnMinAppItem> minappList = minappListEvent.getList();
         for (int i = 0; i < minappList.size(); i++) {
@@ -178,16 +182,16 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
 
         if(defaultList!=null && zzApps!=null){
 
-            WorkInfo workInfo = new WorkInfo();
-            workInfo.name = "生产报表";
-            workInfo.iconResId = R.drawable.ic_data_xjbb;
-            workInfo.router = "nil";
-            workInfo.isOpen = true;
-            zzApps.add(workInfo);
+//            WorkInfo workInfo = new WorkInfo();
+//            workInfo.name = "生产报表";
+//            workInfo.iconResId = R.drawable.ic_data_xjbb;
+//            workInfo.router = "nil";
+//            workInfo.isOpen = true;
+//            zzApps.add(workInfo);
 
             WorkInfo workInfo2 = new WorkInfo();
             workInfo2.viewType = 1;
-            workInfo2.name = "生产管理";
+            workInfo2.name = "数据平台";
             workInfo2.type = -2;
             workInfo2.isOpen = true;
             zzApps.add(0,workInfo2);
@@ -336,7 +340,7 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
                 WorkInfo workInfo = (WorkInfo) obj;
 
                 if(TextUtils.isEmpty(workInfo.router) && TextUtils.isEmpty(workInfo.iconUrl)){
-                    ToastUtils.show(context, "开发中！");
+                    ToastUtils.show(context, "暂无数据！");
                     return;
                 }
 

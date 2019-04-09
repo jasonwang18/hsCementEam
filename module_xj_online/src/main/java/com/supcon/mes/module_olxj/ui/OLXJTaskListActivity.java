@@ -120,6 +120,7 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
     private boolean isFront = false;
     private int enterPosition = -1;
     private NFCHelper nfcHelper;
+    private CustomDialog customDialog;
 
     @Override
     protected IListAdapter<OLXJTaskEntity> createAdapter() {
@@ -322,18 +323,19 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
     String reason = null;
     private void showAbortDialog(OLXJTaskEntity olxjTaskEntity){
         boolean isAllFinished = mOLXJTaskListAdapter.isAllFinished();
-        new CustomDialog(context)
-                .twoButtonAlertDialog(isAllFinished?"确定终止任务？":"还存在未完成的巡检项，确定终止任务？")
-                .bindClickListener(R.id.grayBtn, v -> {}, true)
-                .bindClickListener(R.id.redBtn, v -> {
-
-                    onLoading("正在终止任务...");
-                    presenterRouter.create(OLXJTaskStatusAPI.class).endTasks(String.valueOf(olxjTaskEntity.id), "终止任务", false);
-                }, true)
-                .show();
+//        new CustomDialog(context)
+//                .twoButtonAlertDialog(isAllFinished?"确定终止任务？":"还存在未完成的巡检项，确定终止任务？")
+//                .bindClickListener(R.id.grayBtn, v -> {}, true)
+//                .bindClickListener(R.id.redBtn, v -> {
+//
+//                    onLoading("正在终止任务...");
+//                    presenterRouter.create(OLXJTaskStatusAPI.class).endTasks(String.valueOf(olxjTaskEntity.id), "终止任务", false);
+//                }, true)
+//                .show();
 
         reason = "";
-        new CustomDialog(context).layout(R.layout.item_dialog)
+        customDialog = new CustomDialog(context).layout(R.layout.item_dialog,
+                DisplayUtil.getScreenWidth(context)-DisplayUtil.dip2px(40, context), WRAP_CONTENT)
                 .bindView(R.id.blueBtn, "确定")
                 .bindView(R.id.grayBtn, "取消")
                 .bindTextChangeListener(R.id.reason, new OnTextListener() {
@@ -351,10 +353,11 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
                         }
                         onLoading("正在终止任务...");
                         presenterRouter.create(OLXJTaskStatusAPI.class).endTasks(String.valueOf(olxjTaskEntity.id), reason, false);
-
+                        customDialog.dismiss();
                     }
-                }, true)
+                }, false)
                 .bindClickListener(R.id.grayBtn, null, true);
+        customDialog.show();
     }
 
     @Override
@@ -441,7 +444,7 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRefresh(RefreshEvent event){
         LogUtil.e("onRefresh");
-        Flowable.timer(100, TimeUnit.MILLISECONDS)
+        Flowable.timer(500, TimeUnit.MILLISECONDS)
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
@@ -454,7 +457,7 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogin(LoginEvent event){
         LogUtil.e("onLogin");
-        Flowable.timer(100, TimeUnit.MILLISECONDS)
+        Flowable.timer(500, TimeUnit.MILLISECONDS)
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
@@ -678,6 +681,7 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
 //        ToastUtils.show(context, "任务操作成功！");
         refreshListController.refreshBegin();
         SharedPreferencesUtils.setParam(context, Constant.SPKey.JHXJ_TASK, "");
+        mAreaEntities.clear();
     }
 
     @Override
@@ -692,6 +696,7 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
 //        ToastUtils.show(context, "任务取消成功！");
         refreshListController.refreshBegin();
         SharedPreferencesUtils.setParam(context, Constant.SPKey.JHXJ_TASK, "");
+        mAreaEntities.clear();
     }
 
     @Override
@@ -706,6 +711,7 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
 //        ToastUtils.show(context, "任务取消成功！");
         refreshListController.refreshBegin();
         SharedPreferencesUtils.setParam(context, Constant.SPKey.JHXJ_TASK, "");
+        mAreaEntities.clear();
     }
 
     @Override

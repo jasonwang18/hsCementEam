@@ -73,7 +73,7 @@ public class OLXJTaskListPresenter extends OLXJTaskContract.Presenter {
             if(taskEntity.starTime == null || taskEntity.endTime == null){
                 continue;
             }
-            if(taskEntity.starTime < currentTime && taskEntity.endTime > currentTime){
+            if(taskEntity.starTime <= currentTime && taskEntity.endTime >= currentTime){
                 taskEntities.add(taskEntity);
             }
 

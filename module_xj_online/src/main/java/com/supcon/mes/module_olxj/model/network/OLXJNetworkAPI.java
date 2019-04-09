@@ -47,7 +47,7 @@ public interface OLXJNetworkAPI {
      * @param fastQueryCondEntity 已下发快速查询条件
      * @return
      */
-    @GET("/mobileEAM/potrolTaskNew/potrolTaskWF/potrolTaskList-query.action?1=1&permissionCode=mobileEAM_1.0.0_potrolTaskNew_potrolTaskList&page.pageSize=500&page.maxPageSize=500&page.pageNo=1")
+    @GET("/mobileEAM/potrolTaskNew/potrolTaskWF/potrolTaskList-query.action?1=1&permissionCode=mobileEAM_1.0.0_potrolTaskNew_potrolTaskList")
     Flowable<CommonBAPListEntity<OLXJTaskEntity>> queryPotrolTaskList(@QueryMap Map<String, Object> queryParam, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity);
 
     /**

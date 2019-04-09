@@ -126,7 +126,7 @@ public class OLXJWorkItemEntity extends BaseEntity {
     @Expose
     public String title;
     @Expose
-    public int viewType;
+    public int viewType = 0;
     @Expose
     public String headerPicPath;
 

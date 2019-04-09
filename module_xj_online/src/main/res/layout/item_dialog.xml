@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="10dp"
-        android:text="暂停原因"
+        android:text="终止任务"
         android:textSize="@dimen/fontSize_20sp" />
 
     <include layout="@layout/ly_line" />

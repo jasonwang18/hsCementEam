@@ -13,6 +13,7 @@ import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BasePresenterActivity;
+import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.SharedPreferencesUtils;
 import com.supcon.mes.mbap.MBapApp;
 import com.supcon.mes.mbap.MBapConstant;
@@ -94,6 +95,15 @@ public class LoginActivity extends BasePresenterActivity implements LoginContrac
         loginLogoId = getIntent().getIntExtra(Constant.IntentKey.LOGIN_LOGO_ID, 0);
         loginBgId  = getIntent().getIntExtra(Constant.IntentKey.LOGIN_BG_ID, 0);
 
+        if("218.75.97.170".equals(SharedPreferencesUtils.getParam(context, MBapConstant.SPKey.IP, "218.75.97.170"))){
+            LogUtil.d("ip设置完毕！");
+        }
+
+        if("8181".equals(SharedPreferencesUtils.getParam(context, MBapConstant.SPKey.PORT, "8181"))){
+            LogUtil.d("端口设置完毕！");
+        }
+//        SharedPreferencesUtils.setParam(getApplicationContext(), MBapConstant.SPKey.IP, "218.75.97.170");
+//        SharedPreferencesUtils.setParam(getApplicationContext(), MBapConstant.SPKey.PORT, "8181");
     }
 
     @SuppressLint("CheckResult")
@@ -315,7 +325,7 @@ public class LoginActivity extends BasePresenterActivity implements LoginContrac
 
     @Override
     public void getAccountInfoSuccess() {
-//        downloadBase();
+        downloadBase();
         //跳转到主页
         goMain();
     }
@@ -349,8 +359,9 @@ public class LoginActivity extends BasePresenterActivity implements LoginContrac
 
     private void downloadBase(){
         List<String> downloadModules = new ArrayList<>();
-        downloadModules.add(DataModule.EAM_BASE.getModuelName());
-        downloadModules.add(DataModule.XJ_BASE.getModuelName());
+//        downloadModules.add(DataModule.EAM_BASE.getModuelName());
+//        downloadModules.add(DataModule.XJ_BASE.getModuelName());
+        downloadModules.add(DataModule.EAM_DEVICE.getModuelName());
         Bundle bundle = new Bundle();
         bundle.putStringArrayList(Constant.IntentKey.DOWNLOAD_MODULES, (ArrayList<String>) downloadModules);
         bundle.putBoolean(Constant.IntentKey.DOWNLOAD_VISIBLE, false);

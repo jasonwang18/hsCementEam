@@ -149,11 +149,11 @@ public class OLXJTaskGroupListActivity extends BaseRefreshRecyclerActivity<OLXJT
     @Override
     public void updateStatusSuccess() {
 
-        EventBus.getDefault().post(new RefreshEvent());
         onLoadSuccessAndExit("领取成功！", new OnLoaderFinishListener() {
             @Override
             public void onLoaderFinished() {
                 onBackPressed();
+                EventBus.getDefault().post(new RefreshEvent());
             }
         });
     }
