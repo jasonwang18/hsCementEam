@@ -166,7 +166,6 @@ public class SBDAOnlineListActivity extends BaseRefreshRecyclerActivity<SBDAOnli
 
         RxTextView.textChanges(titleSearchView.editText())
                 .skipInitialValue()
-                .debounce(1, TimeUnit.SECONDS)
                 .subscribe(charSequence -> {
                     if (TextUtils.isEmpty(charSequence)) {
                         doSearchTableNo(charSequence.toString());

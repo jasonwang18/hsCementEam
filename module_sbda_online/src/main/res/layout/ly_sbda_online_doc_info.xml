@@ -55,7 +55,7 @@
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/eamState"
             android:layout_width="0dp"
-            android:layout_height="@dimen/dp_30"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_12"
             android:layout_marginEnd="@dimen/dp_12"
             android:layout_weight="1"
@@ -71,7 +71,7 @@
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/areaNum"
             android:layout_width="0dp"
-            android:layout_height="@dimen/dp_30"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_12"
             android:layout_marginEnd="@dimen/dp_12"
             android:layout_weight="1"
@@ -97,7 +97,7 @@
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/installPlace"
             android:layout_width="0dp"
-            android:layout_height="@dimen/dp_30"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_12"
             android:layout_marginEnd="@dimen/dp_12"
             android:layout_weight="1"
@@ -113,7 +113,7 @@
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/eamUseDept"
             android:layout_width="0dp"
-            android:layout_height="@dimen/dp_30"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_12"
             android:layout_marginEnd="@dimen/dp_12"
             android:layout_weight="1"
@@ -139,7 +139,7 @@
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/eamDutyStaff"
             android:layout_width="0dp"
-            android:layout_height="@dimen/dp_30"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_12"
             android:layout_marginEnd="@dimen/dp_12"
             android:layout_weight="1"
@@ -155,7 +155,7 @@
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/eamAbc"
             android:layout_width="0dp"
-            android:layout_height="@dimen/dp_30"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_12"
             android:layout_marginEnd="@dimen/dp_12"
             android:layout_weight="1"
