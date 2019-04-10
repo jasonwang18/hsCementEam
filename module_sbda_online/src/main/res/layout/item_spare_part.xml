@@ -24,8 +24,8 @@
             android:paddingLeft="@dimen/dp_5"
             android:tag="itemSparePartNameTv"
             app:content_hint="--"
-            app:key="备\t\t\t\t\t件\t:"
-            app:max_lines="100" />
+            app:key="备      件:"
+            app:max_lines="1" />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/itemSparePartNumTv"
@@ -34,8 +34,8 @@
             android:paddingLeft="@dimen/dp_5"
             android:tag="itemSparePartNumTv"
             app:content_hint="--"
-            app:key="数\t\t\t\t\t量\t:"
-            app:max_lines="100" />
+            app:key="数      量:"
+            app:max_lines="1" />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/itemSparePartModelSpecifTv"
@@ -45,7 +45,7 @@
             android:tag="itemSparePartModelSpecifTv"
             app:content_hint="--"
             app:gravity="center"
-            app:key="规\t格\t型\t号\t:"
+            app:key="规 格 型 号:"
             app:key_width="140dp"
             app:max_lines="100" />
 

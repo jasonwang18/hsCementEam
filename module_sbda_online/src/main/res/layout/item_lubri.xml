@@ -23,9 +23,8 @@
             android:tag="itemLubricationOilTv"
             app:content_hint="--"
             app:gravity="center"
-            app:key="润\t滑\t油\t:"
-            app:key_width="140dp"
-            app:max_lines="100" />
+            app:key="润 滑 油:"
+            app:max_lines="1" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,9 +60,8 @@
             android:tag="itemLubricationPartTv"
             app:content_hint="--"
             app:gravity="center"
-            app:key="润\t滑\t部\t位\t:"
-            app:key_width="140dp"
-            app:max_lines="100" />
+            app:key="润 滑 部 位:"
+            app:max_lines="1" />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/itemLubricationLastDateTv"
