@@ -23,8 +23,8 @@
             android:paddingLeft="@dimen/dp_5"
             android:tag="itemSpareLedgerNameTv"
             app:content_hint="--"
-            app:key="设\t\t\t\t备:"
-            app:max_lines="100" />
+            app:key="设    备:"
+            app:max_lines="1" />
 
 
         <com.supcon.mes.mbap.view.CustomTextView

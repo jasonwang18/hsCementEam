@@ -24,8 +24,7 @@
             app:content_hint="--"
             app:gravity="center"
             app:key="上次维保日期:"
-            app:key_width="140dp"
-            app:max_lines="100" />
+            app:key_width="140dp" />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/itemMaintenanceNextDateTv"
@@ -37,8 +36,7 @@
             app:content_hint="--"
             app:gravity="center"
             app:key="下次维保日期:"
-            app:key_width="140dp"
-            app:max_lines="100" />
+            app:key_width="140dp" />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/itemMaintenanceLastDurationTv"
@@ -51,8 +49,7 @@
             app:content_hint="--"
             app:gravity="center"
             app:key="上次维保时长(h):"
-            app:key_width="140dp"
-            app:max_lines="100" />
+            app:key_width="140dp" />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/itemMaintenanceNextDurationTv"
@@ -65,8 +62,7 @@
             app:content_hint="--"
             app:gravity="center"
             app:key="下次维保时长(h):"
-            app:key_width="140dp"
-            app:max_lines="100" />
+            app:key_width="140dp" />
 
 
         <com.supcon.mes.mbap.view.CustomTextView
@@ -78,8 +74,7 @@
             android:tag="itemMaintenanceClaimTv"
             app:content_hint="--"
             app:gravity="center"
-            app:key="要\t\t\t\t\t\t\t\t\t\t求\t:"
-            app:key_width="140dp"
+            app:key="要      求:"
             app:max_lines="100" />
 
         <com.supcon.mes.mbap.view.CustomTextView
@@ -90,8 +85,7 @@
             android:tag="itemMaintenanceContentTv"
             app:content_hint="--"
             app:gravity="center"
-            app:key="内\t\t\t\t\t\t\t\t\t\t容\t:"
-            app:key_width="140dp"
+            app:key="内      容:"
             app:max_lines="100" />
 
         <com.supcon.mes.mbap.view.CustomTextView
@@ -103,7 +97,7 @@
             android:visibility="gone"
             app:content_hint="--"
             app:gravity="center"
-            app:key="备\t\t\t\t\t\t\t\t\t\t注\t:"
+            app:key="备      注:"
             app:key_width="140dp"
             app:max_lines="100" />
     </LinearLayout>

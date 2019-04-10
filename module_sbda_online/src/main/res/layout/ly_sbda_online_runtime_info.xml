@@ -56,7 +56,7 @@
         android:tag="cumulativeRunTime"
         app:gravity="right"
         app:key="累计运行时间"
-        app:key_width="140dp"
+        app:key_width="100dp"
         app:necessary="false" />
 
     <View
@@ -75,7 +75,7 @@
         android:tag="cumulativeDownTime"
         app:gravity="right"
         app:key="累计停机时间"
-        app:key_width="140dp" />
+        app:key_width="100dp" />
 
     <View
         android:layout_width="345dp"
@@ -93,7 +93,7 @@
         android:tag="cumulativeDownNum"
         app:gravity="right"
         app:key="停机次数"
-        app:key_width="140dp"
+        app:key_width="100dp"
         app:necessary="false" />
 
     <!--<View-->

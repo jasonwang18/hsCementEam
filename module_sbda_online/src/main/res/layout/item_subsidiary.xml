@@ -23,8 +23,8 @@
             android:paddingLeft="@dimen/dp_5"
             android:tag="itemEquipmentNameTv"
             app:content_hint="--"
-            app:key="设\t\t\t\t备:"
-            app:max_lines="100" />
+            app:key="设      备:"
+            app:max_lines="1" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -77,7 +77,8 @@
                 android:layout_marginEnd="@dimen/dp_12"
                 android:layout_weight="1"
                 android:tag="itemEquipmentProduceFirmTv"
-                app:key="制\t造\t厂:"
+                app:key="制  造  厂:"
+                app:max_lines="1"
                 app:necessary="false" />
 
             <View
@@ -119,8 +120,8 @@
             android:visibility="gone"
             app:content_hint="--"
             app:gravity="center"
-            app:key="备\t\t\t\t注:"
-            app:max_lines="100" />
+            app:key="备\t\t\t注:"
+            app:max_lines="1" />
 
     </LinearLayout>
 
