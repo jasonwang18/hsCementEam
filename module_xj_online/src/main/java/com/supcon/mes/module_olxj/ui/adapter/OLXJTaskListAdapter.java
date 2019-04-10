@@ -100,6 +100,8 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
 
         private long currentId;
 
+        private boolean isFold = true;
+
         public ViewHolder(Context context) {
             super(context);
         }
@@ -164,17 +166,15 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
         }
 
         private void expand(int position) {
-            int oldPosition = expandPosition;
+//            int oldPosition = expandPosition;
             expandPosition = position;
             notifyItemChanged(expandPosition);
-            notifyItemChanged(oldPosition);
+//            notifyItemChanged(oldPosition);
         }
 
         private void doShrink(){
             taskExpandBtn.setImageResource(R.drawable.ic_zk);
             taskAreaListView.setVisibility(View.GONE);
-//            mOLXJAreaListAdapter.clear();
-//            mOLXJAreaListAdapter.notifyDataSetChanged();
         }
 
         @SuppressLint("CheckResult")

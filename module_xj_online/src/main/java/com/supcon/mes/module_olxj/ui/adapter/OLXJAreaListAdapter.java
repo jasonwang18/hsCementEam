@@ -107,6 +107,7 @@ public class OLXJAreaListAdapter extends BaseListDataRecyclerViewAdapter<OLXJAre
                                 itemAreaProgress.setTextColor(Color.GRAY);
                                 data.finishType = "1";
                             }else {
+                                data.finishType = "0";
                                 itemAreaName.setTextColor(Color.parseColor("#366CBC"));
                                 itemAreaProgress.setTextColor(Color.parseColor("#366CBC"));
                             }

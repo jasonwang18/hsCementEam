@@ -99,6 +99,7 @@
             app:key_width="80dp"
             app:text_size="14"
             app:key_size="14"
+            app:max_lines="1"
             />
 
         <LinearLayout

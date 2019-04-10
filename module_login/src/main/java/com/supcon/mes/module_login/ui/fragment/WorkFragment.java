@@ -136,7 +136,7 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(LoginEventSDK ex) {
-        ToastUtils.show(context, "supos平台登录成功！");
+        LogUtil.d("supos平台登录成功！");
         HomeSDK.getInstance().getMinppListSDK();
     }
 

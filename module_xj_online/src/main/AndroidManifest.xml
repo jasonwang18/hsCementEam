@@ -9,7 +9,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleBarTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden"
-            android:launchMode="singleTask">
+            android:launchMode="standard">
         </activity>
         <activity
             android:name="com.supcon.mes.module_olxj.ui.OLXJTempTaskListActivity"

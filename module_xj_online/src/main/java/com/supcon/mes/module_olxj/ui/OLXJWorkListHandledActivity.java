@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -49,8 +50,11 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Predicate;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by wangshizhan on 2018/3/27.
@@ -89,9 +93,11 @@ public class OLXJWorkListHandledActivity extends BaseRefreshRecyclerActivity<OLX
     @BindByTag("contentView")
     RecyclerView contentView;
 
+    private boolean isXJFinished = false;
+
     @Override
     protected IListAdapter createAdapter() {
-        mOLXJWorkListAdapter = new OLXJWorkListFinishAdapter(context);
+        mOLXJWorkListAdapter = new OLXJWorkListFinishAdapter(context, getIntent().getBooleanExtra(Constant.IntentKey.IS_XJ_FINISHED, false));
         return mOLXJWorkListAdapter;
     }
 
@@ -108,6 +114,7 @@ public class OLXJWorkListHandledActivity extends BaseRefreshRecyclerActivity<OLX
         refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setPullDownRefreshEnabled(false);
         mXJAreaEntity = (OLXJAreaEntity) getIntent().getSerializableExtra(Constant.IntentKey.XJ_AREA_ENTITY);
+        isXJFinished = getIntent().getBooleanExtra(Constant.IntentKey.IS_XJ_FINISHED, false);
     }
 
     @Override
@@ -122,7 +129,9 @@ public class OLXJWorkListHandledActivity extends BaseRefreshRecyclerActivity<OLX
         initEmptyView();
 
         initFilterView();
-
+        if(isXJFinished){
+            oneKeySubmitBtn.setVisibility(View.GONE);
+        }
     }
 
     @SuppressLint("CheckResult")
@@ -180,7 +189,7 @@ public class OLXJWorkListHandledActivity extends BaseRefreshRecyclerActivity<OLX
         });
 
         refreshListController.setOnRefreshListener(() -> {
-            refreshListController.refreshComplete(mXJAreaEntity.workItemEntities);
+            doRefresh();
         });
 
         mOLXJWorkListAdapter.setOnItemChildViewClickListener((childView, position, action, obj) -> {
@@ -291,8 +300,9 @@ public class OLXJWorkListHandledActivity extends BaseRefreshRecyclerActivity<OLX
                                                         for (OLXJWorkItemEntity xjWorkItemEntity : xjWorkItemEntityList) {
                                                             doRerecord(xjWorkItemEntity);
                                                         }
-                                                        EventBus.getDefault().post(new RefreshEvent());
+                                                        EventBus.getDefault().post(mXJAreaEntity);
                                                         ToastUtils.show(context, "处理成功！");
+                                                        finish();
                                                     } catch (Exception e) {
                                                         ToastUtils.show(context, "处理失败： " + e.getMessage());
                                                         e.printStackTrace();
@@ -306,6 +316,36 @@ public class OLXJWorkListHandledActivity extends BaseRefreshRecyclerActivity<OLX
                 });
 
 
+    }
+
+    @SuppressLint("CheckResult")
+    private void doRefresh() {
+        List<OLXJWorkItemEntity> workItems = new ArrayList<>();
+        Flowable.fromIterable(mXJAreaEntity.workItemEntities)
+                .subscribeOn(Schedulers.newThread())
+                .filter(new Predicate<OLXJWorkItemEntity>() {
+                    @Override
+                    public boolean test(OLXJWorkItemEntity olxjWorkItemEntity) throws Exception {
+                        return olxjWorkItemEntity.isFinished;
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<OLXJWorkItemEntity>() {
+                    @Override
+                    public void accept(OLXJWorkItemEntity olxjWorkItemEntity) throws Exception {
+                        workItems.add(olxjWorkItemEntity);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        refreshListController.refreshComplete(workItems);
+                    }
+                });
     }
 
 
@@ -345,7 +385,7 @@ public class OLXJWorkListHandledActivity extends BaseRefreshRecyclerActivity<OLX
 
     @Override
     public void onBackPressed() {
-        EventBus.getDefault().post(new RefreshEvent());
+        EventBus.getDefault().post(mXJAreaEntity);
         finish();
     }
 

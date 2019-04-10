@@ -172,7 +172,7 @@ public class LoginActivity extends BasePresenterActivity implements LoginContrac
     protected void initView() {
         super.initView();
         setSwipeBackEnable(false);
-        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
+        StatusBarUtils.setWindowStatusBarColor(this, R.color.equipmentThemeColor);
         usernameInput.setInputType(InputType.TYPE_CLASS_TEXT);
         pwdInput.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
         pwdInput.editText().setTransformationMethod(PasswordTransformationMethod.getInstance());

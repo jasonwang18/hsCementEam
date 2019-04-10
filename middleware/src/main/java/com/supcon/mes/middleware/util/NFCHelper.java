@@ -67,6 +67,14 @@ public class NFCHelper {
     }
 
     /**
+     * 释放 mPendingIntent
+     */
+    public void release(){
+        mPendingIntent =  null;
+    }
+
+
+    /**
      * @description 检测NFC功能,创建PendingIntent对象
      * @param
      * @author zhangwenshuai1

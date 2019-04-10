@@ -143,7 +143,13 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
         nfcHelper = NFCHelper.getInstance();
         if (nfcHelper != null){
             nfcHelper.setup(this);
-            nfcHelper.setOnNFCListener(nfc -> EventBus.getDefault().post(new NFCEvent(nfc)));
+            nfcHelper.setOnNFCListener(new NFCHelper.OnNFCListener() {
+                @Override
+                public void onNFCReceived(String nfc) {
+                    LogUtil.d("NFC Received : "+nfc);
+                    EventBus.getDefault().post(new NFCEvent(nfc));
+                }
+            });
         }
 
         openDevice();
@@ -430,7 +436,9 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-
+        if(nfcHelper!=null){
+            nfcHelper.release();
+        }
     }
 
     @Override
@@ -586,7 +594,8 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
     }
 
     private void goXL(){
-
+        mAreaEntities.clear();
+        SharedPreferencesUtils.setParam(context, Constant.SPKey.JHXJ_TASK, "");
         IntentRouter.go(context, Constant.Router.JHXJ_LX_LIST);
     }
 
@@ -670,6 +679,7 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
         bundle.putSerializable(Constant.IntentKey.XJ_AREA_ENTITY, xjAreaEntity);
 
         if("1".equals(xjAreaEntity.finishType)){
+            bundle.putBoolean(Constant.IntentKey.IS_XJ_FINISHED, true);
             IntentRouter.go(context, Constant.Router.OLXJ_WORK_LIST_HANDLED, bundle);
         }
         else

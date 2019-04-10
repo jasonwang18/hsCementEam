@@ -1,15 +1,14 @@
 package com.supcon.mes.module_olxj.presenter;
 
+import android.annotation.SuppressLint;
+
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
-import com.supcon.mes.middleware.model.bean.XJPathEntity;
-import com.supcon.mes.middleware.model.bean.XJPathEntityDao;
 import com.supcon.mes.middleware.util.BAPQueryParamsHelper;
 import com.supcon.mes.module_olxj.model.bean.OLXJTaskEntity;
-import com.supcon.mes.module_olxj.model.bean.OLXJTaskListEntity;
 import com.supcon.mes.module_olxj.model.contract.OLXJTempTaskContract;
 import com.supcon.mes.module_olxj.model.network.OLXJClient;
 
@@ -55,10 +54,11 @@ public class OLXJTempTaskListPresenter extends OLXJTempTaskContract.Presenter {
                             @Override
                             public void accept(CommonBAPListEntity<OLXJTaskEntity> olxjTaskEntityCommonBAPListEntity) throws Exception {
                                 if (olxjTaskEntityCommonBAPListEntity.result != null) {
-                                    List<OLXJTaskEntity> taskEntities = new ArrayList<>();
-                                    if(olxjTaskEntityCommonBAPListEntity.result.size()!=0) {
-                                        taskEntities.add(olxjTaskEntityCommonBAPListEntity.result.get(0));
-                                    }
+
+                                    List<OLXJTaskEntity> taskEntities = filterTempTask(olxjTaskEntityCommonBAPListEntity.result );
+//                                    if(olxjTaskEntityCommonBAPListEntity.result.size()!=0) {
+//                                        taskEntities.add(olxjTaskEntityCommonBAPListEntity.result.get(0));
+//                                    }
                                     Objects.requireNonNull(getView()).getOJXJTempTaskListSuccess(taskEntities);
                                 } else {
                                     Objects.requireNonNull(getView()).getOJXJTempTaskListFailed(olxjTaskEntityCommonBAPListEntity.errMsg);
@@ -70,5 +70,21 @@ public class OLXJTempTaskListPresenter extends OLXJTempTaskContract.Presenter {
                                 Objects.requireNonNull(getView()).getOJXJTempTaskListFailed(throwable.toString());
                             }
                         }));
+    }
+
+    @SuppressLint("CheckResult")
+    private List<OLXJTaskEntity> filterTempTask(List<OLXJTaskEntity> result) {
+        List<OLXJTaskEntity> taskEntities = new ArrayList<>();
+        for(OLXJTaskEntity taskEntity:result){
+            if(taskEntity.resstaffID !=null && taskEntity.resstaffID.id != null
+                    &&taskEntity.resstaffID.id.equals(EamApplication.getAccountInfo().staffId)){
+                taskEntities.add(taskEntity);
+                if(taskEntities.size()!=0){
+                    return taskEntities;
+                }
+            }
+        }
+
+        return taskEntities;
     }
 }

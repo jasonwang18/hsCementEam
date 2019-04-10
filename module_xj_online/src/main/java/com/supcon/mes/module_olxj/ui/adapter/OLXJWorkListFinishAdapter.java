@@ -37,6 +37,8 @@ import java.util.List;
 
 public class OLXJWorkListFinishAdapter extends BaseListDataRecyclerViewAdapter<OLXJWorkItemEntity> {
 
+    private boolean isXJFinished = false;
+
     public OLXJWorkListFinishAdapter(Context context) {
         super(context);
     }
@@ -45,12 +47,14 @@ public class OLXJWorkListFinishAdapter extends BaseListDataRecyclerViewAdapter<O
         super(context, list);
     }
 
+    public OLXJWorkListFinishAdapter(Context context, boolean isXJFinished) {
+        super(context);
+        this.isXJFinished = isXJFinished;
+    }
 
     @Override
     protected BaseRecyclerViewHolder<OLXJWorkItemEntity> getViewHolder(int viewType) {
-
         return new ViewHolderFinished(context);
-
     }
 
 
@@ -150,12 +154,20 @@ public class OLXJWorkListFinishAdapter extends BaseListDataRecyclerViewAdapter<O
 
         @Override
         protected int layoutId() {
-            return R.layout.item_xj_work_item_finished;
+            return R.layout.item_olxj_work_item_finished;
         }
 
         @Override
         protected void update(OLXJWorkItemEntity data) {
             mOLXJCameraController.addListener(fItemPics, getAdapterPosition(),OLXJWorkListFinishAdapter.this);
+
+            if(isXJFinished){
+                fReRecordBtn.setVisibility(View.GONE);
+            }
+            else{
+                fReRecordBtn.setVisibility(View.VISIBLE);
+            }
+
             xjItemContent.setValue(data.content);
             fItemRemark.setEditable(false);
             fItemRemark.setInput(data.realRemark);

@@ -213,6 +213,8 @@ public interface Constant {
         String XJ_TASK_ENTITY = "XJ_TASK_ENTITY";
         String XJ_AREA_ENTITY = "XJ_AREA_ENTITY";
         String SPARE_PART_LEDGER_ID = "SPARE_PART_LEDGER_ID";
+
+        String IS_XJ_FINISHED = "IS_XJ_FINISHED";
     }
 
     interface FilterSearchParam {

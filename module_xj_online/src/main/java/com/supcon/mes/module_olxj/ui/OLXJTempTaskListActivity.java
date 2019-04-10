@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -154,7 +153,13 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
         nfcHelper = NFCHelper.getInstance();
         if (nfcHelper != null){
             nfcHelper.setup(this);
-            nfcHelper.setOnNFCListener(nfc -> EventBus.getDefault().post(new NFCEvent(nfc)));
+            nfcHelper.setOnNFCListener(new NFCHelper.OnNFCListener() {
+                @Override
+                public void onNFCReceived(String nfc) {
+                    LogUtil.d("Temp NFC Received : "+nfc);
+                    EventBus.getDefault().post(new NFCEvent(nfc));
+                }
+            });
         }
 
         openDevice();
@@ -455,7 +460,9 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-
+        if(nfcHelper!=null){
+            nfcHelper.release();
+        }
     }
 
     @Override
@@ -609,7 +616,8 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
         if(!hasAddForumPermission){
             ToastUtils.show(context, "没有创建巡检任务的权限！");
         }
-
+        mAreaEntities.clear();
+        SharedPreferencesUtils.setParam(context, Constant.SPKey.LSXJ_TASK, "");
         Bundle bundle = new Bundle();
         bundle.putBoolean(Constant.IntentKey.XJ_IS_TEMP, true);
         bundle.putLong(Constant.IntentKey.DEPLOYMENT_ID, deploymentId);
@@ -699,6 +707,7 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
         bundle.putSerializable(Constant.IntentKey.XJ_AREA_ENTITY, xjAreaEntity);
 
         if("1".equals(xjAreaEntity.finishType)){
+            bundle.putBoolean(Constant.IntentKey.IS_XJ_FINISHED, true);
             IntentRouter.go(context, Constant.Router.OLXJ_WORK_LIST_HANDLED, bundle);
         }
         else

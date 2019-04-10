@@ -81,9 +81,9 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
             return new PicViewHolder(context);
         } else if (viewType == ListType.TITLE.value()) {
             return new TitleViewHolder(context);
-        } else if (viewType == -1) {
+        } /*else if (viewType == -1) {
             return new ViewHolderFinished(context);
-        }
+        }*/
         return new ViewHolderUnFinished(context);
     }
 

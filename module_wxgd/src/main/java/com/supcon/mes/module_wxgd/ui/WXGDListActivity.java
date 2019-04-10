@@ -139,6 +139,7 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
         contentView.addItemDecoration(new SpaceItemDecoration(10));
 
         customSearchView.setHint("搜索");
+        searchTitleBar.disableRightBtn();
         titleText.setTextSize(14);
 
         initFilter();

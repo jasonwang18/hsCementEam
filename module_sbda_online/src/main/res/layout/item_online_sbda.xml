@@ -98,7 +98,7 @@
     <Button
         android:id="@+id/eamFraction"
         android:layout_width="@dimen/dp_40"
-        android:layout_height="@dimen/dp_25"
+        android:layout_height="@dimen/dp_30"
         android:layout_below="@+id/eamStatus"
         android:layout_alignParentEnd="true"
         android:layout_gravity="center"
@@ -108,5 +108,5 @@
         android:gravity="center"
         android:tag="eamFraction"
         android:textColor="@color/white"
-        android:textSize="12sp" />
+        android:textSize="16sp" />
 </RelativeLayout>

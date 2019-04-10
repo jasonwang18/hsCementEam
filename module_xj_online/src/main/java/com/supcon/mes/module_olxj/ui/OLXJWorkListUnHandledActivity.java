@@ -952,6 +952,12 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
         mRefreshEvent = null;
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onAreaUpdate(OLXJAreaEntity areaEntity){
+        mXJAreaEntity = areaEntity;
+        refreshListController.refreshBegin();
+    }
+
     @Override
     public void uploadOLXJAreaDataSuccess() {
         EventBus.getDefault().post(mXJAreaEntity);
