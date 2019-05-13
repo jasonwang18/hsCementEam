@@ -14,6 +14,7 @@ import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
+import com.supcon.mes.mbap.view.CustomFilterView;
 import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
 import com.supcon.mes.mbap.view.CustomSearchView;
 import com.supcon.mes.middleware.constant.Constant;
@@ -22,10 +23,12 @@ import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.KeyExpandHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_warn.R;
+import com.supcon.mes.module_warn.filter.TimeStyleBean;
 import com.supcon.mes.module_warn.model.api.MaintenanceWarnAPI;
 import com.supcon.mes.module_warn.model.bean.MaintenanceWarnEntity;
 import com.supcon.mes.module_warn.model.bean.MaintenanceWarnListEntity;
 import com.supcon.mes.module_warn.model.contract.MaintenanceWarnContract;
+import com.supcon.mes.module_warn.filter.FilterHelper;
 import com.supcon.mes.module_warn.presenter.MaintenanceWarnPresenter;
 import com.supcon.mes.module_warn.ui.adapter.MaintenanceWarnAdapter;
 
@@ -40,7 +43,7 @@ import java.util.Map;
  */
 @Router(Constant.Router.MAINTENANCE_EARLY_WARN)
 @Presenter(value = MaintenanceWarnPresenter.class)
-public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<MaintenanceWarnEntity> implements MaintenanceWarnContract.View  {
+public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<MaintenanceWarnEntity> implements MaintenanceWarnContract.View {
 
     @BindByTag("leftBtn")
     AppCompatImageButton leftBtn;
@@ -53,6 +56,10 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
 
     @BindByTag("contentView")
     RecyclerView contentView;
+
+    @BindByTag("listTimeStyleFilter")
+    CustomFilterView listTimeStyleFilter;
+    private String url;
 
     private final Map<String, Object> queryParam = new HashMap<>();
     private String selecStr;
@@ -82,6 +89,7 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
         searchTitleBar.setTitleText("维保预警");
         searchTitleBar.setBackgroundResource(R.color.gradient_start);
         searchTitleBar.disableRightBtn();
+        listTimeStyleFilter.setData(FilterHelper.createMainteFilter());
     }
 
     @SuppressLint("CheckResult")
@@ -95,7 +103,7 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
             if (!TextUtils.isEmpty(selecStr)) {
                 queryParam.put(Constant.BAPQuery.EAM_CODE, selecStr);
             }
-            presenterRouter.create(MaintenanceWarnAPI.class).getMaintenance(queryParam,pageIndex);
+            presenterRouter.create(MaintenanceWarnAPI.class).getMaintenance(url, queryParam, pageIndex);
         });
         RxTextView.textChanges(titleSearchView.editText())
                 .skipInitialValue()
@@ -108,12 +116,24 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
                 doSearchTableNo(titleSearchView.getInput()));
 
         leftBtn.setOnClickListener(v -> onBackPressed());
+
+        listTimeStyleFilter.setFilterSelectChangedListener(filterBean -> {
+            url = ((TimeStyleBean) filterBean).url;
+            doRefresh();
+        });
     }
+
     public void doSearchTableNo(String search) {
         selecStr = search;
         refreshListController.refreshBegin();
     }
 
+    /**
+     * 进行过滤查询
+     */
+    private void doRefresh() {
+        refreshListController.refreshBegin();
+    }
 
     @Override
     public void getMaintenanceSuccess(MaintenanceWarnListEntity entity) {

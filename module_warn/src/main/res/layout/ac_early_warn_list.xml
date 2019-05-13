@@ -14,5 +14,20 @@
         app:title_background_color="@color/themeColor"
         app:title_text="预警" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/themeColor"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_5">
+
+        <include
+            layout="@layout/ly_filter_warn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp" />
+
+    </LinearLayout>
+
+
     <include layout="@layout/ly_recyclerview" />
 </LinearLayout>

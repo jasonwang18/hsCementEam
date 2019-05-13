@@ -22,8 +22,11 @@ import java.util.Map;
 public class SparePartWarnPresenter extends SparePartWarnContract.Presenter {
 
     @Override
-    public void getSparePart(Map<String, Object> params, int page) {
+    public void getSparePart(String url, Map<String, Object> params, int page) {
 
+        if (TextUtils.isEmpty(url)) {
+            url = "/BEAM/baseInfo/sparePart/data-dg1535424823416.action";
+        }
         FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
         JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(params, "S2BASE_PRODUCT,PRODUCT_ID,BEAM_SPARE_PARTS,PRODUCTID");
         fastQuery.subconds.add(joinSubcondEntity);
@@ -32,7 +35,7 @@ public class SparePartWarnPresenter extends SparePartWarnContract.Presenter {
         Map<String, Object> pageQueryParams = new HashMap<>();
         pageQueryParams.put("page.pageNo", page);
         pageQueryParams.put("page.maxPageSize", 500);
-        mCompositeSubscription.add(EarlyWarnHttpClient.getSparePart(fastQuery,pageQueryParams)
+        mCompositeSubscription.add(EarlyWarnHttpClient.getSparePart(url, fastQuery, pageQueryParams)
                 .onErrorReturn(throwable -> {
                     SparePartWarnListEntity sparePartWarnListEntity = new SparePartWarnListEntity();
                     sparePartWarnListEntity.errMsg = throwable.toString();

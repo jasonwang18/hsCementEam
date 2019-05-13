@@ -22,8 +22,10 @@ import java.util.Map;
 public class MaintenanceWarnPresenter extends MaintenanceWarnContract.Presenter {
 
     @Override
-    public void getMaintenance(Map<String, Object> params,int page) {
-
+    public void getMaintenance(String url,Map<String, Object> params,int page) {
+        if (TextUtils.isEmpty(url)) {
+            url = "/BEAM/baseInfo/jWXItem/data-dg1531171100751.action";
+        }
         FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
         JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(params, "EAM_BaseInfo,EAM_ID,BEAM_JWXITEMS,EAMID");
         fastQuery.subconds.add(joinSubcondEntity);
@@ -32,7 +34,7 @@ public class MaintenanceWarnPresenter extends MaintenanceWarnContract.Presenter 
         Map<String, Object> pageQueryParams = new HashMap<>();
         pageQueryParams.put("page.pageNo", page);
         pageQueryParams.put("page.maxPageSize", 500);
-        mCompositeSubscription.add(EarlyWarnHttpClient.getMaintenance(fastQuery,pageQueryParams)
+        mCompositeSubscription.add(EarlyWarnHttpClient.getMaintenance(url,fastQuery,pageQueryParams)
                 .onErrorReturn(throwable -> {
                     MaintenanceWarnListEntity maintenanceWarnListEntity = new MaintenanceWarnListEntity();
                     maintenanceWarnListEntity.errMsg = throwable.toString();
