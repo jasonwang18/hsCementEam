@@ -1,6 +1,7 @@
 package com.supcon.mes.module_sbda_online.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
+import com.supcon.mes.middleware.model.bean.AccessoryEamId;
 import com.supcon.mes.middleware.model.bean.ValueEntity;
 
 /**
@@ -22,6 +23,9 @@ public class LubriEntity extends BaseEntity {
     public Long nextTime;//下次润滑时间
     public Float sum;//用量
     public ValueEntity periodType;//润滑类型
+
+    public SparePartId sparePartId;//备件编码
+    public AccessoryEamId accessoryEamId;//附属设备
 
     public LubricateOil getLubricateOil() {
         if (lubricateOil == null) {
@@ -49,4 +53,17 @@ public class LubriEntity extends BaseEntity {
         return false;
     }
 
+    public SparePartId getSparePartId() {
+        if (sparePartId == null) {
+            sparePartId = new SparePartId();
+        }
+        return sparePartId;
+    }
+
+    public AccessoryEamId getAccessoryEamId() {
+        if (accessoryEamId == null) {
+            accessoryEamId = new AccessoryEamId();
+        }
+        return accessoryEamId;
+    }
 }

@@ -50,6 +50,19 @@
             app:max_lines="100" />
 
         <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemSparePartAttachEamTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemSparePartAttachEamTv"
+            android:visibility="gone"
+            app:content_hint="--"
+            app:gravity="center"
+            app:key="附 属 设 备:"
+            app:key_width="140dp"
+            app:max_lines="100" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/itemSparePartLastDateTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -113,6 +126,8 @@
             app:key="备\t\t\t\t\t\t注\t:"
             app:key_width="140dp"
             app:max_lines="100" />
+
+
     </LinearLayout>
 
     <Button

@@ -48,6 +48,8 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
         CustomTextView itemSparePartNumTv;
         @BindByTag("itemSparePartModelSpecifTv")
         CustomTextView itemSparePartModelSpecifTv;
+        @BindByTag("itemSparePartAttachEamTv")
+        CustomTextView itemSparePartAttachEamTv;
         @BindByTag("itemSparePartLastDateTv")
         CustomTextView itemSparePartLastDateTv;
         @BindByTag("itemSparePartNextDateTv")
@@ -98,6 +100,11 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
                 String modelSpecif = String.format(context.getString(R.string.device_style10), Util.strFormat(data.getProductID().productModel)
                         , Util.strFormat(data.getProductID().productSpecif));
                 itemSparePartModelSpecifTv.contentView().setText(HtmlParser.buildSpannedText(modelSpecif, new HtmlTagHandler()));
+            }
+
+            if (!TextUtils.isEmpty(data.getAccessoryEamId().getAttachEamId().code)) {
+                itemSparePartAttachEamTv.setVisibility(View.VISIBLE);
+                itemSparePartAttachEamTv.setContent(data.getAccessoryEamId().getAttachEamId().code);
             }
 
             if (data.isDuration()) {

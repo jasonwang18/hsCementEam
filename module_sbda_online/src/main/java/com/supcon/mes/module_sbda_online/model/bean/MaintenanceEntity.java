@@ -1,6 +1,7 @@
 package com.supcon.mes.module_sbda_online.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
+import com.supcon.mes.middleware.model.bean.AccessoryEamId;
 import com.supcon.mes.middleware.model.bean.ValueEntity;
 
 /**
@@ -24,11 +25,28 @@ public class MaintenanceEntity extends BaseEntity {
 
     public ValueEntity periodType;//类型
 
+    public SparePartId sparePartId;//备件编码
+    public AccessoryEamId accessoryEamId;//附属设备
+
     //是否润滑时长
     public boolean isDuration() {
         if (periodType != null && periodType.id.equals("BEAM014/02")) {
             return true;
         }
         return false;
+    }
+
+    public SparePartId getSparePartId() {
+        if (sparePartId == null) {
+            sparePartId = new SparePartId();
+        }
+        return sparePartId;
+    }
+
+    public AccessoryEamId getAccessoryEamId() {
+        if (accessoryEamId == null) {
+            accessoryEamId = new AccessoryEamId();
+        }
+        return accessoryEamId;
     }
 }
