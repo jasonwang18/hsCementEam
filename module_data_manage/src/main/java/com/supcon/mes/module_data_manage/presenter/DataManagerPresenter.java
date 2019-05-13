@@ -55,6 +55,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import io.reactivex.Flowable;
@@ -147,9 +148,9 @@ public class DataManagerPresenter extends DataManaerContract.Presenter {
                             if (alllDeviceResultEntity.success) {
                                 parseEamInfo(alllDeviceResultEntity);
                                 DataParseEvent dataParseEvent = new DataParseEvent(true);
-                                getView().parseDataSuccess(dataParseEvent);
+                                Objects.requireNonNull(getView()).parseDataSuccess(dataParseEvent);
                             } else {
-                                getView().downloadFailed(alllDeviceResultEntity.errMsg);
+                                Objects.requireNonNull(getView()).downloadFailed(alllDeviceResultEntity.errMsg);
                             }
                         })
 

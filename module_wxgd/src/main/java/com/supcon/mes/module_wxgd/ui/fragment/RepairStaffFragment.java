@@ -21,7 +21,7 @@ import com.supcon.mes.middleware.model.bean.UserInfo;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.R;
-import com.supcon.mes.module_wxgd.model.bean.RepairStaffEntity;
+import com.supcon.mes.middleware.model.bean.RepairStaffEntity;
 import com.supcon.mes.module_wxgd.ui.adapter.RepairStaffAdapter;
 
 import org.greenrobot.eventbus.EventBus;

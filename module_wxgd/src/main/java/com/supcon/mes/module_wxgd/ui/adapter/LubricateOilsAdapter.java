@@ -6,12 +6,10 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
-import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
@@ -23,18 +21,14 @@ import com.supcon.mes.mbap.view.CustomNumView;
 import com.supcon.mes.mbap.view.CustomVerticalEditText;
 import com.supcon.mes.mbap.view.CustomVerticalSpinner;
 import com.supcon.mes.mbap.view.CustomVerticalTextView;
-import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
-import com.supcon.mes.module_wxgd.model.bean.LubricateOilsEntity;
+import com.supcon.mes.middleware.model.bean.LubricateOilsEntity;
 import com.supcon.mes.module_wxgd.R;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.regex.Pattern;
-
-import io.reactivex.functions.Consumer;
 
 /**
  * LubricateOilsAdapter  润滑油列表Adapter

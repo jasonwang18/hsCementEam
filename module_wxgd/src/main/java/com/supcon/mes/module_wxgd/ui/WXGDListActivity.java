@@ -42,7 +42,7 @@ import com.supcon.mes.middleware.util.SystemCodeManager;
 import com.supcon.mes.module_wxgd.R;
 import com.supcon.mes.module_wxgd.controller.WXGDSubmitController;
 import com.supcon.mes.module_wxgd.model.api.WXGDListAPI;
-import com.supcon.mes.module_wxgd.model.bean.WXGDEntity;
+import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.module_wxgd.model.bean.WXGDListEntity;
 import com.supcon.mes.module_wxgd.model.contract.WXGDListContract;
 import com.supcon.mes.module_wxgd.presenter.WXGDListPresenter;
@@ -140,7 +140,6 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
 
         customSearchView.setHint("搜索");
         searchTitleBar.disableRightBtn();
-        titleText.setTextSize(14);
 
         initFilter();
         initEmpty();

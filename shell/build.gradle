@@ -6,12 +6,22 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion       rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId       rootProject.ext.applicationId
+        applicationId       'com.supcon.mes.cementEam'
         minSdkVersion       rootProject.ext.minSdkVersion
         targetSdkVersion    rootProject.ext.targetSdkVersion
         versionCode         rootProject.ext.versionCode
         versionName         rootProject.ext.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        flavorDimensions "134"
+    }
+    productFlavors {
+        '134' {
+            manifestPlaceholders = [CHANNEL_VALUE: "134"]
+        }
+        '9'{
+            manifestPlaceholders = [CHANNEL_VALUE: "9"]
+        }
 
     }
 
@@ -33,7 +43,7 @@ android {
             signingConfig signingConfigs.keystore
             applicationVariants.all { variant ->
                 variant.outputs.all {
-                    outputFileName  = "SN-VxEAM-Mobile V${defaultConfig.versionName}-${releaseTime()}-C.apk"
+                    outputFileName  = "SN-VxEAM(M) V${defaultConfig.versionName}-${releaseTime()}-C.apk"
                 }
             }
         }
@@ -76,6 +86,7 @@ dependencies {
         implementation project(':module_sbda_online')
     }
     implementation project(':middleware')
+    implementation project(':upush')
 
 }
 

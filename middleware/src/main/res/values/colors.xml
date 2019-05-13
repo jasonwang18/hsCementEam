@@ -13,6 +13,7 @@
     <color name="xjAreaLineBlue">#c5d3ef</color>
     <color name="BgXjAreaBlue">#f0f4fc</color>
     <color name="xjStateBg">#F0F4FC</color>
+    <color name="BgXjAreaDark">#50bcbcbc</color>
 
     <color name="SBDAListGray">#BCBCBC</color>
     <color name="SBDAListGreen">#8AD790</color>

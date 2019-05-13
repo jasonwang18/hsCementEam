@@ -2,9 +2,6 @@ package com.supcon.mes.module_wxgd.model.dto;
 
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
-import com.supcon.mes.module_wxgd.model.bean.SparePartEntity;
-
-import java.math.BigDecimal;
 
 /**
  * SparePartEntityDto  备件传输对象实体

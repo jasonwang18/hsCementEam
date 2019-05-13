@@ -34,7 +34,7 @@ public class LoginPresenter extends LoginContract.Presenter {
         LogUtil.i("dologin username:"+username);
 
         Map<String, Object> defaultMap = new HashMap<>();
-        defaultMap.put("machineId",11111111);
+        defaultMap.put("machineId", 11111111);
         defaultMap.put("clientType","android");
         defaultMap.put("clientVersion","2.1");
         defaultMap.put("timestamp",new Date().getTime());

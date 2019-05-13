@@ -19,12 +19,11 @@ import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.CustomSwipeLayout;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.view.CustomDialog;
-import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomVerticalDateView;
 import com.supcon.mes.mbap.view.CustomVerticalEditText;
 import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
-import com.supcon.mes.module_wxgd.model.bean.RepairStaffEntity;
+import com.supcon.mes.middleware.model.bean.RepairStaffEntity;
 import com.supcon.mes.module_wxgd.R;
 
 import org.greenrobot.eventbus.EventBus;

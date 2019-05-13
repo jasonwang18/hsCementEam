@@ -91,6 +91,14 @@ public class OLXJAreaListAdapter extends BaseListDataRecyclerViewAdapter<OLXJAre
 
             itemAreaName.setTextColor(Color.GRAY);
             itemAreaProgress.setTextColor(Color.GRAY);
+
+            if(getAdapterPosition() %2 == 1){
+                itemView.setBackgroundResource(R.drawable.sl_area_dark);
+            }
+            else{
+                itemView.setBackgroundResource(R.drawable.sl_area);
+            }
+
             AtomicInteger finishedNum = new AtomicInteger();
             Flowable.fromIterable(data.workItemEntities)
                     .compose(RxSchedulers.io_main())

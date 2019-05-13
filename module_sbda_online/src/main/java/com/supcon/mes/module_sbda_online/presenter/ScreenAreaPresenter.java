@@ -3,6 +3,7 @@ package com.supcon.mes.module_sbda_online.presenter;
 import android.annotation.SuppressLint;
 
 import com.supcon.mes.mbap.view.CustomFilterView;
+import com.supcon.mes.middleware.util.ChannelUtil;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_sbda_online.model.bean.ScreenEntity;
 import com.supcon.mes.module_sbda_online.model.bean.ScreenListEntity;
@@ -28,8 +29,13 @@ public class ScreenAreaPresenter extends ScreenAreaContract.Presenter {
     @Override
     public void screenPart(CustomFilterView customFilterView) {
         ScreenEntity screenEntity = new ScreenEntity();
-        screenEntity.name = "3线水泥制成";
-        screenEntity.id = 1040L;
+        String channel = ChannelUtil.getUMengChannel();
+        if (channel.equals("hongshi")) {
+            screenEntity.name = "3线水泥制成";
+            screenEntity.id = 1040L;
+        } else {
+            screenEntity.name = "区域不限";
+        }
         List<ScreenEntity> screenEntities = new LinkedList<>();
         screenEntities.add(screenEntity);
         url = "/BEAM/area/area/areaList-query.action?page.pageSize=500";
@@ -49,10 +55,13 @@ public class ScreenAreaPresenter extends ScreenAreaContract.Presenter {
                                     }
                                 })
                                 .subscribe(screenEntity1 -> {
-                                    screenEntities.add(screenEntity1);
+                                    if (!screenEntities.contains(screenEntity1)) {
+                                        screenEntities.add(screenEntity1);
+                                    }
                                 }, throwable -> {
                                 }, () -> {
                                     customFilterView.setData(screenEntities);
+                                    customFilterView.setCurrentItem(screenEntity);
                                 });
                     } else {
                         customFilterView.setData(screenEntities);

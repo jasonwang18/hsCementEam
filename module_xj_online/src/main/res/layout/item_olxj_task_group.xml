@@ -119,7 +119,7 @@
             android:textColor="@color/textColorlightblack" />
     </RelativeLayout>
 
-    <ImageView
+<!--    <ImageView
         android:id="@+id/taskGetBtn"
         android:tag="taskGetBtn"
         android:layout_width="40dp"
@@ -130,6 +130,18 @@
         android:src="@drawable/sl_get"
         android:layout_marginTop="50dp"
         android:layout_marginRight="10dp"
+        />-->
+
+    <Button
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        style="@style/BlueButtonRadius"
+        android:text="领取"
+        android:id="@+id/taskGetBtn"
+        android:tag="taskGetBtn"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="@dimen/dp_10"
         />
 </RelativeLayout>
 

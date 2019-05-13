@@ -50,7 +50,7 @@ public class WorkHelper {
 
 
                 case Constant.WorkType.XJGL:
-                    workInfo.iconResId = R.drawable.ic_work_zygl_small;
+                    workInfo.iconResId = R.drawable.ic_work_jhxj;
                     workInfo.router = Constant.Router.XJGL_LIST;
                     break;
                 case Constant.WorkType.JHXJ:
@@ -66,7 +66,7 @@ public class WorkHelper {
                     workInfo.router = Constant.Router.BJSQ_LIST;
                     break;
                 case Constant.WorkType.YXJL:
-                    workInfo.iconResId = R.drawable.ic_work_yxjl_small;
+                    workInfo.iconResId = R.drawable.ic_work_yxjl;
                     workInfo.router = Constant.Router.YXJL_LIST;
                     break;
 //                    case Constant.WorkType.QXGL:
@@ -74,7 +74,7 @@ public class WorkHelper {
 //                        object.put("router", Constant.Router.QXGL_LIST);
 //                        break;
                 case Constant.WorkType.YHGL:
-                    workInfo.iconResId = R.drawable.ic_work_yh;
+                    workInfo.iconResId = R.drawable.ic_work_yhgl;
                     workInfo.router = Constant.Router.YH_LIST;
                     break;
                 case Constant.WorkType.WXGD:
@@ -82,11 +82,11 @@ public class WorkHelper {
                     workInfo.router = Constant.Router.WXGD_LIST;
                     break;
                 case Constant.WorkType.SJSC:
-                    workInfo.iconResId = R.drawable.ic_work_sjsc_small;
+                    workInfo.iconResId = R.drawable.ic_work_sjsc;
                     workInfo.router = Constant.Router.SJSC;
                     break;
                 case Constant.WorkType.SJXZ:
-                    workInfo.iconResId = R.drawable.ic_work_sjxz_small;
+                    workInfo.iconResId = R.drawable.ic_work_sjxz;
                     workInfo.router = Constant.Router.SJXZ;
                     break;
                 case Constant.WorkType.RH:
@@ -122,7 +122,7 @@ public class WorkHelper {
                     break;
                 case Constant.WorkType.STOP_POLICE:
 
-                    workInfo.iconResId = R.drawable.ic_work_stop;
+                    workInfo.iconResId = R.drawable.ic_work_tjjl;
                     workInfo.router = Constant.Router.STOP_POLICE;
                     break;
                 case Constant.WorkType.JXJH:

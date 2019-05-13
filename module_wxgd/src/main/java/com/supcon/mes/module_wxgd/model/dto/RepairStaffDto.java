@@ -1,7 +1,6 @@
 package com.supcon.mes.module_wxgd.model.dto;
 
 import com.supcon.common.com_http.BaseEntity;
-import com.supcon.mes.module_wxgd.model.bean.RepairStaffEntity;
 
 /**
  * @author yangfei.cao

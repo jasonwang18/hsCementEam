@@ -10,7 +10,7 @@ import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.base.fragment.BaseRefreshRecyclerFragment;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
-import com.supcon.mes.module_wxgd.model.bean.SparePartEntity;
+import com.supcon.mes.middleware.model.bean.SparePartEntity;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.module_wxgd.R;
 import com.supcon.mes.module_wxgd.ui.adapter.SparePartAdapter;

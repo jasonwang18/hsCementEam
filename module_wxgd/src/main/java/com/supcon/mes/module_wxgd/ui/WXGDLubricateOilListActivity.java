@@ -31,7 +31,7 @@ import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.R;
-import com.supcon.mes.module_wxgd.model.bean.LubricateOilsEntity;
+import com.supcon.mes.middleware.model.bean.LubricateOilsEntity;
 import com.supcon.mes.module_wxgd.model.event.LubricateOilsEvent;
 import com.supcon.mes.module_wxgd.ui.adapter.LubricateOilsAdapter;
 

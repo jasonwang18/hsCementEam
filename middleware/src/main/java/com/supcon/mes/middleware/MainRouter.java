@@ -30,6 +30,7 @@ public class MainRouter implements IRouter {
     private static final String MODULE_MIDDLE_ROUTER = "com.supcon.mes.middleware.IntentRouter";
     private static final String MODULE_TSD = "com.supcon.mes.module_tsd.IntentRouter";
     private static final String MODULE_SBDA_ONLINE = "com.supcon.mes.module_sbda_online.IntentRouter";
+    private static final String MODULE_EARLY_WARN = "com.supcon.mes.module_warn.IntentRouter";
 
     private static class MainRouterHolder {
         private static MainRouter instance = new MainRouter();
@@ -57,6 +58,7 @@ public class MainRouter implements IRouter {
         modules.add(MODULE_MIDDLE_ROUTER);
         modules.add(MODULE_TSD);
         modules.add(MODULE_SBDA_ONLINE);
+        modules.add(MODULE_EARLY_WARN);
     }
 
 

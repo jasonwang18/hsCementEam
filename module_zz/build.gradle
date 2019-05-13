@@ -109,15 +109,14 @@ android {
 //    }
 //}
 dependencies {
-    //implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation project(':middleware')
 
-//    implementation files('libs/tbs_sdk_thirdapp_v3.6.0.1310_43612_sharewithdownload_withoutGame_obfs_20180706_163319.jar')
-    implementation "com.github.vondear.RxTool:RxFeature:v2.0.1"
+//    implementation "com.github.vondear.RxTool:RxFeature:v2.0.1"
     implementation 'com.google.dagger:dagger:2.16'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.16'
 
@@ -133,15 +132,20 @@ dependencies {
     implementation (name:'floatwindow-release', ext:'aar')
     implementation (name:'timeintervalpickviewlib-1.0', ext:'aar')
 
-//    implementation files('libs/AMap_Location_V4.2.0_20180809.jar')
     api (name:'domain-debug', ext:'aar')
     api (name:'libbase-debug', ext:'aar')
     implementation (name:'libminappparty-debug', ext:'aar')
-    implementation (name:'libthirdparty-debug', ext:'aar')
+//    implementation (name:'libthirdparty-debug', ext:'aar'){
+//        execlude group 'SecurityEnvSDK-release-1.1.0.jar'
+//        execlude group 'umeng-analytics-7.5.4.jar'
+//        execlude group 'umeng-debug-1.0.0.jar'
+//        execlude group 'umeng-common-1.5.4.jar'
+//        execlude group 'umeng-push-4.2.0.jar'
+//    }
     implementation (name:'libwidgets-debug', ext:'aar')
     implementation (name:'projectlibs-debug', ext:'aar')
     api (name:'rxretrohttp-debug', ext:'aar')
-    api (name:'zhizhiapp-Dev-debug', ext:'aar')
+    api (name:'zhizhiapp-Dev-debug2', ext:'aar')
     implementation 'com.qmuiteam:qmui:1.0.6'
     implementation 'com.zhihu.android:matisse:0.5.0-beta3'
     implementation 'com.zhy:percent-support-extends:1.1.1'

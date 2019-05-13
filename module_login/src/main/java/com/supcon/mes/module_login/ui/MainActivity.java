@@ -5,30 +5,29 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.text.TextUtils;
 import android.widget.LinearLayout;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.apt.Router;
-import com.bluetron.zhizhi.login.presentation.LoginUserSDK;
-import com.jdjz.coresdk14.App;
 import com.supcon.common.com_http.util.RxSchedulers;
 import com.supcon.common.view.base.activity.BaseMultiFragmentActivity;
 import com.supcon.common.view.util.LogUtil;
-import com.supcon.common.view.util.SharedPreferencesUtils;
 import com.supcon.mes.mbap.network.Api;
+import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.middleware.BuildConfig;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.constant.DataModule;
 import com.supcon.mes.middleware.controller.AreaController;
 import com.supcon.mes.middleware.controller.DepartmentController;
+import com.supcon.mes.middleware.controller.DeviceTokenController;
 import com.supcon.mes.middleware.controller.RepairGroupController;
-import com.supcon.mes.middleware.controller.SB2Controller;
 import com.supcon.mes.middleware.controller.SystemCodeController;
 import com.supcon.mes.middleware.controller.UserInfoListController;
+import com.supcon.mes.middleware.model.bean.PushEntity;
 import com.supcon.mes.middleware.model.event.AppExitEvent;
+import com.supcon.mes.push.event.DeviceTokenEvent;
 import com.supcon.mes.middleware.model.event.DownloadDataEvent;
 import com.supcon.mes.middleware.model.event.LoginValidEvent;
 import com.supcon.mes.middleware.util.DeviceManager;
@@ -39,6 +38,7 @@ import com.supcon.mes.module_login.controller.SilentLoginController;
 import com.supcon.mes.module_login.service.HeartBeatService;
 import com.supcon.mes.module_login.ui.fragment.MineFragment;
 import com.supcon.mes.module_login.ui.fragment.WorkFragment;
+import com.supcon.mes.push.event.PushOpenEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -57,7 +57,9 @@ import io.reactivex.functions.Consumer;
  */
 
 @Router(Constant.Router.MAIN)
-@Controller(value = {SystemCodeController.class, AreaController.class, RepairGroupController.class, /*SB2Controller.class,*/ UserInfoListController.class, DepartmentController.class})
+@Controller(value = {SystemCodeController.class, AreaController.class, RepairGroupController.class,
+        UserInfoListController.class, DepartmentController.class, DeviceTokenController.class,
+        SilentLoginController.class})
 public class MainActivity extends BaseMultiFragmentActivity {
 
     @BindByTag("drawerLayout")
@@ -96,7 +98,7 @@ public class MainActivity extends BaseMultiFragmentActivity {
 //            bundle.putBoolean(Constant.IntentKey.FIRST_LOGIN, false);
 //            bundle.putBoolean(Constant.IntentKey.LOGIN_INVALID, true);
 //            IntentRouter.go(this, Constant.Router.LOGIN, bundle);
-            new SilentLoginController().silentLogin();
+            getController(SilentLoginController.class).silentLogin();
         }
     }
 
@@ -111,7 +113,26 @@ public class MainActivity extends BaseMultiFragmentActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAppExit(AppExitEvent event) {
+
         System.exit(0);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onDeviceToken(DeviceTokenEvent event) {
+
+        if(event.isLogin()) {
+            getController(DeviceTokenController.class).sendLoginDeviceToken(event.getDeviceToken());
+        }
+        else{
+            getController(DeviceTokenController.class).sendLogoutDeviceToken(event.getDeviceToken());
+        }
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPushOpenEvent(PushOpenEvent pushOpenEvent){
+        PushEntity pushEntity = GsonUtil.gsonToBean(pushOpenEvent.getContent(), PushEntity.class);
+        LogUtil.d("pushEntity :"+pushEntity);
     }
 
     @Override
@@ -165,7 +186,6 @@ public class MainActivity extends BaseMultiFragmentActivity {
             getController(UserInfoListController.class).onInit();
         }
 
-        workFragment.doZhiZhiLogin();
     }
 
 

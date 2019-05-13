@@ -25,16 +25,19 @@ public class SystemCodeEntity extends BaseEntity {
 
     public String layRec;
 
+    public int sort;
+
     public String ip = EamApplication.getIp();
 
-    @Generated(hash = 265982534)
+    @Generated(hash = 326586414)
     public SystemCodeEntity(String id, String value, String entityCode, String code,
-            String layRec, String ip) {
+            String layRec, int sort, String ip) {
         this.id = id;
         this.value = value;
         this.entityCode = entityCode;
         this.code = code;
         this.layRec = layRec;
+        this.sort = sort;
         this.ip = ip;
     }
 
@@ -74,6 +77,22 @@ public class SystemCodeEntity extends BaseEntity {
         this.code = code;
     }
 
+    public String getLayRec() {
+        return this.layRec;
+    }
+
+    public void setLayRec(String layRec) {
+        this.layRec = layRec;
+    }
+
+    public int getSort() {
+        return this.sort;
+    }
+
+    public void setSort(int sort) {
+        this.sort = sort;
+    }
+
     public String getIp() {
         return this.ip;
     }
@@ -82,12 +101,5 @@ public class SystemCodeEntity extends BaseEntity {
         this.ip = ip;
     }
 
-    public String getLayRec() {
-        return this.layRec;
-    }
-
-    public void setLayRec(String layRec) {
-        this.layRec = layRec;
-    }
 
 }

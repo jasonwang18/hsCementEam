@@ -4,6 +4,8 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -19,7 +21,7 @@ import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import com.speedata.libuhf.utils.StringUtils;
+import com.supcon.mes.middleware.EamApplication;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -365,5 +367,6 @@ public class Util {
         }
         return count;
     }
+
 
 }

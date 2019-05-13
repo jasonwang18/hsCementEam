@@ -70,14 +70,6 @@ public class LubriAdapter extends BaseListDataRecyclerViewAdapter<LubriEntity> {
             itemLubricationNumTv.setText(String.format(context.getString(R.string.device_style1), "用量:", Util.big2(data.sum)));
             itemLubricationPartTv.setValue(Util.strFormat(data.lubricatePart));
 
-            if (data.nextTime != null) {
-                itemLubricationNextDateTv.setVisibility(View.VISIBLE);
-                itemLubricationNextDateTv.setValue(dateFormat.format(data.nextTime));
-            }
-            if (data.nextDuration != null) {
-                itemLubricationNextDurationTv.setVisibility(View.VISIBLE);
-                itemLubricationNextDurationTv.setValue(Util.big2(data.nextDuration));
-            }
 
             if (data.isDuration()) {
                 itemLubricationLastDurationTv.setVisibility(View.VISIBLE);

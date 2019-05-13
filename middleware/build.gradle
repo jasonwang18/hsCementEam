@@ -12,7 +12,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         greendao {
-            schemaVersion 5//2019/03/29
+            schemaVersion 6//2019/05/07
         }
     }
 
@@ -63,6 +63,7 @@ dependencies {
     api 'org.greenrobot:eventbus:3.0.0'
     api 'com.github.lzyzsd:circleprogress:1.1.0'
     api 'com.github.SilenceDut:jpinyin:v1.0'
+    implementation 'com.carmelo:keeplive:1.0.0'
 
     implementation files('libs/ModuleAPI_J.jar')
     implementation files('libs/R2K.jar')
@@ -76,6 +77,7 @@ dependencies {
     api "com.github.jasonwang18.common:com_http:$rootProject.ext.commonVersion"
     api "com.github.jasonwang18.common:annotation:$rootProject.ext.commonVersion"
     api "com.github.jasonwang18:bapkit:$rootProject.ext.bapkitVersion"
+    implementation project(':upush')
 }
 
 apply from: '../library.gradle'

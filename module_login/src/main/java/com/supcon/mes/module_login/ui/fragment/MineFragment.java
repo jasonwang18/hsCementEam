@@ -189,7 +189,6 @@ public class MineFragment extends BaseControllerFragment implements MineContract
         DeviceManager.getInstance().release();
         onLoadSuccessAndExit("登出成功！", () -> {
             Bundle bundle = new Bundle();
-            bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, R.drawable.ic_login_logo);
             bundle.putBoolean(Constant.IntentKey.FIRST_LOGIN, false);
             IntentRouter.go(getContext(), Constant.Router.LOGIN, bundle);
             ((MainActivity)getActivity()).toggleDrawer();

@@ -558,6 +558,9 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void addDeviceEvent(CommonSearchEvent commonSearchEvent) {
+        if(!(commonSearchEvent.commonSearchEntity instanceof CommonDeviceEntity)){
+            return;
+        }
         CommonDeviceEntity commonDeviceEntity = (CommonDeviceEntity) commonSearchEvent.commonSearchEntity;
         if (commonDeviceEntity != null) {
             yhEditEamName.setValue(commonDeviceEntity.eamName);
@@ -580,6 +583,9 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getMaintenanceStaff(CommonSearchEvent commonSearchEvent) {
+        if(!(commonSearchEvent.commonSearchEntity instanceof UserInfo)){
+            return;
+        }
         UserInfo userInfo = (UserInfo) commonSearchEvent.commonSearchEntity;
         yhEditFindStaff.setValue(userInfo.staffName);
         mYHEntity.findStaffID = new Staff();

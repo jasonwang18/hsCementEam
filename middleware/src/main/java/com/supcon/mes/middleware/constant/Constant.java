@@ -135,6 +135,9 @@ public interface Constant {
         String OLXJ_WORK_LIST_HANDLED = "OLXJ_WORK_LIST_HANDLED";
 
         String STOP_POLICE = "STOP_POLICE";//停机报警
+        String SPARE_EARLY_WARN = "SPARE_EARLY_WARN";//备件更换预警
+        String LUBRICATION_EARLY_WARN = "LUBRICATION_EARLY_WARN";//润滑预警
+        String MAINTENANCE_EARLY_WARN = "MAINTENANCE_EARLY_WARN";//维保预警
 
     }
 
@@ -215,6 +218,9 @@ public interface Constant {
         String SPARE_PART_LEDGER_ID = "SPARE_PART_LEDGER_ID";
 
         String IS_XJ_FINISHED = "IS_XJ_FINISHED";
+
+        String IS_FROM_PENDING = "IS_FROM_PENDING";
+        String PENDING_ENTITY = "";
     }
 
     interface FilterSearchParam {
@@ -251,11 +257,16 @@ public interface Constant {
         int STOP_POLICE = 20;  //停机报警
         int DXJH = 22;
         int JXJH = 21;
+        int SPARE_EARLY_WARN = 23;//备件更换预警
+        int LUBRICATION_EARLY_WARN = 24;//润滑预警
+        int MAINTENANCE_EARLY_WARN = 25;//维保预警
     }
 
     interface SPKey {
         String WORKS = "works";
         String STAFF = "STAFF";
+
+        String DEVICE_TOKEN = "DEVICE_TOKEN";
 
         String RUN_STATES_ON = "RUN_STATES_ON";
         String RUN_STATES_OFF = "RUN_STATES_OFF";
@@ -285,8 +296,11 @@ public interface Constant {
         String EAM_DEVICE_NEED_DOWNLOAD = "EAM_DEVICE_NEED_DOWNLOAD";
 
 
-        String JHXJ_TASK = "JHXJ_TASK";
-        String LSXJ_TASK = "LSXJ_TASK";
+        String JHXJ_TASK_CONTENT = "JHXJ_TASK_CONTENT";
+        String LSXJ_TASK_CONTENT = "LSXJ_TASK_CONTENT";
+
+        String JHXJ_TASK_ENTITY = "JHXJ_TASK_ENTITY";
+        String LSXJ_TASK_ENTITY = "LSXJ_TASK_ENTITY";
     }
 
 
@@ -548,6 +562,7 @@ public interface Constant {
         String TD_LIST = "/BEAMEle/onOrOff/onoroff/eleOffList.action?__pc__=QkVBTUVsZV8xLjAuMF9vbk9yT2ZmX2VsZU9mZkxpc3Rfc2VsZnw_&workFlowMenuCode=BEAMEle_1.0.0_onOrOff_eleOnList&openType=page&clientType=mobile";
         String SD_LIST = "/BEAMEle/onOrOff/onoroff/eleOnList.action?__pc__=QkVBTUVsZV8xLjAuMF9vbk9yT2ZmX2VsZU9uTGlzdF9zZWxmfA__&workFlowMenuCode=BEAMEle_1.0.0_onOrOff_eleOffList&openType=page&clientType=mobile";
         String SCORE = "/BEAM/scoreStandard/soring/eamScoreView.action?clientType=mobile&eamID=";
+        String XJ = "/mobileEAM/work/work/pointsList.action?taskId=";
     }
 
     interface ZZ {

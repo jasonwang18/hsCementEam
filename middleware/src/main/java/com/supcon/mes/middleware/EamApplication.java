@@ -2,10 +2,12 @@ package com.supcon.mes.middleware;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
+import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.SharedPreferencesUtils;
 import com.supcon.mes.mbap.MBapApp;
 import com.supcon.mes.mbap.MBapConstant;
@@ -18,7 +20,10 @@ import com.supcon.mes.middleware.model.bean.AccountInfoDao;
 import com.supcon.mes.middleware.model.bean.DaoMaster;
 import com.supcon.mes.middleware.model.bean.DaoSession;
 import com.supcon.mes.middleware.model.bean.Staff;
+import com.supcon.mes.middleware.service.KeepService;
+import com.supcon.mes.middleware.util.ChannelUtil;
 import com.supcon.mes.middleware.util.CrashHandler;
+import com.supcon.mes.push.PushController;
 
 import java.util.List;
 
@@ -84,9 +89,83 @@ public class EamApplication extends MBapApp {
         }
         setupDatabase();
         initRouter();
-        SharedPreferencesUtils.setParam(getApplicationContext(), MBapConstant.SPKey.IP, "218.75.97.170");
-        SharedPreferencesUtils.setParam(getApplicationContext(), MBapConstant.SPKey.PORT, "8181");
+        initUMeng();
+        initIP();
+        startService(new Intent(this, KeepService.class));
     }
+
+
+
+    private void initUMeng() {
+
+//        String appKey =  ManifestUtil.getAppkeyByXML(this);
+//        String pushSecret =  ManifestUtil.getMessageSecretByXML(this);
+//
+//        PushHelper.getInstance().init(this, appKey, pushSecret);
+
+        //MainActivity 处理
+        new PushController().onInit();
+    }
+
+    public void initIP(){
+
+        String channel = ChannelUtil.getUMengChannel();
+        String port = " ";
+        String ip  = SharedPreferencesUtils.getParam(getAppContext(), MBapConstant.SPKey.IP, "");
+        LogUtil.d("channel:"+channel+" ip:"+ip);
+        if(TextUtils.isEmpty(ip)){
+
+            if (channel.equals("hongshi")) {
+                ip = "218.75.97.170";
+                port = "8181";
+            }
+            else if(channel.equals("hailuo")){
+                ip = "60.167.69.246";
+                port = "8099";
+            }
+            else if(channel.equals("dev")){
+                ip = "192.168.90.215";
+                port = "8080";
+            }
+            else if (channel.equals("134")) {
+                ip = "192.168.90.134";
+                port = "8080";
+            }
+            else if(channel.equals("115")){
+                ip = "192.168.90.115";
+                port = "8080";
+            }
+            else{
+                ip = "192.168.90.9";
+                port = "8080";
+            }
+            setIp(ip);
+            setPort(port);
+        }
+
+    }
+
+
+    public static boolean isHongshi(){
+
+        String channel = ChannelUtil.getUMengChannel();
+        if (channel.equals("hongshi")) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static boolean isHailuo(){
+
+        String channel = ChannelUtil.getUMengChannel();
+        if (channel.equals("hailuo")) {
+            return true;
+        }
+
+        return false;
+    }
+
 
     private void initRouter() {
 

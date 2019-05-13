@@ -1,6 +1,6 @@
 package com.supcon.mes.module_wxgd.model.event;
 
-import com.supcon.mes.module_wxgd.model.bean.SparePartEntity;
+import com.supcon.mes.middleware.model.bean.SparePartEntity;
 
 import java.util.List;
 

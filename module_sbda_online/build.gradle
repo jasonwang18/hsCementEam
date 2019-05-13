@@ -61,7 +61,7 @@ dependencies {
 
     implementation project(':middleware')
 //    annotationProcessor "com.supcon.mes.common:apt:$rootProject.ext.aptVersion@jar"
-//    annotationProcessor "com.github.jasonwang18.common:apt:$rootProject.ext.commonVersion@jar"
+    annotationProcessor "com.github.jasonwang18.common:apt:$rootProject.ext.commonVersion@jar"
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 }
 apply from: '../library.gradle'

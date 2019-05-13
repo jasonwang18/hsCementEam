@@ -2,7 +2,6 @@ package com.supcon.mes.module_wxgd.model.dto;
 
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
-import com.supcon.mes.module_wxgd.model.bean.LubricateOilsEntity;
 
 /**
  * LubricateOilsEntityDto 润滑油实体传输对象

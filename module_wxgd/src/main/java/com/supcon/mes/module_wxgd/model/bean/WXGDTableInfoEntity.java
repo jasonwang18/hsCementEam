@@ -1,6 +1,7 @@
 package com.supcon.mes.module_wxgd.model.bean;
 
 import com.supcon.mes.middleware.model.bean.ResultEntity;
+import com.supcon.mes.middleware.model.bean.WXGDEntity;
 
 /**
  * WXGDTableInfoEntity 维修工单单据实体

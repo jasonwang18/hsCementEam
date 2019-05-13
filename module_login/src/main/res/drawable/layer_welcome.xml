@@ -18,7 +18,7 @@
 <!--    <item android:bottom="10dp">
         <bitmap
             android:gravity="bottom|center_horizontal"
-            android:src="@drawabg_loginn_bg" />
+            android:src="@drawable/bg_login" />
     </item>-->
 
 </layer-list>

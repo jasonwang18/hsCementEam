@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 
 import java.io.IOException;
@@ -34,18 +35,21 @@ import java.util.Map;
  */
 public class NFCHelper {
 
-    private static final String TAG = "NFC_TAG";
-
-    private static NfcAdapter mNfcAdapter;
-    private static PendingIntent mPendingIntent;
-
-    private static OnNFCListener onNFCListener;
-
-    public NFCHelper() {
+    private static class NFCHelperHolder {
+        private final static NFCHelper INSTANCE = new NFCHelper();
     }
 
+    private NfcAdapter mNfcAdapter;
+    private PendingIntent mPendingIntent;
+
+    private OnNFCListener onNFCListener;
+    private NFCHelper() {
+    }
+
+
+
     public static NFCHelper getInstance(){
-        return new NFCHelper();
+        return NFCHelperHolder.INSTANCE;
     }
 
     /**
@@ -62,8 +66,8 @@ public class NFCHelper {
          }
 
         //创建PendingIntent对象,当检测到一个Tag标签就会执行此Intent; new Intent(context,context.getClass())自己的activity内接收intent
-        if (mPendingIntent == null)
-            mPendingIntent = PendingIntent.getActivity(context,0,new Intent(context,context.getClass()),0);
+//        if (mPendingIntent == null)
+            mPendingIntent = PendingIntent.getActivity(context,0,new Intent(context, context.getClass()),0);
     }
 
     /**
@@ -167,7 +171,7 @@ public class NFCHelper {
             nfcMsg = fireNdefEvent(ndef);
         } else if (action.equals(NfcAdapter.ACTION_TECH_DISCOVERED)) {
             for (String tagTech : tag.getTechList()) {
-                Log.d(TAG, tagTech);
+                LogUtil.d(tagTech);
                 if (tagTech.equals(NdefFormatable.class.getName())) {
                     nfcMsg = fireTagEvent(tag);
                 } else if (tagTech.equals(Ndef.class.getName())) {
@@ -200,7 +204,7 @@ public class NFCHelper {
 
                 byte[] bytes = ndef.getTag().getId();
                 String id = bytesToHexString(bytes);
-                Log.d(TAG, id);
+                LogUtil.d(id);
 
                 NdefMessage ndefMessage = ndef.getNdefMessage();   //附加信息
                 if (ndefMessage != null) {
@@ -251,7 +255,7 @@ public class NFCHelper {
         if (tag != null) {
             byte[] bytes = tag.getId();
             String id = bytesToHexString(bytes);
-            Log.d(TAG, id);
+            LogUtil.d(id);
 
             /*JSONObject jsonObject = Util.tagToJSON(tag);
             Log.d(TAG, jsonObject.toString());

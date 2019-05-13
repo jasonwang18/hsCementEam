@@ -7,6 +7,7 @@ import com.supcon.mes.middleware.model.bean.AttachmentEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEam;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -71,5 +72,5 @@ public class OLXJAreaEntity extends BaseEntity{
     public String signReason;       //签到原因
     public String signCode;         //签到编码
     public long staffId;
-    public List<OLXJWorkItemEntity> workItemEntities = new ArrayList<>();
+    public LinkedList<OLXJWorkItemEntity> workItemEntities = new LinkedList<>();
 }

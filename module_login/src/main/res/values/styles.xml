@@ -3,7 +3,7 @@
     <!-- Base application theme. -->
 
 
-    <style name="LaunchAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="LaunchAppTheme" parent="AppTheme">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@drawable/layer_welcome</item>

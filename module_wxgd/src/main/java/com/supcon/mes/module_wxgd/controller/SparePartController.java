@@ -1,14 +1,11 @@
 package com.supcon.mes.module_wxgd.controller;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
-import com.supcon.common.view.base.controller.BasePresenterController;
 import com.supcon.common.view.base.controller.BaseViewController;
 import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.util.LogUtil;
@@ -17,9 +14,9 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.event.BaseEvent;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.model.api.SparePartAPI;
-import com.supcon.mes.module_wxgd.model.bean.SparePartEntity;
+import com.supcon.mes.middleware.model.bean.SparePartEntity;
 import com.supcon.mes.module_wxgd.model.bean.SparePartListEntity;
-import com.supcon.mes.module_wxgd.model.bean.WXGDEntity;
+import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.module_wxgd.model.contract.SparePartContract;
 import com.supcon.mes.module_wxgd.model.event.ListEvent;
 import com.supcon.mes.module_wxgd.presenter.SparePartPresenter;

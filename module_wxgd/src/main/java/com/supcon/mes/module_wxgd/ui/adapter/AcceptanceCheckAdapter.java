@@ -4,11 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
-import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.common.view.listener.OnChildViewClickListener;
@@ -18,7 +16,7 @@ import com.supcon.mes.mbap.view.CustomVerticalEditText;
 import com.supcon.mes.mbap.view.CustomVerticalSpinner;
 import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.module_wxgd.R;
-import com.supcon.mes.module_wxgd.model.bean.AcceptanceCheckEntity;
+import com.supcon.mes.middleware.model.bean.AcceptanceCheckEntity;
 
 public class AcceptanceCheckAdapter extends BaseListDataRecyclerViewAdapter<AcceptanceCheckEntity> {
 

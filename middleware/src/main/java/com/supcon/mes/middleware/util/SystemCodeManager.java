@@ -73,7 +73,7 @@ public class SystemCodeManager extends BaseController {
         return EamApplication.dao().getSystemCodeEntityDao().queryBuilder().where(SystemCodeEntityDao.Properties.EntityCode.eq(entityCode), SystemCodeEntityDao.Properties.Value.like("%"+mes+"%"), SystemCodeEntityDao.Properties.Ip.eq(EamApplication.getIp()))
                 .offset((pageIndex-1)*20)
                 .limit(20)
-                .orderAsc(SystemCodeEntityDao.Properties.LayRec).list();
+                .orderAsc(SystemCodeEntityDao.Properties.Id).list();
     }
 
 }

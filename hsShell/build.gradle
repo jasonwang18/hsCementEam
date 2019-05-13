@@ -4,16 +4,85 @@ apply plugin: 'com.android.application'
 
 
 android {
-    compileSdkVersion       rootProject.ext.compileSdkVersion
+    compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId       rootProject.ext.applicationId
-        minSdkVersion       rootProject.ext.minSdkVersion
-        targetSdkVersion    rootProject.ext.targetSdkVersion
-        versionCode         rootProject.ext.versionCode
-        versionName         rootProject.ext.versionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+
+        flavorDimensions("dev")
+//        // 默认是umeng的渠道
+//        applicationId 'com.supcon.mes.hongShiCementEam'
+//        manifestPlaceholders = [UMENG_CHANNEL_VALUE: name, APP_NAME:"@string/hs_app_name", UMENG_APPKEY:"5cbea853570df3300e000f4a", UMENG_MESSAGE_SECRET:"b884c2d96b0bda0442bc9158cccb06c4"]
     }
+    productFlavors {
+        dev{
+            applicationId 'com.supcon.mes.cementEam'
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: name,
+                                    APP_NAME:"@string/app_name",
+                                    APP_ICON:"@mipmap/ic_app_launcher",
+                                    APP_ROUND_ICON:"@drawable/ic_app_launcher_round",
+                                    APP_SHARE_ID:"com.supcon.mes.cementEam",
+                                    UMENG_APPKEY:"5cc69a110cafb29e9d0002df",
+                                    UMENG_MESSAGE_SECRET:"36af8a036b74676265df63bea6d182ea"]
+        }
+        hongshi {
+            applicationId 'com.supcon.mes.hongShiCementEam'
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: name,
+                                    APP_NAME:"@string/hs_app_name",
+                                    APP_ICON:"@drawable/ic_app_launcher_hongshi",
+                                    APP_ROUND_ICON:"@drawable/ic_app_launcher_round_hs",
+                                    APP_SHARE_ID:"com.supcon.mes.hongShiCementEam",
+                                    UMENG_APPKEY:"5cbea853570df3300e000f4a",
+                                    UMENG_MESSAGE_SECRET:"b884c2d96b0bda0442bc9158cccb06c4"]
+        }
+        hailuo {
+            applicationId 'com.supcon.mes.hailuoCementEam'
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: name,
+                                    APP_NAME:"@string/hl_app_name",
+                                    APP_ICON:"@drawable/ic_app_launcher_hailuo",
+                                    APP_ROUND_ICON:"@drawable/ic_app_launcher_round_hl",
+                                    APP_SHARE_ID:"com.supcon.mes.hailuoCementEam",
+                                    UMENG_APPKEY:"5cbea9f4570df3985500039c",
+                                    UMENG_MESSAGE_SECRET:"19914a54b2564d01383c852d3b912042"]
+        }
+
+        "134"{
+            applicationId 'com.supcon.mes.cementEam'
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: name,
+                                    APP_NAME:"@string/app_name",
+                                    APP_ICON:"@mipmap/ic_app_launcher",
+                                    APP_ROUND_ICON:"@drawable/ic_app_launcher_round",
+                                    APP_SHARE_ID:"com.supcon.mes.cementEam",
+                                    UMENG_APPKEY:"5cc69a110cafb29e9d0002df",
+                                    UMENG_MESSAGE_SECRET:"36af8a036b74676265df63bea6d182ea"]
+        }
+        "115"{
+            applicationId 'com.supcon.mes.cementEam'
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: name,
+                                    APP_NAME:"@string/app_name",
+                                    APP_ICON:"@mipmap/ic_app_launcher",
+                                    APP_ROUND_ICON:"@drawable/ic_app_launcher_round",
+                                    APP_SHARE_ID:"com.supcon.mes.cementEam",
+                                    UMENG_APPKEY:"5cc69a110cafb29e9d0002df",
+                                    UMENG_MESSAGE_SECRET:"36af8a036b74676265df63bea6d182ea"]
+        }
+        "9"{
+            applicationId 'com.supcon.mes.cementEam'
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: name,
+                                    APP_NAME:"@string/app_name",
+                                    APP_ICON:"@mipmap/ic_app_launcher",
+                                    APP_ROUND_ICON:"@drawable/ic_app_launcher_round",
+                                    APP_SHARE_ID:"com.supcon.mes.cementEam",
+                                    UMENG_APPKEY:"5cc69a110cafb29e9d0002df",
+                                    UMENG_MESSAGE_SECRET:"36af8a036b74676265df63bea6d182ea"]
+        }
+    }
+
 
     signingConfigs {
         keystore {
@@ -28,17 +97,25 @@ android {
         release {
             buildConfigField "boolean", "LOG_DEBUG", "false"
             minifyEnabled false
-            multiDexEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.keystore
             applicationVariants.all { variant ->
                 variant.outputs.all {
-                    outputFileName  = "SN-VxEAM-Mobile V${defaultConfig.versionName}-${releaseTime()}-C.apk"
+                    outputFileName  = "SN-VxEAM(M) V${defaultConfig.versionName}-${releaseTime()}-C.apk"
                 }
             }
+
         }
-        debug{
-            multiDexEnabled true
+//        debug {
+//
+//            multiDexEnabled true
+//
+//        }
+    }
+
+    repositories {
+        flatDir {
+            dirs project(':module_zz').file('libs')
         }
     }
 
@@ -65,7 +142,7 @@ dependencies {
     if (rootProject.ext.isAlone) {
 
     } else {
-        implementation project(':module_login')
+        implementation project(':module_zzlogin')
         implementation project(':module_data_manage')
         implementation project(':module_sbda')
         implementation project(':module_wxgd')
@@ -75,11 +152,10 @@ dependencies {
         implementation project(':module_tsd')
         implementation project(':module_sbda_online')
         implementation project(':module_zz')
-        implementation project(':nfc')
         implementation project(':mogu_viber')
     }
     implementation project(':middleware')
-
+    implementation project(':module_warn')
 }
 
 def releaseTime() {

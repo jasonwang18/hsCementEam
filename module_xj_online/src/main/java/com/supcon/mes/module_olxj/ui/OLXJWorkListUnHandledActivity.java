@@ -143,7 +143,7 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
 
     private String thermometervalue = ""; // 全局测温值
 
-    String deviceName = null;
+    WXGDEam mEam;
     private OLXJCameraController mCameraController;
     private CustomGalleryView customGalleryView;
     boolean isSmoothScroll = false;
@@ -265,8 +265,7 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
                 .subscribe(o -> showOneKeyDialog());
 
         listDeviceFilter.setFilterSelectChangedListener((CustomFilterView.FilterSelectChangedListener) filterBean -> {
-            deviceName = filterBean.name;
-            int position = devicePositions.get(deviceName);
+            int position = devicePositions.get(filterBean.name);
 //                contentView.smoothScrollToPosition(position);
             LinearLayoutManager mManager = (LinearLayoutManager) contentView.getLayoutManager();
 
@@ -573,13 +572,13 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
                                 .bindClickListener(R.id.grayBtn, null, true)
                                 .bindClickListener(R.id.redBtn, v -> {
                                     try {
-                                        onLoading("完成中...");
+//                                        onLoading("完成中...");
 
                                         for (OLXJWorkItemEntity xjWorkItemEntity : mXJAreaEntity.workItemEntities) {
                                             if(set.contains(xjWorkItemEntity.id))
                                                 doFinish(xjWorkItemEntity);
                                         }
-                                        onLoadSuccess("完成");
+//                                        onLoadSuccess("完成");
                                         doRefresh();
 
                                     } catch (Exception e) {
@@ -929,8 +928,10 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
                             xjWorkItemEntities.add(titleEntity);
                         }
 
-                        if (deviceName == null && !TextUtils.isEmpty(workItemEntity.eamID.name) || deviceName != null && !deviceName.equals(workItemEntity.eamID.name)) {
-                            deviceName = workItemEntity.eamID.name;
+                        if (mEam == null && !TextUtils.isEmpty(workItemEntity.eamID.name)
+                                || mEam != null && !mEam.name.equals(workItemEntity.eamID.name)
+                                || mEam != null && !mEam.code.equals(workItemEntity.eamID.code)) {
+                            mEam = workItemEntity.eamID;
                             OLXJWorkItemEntity titleEntity = new OLXJWorkItemEntity();
                             titleEntity.title = workItemEntity.eamID.name;
                             titleEntity.eamID = workItemEntity.eamID;
@@ -943,7 +944,7 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
                 }, throwable -> {
 
                 }, () -> {
-                    deviceName = null;
+                    mEam = null;
                     refreshListController.refreshComplete(xjWorkItemEntities);
                     initFilterView();
                 });

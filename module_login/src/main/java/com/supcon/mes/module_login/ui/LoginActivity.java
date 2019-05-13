@@ -29,8 +29,10 @@ import com.supcon.mes.middleware.model.bean.AccountInfo;
 import com.supcon.mes.middleware.model.bean.AccountInfoDao;
 import com.supcon.mes.middleware.model.bean.ModuleAuthorization;
 import com.supcon.mes.middleware.model.bean.ModuleAuthorizationListEntity;
+import com.supcon.mes.middleware.util.ChannelUtil;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
+import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_login.BuildConfig;
 import com.supcon.mes.module_login.IntentRouter;
 import com.supcon.mes.module_login.R;
@@ -95,15 +97,6 @@ public class LoginActivity extends BasePresenterActivity implements LoginContrac
         loginLogoId = getIntent().getIntExtra(Constant.IntentKey.LOGIN_LOGO_ID, 0);
         loginBgId  = getIntent().getIntExtra(Constant.IntentKey.LOGIN_BG_ID, 0);
 
-        if("218.75.97.170".equals(SharedPreferencesUtils.getParam(context, MBapConstant.SPKey.IP, "218.75.97.170"))){
-            LogUtil.d("ip设置完毕！");
-        }
-
-        if("8181".equals(SharedPreferencesUtils.getParam(context, MBapConstant.SPKey.PORT, "8181"))){
-            LogUtil.d("端口设置完毕！");
-        }
-//        SharedPreferencesUtils.setParam(getApplicationContext(), MBapConstant.SPKey.IP, "218.75.97.170");
-//        SharedPreferencesUtils.setParam(getApplicationContext(), MBapConstant.SPKey.PORT, "8181");
     }
 
     @SuppressLint("CheckResult")

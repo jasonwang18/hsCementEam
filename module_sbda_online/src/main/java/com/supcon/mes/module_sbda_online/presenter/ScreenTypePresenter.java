@@ -1,5 +1,7 @@
 package com.supcon.mes.module_sbda_online.presenter;
 
+import android.annotation.SuppressLint;
+
 import com.supcon.mes.mbap.view.CustomFilterView;
 import com.supcon.mes.module_sbda_online.model.bean.ScreenEntity;
 import com.supcon.mes.module_sbda_online.model.bean.ScreenListEntity;
@@ -8,6 +10,8 @@ import com.supcon.mes.module_sbda_online.model.network.SBDAOnlineHttpClient;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import io.reactivex.Flowable;
 
 /**
  * @author yangfei.cao
@@ -19,6 +23,7 @@ public class ScreenTypePresenter extends ScreenTypeContract.Presenter {
 
     private String url;
 
+    @SuppressLint("CheckResult")
     @Override
     public void screenPart(CustomFilterView customFilterView) {
 
@@ -35,10 +40,18 @@ public class ScreenTypePresenter extends ScreenTypeContract.Presenter {
                     return screenListEntity;
                 }).subscribe(screenListEntity -> {
                     if (screenListEntity.result != null && screenListEntity.result.size() > 0) {
-                        screenEntities.addAll(screenListEntity.result);
-                        customFilterView.setData(screenEntities);
+                        Flowable.fromIterable(screenListEntity.result)
+                                .subscribe(screenEntity1 -> {
+                                    if (!screenEntities.contains(screenEntity1)) {
+                                        screenEntities.add(screenEntity1);
+                                    }
+                                }, throwable -> {
+                                }, () -> {
+                                    customFilterView.setData(screenEntities);
+                                    customFilterView.setCurrentItem(screenEntity);
+                                });
                     } else {
-                        customFilterView.setData(screenEntities);
+                        customFilterView.setData(new LinkedList(screenEntities));
                     }
                 }));
     }

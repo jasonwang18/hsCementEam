@@ -15,23 +15,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_50"
-        android:paddingLeft="@dimen/dp_20"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_10"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
         android:id="@+id/xjBtnLayout"
         android:background="@drawable/sh_white_stroke"
         android:tag="xjBtnLayout">
         <TextView
-            android:layout_width="120dp"
+            android:layout_width="0dp"
+            android:layout_weight="1.1"
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="@color/customBlue4"
-            android:textSize="@dimen/fontSize_16sp"
+            android:textSize="@dimen/fontSize_14sp"
             android:text="已完成巡检项"
             android:id="@+id/finishedBottomBtn"
             android:tag="finishedBottomBtn" />
         <TextView
-            android:layout_width="80dp"
+            android:layout_width="0dp"
+            android:layout_weight="0.8"
             android:layout_height="30dp"
             android:layout_marginLeft="@dimen/dp_30"
             android:layout_marginRight="@dimen/dp_10"
@@ -42,7 +45,8 @@
             style="@style/BlueButtonRadius"
             />
         <TextView
-            android:layout_width="80dp"
+            android:layout_width="0dp"
+            android:layout_weight="0.8"
             android:layout_height="30dp"
             android:layout_marginRight="@dimen/dp_5"
             android:gravity="center"

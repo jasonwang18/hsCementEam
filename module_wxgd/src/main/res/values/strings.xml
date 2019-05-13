@@ -12,7 +12,7 @@
     <string name="faultInfoDescribe">隐患现象:</string>
     <string name="content">内容:</string>
     <string name="claim">要求:</string>
-    <string name="receive">接单</string>
+    <string name="receive">接\t单</string>
     <string name="checkRepair">转为检修</string>
     <string name="bigRepair">转为大修</string>
     <string name="eamCode">设备编码:</string>

@@ -2,6 +2,7 @@ package com.supcon.mes.module_olxj.ui.adapter;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,7 +49,7 @@ public class OLXJTaskGroupListAdapter extends BaseListDataRecyclerViewAdapter<OL
         TextView taskStartEndTime; //备注
 
         @BindByTag("taskGetBtn")
-        ImageView taskGetBtn;
+        Button taskGetBtn;
 
 
         public ViewHolder(Context context) {

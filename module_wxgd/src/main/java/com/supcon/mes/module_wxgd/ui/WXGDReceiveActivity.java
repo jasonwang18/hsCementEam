@@ -17,14 +17,11 @@ import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.beans.LoginEvent;
-import com.supcon.mes.mbap.beans.Transition;
-import com.supcon.mes.mbap.beans.WorkFlowEntity;
 import com.supcon.mes.mbap.beans.WorkFlowVar;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomListWidget;
-import com.supcon.mes.mbap.view.CustomPopTransation;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomVerticalDateView;
 import com.supcon.mes.mbap.view.CustomVerticalTextView;
@@ -45,8 +42,8 @@ import com.supcon.mes.module_wxgd.controller.RepairStaffController;
 import com.supcon.mes.module_wxgd.controller.SparePartController;
 import com.supcon.mes.module_wxgd.controller.WXGDSubmitController;
 import com.supcon.mes.module_wxgd.model.api.WXGDListAPI;
-import com.supcon.mes.module_wxgd.model.bean.AcceptanceCheckEntity;
-import com.supcon.mes.module_wxgd.model.bean.WXGDEntity;
+import com.supcon.mes.middleware.model.bean.AcceptanceCheckEntity;
+import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.module_wxgd.model.bean.WXGDListEntity;
 import com.supcon.mes.module_wxgd.model.contract.WXGDListContract;
 import com.supcon.mes.module_wxgd.presenter.WXGDListPresenter;
@@ -57,7 +54,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -268,7 +264,7 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
             new EamPicController().initEamPic(eamIc, mWXGDEntity.eamID.id);
         }
 
-        if (mWXGDEntity.faultInfo != null) {
+        if (mWXGDEntity.faultInfo != null && mWXGDEntity.workSource!=null) {
             if (Constant.WxgdWorkSource.lubrication.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.sparePart.equals(mWXGDEntity.workSource.id)) {
                 content.setValue(mWXGDEntity.content);
                 claim.setValue(mWXGDEntity.claim);

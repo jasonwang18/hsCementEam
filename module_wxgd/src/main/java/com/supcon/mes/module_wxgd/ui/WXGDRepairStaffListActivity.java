@@ -14,17 +14,14 @@ import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
-import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.CustomSwipeLayout;
-import com.supcon.common.view.view.picker.DateTimePicker;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.utils.controllers.DatePickController;
-import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.UserInfo;
@@ -33,7 +30,7 @@ import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.R;
-import com.supcon.mes.module_wxgd.model.bean.RepairStaffEntity;
+import com.supcon.mes.middleware.model.bean.RepairStaffEntity;
 import com.supcon.mes.module_wxgd.model.event.RepairStaffEvent;
 import com.supcon.mes.module_wxgd.ui.adapter.RepairStaffAdapter;
 
@@ -237,6 +234,9 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void addStaff(CommonSearchEvent commonSearchEvent) {
+        if(!(commonSearchEvent.commonSearchEntity instanceof UserInfo)){
+            return;
+        }
         UserInfo userInfo = (UserInfo) commonSearchEvent.commonSearchEntity;
 
         for (RepairStaffEntity repairStaffEntity : mEntities) {

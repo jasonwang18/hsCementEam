@@ -2,7 +2,6 @@ package com.supcon.mes.module_wxgd.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,32 +11,25 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.app.annotation.Bind;
 import com.app.annotation.BindByTag;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
-import com.supcon.common.view.listener.OnChildViewClickListener;
-import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.CustomSwipeLayout;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomNumView;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomVerticalEditText;
-import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.module_wxgd.R;
-import com.supcon.mes.module_wxgd.model.bean.SparePartEntity;
+import com.supcon.mes.middleware.model.bean.SparePartEntity;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
-
-import io.reactivex.functions.Predicate;
 
 public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartEntity> {
 

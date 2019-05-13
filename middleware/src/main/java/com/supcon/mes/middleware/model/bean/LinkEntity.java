@@ -2,6 +2,8 @@ package com.supcon.mes.middleware.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
 
+import retrofit2.http.PUT;
+
 /**
  * Created by wangshizhan on 2018/7/20
  * Email:wangshizhan@supcom.com

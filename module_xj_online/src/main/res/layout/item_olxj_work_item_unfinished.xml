@@ -39,7 +39,7 @@
             android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/dp_10"
-            android:background="@drawable/sl_transparent_press"
+            android:background="@drawable/sl_transparent_press_no_stroke"
             android:drawablePadding="2dp"
             android:gravity="center_vertical|center_horizontal"
             android:tag="ufItemPartEndBtn"

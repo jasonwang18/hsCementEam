@@ -19,12 +19,11 @@ import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
-import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.R;
-import com.supcon.mes.module_wxgd.model.bean.AcceptanceCheckEntity;
+import com.supcon.mes.middleware.model.bean.AcceptanceCheckEntity;
 import com.supcon.mes.module_wxgd.ui.adapter.AcceptanceCheckAdapter;
 
 import java.util.ArrayList;

@@ -6,23 +6,21 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
-import com.github.lzyzsd.circleprogress.Utils;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.common.view.util.DisplayUtil;
-import com.supcon.common.view.util.LogUtil;
 import com.supcon.mes.mbap.view.CustomTextView;
-import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.controller.EamPicController;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.R;
 import com.supcon.mes.module_wxgd.constant.WXGDConstant;
-import com.supcon.mes.module_wxgd.model.bean.WXGDEntity;
+import com.supcon.mes.middleware.model.bean.WXGDEntity;
 
 public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity> {
     public WXGDListAdapter(Context context) {
@@ -40,8 +38,11 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
         TextView tableNo;
         @BindByTag("tableStatus")
         TextView tableStatus;
+//        @BindByTag("eamName")
+//        CustomTextView eamName;
+
         @BindByTag("eamName")
-        CustomTextView eamName;
+        TextView eamName;
         @BindByTag("location")
         CustomTextView location;
         @BindByTag("repairGroup")
@@ -75,6 +76,8 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
         @BindByTag("receiveBtnLl")
         LinearLayout receiveBtnLl;
 
+        ImageView itemWXGDDeviceIc;
+
 
         public ViewHolder(Context context) {
             super(context);
@@ -99,6 +102,7 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
         @Override
         protected void initView() {
             super.initView();
+            itemWXGDDeviceIc = itemView.findViewById(R.id.itemWXGDDeviceIc);
         }
 
         @Override
@@ -145,11 +149,18 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
 
             tableNo.setText(data.tableNo);
             tableStatus.setText(data.pending == null ? "" : data.pending.taskDescription);
-            eamName.setValue(data.eamID == null ? "" : data.eamID.name);
+            eamName.setText(data.eamID == null ? "" : data.eamID.name);
             location.setValue(data.eamID.installPlace != null && data.eamID.installPlace.name != null ? data.eamID.installPlace.name : "--");
             repairGroup.setValue(data.repairGroup != null && data.repairGroup.name != null ? data.repairGroup.name : "--");
             chargeStaff.setValue(data.chargeStaff  != null && data.chargeStaff.name != null ? data.chargeStaff.name : "--");
             workSource.setText(data.workSource != null && !"".equals(data.workSource.value) ? data.workSource.value : "--");
+
+            if(data.eamID!=null && data.eamID.id!=null){
+                new EamPicController().initEamPic(itemWXGDDeviceIc, data.eamID.id);
+            }
+            else{
+                itemWXGDDeviceIc.setImageResource(R.drawable.ic_default_pic3);
+            }
 
             if (data.workSource == null) {
                 faultInfoTypeLl.setVisibility(View.GONE);

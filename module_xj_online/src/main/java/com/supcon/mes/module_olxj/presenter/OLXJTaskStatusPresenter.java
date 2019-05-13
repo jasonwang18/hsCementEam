@@ -56,12 +56,12 @@ public class OLXJTaskStatusPresenter extends OLXJTaskStatusContract.Presenter {
                         })
                         .subscribe(resultEntity -> {
                             if (!TextUtils.isEmpty(resultEntity.errMsg)) {
-                                Objects.requireNonNull(getView()).updateStatusFailed(resultEntity.errMsg);
+                                Objects.requireNonNull(getView()).cancelTasksFailed(resultEntity.errMsg);
                             } else {
-                                Objects.requireNonNull(getView()).updateStatusSuccess();
+                                Objects.requireNonNull(getView()).cancelTasksSuccess();
                             }
                         }, throwable -> {
-                            Objects.requireNonNull(getView()).updateStatusFailed(throwable.toString());
+                            Objects.requireNonNull(getView()).cancelTasksFailed(throwable.toString());
                         })
         );
     }
@@ -83,7 +83,7 @@ public class OLXJTaskStatusPresenter extends OLXJTaskStatusContract.Presenter {
                                 Objects.requireNonNull(getView()).endTasksFailed(resultEntity.errMsg);
                             }
                         }, throwable -> {
-                            Objects.requireNonNull(getView()).updateStatusFailed(throwable.toString());
+                            Objects.requireNonNull(getView()).endTasksFailed(throwable.toString());
                         })
         );
     }

@@ -22,6 +22,7 @@ import com.supcon.mes.module_olxj.presenter.OLXJAreaListPresenter;
 import com.supcon.mes.module_olxj.presenter.OLXJWorkItemPresenter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,6 +76,8 @@ public class OLXJTaskAreaController extends BaseDataController implements OLXJWo
         mOLXJWorkItemEntities.clear();
         mAreaEntities.clear();
         mAreaEntityMap.clear();
+        currentPage = 1;
+        cuttentAreaPage = 1;
         getAreaData();
     }
 
@@ -137,6 +140,9 @@ public class OLXJTaskAreaController extends BaseDataController implements OLXJWo
                         for(int i = mAreaEntities.size()-1; i>= 0 ; i--){
                             if(mAreaEntities.get(i).workItemEntities.size() == 0){
                                 mAreaEntities.remove(i);
+                            }
+                            else {
+//                                Collections.sort(mAreaEntities.get(i).workItemEntities);
                             }
                         }
 

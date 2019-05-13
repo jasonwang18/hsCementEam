@@ -14,23 +14,12 @@ import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
-import com.bluetron.rxretrohttp.exception.ApiException;
-import com.bluetron.zhizhi.BuildConstants;
-import com.bluetron.zhizhi.domain.bean.response.workstation.OwnMinAppItem;
-import com.bluetron.zhizhi.domain.event.login.LogOutEventSDK;
-import com.bluetron.zhizhi.domain.event.login.LoginEventSDK;
-import com.bluetron.zhizhi.domain.event.minapp.MinappListEvent;
-import com.bluetron.zhizhi.domain.router.Navigation;
-import com.bluetron.zhizhi.home.presentation.HomeSDK;
-import com.bluetron.zhizhi.login.presentation.LoginUserSDK;
-import com.jdjz.coresdk14.App;
 import com.supcon.common.BaseConstant;
 import com.supcon.common.com_http.util.RxSchedulers;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.base.fragment.BaseRefreshRecyclerFragment;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.LogUtil;
-import com.supcon.common.view.util.SharedPreferencesUtils;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.beans.GalleryBean;
 import com.supcon.mes.mbap.beans.LoginEvent;
@@ -39,6 +28,7 @@ import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
+import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_login.IntentRouter;
 import com.supcon.mes.module_login.R;
 import com.supcon.mes.module_login.model.api.WorkAPI;
@@ -61,7 +51,9 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by wangshizhan on 2017/8/11.
@@ -119,87 +111,6 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
     }
 
 
-    public void doZhiZhiLogin() {
-        String ip = SharedPreferencesUtils.getParam(App.getAppContext(), Constant.ZZ.IP, "");
-        String port = SharedPreferencesUtils.getParam(App.getAppContext(), Constant.ZZ.PORT, "");
-        String userName = App.getUserName();
-        String pwd = App.getPassword();
-        LogUtil.d("zhizhi login ip:"+ip+" port:"+port+" userName:"+userName+" pwd:"+pwd);
-        LoginUserSDK.getInstance().userLogin(TextUtils.isEmpty(userName)?"admin":userName, TextUtils.isEmpty(pwd)?"Supos1304@":pwd, "Http://"+ip+":"+port+"/");
-    }
-
-    //登录,登出,获取minappist时出错返回的内容和code
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void Event(ApiException ex) {
-        ToastUtils.show(context, ex.getCode() + " " + ex.getMessage());
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void Event(LoginEventSDK ex) {
-        LogUtil.d("supos平台登录成功！");
-        HomeSDK.getInstance().getMinppListSDK();
-    }
-
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void Event(LogOutEventSDK ex) {
-        LogUtil.d( "supos平台登出成功");
-    }
-
-    private List<WorkInfo> sbWorkInfos = new ArrayList<>();
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void Event(MinappListEvent minappListEvent) {
-        if(zzApps == null) {
-            zzApps = new ArrayList<>();
-        }
-        else{
-            if(zzApps.size() != 0){
-                zzApps.clear();
-            }
-
-            if(sbWorkInfos.size()!=0){
-                sbWorkInfos.clear();
-            }
-        }
-        List<OwnMinAppItem> minappList = minappListEvent.getList();
-        for (int i = 0; i < minappList.size(); i++) {
-            OwnMinAppItem appItem = minappListEvent.getList().get(i);
-            WorkInfo workInfo = new WorkInfo();
-            workInfo.iconUrl = appItem.getAppiconurl();
-            workInfo.name = appItem.getAppname();
-            workInfo.pendingUrl = appItem.getAppurl();
-            workInfo.zzBaseServerUrl = appItem.getAppserverbaseurl();
-            workInfo.zzAppType = appItem.getApptype();
-            workInfo.zzAppId = appItem.getAppId();
-            workInfo.isOpen = true;
-            workInfo.router = appItem.getAppurl();
-            if("设备看板".equals(workInfo.name) || "润滑看板".equals(workInfo.name) || "备件看板".equals(workInfo.name)){
-                sbWorkInfos.add(workInfo);
-            }
-            else
-            zzApps.add(workInfo);
-        }
-
-        if(defaultList!=null && zzApps!=null){
-
-//            WorkInfo workInfo = new WorkInfo();
-//            workInfo.name = "生产报表";
-//            workInfo.iconResId = R.drawable.ic_data_xjbb;
-//            workInfo.router = "nil";
-//            workInfo.isOpen = true;
-//            zzApps.add(workInfo);
-
-            WorkInfo workInfo2 = new WorkInfo();
-            workInfo2.viewType = 1;
-            workInfo2.name = "SupOS平台";
-            workInfo2.type = -2;
-            workInfo2.isOpen = true;
-            zzApps.add(0,workInfo2);
-
-
-            refreshList();
-        }
-    }
 
 
     @Override
@@ -227,13 +138,15 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
         });
         contentView.setLayoutManager(layoutManager);
 //        contentView.addItemDecoration(new GridSpaceItemDecoration(DisplayUtil.dip2px(1, context), LINE_COUT));
-        titleText.setText("红狮移动平台");
+
+
+        titleText.setText("水泥移动设备");
+
         leftBtn.setImageResource(R.drawable.sl_top_menu);
 //        rightBtn.setImageResource(R.drawable.sl_top_pending);
 //        rightBtn.setVisibility(View.VISIBLE);
 
         defaultList = WorkHelper.getDefaultWorkList(context);
-        doZhiZhiLogin();
 
         Flowable.timer(20, TimeUnit.MILLISECONDS)
                 .compose(RxSchedulers.io_main())
@@ -249,7 +162,8 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
     private void initAd() {
         List<GalleryBean> ads = new ArrayList<>();
         GalleryBean galleryBean = new GalleryBean();
-        galleryBean.resId = R.drawable.banner_hssn;
+//        galleryBean.resId = R.drawable.banner_hssn;
+        galleryBean.resId = R.drawable.pic_banner03;
         ads.add(galleryBean);
         workCustomAd.setGalleryBeans(ads);
     }
@@ -271,9 +185,9 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
         info.isOpen = true;
         list.add(info);
 
-        if(sbWorkInfos.size() != 0){
-            list.addAll(sbWorkInfos);
-        }
+//        if(sbWorkInfos.size() != 0){
+//            list.addAll(sbWorkInfos);
+//        }
         list.addAll(defaultList);
         refreshListController.refreshComplete(list);
         height =  DisplayUtil.dip2px(12, context);
@@ -373,9 +287,6 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
                     bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
                     IntentRouter.go(context, workInfo.router, bundle);
                 }
-                else if(workInfo.zzAppType !=0){
-                    goZZApp(workInfo);
-                }
                 else
                     IntentRouter.go(getContext(), workInfo.router);
             }
@@ -390,30 +301,6 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
         });
     }
 
-    private void goZZApp(WorkInfo workInfo) {
-
-        switch (workInfo.zzAppType){
-            case 1:
-                Navigation.navigateToTFAppList(workInfo.name);
-                break;
-            case 2:
-                if("过程报警".equals(workInfo.name)){
-                    BuildConstants.isInit = true;
-                    BuildConstants.appId = workInfo.zzAppId;
-                    Navigation.navigateToAlarmMinapp(workInfo.pendingUrl
-                            , workInfo.name, workInfo.zzBaseServerUrl
-                            , workInfo.iconUrl);
-                }
-                else if("趋势图".equals(workInfo.name)) {
-                    Navigation.navigateToTrendMinapp(workInfo.pendingUrl
-                            , workInfo.name, workInfo.zzBaseServerUrl
-                            , workInfo.iconUrl);
-                }
-                break;
-
-        }
-
-    }
 
     @SuppressLint("CheckResult")
     @Override
@@ -484,13 +371,18 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
     @Override
     public void getPendingsByModuleSuccess(WorkNumEntity entity) {
 
-        Flowable.fromIterable(defaultList)
-                .compose(RxSchedulers.io_main())
-                .filter(workInfo -> entity.url.equals(workInfo.pendingUrl))
-                .subscribe(
-                        workInfo -> workInfo.num = entity.totalCount,
-                        throwable -> { },
-                        () -> refreshListController.refreshComplete(defaultList));
+        if(mWorkAdapter.getList()!=null)
+            Flowable.fromIterable(mWorkAdapter.getList())
+                    .subscribeOn(Schedulers.newThread())
+                    .filter(workInfo -> entity.url.equals(workInfo.pendingUrl))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            workInfo -> {
+                                if(workInfo.num != entity.totalCount) {
+                                    workInfo.num = entity.totalCount;
+                                    mWorkAdapter.notifyItemChanged(mWorkAdapter.getList().indexOf(workInfo));
+                                }}
+                    );
     }
 
 

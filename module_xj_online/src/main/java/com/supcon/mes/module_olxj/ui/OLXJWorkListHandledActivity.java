@@ -46,7 +46,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
@@ -128,7 +130,7 @@ public class OLXJWorkListHandledActivity extends BaseRefreshRecyclerActivity<OLX
 
         initEmptyView();
 
-        initFilterView();
+//        initFilterView();
         if(isXJFinished){
             oneKeySubmitBtn.setVisibility(View.GONE);
         }
@@ -326,7 +328,10 @@ public class OLXJWorkListHandledActivity extends BaseRefreshRecyclerActivity<OLX
                 .filter(new Predicate<OLXJWorkItemEntity>() {
                     @Override
                     public boolean test(OLXJWorkItemEntity olxjWorkItemEntity) throws Exception {
-                        return olxjWorkItemEntity.isFinished;
+                        if(!TextUtils.isEmpty(deviceName) && olxjWorkItemEntity.eamID!=null){
+                            return olxjWorkItemEntity.isFinished && deviceName.equals(olxjWorkItemEntity.eamID.name);
+                        }
+                        return olxjWorkItemEntity.isFinished ;
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -344,10 +349,29 @@ public class OLXJWorkListHandledActivity extends BaseRefreshRecyclerActivity<OLX
                     @Override
                     public void run() throws Exception {
                         refreshListController.refreshComplete(workItems);
+                        initFilterView(workItems);
                     }
                 });
     }
 
+    @SuppressLint("CheckResult")
+    private void initFilterView(List<OLXJWorkItemEntity> itemEntities) {
+        List<FilterBean> filterBeans = new ArrayList<>();
+        Flowable.fromIterable(itemEntities)
+                .subscribe(new Consumer<OLXJWorkItemEntity>() {
+                    @Override
+                    public void accept(OLXJWorkItemEntity workItemEntity) throws Exception {
+                        if(workItemEntity.eamID!=null && !TextUtils.isEmpty(workItemEntity.eamID.name))
+                        if (mFilterDeviceName == null ||  !mFilterDeviceName.equals(workItemEntity.eamID.name)) {
+                            mFilterDeviceName = workItemEntity.eamID.name;
+                            FilterBean filterBean = new FilterBean();
+                            filterBean.name = workItemEntity.eamID.name;
+                            filterBeans.add(filterBean);
+                        }
+                    }
+                }, throwable -> {
+                }, () -> listDeviceFilter.setData(filterBeans));
+    }
 
     @Override
     protected void onDestroy() {

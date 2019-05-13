@@ -74,8 +74,8 @@ public interface OLXJNetworkAPI {
      * 1、添加临时巡检任务作业项参照列表
      * 2、路线查询区域和作业项
      */
-
     @GET("/mobileEAM/work/workItem/addworkItem-query.action?&permissionCode=mobileEAM_1.0.0_work_addworkItem&crossCompanyFlag=")
+//    @GET("/mobileEAM/work/workItem/addworkItem-query.action?&permissionCode=mobileEAM_1.0.0_work_addworkItem&crossCompanyFlag=&page.fileName=%E5%B7%A1%E6%A3%80%E9%A1%B9_%E5%B7%A1%E6%A3%80%E9%A1%B9.xls&cookie_Last_query_type=LAST_QUERY_ec_mobileEAM_work_workItem_addworkItem_queryForm&cookie_expand_type=EXPAND_TYPE_ec_mobileEAM_work_workItem_addworkItem_queryForm&cookie_expand_type_value=all&old_expand_type_value=all&queryParam=MESBasic_1_equipManage_Equipment_code_eamID_code")
     Flowable<CommonBAPListEntity<OLXJWorkItemEntity>> queryWorkListRef(@QueryMap Map<String, Object> queryParam);
 
     /**

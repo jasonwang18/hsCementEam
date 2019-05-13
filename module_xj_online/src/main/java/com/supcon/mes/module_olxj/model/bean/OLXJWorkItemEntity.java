@@ -1,5 +1,7 @@
 package com.supcon.mes.module_olxj.model.bean;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.supcon.common.com_http.BaseEntity;
@@ -11,7 +13,7 @@ import org.greenrobot.greendao.annotation.Transient;
  * Created by wangshizhan on 2019/4/1
  * Email:wangshizhan@supcom.com
  */
-public class OLXJWorkItemEntity extends BaseEntity {
+public class OLXJWorkItemEntity extends BaseEntity implements Comparable<OLXJWorkItemEntity>{
 
     /**
      * "autoAanalysis": false,
@@ -130,4 +132,19 @@ public class OLXJWorkItemEntity extends BaseEntity {
     @Expose
     public String headerPicPath;
 
+
+
+    @Override
+    public int compareTo(@NonNull OLXJWorkItemEntity o) {
+
+        if(this.eamID == null || o.eamID == null){
+            return 0;
+        }
+
+        if(this.eamID.id.equals(o.eamID.id) && this.part!=null){
+            return this.part.compareTo(o.part);
+        }
+
+        return (int) (this.eamID.id - o.eamID.id);
+    }
 }

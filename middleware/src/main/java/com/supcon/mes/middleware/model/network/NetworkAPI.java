@@ -1,13 +1,14 @@
 package com.supcon.mes.middleware.model.network;
 
 import com.app.annotation.apt.ApiFactory;
-import com.supcon.mes.middleware.model.bean.AccountInfo;
 import com.supcon.mes.middleware.model.bean.AreaListEntity;
 import com.supcon.mes.middleware.model.bean.AttachmentListEntity;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
+import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.bean.ContractListEntity;
 import com.supcon.mes.middleware.model.bean.DepartmentInfoListEntity;
+import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.LinkListEntity;
 import com.supcon.mes.middleware.model.bean.LongResultEntity;
 import com.supcon.mes.middleware.model.bean.MyInfo;
@@ -16,7 +17,9 @@ import com.supcon.mes.middleware.model.bean.RoleListEntity;
 import com.supcon.mes.middleware.model.bean.StaffDetailInfoListEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeListEntity;
 import com.supcon.mes.middleware.model.bean.UserInfoListEntity;
+import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.bean.WorkFlowListEntity;
+import com.supcon.mes.middleware.model.bean.YHEntity;
 
 import java.util.List;
 
@@ -212,4 +215,27 @@ public interface NetworkAPI {
     Flowable<DepartmentInfoListEntity> listDepartmentInfo();
 
 
+    /**
+     * 发送device token
+     */
+    @POST("/BEAM/loginAndLogout.action")
+    Flowable<CommonEntity> sendDeviceToken(@Query("deviceToken") String deviceToken, @Query("loginStatus")String loginStatus);
+
+
+    /**
+     * 查询隐患管理待办
+     * @return
+     */
+    @GET("/BEAM2/faultInfo/faultInfo/faultInfoList-pending.action?processKey=faultInfoFW")
+    Flowable<CommonBAPListEntity<YHEntity>> queryFaultInfotPending(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity);
+
+
+    /**
+     * @param
+     * @return
+     * @description 获取工单列表
+     * @author zhangwenshuai1 2018/8/13
+     */
+    @GET("/BEAM2/workList/workRecord/workList-pending.action?1=1&permissionCode=BEAM2_1.0.0_workList_workList")
+    Flowable<CommonBAPListEntity<WXGDEntity>> queryWXGDPending(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity);
 }

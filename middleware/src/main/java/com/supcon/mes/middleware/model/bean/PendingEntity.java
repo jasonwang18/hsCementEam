@@ -12,6 +12,7 @@ public class PendingEntity extends BaseEntity {
     public String activityType;
     public Boolean bulkDealFlag;
     public Long deploymentId;
+    public String deploymentName;
     public Long id;
     public String openUrl;
     public String processDescription;
@@ -20,5 +21,6 @@ public class PendingEntity extends BaseEntity {
     public long processVersion;
     public String taskDescription;  //单据状态
     public long userId;
-
+    public String nowStatus;
+    public String tableNo;
 }
