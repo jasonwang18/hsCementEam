@@ -24,7 +24,6 @@ public class WelcomeActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         new Handler().postDelayed(() -> {
             if(MBapApp.isIsLogin()){
                 IntentRouter.go(WelcomeActivity.this, Constant.Router.MAIN);

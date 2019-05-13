@@ -12,12 +12,9 @@ android {
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
+//        multiDexEnabled true
 
         flavorDimensions("dev")
-//        // 默认是umeng的渠道
-//        applicationId 'com.supcon.mes.hongShiCementEam'
-//        manifestPlaceholders = [UMENG_CHANNEL_VALUE: name, APP_NAME:"@string/hs_app_name", UMENG_APPKEY:"5cbea853570df3300e000f4a", UMENG_MESSAGE_SECRET:"b884c2d96b0bda0442bc9158cccb06c4"]
     }
     productFlavors {
         dev{
@@ -104,13 +101,13 @@ android {
                     outputFileName  = "SN-VxEAM(M) V${defaultConfig.versionName}-${releaseTime()}-C.apk"
                 }
             }
+            multiDexEnabled true
+        }
+        debug {
+
+            multiDexEnabled true
 
         }
-//        debug {
-//
-//            multiDexEnabled true
-//
-//        }
     }
 
     repositories {

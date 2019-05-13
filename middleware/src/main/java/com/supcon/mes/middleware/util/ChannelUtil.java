@@ -59,6 +59,19 @@ public class ChannelUtil {
     }
 
 
+    public static String getAppPackage() {
+        ApplicationInfo appInfo = null;
+        String value = "";
+        try {
+            appInfo = EamApplication.getAppContext().getPackageManager().getApplicationInfo(EamApplication.getAppContext().getPackageName(), PackageManager.GET_META_DATA);
+            Object appPackage = appInfo.metaData.get("APP_SHARE_ID");
+            value = TextUtils.isEmpty(appPackage.toString()) ? "com.supcon.mes.cementEam" : appPackage.toString();
+        } catch (PackageManager.NameNotFoundException e) {
+            value = "com.supcon.mes.cementEam";
+            e.printStackTrace();
+        }
+        return value;
+    }
 
 
 

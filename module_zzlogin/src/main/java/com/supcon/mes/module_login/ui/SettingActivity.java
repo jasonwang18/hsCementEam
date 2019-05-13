@@ -1,5 +1,6 @@
 package com.supcon.mes.module_login.ui;
 
+import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
@@ -399,7 +400,13 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
 //        CookieUtil.clearCookie(context);
         save();
         onLoadSuccessAndExit("登出成功！", () -> {
-            IntentRouter.go(context, Constant.Router.LOGIN);
+            Bundle bundle  = new Bundle();
+            bundle.putBoolean(Constant.IntentKey.FIRST_LOGIN, false);
+            if(!EamApplication.isHongshi()) {
+                bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, R.drawable.ic_login_logo_hl);
+                bundle.putInt(Constant.IntentKey.LOGIN_BG_ID, R.drawable.bg_login_hl);
+            }
+            IntentRouter.go(context, Constant.Router.LOGIN, bundle);
             finish();
         });
     }

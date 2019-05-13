@@ -8,7 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
-
+import com.supcon.mes.push.R;
 import com.supcon.mes.push.util.NotificationUtil;
 import com.umeng.message.UTrack;
 import com.umeng.message.entity.UMessage;

@@ -2,14 +2,14 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
     <!-- 设置整个屏幕背景为白色 -->
     <item >
-        <bitmap android:src="@drawable/bg_login_hs"/>
+        <bitmap android:src="@drawable/bg_login_hl"/>
     </item>
 
     <!-- 中间logo -->
     <item android:gravity="center">
         <bitmap
             android:gravity="center"
-            android:src="@drawable/ic_login_logo_hs"
+            android:src="@drawable/ic_login_logo2"
             android:mipMap="true"
             
             />
