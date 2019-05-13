@@ -1,5 +1,7 @@
 package com.supcon.mes.module_sbda_online.model.bean;
 
+import android.text.TextUtils;
+
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.EamType;
 
@@ -29,9 +31,11 @@ public class AttachEamEntity extends BaseEntity {
     }
 
     public Long getProduceDate() {
-        Long aLong = 0L;
+        Long aLong = null;
         try {
-            aLong = Long.valueOf(produceDate);
+            if (!TextUtils.isEmpty(produceDate)) {
+                aLong = Long.valueOf(produceDate);
+            }
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
