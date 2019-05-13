@@ -1,6 +1,7 @@
 package com.supcon.mes.module_sbda_online.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
+import com.supcon.mes.middleware.model.bean.AttachEamEntity;
 
 /**
  * @author yangfei.cao

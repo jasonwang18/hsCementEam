@@ -78,7 +78,7 @@ public class SubsidiaryAdapter extends BaseListDataRecyclerViewAdapter<Subsidiar
             itemEquipmentModelTv.setValue(Util.strFormat(data.getAttachEamId().model));
             itemEquipmentProduceFirmTv.setValue(Util.strFormat(data.getAttachEamId().produceFirm));
             itemEquipmentProduceCodeTv.setValue(Util.strFormat(data.getAttachEamId().produceCode));
-            itemEquipmentDateTv.setValue(dateFormat.format(data.getAttachEamId().getProduceDate()));
+            itemEquipmentDateTv.setValue(data.getAttachEamId().getProduceDate() != null ? dateFormat.format(data.getAttachEamId().getProduceDate()) : "");
 
             if (!TextUtils.isEmpty(data.attachMemo)) {
                 itemEquipmentMemoTv.setVisibility(View.VISIBLE);

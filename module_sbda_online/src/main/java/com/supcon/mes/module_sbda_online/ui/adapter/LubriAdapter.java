@@ -1,6 +1,7 @@
 package com.supcon.mes.module_sbda_online.ui.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -43,6 +44,10 @@ public class LubriAdapter extends BaseListDataRecyclerViewAdapter<LubriEntity> {
         TextView itemLubricationNumTv;
         @BindByTag("itemLubricationPartTv")
         CustomTextView itemLubricationPartTv;
+        @BindByTag("itemLubricationAttachEamTv")
+        CustomTextView itemLubricationAttachEamTv;
+        @BindByTag("itemLubricationSparePartIdTv")
+        CustomTextView itemLubricationSparePartIdTv;
 
         @BindByTag("itemLubricationLastDateTv")
         CustomTextView itemLubricationLastDateTv;
@@ -70,6 +75,14 @@ public class LubriAdapter extends BaseListDataRecyclerViewAdapter<LubriEntity> {
             itemLubricationNumTv.setText(String.format(context.getString(R.string.device_style1), "用量:", Util.big2(data.sum)));
             itemLubricationPartTv.setValue(Util.strFormat(data.lubricatePart));
 
+            if (!TextUtils.isEmpty(data.getAccessoryEamId().getAttachEamId().code)) {
+                itemLubricationAttachEamTv.setVisibility(View.VISIBLE);
+                itemLubricationAttachEamTv.setContent(data.getAccessoryEamId().getAttachEamId().code);
+            }
+            if (!TextUtils.isEmpty(data.getSparePartId().getProductID().productCode)) {
+                itemLubricationSparePartIdTv.setVisibility(View.VISIBLE);
+                itemLubricationSparePartIdTv.setContent(data.getSparePartId().getProductID().productCode);
+            }
 
             if (data.isDuration()) {
                 itemLubricationLastDurationTv.setVisibility(View.VISIBLE);

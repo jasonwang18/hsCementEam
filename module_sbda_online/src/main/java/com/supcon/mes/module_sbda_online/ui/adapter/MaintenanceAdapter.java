@@ -44,6 +44,11 @@ public class MaintenanceAdapter extends BaseListDataRecyclerViewAdapter<Maintena
         CustomTextView itemMaintenanceLastDurationTv;
         @BindByTag("itemMaintenanceNextDurationTv")
         CustomTextView itemMaintenanceNextDurationTv;
+        @BindByTag("itemMaintenanceAttachEamTv")
+        CustomTextView itemMaintenanceAttachEamTv;
+        @BindByTag("itemMaintenanceSparePartIdTv")
+        CustomTextView itemMaintenanceSparePartIdTv;
+
         @BindByTag("itemMaintenanceClaimTv")
         CustomTextView itemMaintenanceClaimTv;
         @BindByTag("itemMaintenanceContentTv")
@@ -74,6 +79,15 @@ public class MaintenanceAdapter extends BaseListDataRecyclerViewAdapter<Maintena
                 itemMaintenanceNextDateTv.setVisibility(View.VISIBLE);
                 itemMaintenanceLastDateTv.setValue(data.lastTime != null ? dateFormat.format(data.lastTime) : "");
                 itemMaintenanceNextDateTv.setValue(data.nextTime != null ? dateFormat.format(data.nextTime) : "");
+            }
+
+            if (!TextUtils.isEmpty(data.getAccessoryEamId().getAttachEamId().code)) {
+                itemMaintenanceAttachEamTv.setVisibility(View.VISIBLE);
+                itemMaintenanceAttachEamTv.setContent(data.getAccessoryEamId().getAttachEamId().code);
+            }
+            if (!TextUtils.isEmpty(data.getSparePartId().getProductID().productCode)) {
+                itemMaintenanceSparePartIdTv.setVisibility(View.VISIBLE);
+                itemMaintenanceSparePartIdTv.setContent(data.getSparePartId().getProductID().productCode);
             }
 
             itemMaintenanceClaimTv.setValue(data.claim);
