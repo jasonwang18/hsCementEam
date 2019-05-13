@@ -104,7 +104,9 @@ public class EamApplication extends MBapApp {
 //        PushHelper.getInstance().init(this, appKey, pushSecret);
 
         //MainActivity 处理
-        new PushController().onInit();
+        PushController pushController = new PushController();
+        pushController.onInit();
+
     }
 
     public void initIP(){

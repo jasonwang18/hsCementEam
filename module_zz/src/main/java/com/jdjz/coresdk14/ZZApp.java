@@ -112,7 +112,7 @@ public class ZZApp extends EamApplication {
         }
         else if(channel.equals("hailuo")){
             SharedPreferencesUtils.setParam(getApplicationContext(), Constant.ZZ.IP, "60.167.69.246"/*"192.168.13.113"*/);
-            SharedPreferencesUtils.setParam(getApplicationContext(), Constant.ZZ.PORT, "38080");
+            SharedPreferencesUtils.setParam(getApplicationContext(), Constant.ZZ.PORT, "38043");
         }
 
     }

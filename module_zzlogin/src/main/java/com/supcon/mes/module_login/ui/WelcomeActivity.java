@@ -11,6 +11,7 @@ import com.supcon.common.view.util.SharedPreferencesUtils;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.mes.mbap.MBapApp;
 import com.supcon.mes.mbap.MBapConstant;
+import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.module_login.IntentRouter;
 import com.supcon.mes.module_login.R;
@@ -25,13 +26,17 @@ public class WelcomeActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        //无title
-//        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        //全屏
-//        this.getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN ,
-//                WindowManager.LayoutParams. FLAG_FULLSCREEN);
+        boolean isHS = true;
+        if(EamApplication.isHongshi()){
+            isHS = true;
+        }
+        else{
+            isHS = false;
+            getWindow().setBackgroundDrawableResource(R.drawable.layer_welcome_hl);
+        }
         super.onCreate(savedInstanceState);
         StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
+        boolean finalIsHS = isHS;
         new Handler().postDelayed(() -> {
             if(MBapApp.isIsLogin()){
                 IntentRouter.go(WelcomeActivity.this, Constant.Router.MAIN);
@@ -42,7 +47,10 @@ public class WelcomeActivity extends Activity {
             }
             else{
                 Bundle bundle = new Bundle();
-//                bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, R.drawable.ic_login_logo);
+                if(!finalIsHS) {
+                    bundle.putInt(Constant.IntentKey.LOGIN_BG_ID, R.drawable.bg_login_hl);
+                    bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, R.drawable.ic_login_logo_hl);
+                }
                 bundle.putBoolean(Constant.IntentKey.FIRST_LOGIN, true);
                 IntentRouter.go(WelcomeActivity.this, Constant.Router.LOGIN, bundle);
             }

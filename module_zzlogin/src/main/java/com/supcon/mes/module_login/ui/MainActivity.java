@@ -101,11 +101,6 @@ public class MainActivity extends BaseMultiFragmentActivity {
     public void onLoginValid(LoginValidEvent event) {
         LogUtil.w("MainActivity", String.valueOf(event.isLoginValid()));
         if (event.isLoginValid()) {
-//            Bundle bundle = new Bundle();
-//            bundle.putBoolean(Constant.IntentKey.FIRST_LOGIN, false);
-//            bundle.putBoolean(Constant.IntentKey.LOGIN_INVALID, true);
-//            IntentRouter.go(this, Constant.Router.LOGIN, bundle);
-//            new SilentLoginController().silentLogin();
             getController(SilentLoginController.class).silentLogin();
         }
     }

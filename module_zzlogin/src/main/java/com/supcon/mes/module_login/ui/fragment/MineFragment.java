@@ -190,6 +190,10 @@ public class MineFragment extends BaseControllerFragment implements MineContract
         onLoadSuccessAndExit("登出成功！", () -> {
             Bundle bundle = new Bundle();
             bundle.putBoolean(Constant.IntentKey.FIRST_LOGIN, false);
+            if(!EamApplication.isHongshi()) {
+                bundle.putInt(Constant.IntentKey.LOGIN_BG_ID, R.drawable.bg_login_hl);
+                bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, R.drawable.ic_login_logo_hl);
+            }
             IntentRouter.go(getContext(), Constant.Router.LOGIN, bundle);
             ((MainActivity)getActivity()).toggleDrawer();
         });
