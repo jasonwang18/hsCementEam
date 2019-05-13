@@ -64,6 +64,32 @@
             app:max_lines="1" />
 
         <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemLubricationAttachEamTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemLubricationAttachEamTv"
+            android:visibility="gone"
+            app:content_hint="--"
+            app:gravity="center"
+            app:key="附 属 设 备:"
+            app:key_width="140dp"
+            app:max_lines="100" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemLubricationSparePartIdTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemLubricationSparePartIdTv"
+            android:visibility="gone"
+            app:content_hint="--"
+            app:gravity="center"
+            app:key="备 件 编 码:"
+            app:key_width="140dp"
+            app:max_lines="100" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/itemLubricationLastDateTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
