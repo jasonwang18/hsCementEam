@@ -1,5 +1,8 @@
 
 module_zz/.DS_Store
 .DS_Store
-module_zz/.DS_Store
-module_zz/.DS_Store
+*/.svn
+module_yhgl/.svn
+.idea
+*/build
+.gradle
