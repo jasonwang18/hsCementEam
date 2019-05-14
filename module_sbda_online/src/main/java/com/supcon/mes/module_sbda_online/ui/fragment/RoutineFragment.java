@@ -71,15 +71,15 @@ public class RoutineFragment extends BaseRefreshFragment implements RoutineContr
     @BindByTag("areaNum")
     CustomTextView areaNum;
 
-//    @BindByTag("fileState")
-//    CustomTextView fileState;
+    @BindByTag("electricStaff")
+    CustomTextView electricStaff;
 
-//    @BindByTag("eamSpecif")
-//    CustomTextView eamSpecif;
+    @BindByTag("inspectionStaff")
+    CustomTextView inspectionStaff;
 
-//    @BindByTag("eamUseDate")
-//    CustomTextView eamUseDate;
-//
+    @BindByTag("repairStaff")
+    CustomTextView repairStaff;
+
 //    @BindByTag("produceCode")
 //    CustomTextView produceCode;
 //
@@ -167,6 +167,9 @@ public class RoutineFragment extends BaseRefreshFragment implements RoutineContr
             setTextValue(eamAbc, sbdaOnlineEntity.abcForDisplay);
             setTextValue(installPlace, sbdaOnlineEntity.getInstallPlace().name);
             setTextValue(areaNum, sbdaOnlineEntity.areaNum);
+            setTextValue(electricStaff, sbdaOnlineEntity.getElectricStaff().name);
+            setTextValue(inspectionStaff, sbdaOnlineEntity.getInspectionStaff().name);
+            setTextValue(repairStaff, sbdaOnlineEntity.getRepairStaff().name);
         }
         refreshController.refreshComplete();
     }

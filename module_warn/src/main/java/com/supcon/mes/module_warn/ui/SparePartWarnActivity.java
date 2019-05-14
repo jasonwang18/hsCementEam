@@ -5,6 +5,7 @@ import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.widget.RadioGroup;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
@@ -14,7 +15,6 @@ import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
-import com.supcon.mes.mbap.view.CustomFilterView;
 import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
 import com.supcon.mes.mbap.view.CustomSearchView;
 import com.supcon.mes.middleware.constant.Constant;
@@ -23,12 +23,10 @@ import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.KeyExpandHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_warn.R;
-import com.supcon.mes.module_warn.filter.TimeStyleBean;
 import com.supcon.mes.module_warn.model.api.SparePartWarnAPI;
 import com.supcon.mes.module_warn.model.bean.SparePartWarnEntity;
 import com.supcon.mes.module_warn.model.bean.SparePartWarnListEntity;
 import com.supcon.mes.module_warn.model.contract.SparePartWarnContract;
-import com.supcon.mes.module_warn.filter.FilterHelper;
 import com.supcon.mes.module_warn.presenter.SparePartWarnPresenter;
 import com.supcon.mes.module_warn.ui.adapter.SparePartWarnAdapter;
 
@@ -57,8 +55,8 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
     @BindByTag("contentView")
     RecyclerView contentView;
 
-    @BindByTag("listTimeStyleFilter")
-    CustomFilterView listTimeStyleFilter;
+    @BindByTag("warnRadioGroup")
+    RadioGroup warnRadioGroup;
 
     private final Map<String, Object> queryParam = new HashMap<>();
     private String selecStr;
@@ -89,7 +87,6 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
         searchTitleBar.setTitleText("备件更换预警");
         searchTitleBar.setBackgroundResource(R.color.gradient_start);
         searchTitleBar.disableRightBtn();
-        listTimeStyleFilter.setData(FilterHelper.createSpareFilter());
     }
 
     @SuppressLint("CheckResult")
@@ -117,9 +114,17 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
 
         leftBtn.setOnClickListener(v -> onBackPressed());
 
-        listTimeStyleFilter.setFilterSelectChangedListener(filterBean -> {
-            url = ((TimeStyleBean) filterBean).url;
-            doRefresh();
+        warnRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                if (checkedId == R.id.warnRadioBtn1) {
+                    url = "/BEAM/baseInfo/jWXItem/data-dg1531171100751.action";
+                } else if (checkedId == R.id.warnRadioBtn2) {
+                    url = "/BEAM/baseInfo/jWXItem/data-dg1531171100814.action";
+                }
+                doRefresh();
+            }
         });
     }
 

@@ -43,6 +43,10 @@ public class SBDAOnlineEntity extends BaseEntity {
     public String abcForDisplay;//资产abc
     public float score;//分数
 
+    public Staff electricStaff;//电气责任人
+    public Staff inspectionStaff;//巡检责任人
+    public Staff repairStaff;//机修责任人
+
 
     public boolean checkNil() {
         return null == id;
@@ -74,6 +78,27 @@ public class SBDAOnlineEntity extends BaseEntity {
             dutyStaff = new Staff();
         }
         return dutyStaff;
+    }
+
+    public Staff getElectricStaff() {
+        if (electricStaff == null) {
+            electricStaff = new Staff();
+        }
+        return electricStaff;
+    }
+
+    public Staff getInspectionStaff() {
+        if (inspectionStaff == null) {
+            inspectionStaff = new Staff();
+        }
+        return inspectionStaff;
+    }
+
+    public Staff getRepairStaff() {
+        if (repairStaff == null) {
+            repairStaff = new Staff();
+        }
+        return repairStaff;
     }
 
     public ValueEntity getFileState() {

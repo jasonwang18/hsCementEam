@@ -62,19 +62,23 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by wangshizhan on 2017/8/11.
  */
 @Presenter(value = {WorkPresenter.class})
-public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implements WorkContract.View{
+public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implements WorkContract.View {
 
     WorkAdapter mWorkAdapter;
 
@@ -107,7 +111,7 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
     private final int ITEM_HEIGHT = 90;
 
 
-    public WorkFragment(){
+    public WorkFragment() {
 
     }
 
@@ -130,8 +134,8 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
         String port = SharedPreferencesUtils.getParam(ZZApp.getAppContext(), Constant.ZZ.PORT, "");
         String userName = ZZApp.getUserName();
         String pwd = ZZApp.getPassword();
-        LogUtil.d("zhizhi login ip:"+ip+" port:"+port+" userName:"+userName+" pwd:"+pwd);
-        LoginUserSDK.getInstance().userLogin(TextUtils.isEmpty(userName)?"admin":userName, TextUtils.isEmpty(pwd)?"Supos1304@":pwd, "Http://"+ip+":"+port+"/");
+        LogUtil.d("zhizhi login ip:" + ip + " port:" + port + " userName:" + userName + " pwd:" + pwd);
+        LoginUserSDK.getInstance().userLogin(TextUtils.isEmpty(userName) ? "admin" : userName, TextUtils.isEmpty(pwd) ? "Supos1304@" : pwd, "Http://" + ip + ":" + port + "/");
     }
 
     //登录,登出,获取minappist时出错返回的内容和code
@@ -145,27 +149,27 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
         LogUtil.d("supos平台登录成功！");
         HomeSDK.getInstance().getMinppListSDK();
         String token1 = LoginUserSDK.getInstance().getOSToken();
-        LogUtil.e("zhizhi token1:"+token1);
+        LogUtil.e("zhizhi token1:" + token1);
     }
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(LogOutEventSDK ex) {
-        LogUtil.d( "supos平台登出成功");
+        LogUtil.d("supos平台登出成功");
     }
 
     private List<WorkInfo> sbWorkInfos = new ArrayList<>();
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(MinappListEvent minappListEvent) {
-        if(zzApps == null) {
+        if (zzApps == null) {
             zzApps = new ArrayList<>();
-        }
-        else{
-            if(zzApps.size() != 0){
+        } else {
+            if (zzApps.size() != 0) {
                 zzApps.clear();
             }
 
-            if(sbWorkInfos.size()!=0){
+            if (sbWorkInfos.size() != 0) {
                 sbWorkInfos.clear();
             }
         }
@@ -188,7 +192,7 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
             zzApps.add(workInfo);
         }
 
-        if(defaultList!=null && zzApps!=null){
+        if (defaultList != null && zzApps != null) {
 
 //            WorkInfo workInfo = new WorkInfo();
 //            workInfo.name = "生产报表";
@@ -202,7 +206,7 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
             workInfo2.name = "SupOS平台";
             workInfo2.type = -2;
             workInfo2.isOpen = true;
-            zzApps.add(0,workInfo2);
+            zzApps.add(0, workInfo2);
 
 
             refreshList();
@@ -224,10 +228,9 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
             @Override
             public int getSpanSize(int position) {
                 int viewType = mWorkAdapter.getItemViewType(position);
-                if(viewType == 0){
+                if (viewType == 0) {
                     return 1;
-                }
-                else{
+                } else {
                     return LINE_COUT;
                 }
             }
@@ -258,10 +261,9 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
         List<GalleryBean> ads = new ArrayList<>();
         GalleryBean galleryBean = new GalleryBean();
 
-        if(EamApplication.isHongshi()){
+        if (EamApplication.isHongshi()) {
             galleryBean.resId = R.drawable.banner_hssn;
-        }
-        else{
+        } else {
             galleryBean.resId = R.drawable.banner_hailuo;
         }
 
@@ -269,17 +271,15 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
         ads.add(galleryBean);
 
 
-
         workCustomAd.setGalleryBeans(ads);
     }
-
 
 
     @SuppressLint("CheckResult")
     private void refreshList() {
 
         List<WorkInfo> list = new ArrayList<>();
-        if(zzApps!=null){
+        if (zzApps != null) {
             list.addAll(zzApps);
         }
 
@@ -295,12 +295,12 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
 //        }
         list.addAll(defaultList);
         refreshListController.refreshComplete(list);
-        height =  DisplayUtil.dip2px(12, context);
+        height = DisplayUtil.dip2px(12, context);
         count = 0;
         Flowable.fromIterable(list)
                 .compose(RxSchedulers.io_main())
                 .filter(workInfo -> {
-                    if(workInfo.viewType == WorkInfo.VIEW_TYPE_TITLE){
+                    if (workInfo.viewType == WorkInfo.VIEW_TYPE_TITLE) {
                         height += DisplayUtil.dip2px(20, context);
                         count = 0;
                     }
@@ -308,11 +308,11 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
                 })
                 .subscribe(workInfo -> {
 
-                    if(count == LINE_COUT){
+                    if (count == LINE_COUT) {
                         count = 0;
                     }
 
-                    if(count == 0 ){
+                    if (count == 0) {
                         height += DisplayUtil.dip2px(ITEM_HEIGHT, context);
                         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) workLayout.getLayoutParams();
                         lp.height = height;
@@ -323,7 +323,7 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
                 });
     }
 
-    private void startAnimation(View v, int start, int end){
+    private void startAnimation(View v, int start, int end) {
         ValueAnimator animator = ValueAnimator.ofInt(start, end).setDuration(500);
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
         animator.addUpdateListener(arg0 -> {
@@ -352,22 +352,21 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
         });
         mWorkAdapter.setOnItemChildViewClickListener((childView, position, action, obj) -> {
 
-            if(childView.getId() == R.id.contentTitleSettingIc){
-                if(position == 0){
+            if (childView.getId() == R.id.contentTitleSettingIc) {
+                if (position == 0) {
                     IntentRouter.go(context, Constant.Router.WORK_SETTING);
                 }
-            }
-            else{
+            } else {
                 WorkInfo workInfo = (WorkInfo) obj;
 
-                if(TextUtils.isEmpty(workInfo.router) && TextUtils.isEmpty(workInfo.iconUrl)){
+                if (TextUtils.isEmpty(workInfo.router) && TextUtils.isEmpty(workInfo.iconUrl)) {
                     ToastUtils.show(context, "暂无数据！");
                     return;
                 }
 
-                if(Constant.Router.SD.equals(workInfo.router)){
-                    String url = "http://"+EamApplication.getIp()+":"+EamApplication.getPort()
-                            +Constant.WebUrl.SD_LIST
+                if (Constant.Router.SD.equals(workInfo.router)) {
+                    String url = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
+                            + Constant.WebUrl.SD_LIST
                             /*+"&mobileMacAddr=" + PhoneUtil.getMacAddressFromIp(context)*/;
                     Bundle bundle = new Bundle();
                     bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
@@ -378,10 +377,9 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
                     bundle.putString(BaseConstant.WEB_URL, url);
 
                     IntentRouter.go(context, workInfo.router, bundle);
-                }
-                else if(Constant.Router.TD.equals(workInfo.router)){
-                    String url = "http://"+EamApplication.getIp()+":"+EamApplication.getPort()
-                            +Constant.WebUrl.TD_LIST
+                } else if (Constant.Router.TD.equals(workInfo.router)) {
+                    String url = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
+                            + Constant.WebUrl.TD_LIST
                             /*+"&mobileMacAddr=" + PhoneUtil.getMacAddressFromIp(context)*/;
                     Bundle bundle = new Bundle();
                     bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
@@ -391,11 +389,9 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
                     bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, true);
                     bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
                     IntentRouter.go(context, workInfo.router, bundle);
-                }
-                else if(workInfo.zzAppType !=0){
+                } else if (workInfo.zzAppType != 0) {
                     goZZApp(workInfo);
-                }
-                else
+                } else
                     IntentRouter.go(getContext(), workInfo.router);
             }
 
@@ -404,26 +400,25 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
 
         leftBtn.setOnClickListener(v -> {
 
-            ((MainActivity)getActivity()).toggleDrawer();
+            ((MainActivity) getActivity()).toggleDrawer();
 
         });
     }
 
     private void goZZApp(WorkInfo workInfo) {
 
-        switch (workInfo.zzAppType){
+        switch (workInfo.zzAppType) {
             case 1:
                 Navigation.navigateToTFAppList(workInfo.name);
                 break;
             case 2:
-                if("过程报警".equals(workInfo.name)){
+                if ("过程报警".equals(workInfo.name)) {
                     BuildConstants.isInit = true;
                     BuildConstants.appId = workInfo.zzAppId;
                     Navigation.navigateToAlarmMinapp(workInfo.pendingUrl
                             , workInfo.name, workInfo.zzBaseServerUrl
                             , workInfo.iconUrl);
-                }
-                else if("趋势图".equals(workInfo.name)) {
+                } else if ("趋势图".equals(workInfo.name)) {
                     Navigation.navigateToTrendMinapp(workInfo.pendingUrl
                             , workInfo.name, workInfo.zzBaseServerUrl
                             , workInfo.iconUrl);
@@ -438,8 +433,8 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
     @Override
     protected void initData() {
         super.initData();
-        for(WorkInfo workInfo : defaultList){
-            if(TextUtils.isEmpty(workInfo.pendingUrl)){
+        for (WorkInfo workInfo : defaultList) {
+            if (TextUtils.isEmpty(workInfo.pendingUrl)) {
                 continue;
             }
             pendingQueryParams.add(workInfo.pendingUrl);
@@ -462,14 +457,14 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onLogin(LoginEvent loginEvent){
+    public void onLogin(LoginEvent loginEvent) {
 //        refreshListController.refreshBegin();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onWorkRefresh(WorkRefreshEvent loginEvent){
+    public void onWorkRefresh(WorkRefreshEvent loginEvent) {
         defaultList = WorkHelper.getDefaultWorkList(context);
-        if (zzApps!=null) {
+        if (zzApps != null) {
             defaultList.addAll(zzApps);
         }
         refreshList();
@@ -501,19 +496,21 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
 
     @SuppressLint("CheckResult")
     @Override
-    public void getPendingsByModuleSuccess(WorkNumEntity entity) {
-        if(mWorkAdapter.getList()!=null)
-        Flowable.fromIterable(mWorkAdapter.getList())
-                .subscribeOn(Schedulers.newThread())
-                .filter(workInfo -> entity.url.equals(workInfo.pendingUrl))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        workInfo -> {
-                            if(workInfo.num != entity.totalCount) {
-                                workInfo.num = entity.totalCount;
-                                mWorkAdapter.notifyItemChanged(mWorkAdapter.getList().indexOf(workInfo));
-                            }}
-                        );
+    public void getPendingsByModuleSuccess(Map map) {
+        if (mWorkAdapter.getList() != null)
+            Flowable.fromIterable(mWorkAdapter.getList())
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(workInfo -> {
+                                if (map.containsKey(workInfo.pendingUrl)) {
+                                    int totalCount = (int) map.get(workInfo.pendingUrl);
+                                    if (workInfo.num != totalCount) {
+                                        workInfo.num = totalCount;
+                                        mWorkAdapter.notifyItemChanged(mWorkAdapter.getList().indexOf(workInfo));
+                                    }
+                                }
+                            }
+                    );
     }
 
 

@@ -10,9 +10,15 @@ import com.supcon.mes.module_login.model.bean.WorkNumEntity;
 import com.supcon.mes.module_login.model.contract.WorkContract;
 import com.supcon.mes.module_login.model.network.LoginHttpClient;
 
+import org.reactivestreams.Publisher;
+
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Flowable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
@@ -20,6 +26,8 @@ import io.reactivex.functions.Function;
  * Created by wangshizhan on 2017/8/15.
  */
 public class WorkPresenter extends WorkContract.Presenter {
+
+    private String url;
 
     @Override
     public void getAllPendings(String staffName) {
@@ -36,12 +44,11 @@ public class WorkPresenter extends WorkContract.Presenter {
                         .subscribe(new Consumer<String>() {
                             @Override
                             public void accept(String s) throws Exception {
-                                LogUtil.d("s:"+s);
+                                LogUtil.d("s:" + s);
 
                             }
                         })
         );
-
 
 
         getView().getAllPendingsSuccess(new WorkEntity());
@@ -50,35 +57,31 @@ public class WorkPresenter extends WorkContract.Presenter {
     @SuppressLint("CheckResult")
     @Override
     public void getPendingsByModule(List<String> pendingParams) {
-
-        for (String url : pendingParams){
-
-
-            mCompositeSubscription.add(
-                    LoginHttpClient.getPendingsByModule(url)
-                            .onErrorReturn(new Function<Throwable, WorkNumEntity>() {
-                                @Override
-                                public WorkNumEntity apply(Throwable throwable) throws Exception {
-                                    WorkNumEntity entity = new WorkNumEntity();
-                                    entity.success = false;
-                                    entity.errMsg = throwable.toString();
-                                    return entity;
-                                }
-                            })
-                            .subscribe(new Consumer<WorkNumEntity>() {
-                                @Override
-                                public void accept(WorkNumEntity workNumEntity) throws Exception {
-
-                                    if(!TextUtils.isEmpty(workNumEntity.errMsg)){
-                                        getView().getPendingsByModuleFailed(workNumEntity.errMsg);
-                                    }
-                                    else{
-                                        workNumEntity.url = url;
-                                        getView().getPendingsByModuleSuccess(workNumEntity);
-                                    }
-                                }
-                            }));
-
+        for (String url : pendingParams) {
+            Map<String, Integer> map = new HashMap();
+            String[] split = url.split(",");
+            mCompositeSubscription.add(Flowable.fromIterable(Arrays.asList(split))
+                    .flatMap((Function<String, Publisher<WorkNumEntity>>) s -> LoginHttpClient.getPendingsByModule(s))
+                    .onErrorReturn(throwable -> {
+                        WorkNumEntity entity = new WorkNumEntity();
+                        entity.success = false;
+                        entity.errMsg = throwable.toString();
+                        return entity;
+                    })
+                    .subscribe(workNumEntity -> {
+                        if (TextUtils.isEmpty(workNumEntity.errMsg)) {
+                            int count;
+                            if (map.containsKey(url)) {
+                                count = map.get(url) + workNumEntity.totalCount;
+                            } else {
+                                count = workNumEntity.totalCount;
+                            }
+                            map.put(url, count);
+                        }
+                    }, throwable -> {
+                    }, () -> {
+                        getView().getPendingsByModuleSuccess(map);
+                    }));
         }
 
     }

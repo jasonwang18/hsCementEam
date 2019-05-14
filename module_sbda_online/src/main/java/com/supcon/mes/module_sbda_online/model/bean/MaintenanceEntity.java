@@ -2,6 +2,7 @@ package com.supcon.mes.module_sbda_online.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.AccessoryEamId;
+import com.supcon.mes.middleware.model.bean.SparePartId;
 import com.supcon.mes.middleware.model.bean.ValueEntity;
 
 /**
