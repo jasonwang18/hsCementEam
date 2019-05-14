@@ -15,7 +15,6 @@ import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
-import com.supcon.mes.mbap.view.CustomFilterView;
 import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
 import com.supcon.mes.mbap.view.CustomSearchView;
 import com.supcon.mes.middleware.constant.Constant;
@@ -24,12 +23,10 @@ import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.KeyExpandHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_warn.R;
-import com.supcon.mes.module_warn.filter.TimeStyleBean;
 import com.supcon.mes.module_warn.model.api.MaintenanceWarnAPI;
 import com.supcon.mes.module_warn.model.bean.MaintenanceWarnEntity;
 import com.supcon.mes.module_warn.model.bean.MaintenanceWarnListEntity;
 import com.supcon.mes.module_warn.model.contract.MaintenanceWarnContract;
-import com.supcon.mes.module_warn.filter.FilterHelper;
 import com.supcon.mes.module_warn.presenter.MaintenanceWarnPresenter;
 import com.supcon.mes.module_warn.ui.adapter.MaintenanceWarnAdapter;
 
@@ -57,9 +54,6 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
 
     @BindByTag("contentView")
     RecyclerView contentView;
-
-    @BindByTag("listTimeStyleFilter")
-    CustomFilterView listTimeStyleFilter;
 
     @BindByTag("warnRadioGroup")
     RadioGroup warnRadioGroup;
@@ -94,7 +88,6 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
         searchTitleBar.setTitleText("维保预警");
         searchTitleBar.setBackgroundResource(R.color.gradient_start);
         searchTitleBar.disableRightBtn();
-        listTimeStyleFilter.setData(FilterHelper.createMainteFilter());
     }
 
     @SuppressLint("CheckResult")

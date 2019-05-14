@@ -1,7 +1,9 @@
 package com.supcon.mes.module_warn.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
+import com.supcon.mes.middleware.model.bean.AccessoryEamId;
 import com.supcon.mes.middleware.model.bean.LubricateOil;
+import com.supcon.mes.middleware.model.bean.SparePartId;
 import com.supcon.mes.middleware.model.bean.ValueEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEam;
 
@@ -26,6 +28,9 @@ public class LubricationWarnEntity extends BaseEntity {
     public Long period;
     public Float sum;
 
+    public SparePartId sparePartId;//备件编码
+    public AccessoryEamId accessoryEamId;//附属设备
+
     public WXGDEam getEamID() {
         if (eamID==null) {
             eamID = new WXGDEam();
@@ -46,4 +51,19 @@ public class LubricationWarnEntity extends BaseEntity {
         }
         return oilType;
     }
+
+    public SparePartId getSparePartId() {
+        if (sparePartId == null) {
+            sparePartId = new SparePartId();
+        }
+        return sparePartId;
+    }
+
+    public AccessoryEamId getAccessoryEamId() {
+        if (accessoryEamId == null) {
+            accessoryEamId = new AccessoryEamId();
+        }
+        return accessoryEamId;
+    }
+
 }

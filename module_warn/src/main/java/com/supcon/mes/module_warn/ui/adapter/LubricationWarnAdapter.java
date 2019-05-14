@@ -60,6 +60,11 @@ public class LubricationWarnAdapter extends BaseListDataRecyclerViewAdapter<Lubr
         @BindByTag("itemLubriContentTv")
         CustomTextView itemLubriContentTv;
 
+        @BindByTag("itemLubriAttachEamTv")
+        CustomTextView itemLubriAttachEamTv;
+        @BindByTag("itemLubriSparePartIdTv")
+        CustomTextView itemLubriSparePartIdTv;
+
         public ViewHolder(Context context) {
             super(context);
         }
@@ -84,6 +89,15 @@ public class LubricationWarnAdapter extends BaseListDataRecyclerViewAdapter<Lubr
             itemLubriLastDateTv.setValue(data.lastTime != null ? dateFormat.format(data.lastTime) : "");
             itemLubriNextDateTv.setValue(data.nextTime != null ? dateFormat.format(data.nextTime) : "");
             itemLubriAdvanceTimeTv.setContent(data.advanceTime != null ? String.valueOf(data.advanceTime) : "");
+
+            if (!TextUtils.isEmpty(data.getAccessoryEamId().getAttachEamId().code)) {
+                itemLubriAttachEamTv.setVisibility(View.VISIBLE);
+                itemLubriAttachEamTv.setContent(data.getAccessoryEamId().getAttachEamId().code);
+            }
+            if (!TextUtils.isEmpty(data.getSparePartId().getProductID().productCode)) {
+                itemLubriSparePartIdTv.setVisibility(View.VISIBLE);
+                itemLubriSparePartIdTv.setContent(data.getSparePartId().getProductID().productCode);
+            }
 
             if (!TextUtils.isEmpty(data.claim)) {
                 itemLubriClaimTv.setVisibility(View.VISIBLE);
