@@ -14,20 +14,40 @@
         app:title_background_color="@color/themeColor"
         app:title_text="预警" />
 
-    <LinearLayout
+    <RadioGroup
+        android:id="@+id/warnRadioGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/themeColor"
         android:orientation="horizontal"
-        android:paddingLeft="@dimen/dp_5">
+        android:paddingLeft="@dimen/dp_15"
+        android:paddingBottom="@dimen/dp_5"
+        android:tag="warnRadioGroup">
 
-        <include
-            layout="@layout/ly_filter_warn"
+        <RadioButton
+            android:id="@+id/warnRadioBtn1"
             android:layout_width="wrap_content"
-            android:layout_height="40dp" />
+            android:layout_height="wrap_content"
+            android:background="@drawable/sh_filter_gray"
+            android:button="@null"
+            android:checked="true"
+            android:padding="@dimen/dp_5"
+            android:text="时间频率"
+            android:textColor="@drawable/tvbg_tag_item"
+            android:textSize="@dimen/fontSize_14sp" />
 
-    </LinearLayout>
-
+        <RadioButton
+            android:id="@+id/warnRadioBtn2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:background="@drawable/sh_filter_gray"
+            android:button="@null"
+            android:padding="@dimen/dp_5"
+            android:text="运行时长"
+            android:textColor="@drawable/tvbg_tag_item"
+            android:textSize="@dimen/fontSize_14sp" />
+    </RadioGroup>
 
     <include layout="@layout/ly_recyclerview" />
 </LinearLayout>

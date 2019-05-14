@@ -5,6 +5,7 @@ import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.widget.RadioGroup;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
@@ -57,8 +58,8 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
     @BindByTag("contentView")
     RecyclerView contentView;
 
-    @BindByTag("listTimeStyleFilter")
-    CustomFilterView listTimeStyleFilter;
+    @BindByTag("warnRadioGroup")
+    RadioGroup warnRadioGroup;
 
     private final Map<String, Object> queryParam = new HashMap<>();
     private String selecStr;
@@ -89,7 +90,6 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
         searchTitleBar.setTitleText("备件更换预警");
         searchTitleBar.setBackgroundResource(R.color.gradient_start);
         searchTitleBar.disableRightBtn();
-        listTimeStyleFilter.setData(FilterHelper.createSpareFilter());
     }
 
     @SuppressLint("CheckResult")
@@ -117,9 +117,17 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
 
         leftBtn.setOnClickListener(v -> onBackPressed());
 
-        listTimeStyleFilter.setFilterSelectChangedListener(filterBean -> {
-            url = ((TimeStyleBean) filterBean).url;
-            doRefresh();
+        warnRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                if (checkedId == R.id.warnRadioBtn1) {
+                    url = "/BEAM/baseInfo/jWXItem/data-dg1531171100751.action";
+                } else if (checkedId == R.id.warnRadioBtn2) {
+                    url = "/BEAM/baseInfo/jWXItem/data-dg1531171100814.action";
+                }
+                doRefresh();
+            }
         });
     }
 

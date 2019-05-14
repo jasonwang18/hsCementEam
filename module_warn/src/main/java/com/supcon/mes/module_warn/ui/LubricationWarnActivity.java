@@ -5,6 +5,7 @@ import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.widget.RadioGroup;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
@@ -57,8 +58,8 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
     @BindByTag("contentView")
     RecyclerView contentView;
 
-    @BindByTag("listTimeStyleFilter")
-    CustomFilterView listTimeStyleFilter;
+    @BindByTag("warnRadioGroup")
+    RadioGroup warnRadioGroup;
 
     private final Map<String, Object> queryParam = new HashMap<>();
     private String selecStr;
@@ -89,7 +90,6 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
         searchTitleBar.setTitleText("润滑预警");
         searchTitleBar.setBackgroundResource(R.color.gradient_start);
         searchTitleBar.disableRightBtn();
-        listTimeStyleFilter.setData(FilterHelper.createLubriFilter());
     }
 
     @SuppressLint("CheckResult")
@@ -117,9 +117,16 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
 
         leftBtn.setOnClickListener(v -> onBackPressed());
 
-        listTimeStyleFilter.setFilterSelectChangedListener(filterBean -> {
-            url = ((TimeStyleBean) filterBean).url;
-            doRefresh();
+        warnRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.warnRadioBtn1) {
+                    url = "/BEAM/baseInfo/jWXItem/data-dg1530747504994.action";
+                } else if (checkedId == R.id.warnRadioBtn2) {
+                    url = "/BEAM/baseInfo/jWXItem/data-dg1530749613834.action";
+                }
+                doRefresh();
+            }
         });
     }
 
