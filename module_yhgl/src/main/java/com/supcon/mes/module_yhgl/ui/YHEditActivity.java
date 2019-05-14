@@ -153,7 +153,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     private Map<String, Area> mAreas;
     private Map<String, RepairGroupEntity> mRepairGroups;
 
-//    private AttachmentController mAttachmentController;
+    //    private AttachmentController mAttachmentController;
     private LinkController mLinkController;
     private List<GalleryBean> pics = new ArrayList<>();
     private boolean isCancel = false;
@@ -558,7 +558,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void addDeviceEvent(CommonSearchEvent commonSearchEvent) {
-        if(!(commonSearchEvent.commonSearchEntity instanceof CommonDeviceEntity)){
+        if (!(commonSearchEvent.commonSearchEntity instanceof CommonDeviceEntity)) {
             return;
         }
         CommonDeviceEntity commonDeviceEntity = (CommonDeviceEntity) commonSearchEvent.commonSearchEntity;
@@ -583,7 +583,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getMaintenanceStaff(CommonSearchEvent commonSearchEvent) {
-        if(!(commonSearchEvent.commonSearchEntity instanceof UserInfo)){
+        if (!(commonSearchEvent.commonSearchEntity instanceof UserInfo)) {
             return;
         }
         UserInfo userInfo = (UserInfo) commonSearchEvent.commonSearchEntity;
@@ -871,7 +871,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 //            attachmentMap.put("linkId", String.valueOf(mYHEntity.tableInfoId));
 //        }
         getController(OnlineCameraController.class).doSave(attachmentMap);
-        if(attachmentMap.size()!=0){
+        if (attachmentMap.size() != 0) {
             attachmentMap.put("linkId", String.valueOf(mYHEntity.tableInfoId));
         }
 

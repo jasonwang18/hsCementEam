@@ -95,8 +95,8 @@ public class LoginActivity extends BasePresenterActivity implements LoginContrac
         //无title
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         //全屏
-        this.getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN ,
-                WindowManager.LayoutParams. FLAG_FULLSCREEN);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
 
     }
@@ -108,7 +108,7 @@ public class LoginActivity extends BasePresenterActivity implements LoginContrac
         loginInvalid = getIntent().getBooleanExtra(Constant.IntentKey.LOGIN_INVALID, false);
         isFirstIn = getIntent().getBooleanExtra(Constant.IntentKey.FIRST_LOGIN, false);
         loginLogoId = getIntent().getIntExtra(Constant.IntentKey.LOGIN_LOGO_ID, 0);
-        loginBgId  = getIntent().getIntExtra(Constant.IntentKey.LOGIN_BG_ID, 0);
+        loginBgId = getIntent().getIntExtra(Constant.IntentKey.LOGIN_BG_ID, 0);
 
 //        String channel = ChannelUtil.getUMengChannel();
 //        String port = " ";
@@ -215,7 +215,7 @@ public class LoginActivity extends BasePresenterActivity implements LoginContrac
         if (loginLogoId != 0)
             loginLogo.setImageResource(loginLogoId);
 
-        if(loginBgId!=0){
+        if (loginBgId != 0) {
             loginBg.setBackgroundResource(loginBgId);
         }
 
@@ -327,14 +327,14 @@ public class LoginActivity extends BasePresenterActivity implements LoginContrac
     public void getLicenseInfoSuccess(ModuleAuthorizationListEntity entity) {
 
         //将授权信息放入缓存
-        for (ModuleAuthorization moduleAuthorization: entity.result){
+        for (ModuleAuthorization moduleAuthorization : entity.result) {
 
-            switch (moduleAuthorization.moduleCode){
+            switch (moduleAuthorization.moduleCode) {
                 case Constant.ModuleAuthorization.mobileEAM:
-                    SharedPreferencesUtils.setParam(context,Constant.ModuleAuthorization.mobileEAM, true/*moduleAuthorization.isAuthorized*/);
+                    SharedPreferencesUtils.setParam(context, Constant.ModuleAuthorization.mobileEAM, true/*moduleAuthorization.isAuthorized*/);
                     break;
                 case Constant.ModuleAuthorization.BEAM2:
-                    SharedPreferencesUtils.setParam(context,Constant.ModuleAuthorization.BEAM2, true/*moduleAuthorization.isAuthorized*/);
+                    SharedPreferencesUtils.setParam(context, Constant.ModuleAuthorization.BEAM2, true/*moduleAuthorization.isAuthorized*/);
                     break;
                 default:
                     break;
@@ -365,7 +365,7 @@ public class LoginActivity extends BasePresenterActivity implements LoginContrac
 
     @Override
     public void getAccountInfoFailed(String errorMsg) {
-        if(errorMsg!=null && errorMsg.contains("403")){
+        if (errorMsg != null && errorMsg.contains("403")) {
             errorMsg = "获取用户信息失败，请检查用户查看权限！";
         }
 
@@ -390,7 +390,7 @@ public class LoginActivity extends BasePresenterActivity implements LoginContrac
 
     }
 
-    private void downloadBase(){
+    private void downloadBase() {
         List<String> downloadModules = new ArrayList<>();
 //        downloadModules.add(DataModule.EAM_BASE.getModuelName());
 //        downloadModules.add(DataModule.XJ_BASE.getModuelName());

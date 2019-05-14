@@ -21,7 +21,7 @@
         android:largeHeap="true"
         android:roundIcon="${APP_ROUND_ICON}"
         android:supportsRtl="true"
-        android:theme="@style/AppBaseTheme"
+        android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup, android:label">
         <meta-data

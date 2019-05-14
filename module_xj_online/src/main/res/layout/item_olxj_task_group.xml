@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:paddingLeft="@dimen/dp_10"
     android:paddingRight="@dimen/dp_10"
+    android:paddingBottom="@dimen/dp_5"
     android:background="@drawable/sl_press_no_stroke">
 
     <RelativeLayout
@@ -133,8 +134,8 @@
         />-->
 
     <Button
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
         style="@style/BlueButtonRadius"
         android:text="领取"
         android:id="@+id/taskGetBtn"

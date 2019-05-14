@@ -14,6 +14,7 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@drawable/layer_welcome</item>
         <item name="windowActionBar">true</item>
+	<item name="android:windowFullscreen">true</item>
     </style>
     <style name="Transparent2" parent="@android:style/Theme.NoTitleBar.Fullscreen">
         <item name="android:windowBackground">@android:color/black</item>
