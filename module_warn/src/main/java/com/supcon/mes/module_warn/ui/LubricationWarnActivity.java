@@ -14,6 +14,7 @@ import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
+import com.supcon.mes.mbap.view.CustomFilterView;
 import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
 import com.supcon.mes.mbap.view.CustomSearchView;
 import com.supcon.mes.middleware.constant.Constant;
@@ -22,10 +23,12 @@ import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.KeyExpandHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_warn.R;
+import com.supcon.mes.module_warn.filter.TimeStyleBean;
 import com.supcon.mes.module_warn.model.api.LubricationWarnAPI;
 import com.supcon.mes.module_warn.model.bean.LubricationWarnEntity;
 import com.supcon.mes.module_warn.model.bean.LubricationWarnListEntity;
 import com.supcon.mes.module_warn.model.contract.LubricationWarnContract;
+import com.supcon.mes.module_warn.filter.FilterHelper;
 import com.supcon.mes.module_warn.presenter.LubricationWarnPresenter;
 import com.supcon.mes.module_warn.ui.adapter.LubricationWarnAdapter;
 
@@ -54,8 +57,12 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
     @BindByTag("contentView")
     RecyclerView contentView;
 
+    @BindByTag("listTimeStyleFilter")
+    CustomFilterView listTimeStyleFilter;
+
     private final Map<String, Object> queryParam = new HashMap<>();
     private String selecStr;
+    private String url;
 
     @Override
     protected IListAdapter<LubricationWarnEntity> createAdapter() {
@@ -82,6 +89,7 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
         searchTitleBar.setTitleText("润滑预警");
         searchTitleBar.setBackgroundResource(R.color.gradient_start);
         searchTitleBar.disableRightBtn();
+        listTimeStyleFilter.setData(FilterHelper.createLubriFilter());
     }
 
     @SuppressLint("CheckResult")
@@ -95,7 +103,7 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
             if (!TextUtils.isEmpty(selecStr)) {
                 queryParam.put(Constant.BAPQuery.EAM_CODE, selecStr);
             }
-            presenterRouter.create(LubricationWarnAPI.class).getLubrication(queryParam, pageIndex);
+            presenterRouter.create(LubricationWarnAPI.class).getLubrication(url, queryParam, pageIndex);
         });
         RxTextView.textChanges(titleSearchView.editText())
                 .skipInitialValue()
@@ -108,6 +116,18 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
                 doSearchTableNo(titleSearchView.getInput()));
 
         leftBtn.setOnClickListener(v -> onBackPressed());
+
+        listTimeStyleFilter.setFilterSelectChangedListener(filterBean -> {
+            url = ((TimeStyleBean) filterBean).url;
+            doRefresh();
+        });
+    }
+
+    /**
+     * 进行过滤查询
+     */
+    private void doRefresh() {
+        refreshListController.refreshBegin();
     }
 
     public void doSearchTableNo(String search) {

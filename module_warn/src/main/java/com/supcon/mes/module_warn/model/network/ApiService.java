@@ -12,6 +12,7 @@ import io.reactivex.Flowable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
+import retrofit2.http.Url;
 
 /**
  * Created by Administrator on 2016/3/23.
@@ -20,15 +21,15 @@ import retrofit2.http.QueryMap;
 public interface ApiService {
 
     // 维保
-    @GET("/BEAM/baseInfo/jWXItem/data-dg1531171100751.action")
-    Flowable<MaintenanceWarnListEntity> getMaintenance(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity,@QueryMap Map<String, Object> pageQueryMap);
+    @GET
+    Flowable<MaintenanceWarnListEntity> getMaintenance(@Url String url, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
     //润滑
-    @GET("/BEAM/baseInfo/jWXItem/data-dg1530747504994.action")
-    Flowable<LubricationWarnListEntity> getLubrication(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity,@QueryMap Map<String, Object> pageQueryMap);
+    @GET
+    Flowable<LubricationWarnListEntity> getLubrication(@Url String url, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
     //备件
-    @GET("/BEAM/baseInfo/sparePart/data-dg1535424823416.action")
-    Flowable<SparePartWarnListEntity> getSparePart(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+    @GET
+    Flowable<SparePartWarnListEntity> getSparePart(@Url String url, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
 }
