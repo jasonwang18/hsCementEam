@@ -1,25 +1,19 @@
-package com.supcon.mes.module_sbda_online.screen;
+package com.supcon.mes.module_wxgd.model.bean;
 
 import com.supcon.mes.middleware.model.bean.ScreenEntity;
 
-/**
- * @author yangfei.cao
- * @ClassName hongShiCementEam
- * @date 2019/4/2
- * ------------- Description -------------
- */
-public enum EamName {
-    UNLIMITE("设备不限", "01"),
-    CRUSHER("破碎机", "02"),
-    RAWMILL("生料磨", "03"),
-    ROTARYCELLAR("回转窖", "04"),
-    CEMENTMILL("水泥磨", "05"),
-    ROLLERPRESS("辊压机", "06");
+public enum WorkState {
+    ALL("状态不限", ""),
+    DISPATCH("待派工", "BEAM049/01"),
+    CONFIRM("待确认", "BEAM049/02"),
+    IMPLEMENT("待执行", "BEAM049/03"),
+    ACCEPTANCE("待验收", "BEAM049/04"),
+    COMPLETE("已完成", "BEAM049/05");
 
     private String name;
     private String layRec;
 
-    EamName(String name, String layRec) {
+    WorkState(String name, String layRec) {
         this.name = name;
         this.layRec = layRec;
     }
@@ -38,5 +32,4 @@ public enum EamName {
         screenEntity.layRec = layRec;
         return screenEntity;
     }
-
 }

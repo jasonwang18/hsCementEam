@@ -1,6 +1,6 @@
 package com.supcon.mes.module_sbda_online.screen;
 
-import com.supcon.mes.module_sbda_online.model.bean.ScreenEntity;
+import com.supcon.mes.middleware.model.bean.ScreenEntity;
 
 /**
  * @author yangfei.cao

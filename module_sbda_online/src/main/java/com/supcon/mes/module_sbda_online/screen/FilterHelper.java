@@ -2,7 +2,7 @@ package com.supcon.mes.module_sbda_online.screen;
 
 import android.annotation.SuppressLint;
 
-import com.supcon.mes.module_sbda_online.model.bean.ScreenEntity;
+import com.supcon.mes.middleware.model.bean.ScreenEntity;
 
 import java.util.ArrayList;
 import java.util.List;

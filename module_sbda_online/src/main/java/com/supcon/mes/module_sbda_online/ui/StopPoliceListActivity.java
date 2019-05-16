@@ -24,7 +24,7 @@ import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_sbda_online.R;
 import com.supcon.mes.module_sbda_online.model.api.StopPoliceAPI;
-import com.supcon.mes.module_sbda_online.model.bean.ScreenEntity;
+import com.supcon.mes.middleware.model.bean.ScreenEntity;
 import com.supcon.mes.module_sbda_online.model.bean.StopPoliceEntity;
 import com.supcon.mes.module_sbda_online.model.bean.StopPoliceListEntity;
 import com.supcon.mes.module_sbda_online.model.contract.StopPoliceContract;
