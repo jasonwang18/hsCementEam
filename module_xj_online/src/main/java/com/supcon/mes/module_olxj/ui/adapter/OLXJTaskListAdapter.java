@@ -32,6 +32,7 @@ import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_olxj.R;
 import com.supcon.mes.module_olxj.model.bean.OLXJAreaEntity;
 import com.supcon.mes.module_olxj.model.bean.OLXJTaskEntity;
+import com.supcon.mes.module_olxj.util.AndroidtoJs;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -161,6 +162,17 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
             settings.setSupportZoom(true); // 可以缩放
             settings.setDisplayZoomControls(false);
             settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+
+            // 通过addJavascriptInterface()将Java对象映射到JS对象
+            //参数1：Javascript对象名
+            //参数2：Java对象名
+            webView.addJavascriptInterface(new AndroidtoJs() {
+                @Override
+                public void signIn(String id) {
+
+//                    onItemChildViewClick(taskExpandBtn, 1, getItem(position));
+                }
+            }, "android");
         }
 
         @Override
