@@ -33,6 +33,7 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.RoleController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.RoleEntity;
+import com.supcon.mes.middleware.model.bean.ScreenEntity;
 import com.supcon.mes.middleware.model.event.LoginValidEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyViewHelper;
@@ -100,6 +101,9 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
     @BindByTag("listPriorityFilter")
     CustomFilterView<FilterBean> listPriorityFilter;
 
+    @BindByTag("listWorkflowFilter")
+    CustomFilterView<ScreenEntity> listWorkflowFilter;
+
     private WXGDListAdapter wxgdListAdapter;
     private RecyclerEmptyAdapter mRecyclerEmptyAdapter;
 
@@ -166,6 +170,7 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
         listWorkSourceFilter.setData(FilterHelper.createWorkSourceList());
         listRepairTypeFilter.setData(FilterHelper.createRepairTypeList());
         listPriorityFilter.setData(FilterHelper.createPriorityList());
+        listWorkflowFilter.setData(FilterHelper.createWorkflowList());
     }
 
     @SuppressLint("CheckResult")
@@ -191,10 +196,10 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
         listRepairTypeFilter.setFilterSelectChangedListener(new CustomFilterView.FilterSelectChangedListener<FilterBean>() {
             @Override
             public void onFilterSelected(FilterBean filterBean) {
-                if (filterBean.type == CustomFilterView.VIEW_TYPE_ALL){
+                if (filterBean.type == CustomFilterView.VIEW_TYPE_ALL) {
                     queryParam.remove(Constant.BAPQuery.WXGD_REPAIR_TYPE);
-                }else {
-                    queryParam.put(Constant.BAPQuery.WXGD_REPAIR_TYPE, SystemCodeManager.getInstance().getSystemCodeEntityId(Constant.SystemCode.YH_WX_TYPE,filterBean.name));
+                } else {
+                    queryParam.put(Constant.BAPQuery.WXGD_REPAIR_TYPE, SystemCodeManager.getInstance().getSystemCodeEntityId(Constant.SystemCode.YH_WX_TYPE, filterBean.name));
                 }
                 doFilter();
             }
@@ -202,13 +207,18 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
         listPriorityFilter.setFilterSelectChangedListener(new CustomFilterView.FilterSelectChangedListener<FilterBean>() {
             @Override
             public void onFilterSelected(FilterBean filterBean) {
-                if (filterBean.type == CustomFilterView.VIEW_TYPE_ALL){
+                if (filterBean.type == CustomFilterView.VIEW_TYPE_ALL) {
                     queryParam.remove(Constant.BAPQuery.WXGD_PRIORITY);
-                }else {
-                    queryParam.put(Constant.BAPQuery.WXGD_PRIORITY,SystemCodeManager.getInstance().getSystemCodeEntityId(Constant.SystemCode.YH_PRIORITY,filterBean.name));
+                } else {
+                    queryParam.put(Constant.BAPQuery.WXGD_PRIORITY, SystemCodeManager.getInstance().getSystemCodeEntityId(Constant.SystemCode.YH_PRIORITY, filterBean.name));
                 }
                 doFilter();
             }
+        });
+
+        listWorkflowFilter.setFilterSelectChangedListener((CustomFilterView.FilterSelectChangedListener<ScreenEntity>) screenEntity -> {
+            queryParam.put(Constant.BAPQuery.WORK_STATE, screenEntity.layRec);
+            doFilter();
         });
 
         RxTextView.textChanges(customSearchView.editText())
@@ -390,12 +400,13 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refresh(LoginEvent loginEvent) {
-        LogUtil.w("---------------------------------","测试登录刷新...");
+        LogUtil.w("---------------------------------", "测试登录刷新...");
         refreshListController.refreshBegin();
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refresh(LoginValidEvent loginValidEvent){
-        LogUtil.w("---------------------------------","测试登录失效刷新...");
+    public void refresh(LoginValidEvent loginValidEvent) {
+        LogUtil.w("---------------------------------", "测试登录失效刷新...");
         Flowable.timer(500, TimeUnit.MILLISECONDS)
                 .compose(RxSchedulers.io_main())
                 .subscribe(new Consumer<Long>() {

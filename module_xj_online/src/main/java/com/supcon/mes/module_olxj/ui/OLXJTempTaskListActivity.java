@@ -219,6 +219,11 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
                 xjTitleMap.setSelected(true);
                 mOLXJTaskListAdapter.setMap(true);
                 btnLayout.setVisibility(View.GONE);
+                if (mAreaEntities == null || mAreaEntities.size() == 0) {
+                    if (mOLXJTaskListAdapter != null && mOLXJTaskListAdapter.getList() != null) {
+                        doLoadArea(mOLXJTaskListAdapter.getItem(0));
+                    }
+                }
             }
             mOLXJTaskListAdapter.notifyDataSetChanged();
         });
@@ -323,19 +328,13 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
             mOLXJTaskAreaController = new OLXJTaskAreaController(context);
 
         }
-        mOLXJTaskAreaController.getData(taskEntity, new OnSuccessListener<Boolean>() {
-            @Override
-            public void onSuccess(Boolean result) {
-                mAreaEntities = mOLXJTaskAreaController.getAreaEntities();
-                new Handler(getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        onLoadSuccess();
-                        mOLXJTaskListAdapter.setAreaEntities(mAreaEntities);
-                        saveAreaCache(mAreaEntities.toString());
-                    }
-                });
-            }
+        mOLXJTaskAreaController.getData(taskEntity, result -> {
+            mAreaEntities = mOLXJTaskAreaController.getAreaEntities();
+            new Handler(getMainLooper()).post(() -> {
+                onLoadSuccess();
+                mOLXJTaskListAdapter.setAreaEntities(mAreaEntities);
+                saveAreaCache(mAreaEntities.toString());
+            });
         });
     }
 
@@ -471,7 +470,6 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
     protected void onPause() {
         super.onPause();
         isFront = false;
-
 
 
     }
@@ -618,14 +616,13 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
     @Override
     public void getOJXJTempTaskListSuccess(List entities) {
 
-        if(entities.size() !=0 && isCurrentTask((OLXJTaskEntity) entities.get(0))){
+        if (entities.size() != 0 && isCurrentTask((OLXJTaskEntity) entities.get(0))) {
             entities.set(0, mOLXJTaskEntity);
             refreshListController.refreshComplete(entities);
-        }
-        else {
+        } else {
             refreshListController.refreshComplete(entities); //成功获取数据
         }
-        if (entities.size() == 0){
+        if (entities.size() == 0) {
             ToastUtils.show(context, "没有巡检任务!");
             initEmptyView();
             if (isFirstIn) {
@@ -825,24 +822,24 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
     }
 
 
-    private void saveAreaCache(String cache){
+    private void saveAreaCache(String cache) {
 
 
         SharedPreferencesUtils.setParam(context, Constant.SPKey.LSXJ_TASK_CONTENT, cache);
     }
 
-    private void saveTask(String task){
+    private void saveTask(String task) {
         SharedPreferencesUtils.setParam(context, Constant.SPKey.LSXJ_TASK_ENTITY, task);
     }
 
-    private boolean isCurrentTask(OLXJTaskEntity taskEntity){
+    private boolean isCurrentTask(OLXJTaskEntity taskEntity) {
 
 
-        String taskCache = SharedPreferencesUtils.getParam(context,Constant.SPKey.LSXJ_TASK_ENTITY, "");
+        String taskCache = SharedPreferencesUtils.getParam(context, Constant.SPKey.LSXJ_TASK_ENTITY, "");
 
         OLXJTaskEntity cacheTask = GsonUtil.gsonToBean(taskCache, OLXJTaskEntity.class);
 
-        if(cacheTask!=null && taskEntity.id == cacheTask.id){
+        if (cacheTask != null && taskEntity.id == cacheTask.id) {
             mOLXJTaskEntity = cacheTask;
             return true;
         }

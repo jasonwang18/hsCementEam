@@ -3,7 +3,7 @@ package com.supcon.mes.module_sbda_online.presenter;
 import android.annotation.SuppressLint;
 
 import com.supcon.mes.mbap.view.CustomFilterView;
-import com.supcon.mes.module_sbda_online.model.bean.ScreenEntity;
+import com.supcon.mes.middleware.model.bean.ScreenEntity;
 import com.supcon.mes.module_sbda_online.model.bean.ScreenListEntity;
 import com.supcon.mes.module_sbda_online.model.contract.ScreenTypeContract;
 import com.supcon.mes.module_sbda_online.model.network.SBDAOnlineHttpClient;

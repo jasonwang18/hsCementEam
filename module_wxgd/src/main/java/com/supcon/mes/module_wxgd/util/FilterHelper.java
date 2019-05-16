@@ -3,8 +3,10 @@ package com.supcon.mes.module_wxgd.util;
 import com.supcon.mes.mbap.beans.FilterBean;
 import com.supcon.mes.mbap.view.CustomFilterView;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.ScreenEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.util.SystemCodeManager;
+import com.supcon.mes.module_wxgd.model.bean.WorkState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +59,7 @@ public class FilterHelper {
         List<SystemCodeEntity> list = SystemCodeManager.getInstance().getSystemCodeListByCode(Constant.SystemCode.YH_WX_TYPE);
         List<FilterBean> filterBeanList = new ArrayList<>();
         FilterBean filterBean;
-        for (SystemCodeEntity entity : list){
+        for (SystemCodeEntity entity : list) {
             filterBean = new FilterBean();
             filterBean.name = entity.value;
             filterBeanList.add(filterBean);
@@ -74,7 +76,7 @@ public class FilterHelper {
         List<SystemCodeEntity> list = SystemCodeManager.getInstance().getSystemCodeListByCode(Constant.SystemCode.YH_PRIORITY);
         List<FilterBean> filterBeanList = new ArrayList<>();
         FilterBean filterBean;
-        for (SystemCodeEntity entity : list){
+        for (SystemCodeEntity entity : list) {
             filterBean = new FilterBean();
             filterBean.name = entity.value;
             filterBeanList.add(filterBean);
@@ -85,5 +87,17 @@ public class FilterHelper {
         filterBeanList.add(filterBean);
 
         return filterBeanList;
+    }
+
+    //工作流状态
+    public static List<ScreenEntity> createWorkflowList() {
+        List<ScreenEntity> list = new ArrayList<>();
+        list.add(WorkState.ALL.getScreenEntity());
+        list.add(WorkState.DISPATCH.getScreenEntity());
+        list.add(WorkState.CONFIRM.getScreenEntity());
+        list.add(WorkState.IMPLEMENT.getScreenEntity());
+        list.add(WorkState.ACCEPTANCE.getScreenEntity());
+        list.add(WorkState.COMPLETE.getScreenEntity());
+        return list;
     }
 }

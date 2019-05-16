@@ -259,6 +259,15 @@ public class BAPQueryParamsHelper {
                 subcondEntity.paramStr = Constant.BAPQuery.LIKE_OPT_Q;
                 subcondEntity.value = String.valueOf(value);
                 break;
+            case Constant.BAPQuery.WORK_STATE:
+                subcondEntity = new SubcondEntity();
+                subcondEntity.type = TYPE_NORMAL;
+                subcondEntity.columnName = Constant.BAPQuery.WORK_STATE;
+                subcondEntity.dbColumnType = Constant.BAPQuery.SYSTEMCODE;
+                subcondEntity.operator = Constant.BAPQuery.BE;
+                subcondEntity.paramStr = Constant.BAPQuery.LIKE_OPT_Q;
+                subcondEntity.value = String.valueOf(value);
+                break;
 
             case Constant.BAPQuery.REPAIR_TYPE:
             case Constant.BAPQuery.PRIORITY:
