@@ -433,6 +433,7 @@ public interface Constant {
         String WORK_SOURCE = "WORK_SOURCE";//工单来源
         String WXGD_REPAIR_TYPE = "WXGD_REPAIR_TYPE"; // 维修类型（维修工单列表查询）
         String WXGD_PRIORITY = "WXGD_PRIORITY"; // 优先级（维修工单列表查询）
+        String WORK_STATE = "WORK_STATE"; // 工作流状态（维修工单列表查询）
 
         /*备件参照快速查询*/
         String BEAM_SPARE_PARTS = "BEAM_SPARE_PARTS";
