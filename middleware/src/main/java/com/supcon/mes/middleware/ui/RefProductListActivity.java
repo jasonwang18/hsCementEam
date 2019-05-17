@@ -1,7 +1,6 @@
-package com.supcon.mes.module_wxgd.ui;
+package com.supcon.mes.middleware.ui;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -17,26 +16,25 @@ import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
-import com.supcon.common.view.view.CustomSwipeLayout;
 import com.supcon.mes.mbap.listener.OnTitleSearchExpandListener;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
 import com.supcon.mes.mbap.view.CustomSearchView;
+import com.supcon.mes.middleware.R;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.api.RefProductAPI;
 import com.supcon.mes.middleware.model.bean.Good;
+import com.supcon.mes.middleware.model.bean.RefProductListEntity;
+import com.supcon.mes.middleware.model.bean.SparePartRefEntity;
+import com.supcon.mes.middleware.model.bean.SparePartRefListEntity;
+import com.supcon.mes.middleware.model.contract.RefProductContract;
+import com.supcon.mes.middleware.model.event.SparePartAddEvent;
+import com.supcon.mes.middleware.presenter.RefProductPresenter;
+import com.supcon.mes.middleware.ui.adapter.RefProductAdapter;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
-import com.supcon.mes.module_wxgd.R;
-import com.supcon.mes.module_wxgd.model.api.RefProductAPI;
-import com.supcon.mes.module_wxgd.model.bean.RefProductListEntity;
-import com.supcon.mes.module_wxgd.model.bean.SparePartRefEntity;
-import com.supcon.mes.module_wxgd.model.bean.SparePartRefListEntity;
-import com.supcon.mes.module_wxgd.model.contract.RefProductContract;
-import com.supcon.mes.module_wxgd.model.event.SparePartAddEvent;
-import com.supcon.mes.module_wxgd.presenter.RefProductPresenter;
-import com.supcon.mes.module_wxgd.ui.adapter.RefProductAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -52,7 +50,7 @@ import io.reactivex.functions.Consumer;
  * @ClassName RefProductListActivity
  * @date 2018/9/5
  * ------------- Description -------------
- * 备件选择
+ * 备件参照
  */
 @Router(Constant.Router.SPARE_PART_REF)
 @Presenter(RefProductPresenter.class)
@@ -60,9 +58,6 @@ public class RefProductListActivity extends BaseRefreshRecyclerActivity<Good> im
 
     @BindByTag("contentView")
     RecyclerView contentView;
-
-    @BindByTag("titleText")
-    TextView titleText;
 
     @BindByTag("leftBtn")
     ImageButton leftBtn;
@@ -76,6 +71,7 @@ public class RefProductListActivity extends BaseRefreshRecyclerActivity<Good> im
     private RefProductAdapter refProductAdapter;
     private Map<String, Object> queryParam = new HashMap<>();
     private boolean isSparePartRef;
+    private String url;
     private Long eamID;
 
     @Override
@@ -92,7 +88,7 @@ public class RefProductListActivity extends BaseRefreshRecyclerActivity<Good> im
     @Override
     protected void onInit() {
         super.onInit();
-        StatusBarUtils.setWindowStatusBarColor(this,R.color.themeColor);
+        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(3, context)));
         contentView.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
@@ -100,8 +96,9 @@ public class RefProductListActivity extends BaseRefreshRecyclerActivity<Good> im
         refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setLoadMoreEnable(true);
 
-        isSparePartRef = getIntent().getBooleanExtra(Constant.IntentKey.IS_SPARE_PART_REF,false);
-        eamID = getIntent().getLongExtra(Constant.IntentKey.WXGD_EAM_ID,0);
+        isSparePartRef = getIntent().getBooleanExtra(Constant.IntentKey.IS_SPARE_PART_REF, false);
+        url = getIntent().getStringExtra(Constant.IntentKey.SPARE_PART_REF_YRL);
+        eamID = getIntent().getLongExtra(Constant.IntentKey.EAM_ID, 0);
     }
 
     @Override
@@ -123,32 +120,26 @@ public class RefProductListActivity extends BaseRefreshRecyclerActivity<Good> im
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                if (isSparePartRef){
-                    presenterRouter.create(RefProductAPI.class).listRefSparePart(pageIndex,eamID,queryParam);
-                }else {
-                    presenterRouter.create(RefProductAPI.class).listRefProduct(pageIndex,queryParam);
+                if (isSparePartRef) {
+                    presenterRouter.create(RefProductAPI.class).listRefSparePart(pageIndex, eamID, queryParam);
+                } else {
+                    presenterRouter.create(RefProductAPI.class).listRefProduct(url, pageIndex, queryParam);
                 }
 
             }
         });
-        refProductAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
-            @Override
-            public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-                Good good = refProductAdapter.getItem(position);
-                EventBus.getDefault().post(new SparePartAddEvent(isSparePartRef,good));
-                RefProductListActivity.this.finish();
-            }
+        refProductAdapter.setOnItemChildViewClickListener((childView, position, action, obj) -> {
+            Good good = refProductAdapter.getItem(position);
+            EventBus.getDefault().post(new SparePartAddEvent(isSparePartRef, good));
+            RefProductListActivity.this.finish();
         });
-        searchTitleBar.setOnExpandListener(new OnTitleSearchExpandListener() {
-            @Override
-            public void onTitleSearchExpand(boolean isExpand) {
-                if (isExpand){
-                    customSearchView.setHint("备件名称或规格");
-                    customSearchView.setInputTextColor(R.color.hintColor);
-                }else {
-                    customSearchView.setHint("搜索");
-                    customSearchView.setInputTextColor(R.color.black);
-                }
+        searchTitleBar.setOnExpandListener(isExpand -> {
+            if (isExpand) {
+                customSearchView.setHint("备件名称");
+                customSearchView.setInputTextColor(R.color.hintColor);
+            } else {
+                customSearchView.setHint("搜索");
+                customSearchView.setInputTextColor(R.color.black);
             }
         });
         RxTextView.textChanges(customSearchView.editText())
@@ -162,23 +153,22 @@ public class RefProductListActivity extends BaseRefreshRecyclerActivity<Good> im
     }
 
     /**
-     * @description 搜索
      * @param
-     * @return  
+     * @return
+     * @description 搜索
      * @author zhangwenshuai1 2018/9/19
-     *
      */
     private void doSearch(String searchContent) {
-        if (queryParam.containsKey(Constant.BAPQuery.PRODUCT_NAME)){
+        if (queryParam.containsKey(Constant.BAPQuery.PRODUCT_NAME)) {
             queryParam.remove(Constant.BAPQuery.PRODUCT_NAME);
         }
-        if (queryParam.containsKey(Constant.BAPQuery.PRODUCT_SPECIF)){
+        if (queryParam.containsKey(Constant.BAPQuery.PRODUCT_SPECIF)) {
             queryParam.remove(Constant.BAPQuery.PRODUCT_SPECIF);
         }
-        if (Util.isContainChinese(searchContent)){
-            queryParam.put(Constant.BAPQuery.PRODUCT_NAME,searchContent);
-        }else {
-            queryParam.put(Constant.BAPQuery.PRODUCT_SPECIF,searchContent);
+        if (Util.isContainChinese(searchContent)) {
+            queryParam.put(Constant.BAPQuery.PRODUCT_NAME, searchContent);
+        } else {
+            queryParam.put(Constant.BAPQuery.PRODUCT_SPECIF, searchContent);
         }
 
         refreshListController.refreshBegin();
@@ -200,7 +190,7 @@ public class RefProductListActivity extends BaseRefreshRecyclerActivity<Good> im
     public void listRefSparePartSuccess(SparePartRefListEntity entity) {
         List<Good> list = new ArrayList<>();
         Good good;
-        for (SparePartRefEntity sparePartRefEntity :entity.result){
+        for (SparePartRefEntity sparePartRefEntity : entity.result) {
             good = new Good();
             good.id = sparePartRefEntity.getProductID().id;
             good.productName = sparePartRefEntity.getProductID().productName;

@@ -11,9 +11,13 @@ import com.supcon.mes.middleware.model.bean.DepartmentInfoListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.LinkListEntity;
 import com.supcon.mes.middleware.model.bean.LongResultEntity;
+import com.supcon.mes.middleware.model.bean.RefLubricateListEntity;
 import com.supcon.mes.middleware.model.bean.MyInfo;
+import com.supcon.mes.middleware.model.bean.RefMaintainListEntity;
+import com.supcon.mes.middleware.model.bean.RefProductListEntity;
 import com.supcon.mes.middleware.model.bean.RepairGroupListEntity;
 import com.supcon.mes.middleware.model.bean.RoleListEntity;
+import com.supcon.mes.middleware.model.bean.SparePartRefListEntity;
 import com.supcon.mes.middleware.model.bean.StaffDetailInfoListEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeListEntity;
 import com.supcon.mes.middleware.model.bean.UserInfoListEntity;
@@ -22,6 +26,7 @@ import com.supcon.mes.middleware.model.bean.WorkFlowListEntity;
 import com.supcon.mes.middleware.model.bean.YHEntity;
 
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Flowable;
 import okhttp3.MultipartBody;
@@ -31,6 +36,8 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
+import retrofit2.http.Url;
 
 /**
  * Created by wangshizhan on 2018/7/10
@@ -78,17 +85,18 @@ public interface NetworkAPI {
      */
 //    @GET("/foundation/role/roleUserList.action?roleUserPage.pageSize=500&roleUserPage.maxPageSize=500")
     @GET("/foundation/role/common/roleUserList.action?roleUserPage.pageSize=500&roleUserPage.maxPageSize=500")
-    Flowable<RoleListEntity> queryRoleUserList(@Query("user.name") String  userName);
+    Flowable<RoleListEntity> queryRoleUserList(@Query("user.name") String userName);
 
     /**
      * 获取员工详细信息
      */
 //    @GET("/foundation/staff/list-data.action?pageSize=20&&records.pageSize=20&records.maxPageSize=500")
     @GET("/foundation/systemCode/systemCodeJson.action?pageSize=20&&records.pageSize=20&records.maxPageSize=500")
-    Flowable<StaffDetailInfoListEntity> queryStaffDetailInfo(@Query("staff.code") String  staffCode, @Query("companyId") long companyId);
+    Flowable<StaffDetailInfoListEntity> queryStaffDetailInfo(@Query("staff.code") String staffCode, @Query("companyId") long companyId);
 
     /**
      * 下载头像
+     *
      * @param id 图片id
      * @return
      */
@@ -97,6 +105,7 @@ public interface NetworkAPI {
 
     /**
      * 上传附件
+     *
      * @param partList 附件分包
      * @return
      */
@@ -106,6 +115,7 @@ public interface NetworkAPI {
 
     /**
      * 删除附件
+     *
      * @param ids2del 附件 id
      * @return
      */
@@ -114,6 +124,7 @@ public interface NetworkAPI {
 
     /**
      * 下载附件
+     *
      * @param id 附件id
      * @return
      */
@@ -122,6 +133,7 @@ public interface NetworkAPI {
 
     /**
      * 获取附件信息
+     *
      * @param tableId 单据id
      * @return
      */
@@ -130,6 +142,7 @@ public interface NetworkAPI {
 
     /**
      * 获取附件信息
+     *
      * @param tableInfoId 单据id
      * @return
      */
@@ -138,6 +151,7 @@ public interface NetworkAPI {
 
     /**
      * 获取区域位置
+     *
      * @return
      */
     @GET("/BEAM/area/area/areaNoCheckListRef-query.action?page.pageSize=500")
@@ -145,6 +159,7 @@ public interface NetworkAPI {
 
     /**
      * 获取维修组
+     *
      * @return
      */
     @GET("/BEAM/repairGroup/repairGroup/groupList-query.action?page.pageSize=500")
@@ -152,6 +167,7 @@ public interface NetworkAPI {
 
     /**
      * 获取新建单据工作流
+     *
      * @param flowKey 工作流名字
      * @return
      */
@@ -161,6 +177,7 @@ public interface NetworkAPI {
 
     /**
      * 获取deploymentId
+     *
      * @param flowKey 工作流名字
      * @return
      */
@@ -169,16 +186,18 @@ public interface NetworkAPI {
 
     /**
      * 检查用户是否有发起该工作流的权限
-     * @param userName  用户名
+     *
+     * @param userName   用户名
      * @param processKey 工作流名字
      * @return
      */
     @GET("/mobile/mobileCommon/workflow/judgeFlowPermission.action")
-    Flowable<LongResultEntity> checkModulePermission(@Query("userName")String userName, @Query("processKey") String processKey);
+    Flowable<LongResultEntity> checkModulePermission(@Query("userName") String userName, @Query("processKey") String processKey);
 
     /**
      * 获取单据当前工作流
-     * @param  pendingId 待办id
+     *
+     * @param pendingId 待办id
      * @return
      */
     @GET("/mobile/mobileCommon/workflow/getCurrentActTransition.action")
@@ -186,6 +205,7 @@ public interface NetworkAPI {
 
     /**
      * 获取用户，包含没有用户名的员工
+     *
      * @return
      */
     @GET("/foundation/staff/common/getDepartmentWorkList.action?departmentWorkPage.pageSize=500&pageOrder=DESC")
@@ -193,6 +213,7 @@ public interface NetworkAPI {
 
     /**
      * 获取通讯录
+     *
      * @param staffName
      * @param pageNo
      * @return
@@ -202,6 +223,7 @@ public interface NetworkAPI {
 
     /**
      * 获取部门列表
+     *
      * @return
      */
     @GET("/foundation/department/queryList.action?companyId=1000&page.pageSize=500&&page.maxPageSize=500")
@@ -219,11 +241,12 @@ public interface NetworkAPI {
      * 发送device token
      */
     @POST("/BEAM/loginAndLogout.action")
-    Flowable<CommonEntity> sendDeviceToken(@Query("deviceToken") String deviceToken, @Query("loginStatus")String loginStatus);
+    Flowable<CommonEntity> sendDeviceToken(@Query("deviceToken") String deviceToken, @Query("loginStatus") String loginStatus);
 
 
     /**
      * 查询隐患管理待办
+     *
      * @return
      */
     @GET("/BEAM2/faultInfo/faultInfo/faultInfoList-pending.action?processKey=faultInfoFW")
@@ -238,4 +261,51 @@ public interface NetworkAPI {
      */
     @GET("/BEAM2/workList/workRecord/workList-pending.action?1=1&permissionCode=BEAM2_1.0.0_workList_workList")
     Flowable<CommonBAPListEntity<WXGDEntity>> queryWXGDPending(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity);
+
+    /**
+     * @param
+     * @return
+     * @description 备件参照列表查询
+     * @author zhangwenshuai1 2018/10/23
+     */
+    @POST("/BEAM/baseInfo/sparePart/sparePartRef-query.action?&permissio.0.0_baseInfo_sparePartRef&crossCompanyFlag=false")
+    Flowable<SparePartRefListEntity> listSparePartsRef(@QueryMap Map<String, Object> queryMap, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity);
+
+    /**
+     * @param
+     * @return
+     * @description 获取备件物品列表
+     * @author zhangwenshuai1 2018/8/13
+     */
+    @GET
+    Flowable<RefProductListEntity> listRefProduct(@Url String url, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+
+    /**
+     * @param
+     * @return
+     * @description 获取润滑列表
+     * @author zhangwenshuai1 2018/8/13
+     */
+    @GET("/BEAM/lubricateOil/lubricateOil/oilRef-query.action?&permissionCode=BEAM_1.0.0_lubricateOil_oilRef&crossCompanyFlag=false")
+    Flowable<RefLubricateListEntity> listLubricate(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+
+    /**
+     * @param
+     * @return
+     * @description 获取润滑参照列表
+     * @author zhangwenshuai1 2018/8/13
+     */
+    @GET("/BEAM/baseInfo/jWXItem/lubricateBeamRef-query.action?&permissionCode=BEAM_1.0.0_lubricateOil_oilRef&crossCompanyFlag=false")
+    Flowable<RefLubricateListEntity> listRefLubricate(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+
+
+    /**
+     * @param
+     * @return
+     * @description 获取维保参照列表
+     * @author zhangwenshuai1 2018/8/13
+     */
+    @GET("/BEAM/baseInfo/jWXItem/maintainBeamRef-query.action?&permissionCode=BEAM_1.0.0_lubricateOil_oilRef&crossCompanyFlag=false")
+    Flowable<RefMaintainListEntity> listRefMaintain(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+
 }

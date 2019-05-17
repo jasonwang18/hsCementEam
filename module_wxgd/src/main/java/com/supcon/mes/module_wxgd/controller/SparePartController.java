@@ -81,8 +81,8 @@ public class SparePartController extends BaseViewController implements SparePart
                         bundle.putLong(Constant.IntentKey.REPAIR_SUM, mWXGDEntity.repairSum);
                         bundle.putString(Constant.IntentKey.TABLE_STATUS, mWXGDEntity.pending.taskDescription);
                         bundle.putString(Constant.IntentKey.TABLE_ACTION,mWXGDEntity.pending.openUrl);
-                        bundle.putLong(Constant.IntentKey.WORK_LIST_ID,id);
-                        bundle.putLong(Constant.IntentKey.WXGD_EAM_ID,mWXGDEntity.eamID.id);
+                        bundle.putLong(Constant.IntentKey.LIST_ID,id);
+                        bundle.putLong(Constant.IntentKey.EAM_ID,mWXGDEntity.eamID.id);
                         IntentRouter.go(context, Constant.Router.WXGD_SPARE_PART_LIST, bundle);
                         break;
                     default:

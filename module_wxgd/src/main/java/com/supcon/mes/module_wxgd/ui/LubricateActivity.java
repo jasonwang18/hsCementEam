@@ -49,7 +49,7 @@ import io.reactivex.functions.Consumer;
  * 润滑油选择
  */
 @Presenter(LubricatePresenter.class)
-@Router(Constant.Router.LUBRICATE_REF)
+@Router(Constant.Router.LUBRICATE)
 public class LubricateActivity extends BaseRefreshRecyclerActivity<LubricateOil> implements LubricateContract.View {
     @BindByTag("contentView")
     RecyclerView contentView;

@@ -31,6 +31,7 @@ import com.supcon.mes.middleware.model.bean.Good;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.model.event.SparePartAddEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
@@ -45,7 +46,6 @@ import com.supcon.mes.module_wxgd.model.bean.StandingCropResultEntity;
 import com.supcon.mes.module_wxgd.model.contract.SparePartContract;
 import com.supcon.mes.module_wxgd.model.contract.SparePartListContract;
 import com.supcon.mes.module_wxgd.model.dto.GoodDto;
-import com.supcon.mes.module_wxgd.model.event.SparePartAddEvent;
 import com.supcon.mes.module_wxgd.model.event.SparePartEvent;
 import com.supcon.mes.module_wxgd.model.event.VersionRefreshEvent;
 import com.supcon.mes.module_wxgd.presenter.SparePartListPresenter;
@@ -124,8 +124,8 @@ public class WXGDSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
         repairSum = getIntent().getLongExtra(Constant.IntentKey.REPAIR_SUM, 1);
         tableStatus = getIntent().getStringExtra(Constant.IntentKey.TABLE_STATUS);
         tableAction = getIntent().getStringExtra(Constant.IntentKey.TABLE_ACTION);
-        workListId = getIntent().getLongExtra(Constant.IntentKey.WORK_LIST_ID,0);
-        eamID = getIntent().getLongExtra(Constant.IntentKey.WXGD_EAM_ID,0);
+        workListId = getIntent().getLongExtra(Constant.IntentKey.LIST_ID,0);
+        eamID = getIntent().getLongExtra(Constant.IntentKey.EAM_ID,0);
         mSparePartAdapter.setEditable(editable);
         mSparePartAdapter.setRepairSum((int) repairSum);
         mSparePartAdapter.setTableStatus(tableStatus);
@@ -186,6 +186,7 @@ public class WXGDSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
                     public void accept(Object o) throws Exception {
                         Bundle bundle = new Bundle();
                         bundle.putBoolean(Constant.IntentKey.IS_SPARE_PART_REF,false);
+                        bundle.putString(Constant.IntentKey.SPARE_PART_REF_YRL, "/MESBasic/product/product/refProduct_kc-query.action?&permissionCode=MESBasic_1_product_refProductLayout_kc&crossCompanyFlag=false");
                         IntentRouter.go(context, Constant.Router.SPARE_PART_REF,bundle);
                     }
                 });
@@ -196,7 +197,7 @@ public class WXGDSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
                     public void accept(Object o) throws Exception {
                         Bundle bundle = new Bundle();
                         bundle.putBoolean(Constant.IntentKey.IS_SPARE_PART_REF,true);
-                        bundle.putLong(Constant.IntentKey.WXGD_EAM_ID,eamID);
+                        bundle.putLong(Constant.IntentKey.EAM_ID,eamID);
                         IntentRouter.go(context, Constant.Router.SPARE_PART_REF,bundle);
                     }
                 });

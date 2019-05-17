@@ -51,11 +51,6 @@
             android:theme="@style/AppNoTitleBarTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity
-            android:name=".ui.RefProductListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppNoTitleBarTheme"
-            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
-        <activity
             android:name=".ui.LubricateActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleBarTheme"

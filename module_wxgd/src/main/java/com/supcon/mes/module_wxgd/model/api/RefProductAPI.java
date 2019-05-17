@@ -20,7 +20,7 @@ public interface RefProductAPI {
     /**
      * @description 备件参照列表查询
      * @param
-     * @return  
+     * @return
      * @author zhangwenshuai1 2018/10/25
      *
      */

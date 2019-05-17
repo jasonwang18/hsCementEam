@@ -49,6 +49,7 @@ import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonDeviceEntity;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntity;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntityDao;
+import com.supcon.mes.middleware.model.bean.SparePartEntity;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.UserInfo;
@@ -62,22 +63,35 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
 import com.supcon.mes.module_yhgl.IntentRouter;
 import com.supcon.mes.module_yhgl.R;
+import com.supcon.mes.module_yhgl.controller.LubricateOilsController;
+import com.supcon.mes.module_yhgl.controller.MaintenanceController;
+import com.supcon.mes.module_yhgl.controller.RepairStaffController;
+import com.supcon.mes.module_yhgl.controller.SparePartController;
 import com.supcon.mes.module_yhgl.model.api.YHSubmitAPI;
 import com.supcon.mes.module_yhgl.model.contract.YHSubmitContract;
+import com.supcon.mes.module_yhgl.model.dto.LubricateOilsEntityDto;
+import com.supcon.mes.module_yhgl.model.dto.MaintainDto;
+import com.supcon.mes.module_yhgl.model.dto.RepairStaffDto;
+import com.supcon.mes.module_yhgl.model.dto.SparePartEntityDto;
+import com.supcon.mes.module_yhgl.model.event.ListEvent;
+import com.supcon.mes.module_yhgl.model.event.LubricateOilsEvent;
+import com.supcon.mes.module_yhgl.model.event.MaintenanceEvent;
+import com.supcon.mes.module_yhgl.model.event.RepairStaffEvent;
+import com.supcon.mes.module_yhgl.model.event.SparePartEvent;
 import com.supcon.mes.module_yhgl.presenter.YHSubmitPresenter;
 import com.supcon.mes.module_yhgl.util.FieldHepler;
+import com.supcon.mes.module_yhgl.util.YHGLMapManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 import static com.supcon.mes.middleware.constant.Constant.IntentKey.DEPLOYMENT_ID;
@@ -88,7 +102,7 @@ import static com.supcon.mes.middleware.constant.Constant.IntentKey.DEPLOYMENT_I
  */
 @Router(Constant.Router.YH_EDIT)
 @Presenter(YHSubmitPresenter.class)
-@Controller(OnlineCameraController.class)
+@Controller(value = {SparePartController.class, LubricateOilsController.class, RepairStaffController.class, MaintenanceController.class, OnlineCameraController.class})
 public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContract.View {
 
     @BindByTag("leftBtn")
@@ -160,6 +174,23 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     private long deploymentId;
     private boolean hits;
 
+    private SparePartController mSparePartController;
+    private LubricateOilsController mLubricateOilsController;
+    private RepairStaffController mRepairStaffController;
+    private MaintenanceController maintenanceController;
+    //dataGrid删除数据id
+    private List<Long> dgDeletedIds_sparePart = new ArrayList<>();
+    private List<Long> dgDeletedIds_lubricateOils = new ArrayList<>();
+    private List<Long> dgDeletedIds_repairStaff = new ArrayList<>();
+    private List<Long> dgDeletedIds_maintenance = new ArrayList<>();
+
+    //表体修改前的列表数据
+    private String lubricateOilsListStr;
+    private String repairStaffListStr;
+    private String sparePartListStr;
+    private String maintenanceListStr;
+    private YHEntity oldYHEntity;
+
     @Subscribe
     public void onReceiveImageDeleteEvent(ImageDeleteEvent imageDeleteEvent) {
         getController(OnlineCameraController.class).deleteGalleryBean(yhGalleryView.getGalleryAdapter().getList().get(imageDeleteEvent.getPos()), imageDeleteEvent.getPos());
@@ -179,11 +210,22 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         refreshController.setAutoPullDownRefresh(false);
         refreshController.setPullDownRefreshEnabled(false);
         mYHEntity = (YHEntity) getIntent().getSerializableExtra(Constant.IntentKey.YHGL_ENTITY);
+        oldYHEntity = GsonUtil.gsonToBean(mYHEntity.toString(), YHEntity.class);
+
         if (null != mYHEntity.eamID && !mYHEntity.eamID.checkNil()) {
             yhEditArea.setEditable(false);
         }
         deploymentId = getIntent().getLongExtra(DEPLOYMENT_ID, 0L);
         mOriginalEntity = GsonUtil.gsonToBean(mYHEntity.toString(), YHEntity.class);
+
+        mSparePartController = getController(SparePartController.class);
+        mSparePartController.setEditable(true);
+        mLubricateOilsController = getController(LubricateOilsController.class);
+        mLubricateOilsController.setEditable(true);
+        mRepairStaffController = getController(RepairStaffController.class);
+        mRepairStaffController.setEditable(true);
+        maintenanceController = getController(MaintenanceController.class);
+        maintenanceController.setEditable(true);
 
         initSinglePickController();
         initDatePickController();
@@ -594,6 +636,65 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         mYHEntity.findStaffID.name = userInfo.staffName;
     }
 
+    /**
+     * @param
+     * @return
+     * @description 接收原始数据
+     * @author zhangwenshuai1 2018/10/11
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void receiveList(ListEvent listEvent) {
+        if ("lubricateOils".equals(listEvent.getFlag())) {
+            lubricateOilsListStr = listEvent.getList().toString();
+        } else if ("repairStaff".equals(listEvent.getFlag())) {
+            repairStaffListStr = listEvent.getList().toString();
+        } else if ("sparePart".equals(listEvent.getFlag())) {
+            sparePartListStr = listEvent.getList().toString();
+        } else if ("maintenance".equals(listEvent.getFlag())) {
+            maintenanceListStr = listEvent.getList().toString();
+        }
+    }
+
+    //更新备件
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshSparePart(SparePartEvent sparePartEvent) {
+        mSparePartController.updateSparePartEntities(sparePartEvent.getList());
+        if (sparePartEvent.getList().size() <= 0) {
+            mSparePartController.clear();
+        }
+        dgDeletedIds_sparePart = sparePartEvent.getDgDeletedIds();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshLubricateOils(LubricateOilsEvent event) {
+        mLubricateOilsController.updateLubricateOilsEntities(event.getList());
+        if (event.getList().size() <= 0) {
+            mLubricateOilsController.clear();
+        }
+        dgDeletedIds_lubricateOils = event.getDgDeletedIds();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshRepairStaff(RepairStaffEvent event) {
+        mRepairStaffController.updateRepairStaffEntiies(event.getList());
+        if (event.getList().size() <= 0) {
+//            repairStaffListWidget.clear();
+            mRepairStaffController.clear();
+        }
+
+        dgDeletedIds_repairStaff = event.getDgDeletedIds();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshRepairStaff(MaintenanceEvent event) {
+        maintenanceController.updateMaintenanceEntities(event.getList());
+        if (event.getList().size() <= 0) {
+            maintenanceController.clear();
+        }
+        dgDeletedIds_maintenance = event.getDgDeletedIds();
+    }
+
+
     @Override
     protected void initData() {
         super.initData();
@@ -659,19 +760,21 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     public void onBackPressed() {
         //退出前校验表单是否修改过
         //如果修改过, 提示是否保存
-        if (isModified()) {
+        if (isModified() || doCheckChange()) {
             new CustomDialog(context)
                     .twoButtonAlertDialog("页面已经被修改，是否要保存?")
                     .bindView(R.id.grayBtn, "保存")
                     .bindView(R.id.redBtn, "离开")
                     .bindClickListener(R.id.grayBtn, v -> doSave(), true)
                     .bindClickListener(R.id.redBtn, v3 -> {
+                        EventBus.getDefault().post(new RefreshEvent());
                         //关闭页面
                         YHEditActivity.this.finish();
                     }, true)
                     .show();
         } else {
-            finish();
+            EventBus.getDefault().post(new RefreshEvent());
+            super.onBackPressed();
         }
 
     }
@@ -852,6 +955,52 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         map.put("__file_upload", true);
 
 
+        //标题数据
+        List<SparePartEntityDto> sparePartEntityDtos = YHGLMapManager.translateSparePartDto(mSparePartController.getSparePartEntities());
+        List<RepairStaffDto> repairStaffDtos = YHGLMapManager.translateStaffDto(mRepairStaffController.getRepairStaffEntities());
+        List<LubricateOilsEntityDto> lubricateOilsEntityDtos = YHGLMapManager.translateLubricateOilsDto(mLubricateOilsController.getLubricateOilsEntities());
+        List<MaintainDto> maintainDtos = YHGLMapManager.translateMaintainDto(maintenanceController.getMaintenanceEntities());
+        if (Constant.Transition.SUBMIT.equals(map.get("operateType")) && TextUtils.isEmpty(map.get("workFlowVarStatus").toString())) {
+            for (RepairStaffDto repairStaffDto : repairStaffDtos) {
+                if (TextUtils.isEmpty(repairStaffDto.repairStaff.id)) {
+                    onLoadFailed("维修人员列表禁止存在空人员信息");
+                    return;
+                }
+            }
+            for (SparePartEntityDto sparePartEntityDto : sparePartEntityDtos) {
+                if (TextUtils.isEmpty(sparePartEntityDto.productID.id)) {
+                    onLoadFailed("备件列表禁止存在空备件信息");
+                    return;
+                }
+            }
+            for (LubricateOilsEntityDto lubricateOilsEntityDto : lubricateOilsEntityDtos) {
+                if (TextUtils.isEmpty(lubricateOilsEntityDto.lubricate.id)) {
+                    onLoadFailed("润滑油列表禁止存在空润滑油信息");
+                    return;
+                }
+            }
+        }
+        map = YHGLMapManager.dgDeleted(map, dgDeletedIds_sparePart, "dg1557402465409");
+        map.put("dg1557402465409ModelCode", "BEAM2_1.0.0_faultInfo_FaultSparePart");
+        map.put("dg1557402465409ListJson", sparePartEntityDtos.toString());
+        map.put("dgLists['dg1557402465409']", sparePartEntityDtos.toString());
+
+        map = YHGLMapManager.dgDeleted(map, dgDeletedIds_repairStaff, "dg1557402325583");
+        map.put("dg1557402325583ModelCode", "BEAM2_1.0.0_faultInfo_FaultRepairStaff");
+        map.put("dg1557402325583ListJson", repairStaffDtos);
+        map.put("dgLists['dg1557402325583']", repairStaffDtos);
+
+        map = YHGLMapManager.dgDeleted(map, dgDeletedIds_lubricateOils, "dg1557455440578");
+        map.put("dg1557455440578ModelCode", "BEAM2_1.0.0_faultInfo_FaultLubricateOils");
+        map.put("dg1557455440578ListJson", lubricateOilsEntityDtos);
+        map.put("dgLists['dg1557455440578']", lubricateOilsEntityDtos);
+
+        map = YHGLMapManager.dgDeleted(map, dgDeletedIds_maintenance, "dg1557457043896");
+        map.put("dg1557457043896ModelCode", "BEAM2_1.0.0_faultInfo_MaintainJwx");
+        map.put("dg1557457043896ListJson", maintainDtos);
+        map.put("dgLists['dg1557457043896']", maintainDtos);
+
+
         Map<String, Object> attachmentMap = new HashMap<>();
 
 //        List<Map<String, Object>> files = new ArrayList<>();
@@ -955,5 +1104,25 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         hits = false;
         onLoadFailed(errorMsg);
         SnackbarHelper.showError(rootView, ErrorMsgHelper.msgParse(errorMsg));
+    }
+
+    //检查是否变化
+    public boolean doCheckChange() {
+        if (!oldYHEntity.toString().equals(mYHEntity.toString())) {
+            return true;
+        }
+        if (!TextUtils.isEmpty(repairStaffListStr) && !repairStaffListStr.equals(mRepairStaffController.getRepairStaffEntities().toString())) {
+            return true;
+        }
+        if (!TextUtils.isEmpty(lubricateOilsListStr) && !lubricateOilsListStr.equals(mLubricateOilsController.getLubricateOilsEntities().toString())) {
+            return true;
+        }
+        if ((!TextUtils.isEmpty(sparePartListStr) && !sparePartListStr.equals(mSparePartController.getSparePartEntities().toString()))) {
+            return true;
+        }
+        if ((!TextUtils.isEmpty(maintenanceListStr) && !maintenanceListStr.equals(maintenanceController.getMaintenanceEntities().toString()))) {
+            return true;
+        }
+        return false;
     }
 }

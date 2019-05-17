@@ -14,4 +14,5 @@ public class LubricateOil extends BaseEntity {
     public String unit;
     public String specify; //规格
 
+
 }
