@@ -85,6 +85,11 @@ public interface Constant {
         String WXGD_SPARE_PART_LIST = "WXGD_SPARE_PART_LIST";//维修工单备件
         String WXGD_LUBRICATE_OIL_LIST = "WXGD_LUBRICATE_OIL_LIST";//维修工单润滑油
 
+        String YHGL_SPARE_PART_LIST = "WXGD_SPARE_PART_LIST";//隐患管理备件
+        String YHGL_LUBRICATE_OIL_LIST = "WXGD_LUBRICATE_OIL_LIST";//隐患管理润滑油
+        String YHGL_REPAIR_STAFF_LIST = "YHGL_REPAIR_STAFF_LIST";//隐患管理润维修人员
+        String YHGL_MAINTENANCE_STAFF_LIST = "YHGL_MAINTENANCE_STAFF_LIST";//隐患管理润维保
+
         String SJSC = "SJSC";
         String SJXZ = "SJXZ";
 
@@ -100,8 +105,16 @@ public interface Constant {
         String SBDA_VIEW = "SBDAListView";    //设备档案列表点击进入详细信息界面
         //        String SBDA_SEARCH_STAFF = "SDBASearchContact"; //搜索联系人列表
         String COMMON_SEARCH = "COMMON_SEARCH";
+
+        //参照
+        String SPARE_PART = "SPARE_PART";//备件选择列表
+        String LUBRICATE = "LUBRICATE";//润滑选择列表
+
+        //参照
         String SPARE_PART_REF = "SPARE_PART_REF";//备件参照选择列表
         String LUBRICATE_REF = "LUBRICATE_REF";//润滑参照选择列表
+        String MAINTAIN_REF = "MAINTAIN_REF";//维保参照选择列表
+
         String SBDA_SEARCH_DEPARTMENT = "SBDA_SEARCH_DEPARTMENT";
         String COMMON_FILETER_SEARCH = "CommonFilterSearchActivity";
 
@@ -177,6 +190,7 @@ public interface Constant {
         String REPAIR_STAFF_ENTITIES = "REPAIR_STAFF_ENTITIES";
         String ACCEPTANCE_ENTITIES = "ACCEPTANCE_ENTITIES";
         String LUBRICATE_OIL_ENTITIES = "LUBRICATE_OIL_ENTITIES";
+        String MAINTENANCE_ENTITIES = "MAINTENANCE_ENTITIES";
         String SPARE_PART_ENTITIES = "SPARE_PART_ENTITIES";
         String IS_EDITABLE = "IS_EDITABLE";
         String IS_ADD = "IS_ADD";
@@ -197,9 +211,11 @@ public interface Constant {
 
         String PROPERTY = "PROPERTY"; // 数据库字段属性
 
-        String WORK_LIST_ID = "WORK_LIST_ID"; // 工单ID
+        String LIST_ID = "LIST_ID"; // 工单ID
         String IS_SPARE_PART_REF = "IS_SPARE_PART_REF"; // 备件参照清单
-        String WXGD_EAM_ID = "WXGD_EAM_ID"; // 设备ID
+        String SPARE_PART_REF_YRL = "SPARE_PART_REF_YRL"; // 备件参照URL
+
+        String EAM_ID = "EAM_ID"; // 设备ID
         String XJ_YHGL_ENTITY = "XJ_YHGL_ENTITY"; //巡检隐患
         String COMMON_SEARCH_DEFAULT_SEARCH_VALUE = "COMMON_SEARCH_DEFAULT_SEARCH_VALUE";
 
@@ -426,6 +442,8 @@ public interface Constant {
         String EAM_TYPE = "EAM_TYPE";//设备类型
         String EAM_AREA = "EAM_AREA";//区域类型
         String EAM_AREANAME = "EAM_AREANAME";//区域类型主设备
+
+        String CONTENT = "CONTENT";//内容
 
         String OPEN_TIME_START = "OPEN_TIME_START";//时间
         String OPEN_TIME_STOP = "OPEN_TIME_STOP";//时间

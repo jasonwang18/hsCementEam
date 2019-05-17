@@ -25,4 +25,5 @@ public class SparePartEntity extends BaseEntity {
     public boolean isDeliveried; // 是否领用出库
     public boolean isRef; // 是否参照
     public String version;
+
 }

@@ -89,7 +89,7 @@ public class WXGDLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
         editable = getIntent().getBooleanExtra(Constant.IntentKey.IS_EDITABLE, false);
         isAdd = getIntent().getBooleanExtra(Constant.IntentKey.IS_ADD, false);
         if (isAdd) {
-            IntentRouter.go(context, Constant.Router.LUBRICATE_REF);
+            IntentRouter.go(context, Constant.Router.LUBRICATE);
         }
         repairSum = getIntent().getLongExtra(Constant.IntentKey.REPAIR_SUM, 1);
         tableStatus = getIntent().getStringExtra(Constant.IntentKey.TABLE_STATUS);
@@ -156,7 +156,7 @@ public class WXGDLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        IntentRouter.go(context, Constant.Router.LUBRICATE_REF);
+                        IntentRouter.go(context, Constant.Router.LUBRICATE);
                     }
                 });
 

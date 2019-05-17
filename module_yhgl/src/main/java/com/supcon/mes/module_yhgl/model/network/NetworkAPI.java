@@ -2,7 +2,15 @@ package com.supcon.mes.module_yhgl.model.network;
 
 import com.app.annotation.apt.ApiFactory;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
+import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
+import com.supcon.mes.middleware.model.bean.ResultEntity;
+import com.supcon.mes.module_yhgl.model.bean.LubricateOilsListEntity;
+import com.supcon.mes.module_yhgl.model.bean.MaintenanceListEntity;
+import com.supcon.mes.module_yhgl.model.bean.RefProductListEntity;
+import com.supcon.mes.module_yhgl.model.bean.RepairStaffListEntity;
+import com.supcon.mes.module_yhgl.model.bean.SparePartListEntity;
+import com.supcon.mes.module_yhgl.model.bean.StandingCropResultEntity;
 import com.supcon.mes.module_yhgl.model.bean.YHListEntity;
 
 import java.util.List;
@@ -55,4 +63,60 @@ public interface NetworkAPI {
      */
     @GET("/services/public/BEAM2/faultInfo/getFaultInfos/{pageNo}/{pageSize}?securityKey=securityKey&securityId=restfulKey&returnType=json")
     Flowable<YHListEntity> faultInfoList(@Path("pageNo") int pageNo, @Path("pageSize") int pageSize);
+
+    /**
+     * @param
+     * @return
+     * @description 隐患管理维修人员
+     * @author wnagshizhan 2018/8/28
+     */
+    @GET("/BEAM2/faultInfo/faultInfo/data-dg1557402325583.action")
+    Flowable<RepairStaffListEntity> listRepairStaffs(@Query("faultInfo.id") long id);
+
+    /**
+     * @param
+     * @return
+     * @description 隐患管理备件
+     * @author wnagshizhan 2018/8/28
+     */
+    @GET("/BEAM2/faultInfo/faultInfo/data-dg1557402465409.action")
+    Flowable<SparePartListEntity> listSpareParts(@Query("faultInfo.id") long id);
+
+    /**
+     * @param
+     * @return
+     * @description 隐患管理润滑油
+     * @author wnagshizhan 2018/8/28
+     */
+    @GET("/BEAM2/faultInfo/faultInfo/data-dg1557455440578.action")
+    Flowable<LubricateOilsListEntity> listLubricateOils(@Query("faultInfo.id") long id);
+
+    /**
+     * @param
+     * @return
+     * @description 隐患管理维保
+     * @author wnagshizhan 2018/8/28
+     */
+    @GET("/BEAM2/faultInfo/faultInfo/data-dg1557457043896.action")
+    Flowable<MaintenanceListEntity> listMaintenance(@Query("faultInfo.id") long id);
+
+    /**
+     * @param productCode 备件编码
+     * @return
+     * @description 备件更新现存量
+     * @author zhangwenshuai1 2018/10/10
+     */
+    @POST("/BEAM2/faultInfo/faultInfo/getNowSum.action")
+    Flowable<CommonListEntity<StandingCropResultEntity>> updateStandingCrop(@Query("productCode") String productCode);
+
+    /**
+     * @description 备件生成领用出库单
+     * @param
+     * @return
+     * @author zhangwenshuai1 2018/10/23
+     *
+     */
+    @POST("/BEAM2/workList/sparePart/generateSparePartApply.action")
+    Flowable<ResultEntity> generateSparePartApply(@Query("sparePartJsons") String listStr);
+
 }

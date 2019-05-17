@@ -299,11 +299,11 @@ public class Util {
      * @param str
      * @return
      */
-    public static String strFormat(String str) {
-        if (str == null || TextUtils.isEmpty(str)) {
-            return "--";
+    public static String strFormat(Object str) {
+        if (str != null && !TextUtils.isEmpty(str.toString())) {
+            return str.toString();
         }
-        return str;
+        return "--";
     }
 
     /**
@@ -312,11 +312,11 @@ public class Util {
      * @param str
      * @return
      */
-    public static String strFormat2(String str) {
-        if (str == null || TextUtils.isEmpty(str)) {
-            return "";
+    public static String strFormat2(Object str) {
+        if (str != null && !TextUtils.isEmpty(str.toString())) {
+            return str.toString();
         }
-        return str;
+        return "";
     }
 
     public static int strToInt(String str) {
