@@ -20,5 +20,4 @@ public class LubricateOilsEntity extends BaseEntity {
     public String remark;//备注
     public String version;
 
-    public boolean isEdit;//是否可以编辑，参照不能编辑，添加的可以编辑
 }
