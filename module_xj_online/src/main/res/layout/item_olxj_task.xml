@@ -170,7 +170,7 @@
         android:id="@+id/mapLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/bgGray2"
         android:orientation="vertical"
         android:tag="mapLayout">
 
@@ -184,7 +184,7 @@
             android:progressDrawable="@drawable/layer_web_progressbar"
             android:tag="progressBar" />
 
-        <WebView
+        <com.supcon.common.view.view.js.BridgeWebView
             android:id="@+id/webView"
             android:layout_width="match_parent"
             android:layout_height="0dp"

@@ -2,6 +2,7 @@ package com.supcon.mes.module_olxj.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +25,13 @@ import android.widget.TextView;
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
+import com.supcon.common.view.util.DisplayUtil;
+import com.supcon.common.view.util.LogUtil;
+import com.supcon.common.view.view.js.BaseBridgeWebViewClient;
+import com.supcon.common.view.view.js.BridgeHandler;
+import com.supcon.common.view.view.js.BridgeUtil;
+import com.supcon.common.view.view.js.BridgeWebView;
+import com.supcon.common.view.view.js.CallBackFunction;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
@@ -32,7 +40,9 @@ import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_olxj.R;
 import com.supcon.mes.module_olxj.model.bean.OLXJAreaEntity;
 import com.supcon.mes.module_olxj.model.bean.OLXJTaskEntity;
-import com.supcon.mes.module_olxj.util.AndroidtoJs;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -124,7 +134,7 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
         @BindByTag("progressBar")
         ProgressBar progressBar;
         @BindByTag("webView")
-        WebView webView;
+        BridgeWebView webView;
 
         OLXJAreaListAdapter mOLXJAreaListAdapter;
 
@@ -149,7 +159,7 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
             taskAreaListView.setAdapter(mOLXJAreaListAdapter);
 
             webView.setFocusableInTouchMode(false);
-            webView.setWebViewClient(new MyWebViewClient());
+            webView.setWebViewClient(new MapWebViewClient(webView));
             webView.setWebChromeClient(new MyWebChromeClient());
             WebSettings settings = webView.getSettings();
             settings.setAppCacheEnabled(true);
@@ -158,21 +168,26 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
             settings.setDatabaseEnabled(true);
             settings.setDomStorageEnabled(true);
             settings.setGeolocationEnabled(true);
-            settings.setBuiltInZoomControls(true); // 显示放大缩小
+//            settings.setBuiltInZoomControls(true); // 显示放大缩小
             settings.setSupportZoom(true); // 可以缩放
             settings.setDisplayZoomControls(false);
             settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+            settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 
+            settings.setLoadWithOverviewMode(true);
             // 通过addJavascriptInterface()将Java对象映射到JS对象
             //参数1：Javascript对象名
             //参数2：Java对象名
-            webView.addJavascriptInterface(new AndroidtoJs() {
-                @Override
-                public void signIn(String id) {
+//            webView.addJavascriptInterface(new AndroidtoJs() {
+//                @Override
+//                public void signIn(String id) {
+//
+////                    onItemChildViewClick(taskExpandBtn, 1, getItem(position));
+//                }
+//            }, "android");
 
-//                    onItemChildViewClick(taskExpandBtn, 1, getItem(position));
-                }
-            }, "android");
+
+
         }
 
         @Override
@@ -198,6 +213,33 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
                 onItemChildViewClick(taskAreaListView, action, obj);
             });
 
+
+            if(webView!=null){
+                webView.registerHandler("areaClick", new BridgeHandler() {
+
+                    @Override
+                    public void handler(String data, CallBackFunction function) {
+                        LogUtil.e("areaClick" + data);
+                        try {
+                            JSONObject jsonObject = new JSONObject(data);
+                            String code = jsonObject.getString("id");
+                            if(mOLXJAreaEntities == null){
+                                onItemChildViewClick(taskExpandBtn, 0, getItem(0));
+                            }
+                            else if (!TextUtils.isEmpty(code))
+                                for (OLXJAreaEntity areaEntity : mOLXJAreaEntities) {
+                                    if (code.equals(areaEntity._code)) {
+                                        onItemChildViewClick(taskAreaListView, 0, areaEntity);
+                                        return;
+                                    }
+                                }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                });
+            }
         }
 
         private void shrink(int position) {
@@ -359,22 +401,61 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
         private class MyWebViewClient extends WebViewClient {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                webView.loadUrl(url);
                 return true;
             }
 
             @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT
                         , context.getResources().getDisplayMetrics().heightPixels - Util.dpToPx(context, 160));
                 webView.setLayoutParams(lp);
             }
 
             @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+
+
+            }
+
+            @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
             }
+        }
+
+        private class MapWebViewClient extends BaseBridgeWebViewClient {
+
+            public MapWebViewClient(BridgeWebView webView) {
+                super(webView);
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                return super.shouldOverrideUrlLoading(view, url);
+            }
+
+            @Override
+            protected boolean dealUrl(WebView view, String url) {
+                return super.shouldOverrideUrlLoading(view, url);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT
+                        , DisplayUtil.getScreenHeight(context) - DisplayUtil.dip2px(170, context));
+                webView.setLayoutParams(lp);
+                BridgeUtil.webViewLoadLocalJs(webView, "xj.js");
+
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+            }
+
         }
 
         private class MyWebChromeClient extends WebChromeClient {

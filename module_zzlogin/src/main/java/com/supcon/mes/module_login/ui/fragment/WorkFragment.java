@@ -185,21 +185,10 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
             workInfo.zzAppId = appItem.getAppId();
             workInfo.isOpen = true;
             workInfo.router = appItem.getAppurl();
-//            if("设备看板".equals(workInfo.name) || "润滑看板".equals(workInfo.name) || "备件看板".equals(workInfo.name)){
-//                sbWorkInfos.add(workInfo);
-//            }
-//            else
             zzApps.add(workInfo);
         }
 
         if (defaultList != null && zzApps != null) {
-
-//            WorkInfo workInfo = new WorkInfo();
-//            workInfo.name = "生产报表";
-//            workInfo.iconResId = R.drawable.ic_data_xjbb;
-//            workInfo.router = "nil";
-//            workInfo.isOpen = true;
-//            zzApps.add(workInfo);
 
             WorkInfo workInfo2 = new WorkInfo();
             workInfo2.viewType = 1;

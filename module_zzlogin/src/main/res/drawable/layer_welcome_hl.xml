@@ -9,7 +9,7 @@
     <item android:gravity="center">
         <bitmap
             android:gravity="center"
-            android:src="@drawable/ic_login_logo2"
+            android:src="@drawable/ic_login_logo_hl"
             android:mipMap="true"
             
             />

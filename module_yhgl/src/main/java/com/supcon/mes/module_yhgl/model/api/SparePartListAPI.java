@@ -18,6 +18,7 @@ public interface SparePartListAPI {
 
     /**
      * @description 领用出库单
+     * @param sparePartJsonEntityDto
      * @return
      * @author zhangwenshuai1 2018/10/24
      *

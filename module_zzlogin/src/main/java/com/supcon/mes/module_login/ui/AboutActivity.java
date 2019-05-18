@@ -11,6 +11,7 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseActivity;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomImageButton;
+import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.util.ChannelUtil;
 import com.supcon.mes.module_login.BuildConfig;
@@ -53,8 +54,12 @@ public class AboutActivity extends BaseActivity {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText("关于我们");
-
-        aboutIv.setImageResource(R.mipmap.ic_app_launcher);
+        if(EamApplication.isHongshi()) {
+            aboutIv.setImageResource(R.drawable.ic_app_launcher_hongshi);
+        }
+        else{
+            aboutIv.setImageResource(R.drawable.ic_app_launcher_hailuo);
+        }
         aboutName.setText(ChannelUtil.getAppName());
         StringBuilder versionName = new StringBuilder();
         versionName.append(" V");

@@ -76,7 +76,9 @@ public class LubricateOilsController extends BaseViewController implements Lubri
                         bundle.putString(Constant.IntentKey.LUBRICATE_OIL_ENTITIES, mLubricateOilsEntities.toString());
                         bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, isEditable);
                         bundle.putBoolean(Constant.IntentKey.IS_ADD, false);
-                        bundle.putString(Constant.IntentKey.TABLE_STATUS, mYHEntity.pending.taskDescription);
+                        if(mYHEntity.pending!=null) {
+                            bundle.putString(Constant.IntentKey.TABLE_STATUS, mYHEntity.pending.taskDescription);
+                        }
                         bundle.putLong(Constant.IntentKey.EAM_ID,mYHEntity.eamID.id);
                         IntentRouter.go(context, Constant.Router.YHGL_LUBRICATE_OIL_LIST, bundle);
                         break;
