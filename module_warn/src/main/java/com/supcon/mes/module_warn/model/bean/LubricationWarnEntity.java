@@ -31,6 +31,8 @@ public class LubricationWarnEntity extends BaseEntity {
     public SparePartId sparePartId;//备件编码
     public AccessoryEamId accessoryEamId;//附属设备
 
+    public boolean isCheck;
+
     public WXGDEam getEamID() {
         if (eamID==null) {
             eamID = new WXGDEam();

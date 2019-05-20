@@ -48,6 +48,7 @@ import io.reactivex.functions.Consumer;
 /**
  * Created by wangshizhan on 2018/9/3
  * Email:wangshizhan@supcom.com
+ * 润滑列表
  */
 @Router(Constant.Router.WXGD_LUBRICATE_OIL_LIST)
 public class WXGDLubricateOilListActivity extends BaseRefreshRecyclerActivity<LubricateOilsEntity> {

@@ -3,6 +3,8 @@ package com.supcon.mes.module_warn.ui.adapter;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -26,6 +28,7 @@ import java.text.SimpleDateFormat;
  */
 public class LubricationWarnAdapter extends BaseListDataRecyclerViewAdapter<LubricationWarnEntity> {
 
+    private int checkPosition = -1;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public LubricationWarnAdapter(Context context) {
@@ -65,6 +68,9 @@ public class LubricationWarnAdapter extends BaseListDataRecyclerViewAdapter<Lubr
         @BindByTag("itemLubriSparePartIdTv")
         CustomTextView itemLubriSparePartIdTv;
 
+        @BindByTag("chkBox")
+        CheckBox chkBox;
+
         public ViewHolder(Context context) {
             super(context);
         }
@@ -74,6 +80,27 @@ public class LubricationWarnAdapter extends BaseListDataRecyclerViewAdapter<Lubr
             return R.layout.item_lubrication_warn;
         }
 
+        @Override
+        protected void initListener() {
+            super.initListener();
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    LubricationWarnEntity item = getItem(getAdapterPosition());
+                    item.isCheck = !item.isCheck;
+                    notifyItemChanged(getAdapterPosition());
+                    if (checkPosition != -1) {
+                        if (checkPosition != getAdapterPosition()) {
+                            LubricationWarnEntity item1 = getItem(checkPosition);
+                            item1.isCheck = false;
+                        }
+                        notifyItemChanged(checkPosition);
+                    }
+                    checkPosition = getAdapterPosition();
+                    onItemChildViewClick(itemView, checkPosition, getItem(checkPosition));
+                }
+            });
+        }
 
         @Override
         protected void update(LubricationWarnEntity data) {
@@ -93,10 +120,14 @@ public class LubricationWarnAdapter extends BaseListDataRecyclerViewAdapter<Lubr
             if (!TextUtils.isEmpty(data.getAccessoryEamId().getAttachEamId().code)) {
                 itemLubriAttachEamTv.setVisibility(View.VISIBLE);
                 itemLubriAttachEamTv.setContent(data.getAccessoryEamId().getAttachEamId().code);
+            } else {
+                itemLubriAttachEamTv.setVisibility(View.GONE);
             }
             if (!TextUtils.isEmpty(data.getSparePartId().getProductID().productCode)) {
                 itemLubriSparePartIdTv.setVisibility(View.VISIBLE);
                 itemLubriSparePartIdTv.setContent(data.getSparePartId().getProductID().productCode);
+            } else {
+                itemLubriSparePartIdTv.setVisibility(View.GONE);
             }
 
             if (!TextUtils.isEmpty(data.claim)) {
@@ -107,6 +138,12 @@ public class LubricationWarnAdapter extends BaseListDataRecyclerViewAdapter<Lubr
             if (!TextUtils.isEmpty(data.content)) {
                 itemLubriContentTv.setVisibility(View.VISIBLE);
                 itemLubriContentTv.setContent(data.content);
+            }
+
+            if (data.isCheck) {
+                chkBox.setChecked(true);
+            } else {
+                chkBox.setChecked(false);
             }
         }
     }

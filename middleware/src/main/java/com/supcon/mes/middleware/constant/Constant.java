@@ -84,6 +84,7 @@ public interface Constant {
         String WXGD_ACCEPTANCE_LIST = "WXGD_ACCEPTANCE_LIST";//维修工单验收
         String WXGD_SPARE_PART_LIST = "WXGD_SPARE_PART_LIST";//维修工单备件
         String WXGD_LUBRICATE_OIL_LIST = "WXGD_LUBRICATE_OIL_LIST";//维修工单润滑油
+        String WXGD_MAINTENANCE_STAFF_LIST = "WXGD_MAINTENANCE_STAFF_LIST";//维修工单润维保
 
         String YHGL_SPARE_PART_LIST = "WXGD_SPARE_PART_LIST";//隐患管理备件
         String YHGL_LUBRICATE_OIL_LIST = "WXGD_LUBRICATE_OIL_LIST";//隐患管理润滑油

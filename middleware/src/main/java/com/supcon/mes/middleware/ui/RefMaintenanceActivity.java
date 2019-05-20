@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
@@ -32,14 +31,11 @@ import com.supcon.mes.middleware.ui.adapter.RefMaintainAdapter;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.KeyExpandHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
-import com.supcon.mes.middleware.util.Util;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import io.reactivex.functions.Consumer;
 
 /**
  * @author yangfei.cao
@@ -53,9 +49,6 @@ import io.reactivex.functions.Consumer;
 public class RefMaintenanceActivity extends BaseRefreshRecyclerActivity<MaintainEntity> implements RefMaintainContract.View {
     @BindByTag("contentView")
     RecyclerView contentView;
-
-    @BindByTag("titleText")
-    TextView titleText;
 
     @BindByTag("leftBtn")
     ImageButton leftBtn;

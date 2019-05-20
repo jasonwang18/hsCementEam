@@ -3,6 +3,7 @@ package com.supcon.mes.module_warn.ui.adapter;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.CheckBox;
 
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
@@ -12,6 +13,7 @@ import com.supcon.mes.middleware.util.HtmlParser;
 import com.supcon.mes.middleware.util.HtmlTagHandler;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_warn.R;
+import com.supcon.mes.module_warn.model.bean.LubricationWarnEntity;
 import com.supcon.mes.module_warn.model.bean.MaintenanceWarnEntity;
 
 import java.text.SimpleDateFormat;
@@ -25,6 +27,7 @@ import java.text.SimpleDateFormat;
  */
 public class MaintenanceWarnAdapter extends BaseListDataRecyclerViewAdapter<MaintenanceWarnEntity> {
 
+    private int checkPosition = -1;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public MaintenanceWarnAdapter(Context context) {
@@ -51,6 +54,9 @@ public class MaintenanceWarnAdapter extends BaseListDataRecyclerViewAdapter<Main
         @BindByTag("itemMaintenanceContentTv")
         CustomTextView itemMaintenanceContentTv;
 
+        @BindByTag("chkBox")
+        CheckBox chkBox;
+
         public ViewHolder(Context context) {
             super(context);
         }
@@ -60,6 +66,28 @@ public class MaintenanceWarnAdapter extends BaseListDataRecyclerViewAdapter<Main
             return R.layout.item_maintenance_warn;
         }
 
+        @Override
+        protected void initListener() {
+            super.initListener();
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MaintenanceWarnEntity item = getItem(getAdapterPosition());
+                    item.isCheck = !item.isCheck;
+                    notifyItemChanged(getAdapterPosition());
+                    if (checkPosition != -1) {
+                        if (checkPosition != getAdapterPosition()) {
+                            MaintenanceWarnEntity item1 = getItem(checkPosition);
+                            item1.isCheck = false;
+                        }
+                        notifyItemChanged(checkPosition);
+                    }
+                    checkPosition = getAdapterPosition();
+                    onItemChildViewClick(itemView, checkPosition, getItem(checkPosition));
+                }
+            });
+        }
 
         @Override
         protected void update(MaintenanceWarnEntity data) {
@@ -79,6 +107,12 @@ public class MaintenanceWarnAdapter extends BaseListDataRecyclerViewAdapter<Main
             if (!TextUtils.isEmpty(data.content)) {
                 itemMaintenanceContentTv.setVisibility(View.VISIBLE);
                 itemMaintenanceContentTv.setContent(data.content);
+            }
+
+            if (data.isCheck) {
+                chkBox.setChecked(true);
+            } else {
+                chkBox.setChecked(false);
             }
         }
     }

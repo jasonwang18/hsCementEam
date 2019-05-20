@@ -12,7 +12,6 @@ public class LubricateOilsEntityDto extends BaseEntity {
     public LubricateOilDto lubricate;
     public SystemCodeEntity oilType;//加换油
     public String oilQuantity;
-    public String timesNum;
     public String rowIndex;
     public String version;
     public String sort;

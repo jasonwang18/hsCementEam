@@ -5,16 +5,20 @@ import android.text.TextUtils;
 
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.middleware.EamApplication;
+import com.supcon.mes.middleware.model.bean.MaintainEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.AcceptanceCheckEntity;
 import com.supcon.mes.middleware.model.bean.LubricateOilsEntity;
 import com.supcon.mes.middleware.model.bean.RepairStaffEntity;
 import com.supcon.mes.middleware.model.bean.SparePartEntity;
+import com.supcon.mes.middleware.model.bean.ValueEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
+import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_wxgd.model.dto.AcceptanceCheckEntityDto;
 import com.supcon.mes.module_wxgd.model.dto.GoodDto;
 import com.supcon.mes.module_wxgd.model.dto.LubricateOilDto;
 import com.supcon.mes.module_wxgd.model.dto.LubricateOilsEntityDto;
+import com.supcon.mes.module_wxgd.model.dto.MaintainDto;
 import com.supcon.mes.module_wxgd.model.dto.RepairStaffDto;
 import com.supcon.mes.module_wxgd.model.dto.SparePartEntityDto;
 import com.supcon.mes.module_wxgd.model.dto.StaffDto;
@@ -191,6 +195,29 @@ public class WXGDMapManager {
             lubricateOilsEntityDtos.add(lubricateOilsEntityDto);
         }
         return lubricateOilsEntityDtos;
+    }
+
+    /**
+     * @param
+     * @return
+     * @description 转化传输润滑油
+     * @author zhangwenshuai1 2018/9/5
+     */
+    public static LinkedList<MaintainDto> translateMaintainDto(List<MaintainEntity> list) {
+        LinkedList<MaintainDto> maintainDtos = new LinkedList<>();
+        for (MaintainEntity maintainEntity : list) {
+            MaintainDto maintainDto = new MaintainDto();
+
+            ValueEntity jwxItemID = new ValueEntity();
+            jwxItemID.id = Util.strFormat2(maintainEntity.getJwxItem().id);
+            maintainDto.jwxItemID = jwxItemID;
+            maintainDto.claim = maintainEntity.claim;
+            maintainDto.sparePartName = maintainEntity.sparePartName;
+            maintainDto.lastTime = maintainEntity.lastTime != null ? DateUtil.dateFormat(maintainEntity.lastTime) : "";
+            maintainDto.nextTime = maintainEntity.nextTime != null ? DateUtil.dateFormat(maintainEntity.nextTime) : "";
+            maintainDtos.add(maintainDto);
+        }
+        return maintainDtos;
     }
 
     /**

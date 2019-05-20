@@ -940,6 +940,10 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             map.put("workFlowVar.dec", workFlowEntity.dec);
             map.put("workFlowVar.outcome", workFlowEntity.outcome);
             map.put("operateType", "submit");
+
+            if (Constant.Transition.CANCEL_CN.equals(workFlowEntity.dec)) {
+                map.put("workFlowVarStatus", Constant.Transition.CANCEL);
+            }
         } else {
 //            map.put("workFlowVar.dec", "");
 //            map.put("workFlowVar.outcome", "");
@@ -954,32 +958,31 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         map.put("datagridKey", "BEAM2_faultInfo_faultInfo_faultInfoEdit_datagrids");
         map.put("__file_upload", true);
 
-
         //标题数据
         List<SparePartEntityDto> sparePartEntityDtos = YHGLMapManager.translateSparePartDto(mSparePartController.getSparePartEntities());
         List<RepairStaffDto> repairStaffDtos = YHGLMapManager.translateStaffDto(mRepairStaffController.getRepairStaffEntities());
         List<LubricateOilsEntityDto> lubricateOilsEntityDtos = YHGLMapManager.translateLubricateOilsDto(mLubricateOilsController.getLubricateOilsEntities());
         List<MaintainDto> maintainDtos = YHGLMapManager.translateMaintainDto(maintenanceController.getMaintenanceEntities());
-        if (Constant.Transition.SUBMIT.equals(map.get("operateType")) && TextUtils.isEmpty(map.get("workFlowVarStatus").toString())) {
-            for (RepairStaffDto repairStaffDto : repairStaffDtos) {
-                if (TextUtils.isEmpty(repairStaffDto.repairStaff.id)) {
-                    onLoadFailed("维修人员列表禁止存在空人员信息");
-                    return;
-                }
-            }
-            for (SparePartEntityDto sparePartEntityDto : sparePartEntityDtos) {
-                if (TextUtils.isEmpty(sparePartEntityDto.productID.id)) {
-                    onLoadFailed("备件列表禁止存在空备件信息");
-                    return;
-                }
-            }
-            for (LubricateOilsEntityDto lubricateOilsEntityDto : lubricateOilsEntityDtos) {
-                if (TextUtils.isEmpty(lubricateOilsEntityDto.lubricate.id)) {
-                    onLoadFailed("润滑油列表禁止存在空润滑油信息");
-                    return;
-                }
-            }
-        }
+//        if (Constant.Transition.SUBMIT.equals(map.get("operateType"))) {
+//            for (RepairStaffDto repairStaffDto : repairStaffDtos) {
+//                if (TextUtils.isEmpty(repairStaffDto.repairStaff.id)) {
+//                    onLoadFailed("维修人员列表禁止存在空人员信息");
+//                    return;
+//                }
+//            }
+//            for (SparePartEntityDto sparePartEntityDto : sparePartEntityDtos) {
+//                if (TextUtils.isEmpty(sparePartEntityDto.productID.id)) {
+//                    onLoadFailed("备件列表禁止存在空备件信息");
+//                    return;
+//                }
+//            }
+//            for (LubricateOilsEntityDto lubricateOilsEntityDto : lubricateOilsEntityDtos) {
+//                if (TextUtils.isEmpty(lubricateOilsEntityDto.lubricate.id)) {
+//                    onLoadFailed("润滑油列表禁止存在空润滑油信息");
+//                    return;
+//                }
+//            }
+//        }
         map = YHGLMapManager.dgDeleted(map, dgDeletedIds_sparePart, "dg1557402465409");
         map.put("dg1557402465409ModelCode", "BEAM2_1.0.0_faultInfo_FaultSparePart");
         map.put("dg1557402465409ListJson", sparePartEntityDtos.toString());

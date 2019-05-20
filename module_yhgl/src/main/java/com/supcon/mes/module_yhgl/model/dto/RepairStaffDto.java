@@ -15,7 +15,6 @@ public class RepairStaffDto extends BaseEntity {
     public String endTime;//实际结束时间
     public String version;//版本（版本锁问题）
     public String sort;
-    public String timesNum;//次数
     public String workHour;//工时(H)
     public String remark;//备注
     public String rowIndex;//

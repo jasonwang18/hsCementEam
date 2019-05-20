@@ -313,7 +313,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginBottom="@dimen/dp_1"
                     android:tag="maintenanceListWidget"
-                    app:icon_res="@drawable/ic_rhy"
+                    app:icon_res="@drawable/ic_maintain"
                     app:is_addable="false"
                     app:is_editable="false"
                     app:text_size="14"

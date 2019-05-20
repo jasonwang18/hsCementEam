@@ -35,6 +35,7 @@ import io.reactivex.functions.Consumer;
 /**
  * Created by wangshizhan on 2018/9/3
  * Email:wangshizhan@supcom.com
+ * 验收列表
  */
 @Router(Constant.Router.WXGD_ACCEPTANCE_LIST)
 public class WXGDAcceptanceListActivity extends BaseRefreshRecyclerActivity<AcceptanceCheckEntity> {

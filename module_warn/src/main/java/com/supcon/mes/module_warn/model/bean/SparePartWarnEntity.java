@@ -21,6 +21,8 @@ public class SparePartWarnEntity extends BaseEntity {
     public Long nextTime;
     public Long advanceTime;
 
+    public boolean isCheck;
+
     public WXGDEam getEamID() {
         if (eamID==null) {
             eamID = new WXGDEam();

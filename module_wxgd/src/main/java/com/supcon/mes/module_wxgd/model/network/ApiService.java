@@ -8,6 +8,7 @@ import com.supcon.mes.middleware.model.bean.ResultEntity;
 import com.supcon.mes.module_wxgd.model.bean.AcceptanceCheckListEntity;
 import com.supcon.mes.module_wxgd.model.bean.LubricateListEntity;
 import com.supcon.mes.module_wxgd.model.bean.LubricateOilsListEntity;
+import com.supcon.mes.module_wxgd.model.bean.MaintenanceListEntity;
 import com.supcon.mes.module_wxgd.model.bean.RefProductListEntity;
 import com.supcon.mes.module_wxgd.model.bean.RepairStaffListEntity;
 import com.supcon.mes.module_wxgd.model.bean.SparePartJsonEntity;
@@ -190,4 +191,12 @@ public interface ApiService {
     @POST("/BEAM2/workList/sparePart/generateSparePartApply.action")
     Flowable<ResultEntity> generateSparePartApply(@Query("sparePartJsons") String listStr);
 
+    /**
+     * @param
+     * @return
+     * @description 隐患管理维保
+     * @author wnagshizhan 2018/8/28
+     */
+    @GET("/BEAM2/workList/workRecord/data-dg1557994493235.action")
+    Flowable<MaintenanceListEntity> listMaintenance(@Query("workRecord.id") long id);
 }
