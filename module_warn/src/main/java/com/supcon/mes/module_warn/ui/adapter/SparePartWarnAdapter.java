@@ -3,6 +3,7 @@ package com.supcon.mes.module_warn.ui.adapter;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.CheckBox;
 
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
@@ -12,6 +13,7 @@ import com.supcon.mes.middleware.util.HtmlParser;
 import com.supcon.mes.middleware.util.HtmlTagHandler;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_warn.R;
+import com.supcon.mes.module_warn.model.bean.MaintenanceWarnEntity;
 import com.supcon.mes.module_warn.model.bean.SparePartWarnEntity;
 
 import java.text.SimpleDateFormat;
@@ -25,6 +27,7 @@ import java.text.SimpleDateFormat;
  */
 public class SparePartWarnAdapter extends BaseListDataRecyclerViewAdapter<SparePartWarnEntity> {
 
+    private int checkPosition = -1;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public SparePartWarnAdapter(Context context) {
@@ -53,6 +56,9 @@ public class SparePartWarnAdapter extends BaseListDataRecyclerViewAdapter<SpareP
         @BindByTag("itemMaintenanceMemoTv")
         CustomTextView itemMaintenanceMemoTv;
 
+        @BindByTag("chkBox")
+        CheckBox chkBox;
+
         public ViewHolder(Context context) {
             super(context);
         }
@@ -62,6 +68,28 @@ public class SparePartWarnAdapter extends BaseListDataRecyclerViewAdapter<SpareP
             return R.layout.item_sparepart_warn;
         }
 
+        @Override
+        protected void initListener() {
+            super.initListener();
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SparePartWarnEntity item = getItem(getAdapterPosition());
+                    item.isCheck = !item.isCheck;
+                    notifyItemChanged(getAdapterPosition());
+                    if (checkPosition != -1) {
+                        if (checkPosition != getAdapterPosition()) {
+                            SparePartWarnEntity item1 = getItem(checkPosition);
+                            item1.isCheck = false;
+                        }
+                        notifyItemChanged(checkPosition);
+                    }
+                    checkPosition = getAdapterPosition();
+                    onItemChildViewClick(itemView, checkPosition, getItem(checkPosition));
+                }
+            });
+        }
 
         @Override
         protected void update(SparePartWarnEntity data) {
@@ -84,6 +112,11 @@ public class SparePartWarnAdapter extends BaseListDataRecyclerViewAdapter<SpareP
             if (!TextUtils.isEmpty(data.spareMemo)) {
                 itemMaintenanceMemoTv.setVisibility(View.VISIBLE);
                 itemMaintenanceMemoTv.setContent(data.spareMemo);
+            }
+            if (data.isCheck) {
+                chkBox.setChecked(true);
+            } else {
+                chkBox.setChecked(false);
             }
         }
     }

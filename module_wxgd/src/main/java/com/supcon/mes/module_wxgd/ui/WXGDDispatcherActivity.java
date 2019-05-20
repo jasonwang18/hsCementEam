@@ -54,6 +54,7 @@ import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.R;
 import com.supcon.mes.module_wxgd.controller.AcceptanceCheckController;
 import com.supcon.mes.module_wxgd.controller.LubricateOilsController;
+import com.supcon.mes.module_wxgd.controller.MaintenanceController;
 import com.supcon.mes.module_wxgd.controller.RepairStaffController;
 import com.supcon.mes.module_wxgd.controller.SparePartController;
 import com.supcon.mes.module_wxgd.controller.WXGDSubmitController;
@@ -66,10 +67,12 @@ import com.supcon.mes.module_wxgd.model.bean.WXGDTableInfoEntity;
 import com.supcon.mes.module_wxgd.model.contract.WXGDDispatcherContract;
 import com.supcon.mes.module_wxgd.model.contract.WXGDListContract;
 import com.supcon.mes.module_wxgd.model.dto.LubricateOilsEntityDto;
+import com.supcon.mes.module_wxgd.model.dto.MaintainDto;
 import com.supcon.mes.module_wxgd.model.dto.RepairStaffDto;
 import com.supcon.mes.module_wxgd.model.dto.SparePartEntityDto;
 import com.supcon.mes.module_wxgd.model.event.ListEvent;
 import com.supcon.mes.module_wxgd.model.event.LubricateOilsEvent;
+import com.supcon.mes.module_wxgd.model.event.MaintenanceEvent;
 import com.supcon.mes.module_wxgd.model.event.RepairStaffEvent;
 import com.supcon.mes.module_wxgd.model.event.SparePartEvent;
 import com.supcon.mes.module_wxgd.model.event.VersionRefreshEvent;
@@ -89,12 +92,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * WXGDDispatcherActivity 维修工单派单Activity
+ * WXGDDispatcherActivity
  * created by zhangwenshuai1 2018/8/15
+ * 维修工单派单
  */
 @Router(value = Constant.Router.WXGD_DISPATCHER)
 @Presenter(value = {WXGDDispatcherPresenter.class, WXGDListPresenter.class})
-@Controller(value = {SparePartController.class, RepairStaffController.class, LubricateOilsController.class, AcceptanceCheckController.class})
+@Controller(value = {SparePartController.class, RepairStaffController.class, MaintenanceController.class, LubricateOilsController.class, AcceptanceCheckController.class})
 public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDDispatcherContract.View, WXGDListContract.View, WXGDSubmitController.OnSubmitResultListener {
 
     @BindByTag("leftBtn")
@@ -179,6 +183,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     private RepairStaffController mRepairStaffController;
     private LubricateOilsController mLubricateOilsController;
     private AcceptanceCheckController mAcceptanceCheckController;
+    private MaintenanceController maintenanceController;
 
     private WXGDSubmitController mWxgdSubmitController;
     private RoleController roleController;
@@ -186,10 +191,13 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     private String sparePartListStr; // 备件列表
     private String repairStaffListStr; // 维修人员列表
     private String lubricateOilsListStr; // 润滑油列表
+    private String maintenanceListStr;
+
     //dataGrid删除数据id
     private List<Long> dgDeletedIds_sparePart = new ArrayList<>();
     private List<Long> dgDeletedIds_repairStaff = new ArrayList<>();
     private List<Long> dgDeletedIds_lubricateOils = new ArrayList<>();
+    private List<Long> dgDeletedIds_maintenance = new ArrayList<>();
 
     @Override
     protected int getLayoutID() {
@@ -210,16 +218,15 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
 
         mSparePartController = getController(SparePartController.class);
         mSparePartController.setEditable(true);
-//        mSparePartController = new SparePartController(sparePartListWidget, mWXGDEntity.id, true);
-//        mRepairStaffController = new RepairStaffController(repairStaffListWidget, mWXGDEntity.id, true);
-//        mLubricateOilsController = new LubricateOilsController(lubricateOilsListWidget, mWXGDEntity.id, true);
-//        mAcceptanceCheckController = new AcceptanceCheckController(acceptanceCheckListWidget, mWXGDEntity.id, false);
         mRepairStaffController = getController(RepairStaffController.class);
         mRepairStaffController.setEditable(true);
         mLubricateOilsController = getController(LubricateOilsController.class);
         mLubricateOilsController.setEditable(true);
         mAcceptanceCheckController = getController(AcceptanceCheckController.class);
         mAcceptanceCheckController.setEditable(false);
+        maintenanceController = getController(MaintenanceController.class);
+        maintenanceController.setEditable(true);
+
 
         roleController = new RoleController();  //角色
         roleController.queryRoleList(EamApplication.getUserName());
@@ -660,6 +667,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         LinkedList<RepairStaffDto> repairStaffDtos = WXGDMapManager.translateStaffDto(mRepairStaffController.getRepairStaffEntities());
         LinkedList<SparePartEntityDto> sparePartEntityDtos = WXGDMapManager.translateSparePartDto(mSparePartController.getSparePartEntities());
         LinkedList<LubricateOilsEntityDto> lubricateOilsEntityDtos = WXGDMapManager.translateLubricateOilsDto(mLubricateOilsController.getLubricateOilsEntities());
+        List<MaintainDto> maintainDtos = WXGDMapManager.translateMaintainDto(maintenanceController.getMaintenanceEntities());
         if (Constant.Transition.SUBMIT.equals(map.get("operateType")) && TextUtils.isEmpty(map.get("workFlowVarStatus").toString())) {
             for (RepairStaffDto repairStaffDto : repairStaffDtos) {
                 if (TextUtils.isEmpty(repairStaffDto.repairStaff.id)) {
@@ -692,6 +700,11 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         map = WXGDMapManager.dgDeleted(map, dgDeletedIds_lubricateOils, "dg1531680481787");
         map.put("dg1531680481787ModelCode", "BEAM2_1.0.0_workList_LubricateOil");
         map.put("dgLists['dg1531680481787']", lubricateOilsEntityDtos);
+
+        map = WXGDMapManager.dgDeleted(map, dgDeletedIds_maintenance, "dg1557994493235");
+        map.put("dg1557994493235ModelCode", "BEAM2_1.0.0_workList_Maintenance");
+        map.put("dg1557994493235ListJson", maintainDtos);
+        map.put("dgLists['dg1557994493235']", maintainDtos);
 
         map.put("dg1531680512710ModelCode", "BEAM2_1.0.0_workList_AccceptanceCheck");
         map.put("dgLists['dg1531680512710']", new ArrayList<>());
@@ -739,37 +752,20 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     /**
      * @param
      * @return
-     * @description 接收备件表体原始数据
+     * @description 接收原始数据
      * @author zhangwenshuai1 2018/10/11
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveInitSparePartList(ListEvent listEvent) {
-        if ("sparePart".equals(listEvent.getFlag()))
-            sparePartListStr = listEvent.getList().toString();
-    }
-
-    /**
-     * @param
-     * @return
-     * @description 接收维修人员表体原始数据
-     * @author zhangwenshuai1 2018/10/11
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveInitRepairStaffList(ListEvent listEvent) {
-        if ("repairStaff".equals(listEvent.getFlag()))
-            repairStaffListStr = listEvent.getList().toString();
-    }
-
-    /**
-     * @param
-     * @return
-     * @description 接收润滑油表体原始数据
-     * @author zhangwenshuai1 2018/10/11
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveInitLubricateOilsList(ListEvent listEvent) {
-        if ("lubricateOils".equals(listEvent.getFlag()))
+    public void receiveList(ListEvent listEvent) {
+        if ("lubricateOils".equals(listEvent.getFlag())) {
             lubricateOilsListStr = listEvent.getList().toString();
+        } else if ("repairStaff".equals(listEvent.getFlag())) {
+            repairStaffListStr = listEvent.getList().toString();
+        } else if ("sparePart".equals(listEvent.getFlag())) {
+            sparePartListStr = listEvent.getList().toString();
+        } else if ("maintenance".equals(listEvent.getFlag())) {
+            maintenanceListStr = listEvent.getList().toString();
+        }
     }
 
     /**
@@ -811,6 +807,15 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
             mLubricateOilsController.clear();
         }
         dgDeletedIds_lubricateOils = event.getDgDeletedIds();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshRepairStaff(MaintenanceEvent event) {
+        maintenanceController.updateMaintenanceEntities(event.getList());
+        if (event.getList().size() <= 0) {
+            maintenanceController.clear();
+        }
+        dgDeletedIds_maintenance = event.getDgDeletedIds();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -920,6 +925,9 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
             return true;
         }
         if (!TextUtils.isEmpty(lubricateOilsListStr) && !lubricateOilsListStr.equals(mLubricateOilsController.getLubricateOilsEntities().toString())) {
+            return true;
+        }
+        if (!TextUtils.isEmpty(maintenanceListStr) && !maintenanceListStr.equals(maintenanceController.getMaintenanceEntities().toString())) {
             return true;
         }
         return false;

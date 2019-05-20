@@ -14,6 +14,15 @@ public class JWXItem extends BaseEntity {
     public SystemCodeEntity periodType;//周期类型
     public SystemCodeEntity periodUnit;//周期单位
 
+    public AttachEamEntity attachEamId;
+    public String claim;//要求
+    public String content;//内容
+    public Float lastDuration;
+    public Float nextDuration;
+    public Long lastTime;
+    public Long nextTime;
+    public SparePartId sparePartId;//备件编码
+
     public SystemCodeEntity getPeriodType() {
         if (periodType == null) {
             periodType = new SystemCodeEntity();
@@ -34,5 +43,20 @@ public class JWXItem extends BaseEntity {
             return true;
         }
         return false;
+    }
+
+
+    public SparePartId getSparePartId() {
+        if (sparePartId==null) {
+            sparePartId = new SparePartId();
+        }
+        return sparePartId;
+    }
+
+    public AttachEamEntity getAttachEamId() {
+        if (attachEamId==null) {
+            attachEamId = new AttachEamEntity();
+        }
+        return attachEamId;
     }
 }

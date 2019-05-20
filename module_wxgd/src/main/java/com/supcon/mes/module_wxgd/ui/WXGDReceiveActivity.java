@@ -38,6 +38,7 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_wxgd.R;
 import com.supcon.mes.module_wxgd.controller.AcceptanceCheckController;
 import com.supcon.mes.module_wxgd.controller.LubricateOilsController;
+import com.supcon.mes.module_wxgd.controller.MaintenanceController;
 import com.supcon.mes.module_wxgd.controller.RepairStaffController;
 import com.supcon.mes.module_wxgd.controller.SparePartController;
 import com.supcon.mes.module_wxgd.controller.WXGDSubmitController;
@@ -69,7 +70,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Router(value = Constant.Router.WXGD_RECEIVE)
 @Presenter(value = {WXGDListPresenter.class})
-@Controller(value = {SparePartController.class, RepairStaffController.class, LubricateOilsController.class, AcceptanceCheckController.class})
+@Controller(value = {SparePartController.class, RepairStaffController.class, MaintenanceController.class, LubricateOilsController.class, AcceptanceCheckController.class})
 public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubmitController.OnSubmitResultListener, WXGDListContract.View {
 
     @BindByTag("leftBtn")
@@ -137,7 +138,7 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
     private SparePartController mSparePartController;
     private LubricateOilsController mLubricateOilsController;
     private AcceptanceCheckController mAcceptanceCheckController;
-
+    private MaintenanceController maintenanceController;
 
     private WXGDEntity mWXGDEntity;//传入维修工单实体参数
     private LinkController mLinkController;
@@ -171,7 +172,8 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
         mLubricateOilsController.setEditable(false);
         mAcceptanceCheckController = getController(AcceptanceCheckController.class);
         mAcceptanceCheckController.setEditable(false);
-
+        maintenanceController = getController(MaintenanceController.class);
+        maintenanceController.setEditable(false);
     }
 
 
@@ -264,7 +266,7 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
             new EamPicController().initEamPic(eamIc, mWXGDEntity.eamID.id);
         }
 
-        if (mWXGDEntity.faultInfo != null && mWXGDEntity.workSource!=null) {
+        if (mWXGDEntity.faultInfo != null && mWXGDEntity.workSource != null) {
             if (Constant.WxgdWorkSource.lubrication.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.sparePart.equals(mWXGDEntity.workSource.id)) {
                 content.setValue(mWXGDEntity.content);
                 claim.setValue(mWXGDEntity.claim);
@@ -501,6 +503,9 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
 
         map.put("dg1531695879365ModelCode", "BEAM2_1.0.0_workList_RepairStaff");
         map.put("dg1531695879365ListJson", new LinkedList().toString());
+
+        map.put("dg1557994493235ModelCode", "BEAM2_1.0.0_workList_Maintenance");
+        map.put("dg1557994493235ListJson", new LinkedList().toString());
         wxgdSubmitController.doReceiveSubmit(map);
     }
 

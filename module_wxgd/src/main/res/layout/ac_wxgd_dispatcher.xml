@@ -189,6 +189,18 @@
                     app:widget_name="验收"
                     android:tag="acceptanceCheckListWidget" />
 
+                <com.supcon.mes.mbap.view.CustomListWidget
+                    android:id="@+id/maintenanceListWidget"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:tag="maintenanceListWidget"
+                    app:icon_res="@drawable/ic_maintain"
+                    app:is_addable="false"
+                    app:is_editable="false"
+                    app:text_size="14"
+                    app:title_bg_color="@color/white"
+                    app:widget_name="维保" />
             </LinearLayout>
         </ScrollView>
     </com.supcon.common.view.ptr.PtrFrameLayout>

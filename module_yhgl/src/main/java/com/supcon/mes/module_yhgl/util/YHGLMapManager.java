@@ -102,7 +102,6 @@ public class YHGLMapManager {
             repairStaffDto.startTime = staffs.get(i).startTime != null ? format.format(staffs.get(i).startTime) : "";
             repairStaffDto.endTime = staffs.get(i).endTime != null ? format.format(staffs.get(i).endTime) : "";
             repairStaffDto.workHour = staffs.get(i).workHour == null ? "" : String.valueOf(staffs.get(i).workHour);
-            repairStaffDto.timesNum = String.valueOf(staffs.get(i).timesNum);
             repairStaffDto.sort = staffs.get(i).sort == null ? "" : String.valueOf(staffs.get(i).sort);
             repairStaffDto.rowIndex = String.valueOf(i);
             repairStaffDto.remark = staffs.get(i).remark;
@@ -136,7 +135,6 @@ public class YHGLMapManager {
             sparePartEntityDto.checkbox = "true";
             sparePartEntityDto.version = sparePartEntity.version != null ? sparePartEntity.version : "";
             sparePartEntityDto.sum = sparePartEntity.sum == null ? "" : String.valueOf(sparePartEntity.sum);
-            sparePartEntityDto.timesNum = String.valueOf(sparePartEntity.timesNum);
             index = String.valueOf(list.indexOf(sparePartEntity));
             sparePartEntityDto.sort = index;
             sparePartEntityDto.rowIndex = index;
@@ -185,7 +183,6 @@ public class YHGLMapManager {
             lubricateOilsEntityDto.oilType = oilType;
 
             lubricateOilsEntityDto.oilQuantity = lubricateOilsEntity.oilQuantity == null ? "" : String.valueOf(lubricateOilsEntity.oilQuantity);
-            lubricateOilsEntityDto.timesNum = String.valueOf(lubricateOilsEntity.timesNum);
             String index = String.valueOf(list.indexOf(lubricateOilsEntity));
             lubricateOilsEntityDto.sort = index;
             lubricateOilsEntityDto.rowIndex = index;

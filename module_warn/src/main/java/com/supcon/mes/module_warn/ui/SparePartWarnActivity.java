@@ -5,6 +5,8 @@ import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
 import com.app.annotation.BindByTag;
@@ -57,6 +59,9 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
 
     @BindByTag("warnRadioGroup")
     RadioGroup warnRadioGroup;
+
+    @BindByTag("btnLayout")
+    LinearLayout btnLayout;
 
     private final Map<String, Object> queryParam = new HashMap<>();
     private String selecStr;
@@ -143,11 +148,17 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
 
     @Override
     public void getSparePartSuccess(SparePartWarnListEntity entity) {
+        if (entity.pageNo == 1 && entity.result.size() <= 0) {
+            btnLayout.setVisibility(View.GONE);
+        } else {
+            btnLayout.setVisibility(View.VISIBLE);
+        }
         refreshListController.refreshComplete(entity.result);
     }
 
     @Override
     public void getSparePartFailed(String errorMsg) {
+        btnLayout.setVisibility(View.GONE);
         SnackbarHelper.showError(rootView, ErrorMsgHelper.msgParse(errorMsg));
         refreshListController.refreshComplete(null);
     }

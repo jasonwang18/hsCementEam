@@ -12,7 +12,6 @@ public class SparePartEntityDto extends BaseEntity {
     public String id;
     public GoodDto productID; // 物品对象
     public String sum;  // 数量
-    public String timesNum;// 次数
     public String rowIndex;  // 行索引
     public String checkbox; // 多选框
     public String sort;
