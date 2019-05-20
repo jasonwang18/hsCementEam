@@ -175,18 +175,6 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
             settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 
             settings.setLoadWithOverviewMode(true);
-            // 通过addJavascriptInterface()将Java对象映射到JS对象
-            //参数1：Javascript对象名
-            //参数2：Java对象名
-//            webView.addJavascriptInterface(new AndroidtoJs() {
-//                @Override
-//                public void signIn(String id) {
-//
-////                    onItemChildViewClick(taskExpandBtn, 1, getItem(position));
-//                }
-//            }, "android");
-
-
 
         }
 
