@@ -285,7 +285,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
      * @author zhangwenshuai1 2018/9/1
      */
     private void initLink() {
-        mLinkController.setCancelShow(mWXGDEntity.workSource != null ? Constant.WxgdWorkSource.faultInfoSource.equals(mWXGDEntity.workSource.id) ? true : false : false);
+        mLinkController.setCancelShow(mWXGDEntity.workSource != null ? mWXGDEntity.faultInfo != null && TextUtils.isEmpty(mWXGDEntity.faultInfo.tableNo) ? true : false : false);
         mLinkController.initPendingTransition(transition, mWXGDEntity.pending.id);
     }
 
@@ -300,7 +300,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
             faultInfo.setVisibility(View.GONE);
             noFaultInfo.setVisibility(View.GONE);
         } else {
-            if (Constant.WxgdWorkSource.lubrication.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.sparePart.equals(mWXGDEntity.workSource.id)) {
+            if (Constant.WxgdWorkSource.lubrication.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.sparepart.equals(mWXGDEntity.workSource.id)) {
                 repairLl.setVisibility(View.GONE);
                 findViewById(R.id.faultInfoTitle).setVisibility(View.GONE);
                 findViewById(R.id.noFaultInfoTitle).setVisibility(View.VISIBLE);
@@ -321,7 +321,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
                 faultInfo.setVisibility(View.VISIBLE);
                 acceptanceCheckListWidget.setVisibility(View.VISIBLE);
 
-                if (Constant.WxgdWorkSource.faultInfoSource.equals(mWXGDEntity.workSource.id)) {
+                if (mWXGDEntity.faultInfo != null && TextUtils.isEmpty(mWXGDEntity.faultInfo.tableNo)) {
                     repairLl.setVisibility(View.VISIBLE);
                 } else {
                     repairLl.setVisibility(View.GONE);
@@ -358,7 +358,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         if (mWXGDEntity.workSource == null) {
 
         } else {
-            if (Constant.WxgdWorkSource.lubrication.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.sparePart.equals(mWXGDEntity.workSource.id)) {
+            if (Constant.WxgdWorkSource.lubrication.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.sparepart.equals(mWXGDEntity.workSource.id)) {
                 content.setValue(mWXGDEntity.content);
                 claim.setValue(mWXGDEntity.claim);
                 period.setValue(mWXGDEntity.period == null ? "" : String.valueOf(mWXGDEntity.period));

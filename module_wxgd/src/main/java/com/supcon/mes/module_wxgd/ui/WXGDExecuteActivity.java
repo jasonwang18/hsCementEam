@@ -272,7 +272,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
             noFaultInfo.setVisibility(View.GONE);
             acceptanceCheckListWidget.setVisibility(View.GONE);
         } else {
-            if (Constant.WxgdWorkSource.lubrication.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.sparePart.equals(mWXGDEntity.workSource.id)) {
+            if (Constant.WxgdWorkSource.lubrication.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.sparepart.equals(mWXGDEntity.workSource.id)) {
                 findViewById(R.id.faultInfoTitle).setVisibility(View.GONE);
                 faultInfo.setVisibility(View.GONE);
                 noFaultInfo.setVisibility(View.VISIBLE);
@@ -317,7 +317,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         }
 
         if (mWXGDEntity.faultInfo != null) {
-            if (mWXGDEntity.workSource != null && Constant.WxgdWorkSource.lubrication.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.sparePart.equals(mWXGDEntity.workSource.id)) {
+            if (mWXGDEntity.workSource != null && Constant.WxgdWorkSource.lubrication.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.sparepart.equals(mWXGDEntity.workSource.id)) {
                 content.setValue(mWXGDEntity.content);
                 claim.setValue(mWXGDEntity.claim);
                 period.setValue(mWXGDEntity.period == null ? "" : String.valueOf(mWXGDEntity.period));
@@ -477,7 +477,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
                     }
                     // 润滑、维保、备件更换 判断实际结束时间必填
                     if (!Constant.Transition.REJECT_CN.equals(workFlowVar.dec)){
-                        if (Constant.WxgdWorkSource.lubrication.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.sparePart.equals(mWXGDEntity.workSource.id)){
+                        if (Constant.WxgdWorkSource.lubrication.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.sparepart.equals(mWXGDEntity.workSource.id)){
                             if (mWXGDEntity.realEndDate == null){
                                 SnackbarHelper.showError(rootView,"请填写实际结束时间");
                                 return;

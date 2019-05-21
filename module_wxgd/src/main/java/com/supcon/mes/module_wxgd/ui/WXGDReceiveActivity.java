@@ -222,7 +222,7 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
             noFaultInfo.setVisibility(View.GONE);
             acceptanceCheckListWidget.setVisibility(View.GONE);
         } else {
-            if (Constant.WxgdWorkSource.lubrication.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.sparePart.equals(mWXGDEntity.workSource.id)) {
+            if (Constant.WxgdWorkSource.lubrication.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.sparepart.equals(mWXGDEntity.workSource.id)) {
                 findViewById(R.id.faultInfoTitle).setVisibility(View.GONE);
                 faultInfo.setVisibility(View.GONE);
                 noFaultInfo.setVisibility(View.VISIBLE);
@@ -267,7 +267,7 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
         }
 
         if (mWXGDEntity.faultInfo != null && mWXGDEntity.workSource != null) {
-            if (Constant.WxgdWorkSource.lubrication.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.sparePart.equals(mWXGDEntity.workSource.id)) {
+            if (Constant.WxgdWorkSource.lubrication.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.sparepart.equals(mWXGDEntity.workSource.id)) {
                 content.setValue(mWXGDEntity.content);
                 claim.setValue(mWXGDEntity.claim);
                 period.setValue(mWXGDEntity.period == null ? "" : String.valueOf(mWXGDEntity.period));

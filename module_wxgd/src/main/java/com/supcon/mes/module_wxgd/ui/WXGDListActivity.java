@@ -5,6 +5,8 @@ import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -104,6 +106,9 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
     @BindByTag("listWorkflowFilter")
     CustomFilterView<ScreenEntity> listWorkflowFilter;
 
+    @BindByTag("radioGroup1")
+    RadioGroup radioGroup1;
+
     private WXGDListAdapter wxgdListAdapter;
     private RecyclerEmptyAdapter mRecyclerEmptyAdapter;
 
@@ -166,11 +171,11 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
      * @author zhangwenshuai1 2018/8/14
      */
     private void initFilter() {
-//        listWorkSourceFilter.setCurrentItem(Constant.WxgdWorkSource_CN.allSource);
         listWorkSourceFilter.setData(FilterHelper.createWorkSourceList());
-        listRepairTypeFilter.setData(FilterHelper.createRepairTypeList());
+//        listRepairTypeFilter.setData(FilterHelper.createRepairTypeList());
         listPriorityFilter.setData(FilterHelper.createPriorityList());
-        listWorkflowFilter.setData(FilterHelper.createWorkflowList());
+
+        FilterHelper.addview(this, radioGroup1, FilterHelper.createWorkflowList(), 1000);
     }
 
     @SuppressLint("CheckResult")
@@ -186,7 +191,10 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
                 presenterRouter.create(WXGDListAPI.class).listWxgds(pageIndex, queryParam);
             }
         });
-
+        radioGroup1.setOnCheckedChangeListener((group, checkedId) -> {
+            RadioButton radioButton = findViewById(group.getCheckedRadioButtonId());
+            generateFilterWorkflow(radioButton.getText().toString());
+        });
         listWorkSourceFilter.setFilterSelectChangedListener(filterBean -> {
             LogUtil.d("filterBean", filterBean.toString());
 
@@ -293,7 +301,6 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
         map.put("operateType", Constant.Transition.SUBMIT);
         map.put("workFlowVar.outcomeMapJson", workFlowEntities.toString());
         map.put("workFlowVar.outcome", workFlowEntity.outcome);
-
         return map;
     }
 
@@ -353,14 +360,8 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
     private void generateFilterCondition(String workSource) {
         String workSourceId = "";
         switch (workSource) {
-            case Constant.WxgdWorkSource_CN.faultInfoSource:
-                workSourceId = Constant.WxgdWorkSource.faultInfoSource;
-                break;
-            case Constant.WxgdWorkSource_CN.checkRepair:
-                workSourceId = Constant.WxgdWorkSource.checkRepair;
-                break;
-            case Constant.WxgdWorkSource_CN.bigRepair:
-                workSourceId = Constant.WxgdWorkSource.bigRepair;
+            case Constant.WxgdWorkSource_CN.patrolcheck:
+                workSourceId = Constant.WxgdWorkSource.patrolcheck;
                 break;
             case Constant.WxgdWorkSource_CN.lubrication:
                 workSourceId = Constant.WxgdWorkSource.lubrication;
@@ -368,19 +369,47 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
             case Constant.WxgdWorkSource_CN.maintenance:
                 workSourceId = Constant.WxgdWorkSource.maintenance;
                 break;
-            case Constant.WxgdWorkSource_CN.sparePart:
-                workSourceId = Constant.WxgdWorkSource.sparePart;
+            case Constant.WxgdWorkSource_CN.sparepart:
+                workSourceId = Constant.WxgdWorkSource.sparepart;
                 break;
-            case Constant.WxgdWorkSource_CN.allSource:
-                workSourceId = null;
+            case Constant.WxgdWorkSource_CN.other:
+                workSourceId = Constant.WxgdWorkSource.other;
                 break;
             default:
                 break;
         }
-
         queryParam.put(Constant.BAPQuery.WORK_SOURCE, workSourceId);
         doFilter();
     }
+
+    /**
+     * @param
+     * @return
+     * @description 封装工作流状态过滤条件
+     * @author zhangwenshuai1 2018/8/14
+     */
+    private void generateFilterWorkflow(String workState) {
+        String workStateId = "";
+        switch (workState) {
+            case Constant.WxgdStatus_CH.DISPATCH:
+                workStateId = Constant.WxgdStatus.DISPATCH;
+                break;
+            case Constant.WxgdStatus_CH.CONFIRM:
+                workStateId = Constant.WxgdStatus.CONFIRM;
+                break;
+            case Constant.WxgdStatus_CH.IMPLEMENT:
+                workStateId = Constant.WxgdStatus.IMPLEMENT;
+                break;
+            case Constant.WxgdStatus_CH.ACCEPTANCE:
+                workStateId = Constant.WxgdStatus.ACCEPTANCE;
+                break;
+            default:
+                break;
+        }
+        queryParam.put(Constant.BAPQuery.WORK_STATE, workStateId);
+        doFilter();
+    }
+
 
     /**
      * @param

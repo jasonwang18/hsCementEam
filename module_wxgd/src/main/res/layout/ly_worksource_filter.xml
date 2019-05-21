@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
+    android:layout_height="wrap_content"
     android:background="@color/themeColor"
     android:orientation="horizontal"
     android:paddingLeft="12dp"
@@ -48,7 +48,8 @@
         app:icon_res="@drawable/ic_choose_white2"
         app:text="维修类型"
         app:text_color="@color/white"
-        app:text_size="14" />
+        app:text_size="14"
+        android:visibility="gone"/>
 
     <com.supcon.mes.mbap.view.CustomFilterView
         android:id="@+id/listPriorityFilter"
@@ -72,5 +73,6 @@
         app:icon_res="@drawable/ic_choose_white2"
         app:text="单据状态"
         app:text_color="@color/white"
-        app:text_size="14" />
+        app:text_size="14"
+        android:visibility="gone"/>
 </LinearLayout>
