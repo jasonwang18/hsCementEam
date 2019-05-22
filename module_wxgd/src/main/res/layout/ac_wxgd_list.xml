@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/bgGray"
     android:orientation="vertical">
 
     <com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar
         android:id="@+id/searchTitleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:tag="searchTitleBar"
-        app:title_text="维修工单列表"
-        app:title_length="96dp"
         app:title_background_color="@color/themeColor"
+        app:title_length="96dp"
         app:title_right_btn_need="false"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        app:title_text="维修工单列表" />
 
-    <include layout="@layout/ly_worksource_filter"
-        android:layout_height="@dimen/dp_40"
-        android:layout_width="match_parent"/>
+    <include layout="@layout/ly_scroll_fliter" />
 
-    <include layout="@layout/ly_recyclerview"
+    <include layout="@layout/ly_worksource_filter" />
+
+
+    <include
+        layout="@layout/ly_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

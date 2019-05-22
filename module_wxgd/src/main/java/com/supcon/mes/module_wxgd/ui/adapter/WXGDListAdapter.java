@@ -86,7 +86,7 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
         @Override
         public void onClick(View v) {
             WXGDEntity wxgdEntity = getItem(getAdapterPosition());
-            onItemChildViewClick(v,0,wxgdEntity);
+            onItemChildViewClick(v, 0, wxgdEntity);
         }
 
         @Override
@@ -152,13 +152,12 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
             eamName.setText(data.eamID == null ? "" : data.eamID.name);
             location.setValue(data.eamID.installPlace != null && data.eamID.installPlace.name != null ? data.eamID.installPlace.name : "--");
             repairGroup.setValue(data.repairGroup != null && data.repairGroup.name != null ? data.repairGroup.name : "--");
-            chargeStaff.setValue(data.chargeStaff  != null && data.chargeStaff.name != null ? data.chargeStaff.name : "--");
+            chargeStaff.setValue(data.chargeStaff != null && data.chargeStaff.name != null ? data.chargeStaff.name : "--");
             workSource.setText(data.workSource != null && !"".equals(data.workSource.value) ? data.workSource.value : "--");
 
-            if(data.eamID!=null && data.eamID.id!=null){
+            if (data.eamID != null && data.eamID.id != null) {
                 new EamPicController().initEamPic(itemWXGDDeviceIc, data.eamID.id);
-            }
-            else{
+            } else {
                 itemWXGDDeviceIc.setImageResource(R.drawable.ic_default_pic3);
             }
 
@@ -170,28 +169,28 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
                 claim.setVisibility(View.GONE);
             } else {
 
-                if (Constant.WxgdWorkSource.faultInfoSource.equals(data.workSource.id)){
+                if (data.faultInfo != null && TextUtils.isEmpty(data.faultInfo.tableNo)) {
                     workSource.setBackgroundResource(R.color.faultWarn);
                     tableStatus.setTextColor(context.getResources().getColor(R.color.faultWarn));
                     tableStatus.setBackgroundResource(R.drawable.sh_bg_worksource_tablestatus_faultinfo);
                 }
-                if (Constant.WxgdWorkSource.bigRepair.equals(data.workSource.id) || Constant.WxgdWorkSource.checkRepair.equals(data.workSource.id)){
+                if (Constant.WxgdWorkSource.patrolcheck.equals(data.workSource.id)) {
                     workSource.setBackgroundResource(R.color.repairOrange);
                     tableStatus.setTextColor(context.getResources().getColor(R.color.repairOrange));
                     tableStatus.setBackgroundResource(R.drawable.sh_bg_worksource_tablestatus_repair);
                 }
-                if (Constant.WxgdWorkSource.lubrication.equals(data.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(data.workSource.id)){
+                if (Constant.WxgdWorkSource.lubrication.equals(data.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(data.workSource.id)) {
                     workSource.setBackgroundResource(R.color.lubricateGreen);
                     tableStatus.setTextColor(context.getResources().getColor(R.color.lubricateGreen));
                     tableStatus.setBackgroundResource(R.drawable.sh_bg_worksource_tablestatus_lubricate_maintenance);
                 }
-                if (Constant.WxgdWorkSource.sparePart.equals(data.workSource.id)){
+                if (Constant.WxgdWorkSource.sparepart.equals(data.workSource.id)) {
                     workSource.setBackgroundResource(R.color.sparePartBlue);
                     tableStatus.setTextColor(context.getResources().getColor(R.color.sparePartBlue));
                     tableStatus.setBackgroundResource(R.drawable.sh_bg_worksource_tablestatus_sparepart);
                 }
 
-                if (Constant.WxgdWorkSource.lubrication.equals(data.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(data.workSource.id) || Constant.WxgdWorkSource.sparePart.equals(data.workSource.id)) {
+                if (Constant.WxgdWorkSource.lubrication.equals(data.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(data.workSource.id) || Constant.WxgdWorkSource.sparepart.equals(data.workSource.id)) {
                     priority.setVisibility(View.GONE);
                     faultInfoTypeLl.setVisibility(View.GONE);
                     faultInfoDescribeLl.setVisibility(View.GONE);
@@ -210,19 +209,18 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
 
                     repairType.setValue(data.faultInfo.repairType == null ? "" : data.faultInfo.repairType.value);
                     faultInfoType.setValue(data.faultInfo.faultInfoType == null ? "" : data.faultInfo.faultInfoType.value);
-                    if(data.faultInfo.priority != null && (WXGDConstant.Priority.emergency.equals(data.faultInfo.priority.id) || WXGDConstant.Priority.priority.equals(data.faultInfo.priority.id))){
+                    if (data.faultInfo.priority != null && (WXGDConstant.Priority.emergency.equals(data.faultInfo.priority.id) || WXGDConstant.Priority.priority.equals(data.faultInfo.priority.id))) {
                         priority.setVisibility(View.VISIBLE);
                         priority.setText(data.faultInfo.priority.value);
 
                         ViewGroup.LayoutParams lp = tableNo.getLayoutParams();
                         lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                        lp.width = DisplayUtil.dip2px(160,context);
+                        lp.width = DisplayUtil.dip2px(160, context);
                         tableNo.setLayoutParams(lp);
-                    }
-                    else{
+                    } else {
                         ViewGroup.LayoutParams lp = tableNo.getLayoutParams();
                         lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                        lp.width = DisplayUtil.dip2px(180,context);
+                        lp.width = DisplayUtil.dip2px(180, context);
                         tableNo.setLayoutParams(lp);
 
                         priority.setVisibility(View.GONE);

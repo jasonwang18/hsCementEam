@@ -481,35 +481,41 @@ public interface Constant {
 
     }
 
-
     /**
      * 维修工单单据状态
      */
     interface WxgdStatus {
-        String DISPATCH_STATUS = "调度员派工";
-        String RECEIVE_STATUS = "维修工接单";
-        String EXECUTE_STATUS = "执行";
-        String STOP_STATUS = "暂停";
-        String ACCEPTANCE_STATUS = "验收";
+        String DISPATCH = "BEAM049/01";
+        String CONFIRM = "BEAM049/02";
+        String IMPLEMENT = "BEAM049/03";
+        String ACCEPTANCE = "BEAM049/04";
+    }
+
+    /**
+     * 维修工单单据状态
+     */
+    interface WxgdStatus_CH {
+        String DISPATCH = "派工";
+        String CONFIRM = "接收";
+        String IMPLEMENT = "执行";
+        String ACCEPTANCE = "验收";
     }
 
     interface WxgdWorkSource {
-        String faultInfoSource = "BEAM2003/01";//隐患单
-        String checkRepair = "BEAM2003/06";//检修
-        String bigRepair = "BEAM2003/05";//大修
-        String maintenance = "BEAM2003/03";//维保
+        String patrolcheck = "BEAM2003/01";//巡检
         String lubrication = "BEAM2003/02";//润滑
-        String sparePart = "BEAM2003/04";//备件更换
+        String maintenance = "BEAM2003/03";//维保
+        String sparepart = "BEAM2003/04";//备件
+        String other = "BEAM2003/05";//其它
     }
 
     interface WxgdWorkSource_CN {
-        String allSource = "来源不限";//全部
-        String faultInfoSource = "隐患单";//隐患单
-        String checkRepair = "检修";//检修
-        String bigRepair = "大修";//大修
-        String maintenance = "维保";//维保
+        String patrolcheck = "巡检";//巡检
         String lubrication = "润滑";//润滑
-        String sparePart = "备件更换";//备件更换
+        String maintenance = "维保";//维保
+        String sparepart = "备件";//备件
+        String other = "其它";//其它
+
     }
 
     // 隐患维修类型
