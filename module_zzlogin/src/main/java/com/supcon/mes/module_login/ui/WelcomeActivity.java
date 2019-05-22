@@ -17,6 +17,8 @@ import com.supcon.mes.module_login.IntentRouter;
 import com.supcon.mes.module_login.R;
 import com.supcon.mes.module_login.service.HeartBeatService;
 
+import io.reactivex.Flowable;
+
 /**
  * Created by wangshizhan on 2017/8/11.
  */

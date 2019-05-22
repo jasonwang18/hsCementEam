@@ -50,6 +50,7 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
 import com.supcon.mes.module_olxj.IntentRouter;
 import com.supcon.mes.module_olxj.R;
+import com.supcon.mes.module_olxj.controller.MapController;
 import com.supcon.mes.module_olxj.controller.OLXJTaskAreaController;
 import com.supcon.mes.module_olxj.model.api.OLXJTaskStatusAPI;
 import com.supcon.mes.module_olxj.model.api.OLXJTempTaskAPI;
@@ -88,7 +89,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  */
 
 @Router(Constant.Router.LSXJ_LIST)
-@Controller(ModulePermissonCheckController.class)
+@Controller({ModulePermissonCheckController.class, MapController.class})
 @Presenter(value = {OLXJTempTaskListPresenter.class, OLXJTaskStatusPresenter.class})
 public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEntity> implements OLXJTempTaskContract.View, OLXJTaskStatusContract.View {
 
@@ -143,7 +144,7 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
     @Override
     protected IListAdapter<OLXJTaskEntity> createAdapter() {
         mOLXJTaskListAdapter = new OLXJTaskListAdapter(this);
-        mOLXJTaskListAdapter.setLisenter(contentView);
+//        mOLXJTaskListAdapter.setLisenter(contentView);
         return mOLXJTaskListAdapter;
     }
 
@@ -213,19 +214,29 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
         xjTitleMap.setOnClickListener(v -> {
             if (xjTitleMap.isSelected()) {
                 xjTitleMap.setSelected(false);
-                mOLXJTaskListAdapter.setMap(false);
+//                mOLXJTaskListAdapter.setMap(false);
                 btnLayout.setVisibility(View.VISIBLE);
+                getController(MapController.class).hide();
             } else {
                 xjTitleMap.setSelected(true);
-                mOLXJTaskListAdapter.setMap(true);
+//                mOLXJTaskListAdapter.setMap(true);
                 btnLayout.setVisibility(View.GONE);
                 if (mAreaEntities == null || mAreaEntities.size() == 0) {
                     if (mOLXJTaskListAdapter != null && mOLXJTaskListAdapter.getList() != null) {
                         doLoadArea(mOLXJTaskListAdapter.getItem(0));
                     }
                 }
+                contentView.scrollBy(0, -DisplayUtil.dip2px(720, context));
+                getController(MapController.class).show(mOLXJTaskListAdapter.getItem(0));
             }
-            mOLXJTaskListAdapter.notifyDataSetChanged();
+//            mOLXJTaskListAdapter.notifyDataSetChanged();
+        });
+
+        getController(MapController.class).setOnMapAreaClickListener(new MapController.OnMapAreaClickListener() {
+            @Override
+            public void onAreaClick(OLXJAreaEntity areaEntity) {
+                showSignReason(areaEntity);
+            }
         });
 
         //手动刷新事件
@@ -334,6 +345,8 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
                 onLoadSuccess();
                 mOLXJTaskListAdapter.setAreaEntities(mAreaEntities);
                 saveAreaCache(mAreaEntities.toString());
+
+                getController(MapController.class).setOLXJAreaEntities(mAreaEntities);
             });
         });
     }
@@ -655,6 +668,7 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
                     @Override
                     public void accept(List<OLXJAreaEntity> mAreaEntities) throws Exception {
                         mOLXJTaskListAdapter.setAreaEntities(mAreaEntities);
+                        getController(MapController.class).setOLXJAreaEntities(mAreaEntities);
                     }
                 });
     }

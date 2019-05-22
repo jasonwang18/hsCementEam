@@ -15,6 +15,36 @@
         android:layout_above="@+id/btnLayout"
         />
     <LinearLayout
+        android:id="@+id/mapLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="150dp"
+        android:background="@color/bgGray2"
+        android:orientation="vertical"
+        android:tag="mapLayout"
+        android:visibility="gone"
+        >
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="2dip"
+            android:indeterminateOnly="false"
+            android:max="100"
+            android:progressDrawable="@drawable/layer_web_progressbar"
+            android:tag="progressBar" />
+
+        <com.supcon.common.view.view.js.BridgeWebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:overScrollMode="never"
+            android:scrollbars="vertical"
+            android:tag="webView" />
+
+    </LinearLayout>
+    <LinearLayout
         android:id="@+id/btnLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"

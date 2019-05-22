@@ -2,52 +2,25 @@ package com.supcon.mes.module_olxj.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Rect;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
-import com.supcon.common.view.util.DisplayUtil;
-import com.supcon.common.view.util.LogUtil;
-import com.supcon.common.view.view.js.BaseBridgeWebViewClient;
-import com.supcon.common.view.view.js.BridgeHandler;
-import com.supcon.common.view.view.js.BridgeUtil;
-import com.supcon.common.view.view.js.BridgeWebView;
-import com.supcon.common.view.view.js.CallBackFunction;
 import com.supcon.mes.mbap.utils.DateUtil;
-import com.supcon.mes.middleware.EamApplication;
-import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.util.SnackbarHelper;
-import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_olxj.R;
 import com.supcon.mes.module_olxj.model.bean.OLXJAreaEntity;
 import com.supcon.mes.module_olxj.model.bean.OLXJTaskEntity;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -58,7 +31,7 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
 
     private int expandPosition = -1;
     private List<OLXJAreaEntity> mOLXJAreaEntities;
-    private boolean map;
+//    private boolean map;
     private ViewHolder viewHolder;
 
     public OLXJTaskListAdapter(Context context) {
@@ -67,17 +40,18 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
 
     public void setAreaEntities(List<OLXJAreaEntity> olxjAreaEntities) {
         this.mOLXJAreaEntities = olxjAreaEntities;
+//        if(!map)
         notifyDataSetChanged();
     }
 
-    public void setMap(boolean map) {
-        this.map = map;
-    }
+//    public void setMap(boolean map) {
+//        this.map = map;
+//    }
 
-    public void setLisenter(RecyclerView contentView) {
-        contentView.setOnTouchListener(new RecyclerViewOnTouchListener());
-
-    }
+//    public void setLisenter(RecyclerView contentView) {
+//        contentView.setOnTouchListener(new RecyclerViewOnTouchListener());
+//
+//    }
 
     public boolean isAllFinished() {
         boolean result = true;
@@ -107,8 +81,8 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
 
         @BindByTag("listLayout")
         LinearLayout listLayout;
-        @BindByTag("mapLayout")
-        LinearLayout mapLayout;
+//        @BindByTag("mapLayout")
+//        LinearLayout mapLayout;
 
         @BindByTag("itemXJPathIndex")
         TextView itemXJPathIndex;  //序号
@@ -131,10 +105,10 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
         @BindByTag("taskAreaListView")
         RecyclerView taskAreaListView;
 
-        @BindByTag("progressBar")
-        ProgressBar progressBar;
-        @BindByTag("webView")
-        BridgeWebView webView;
+//        @BindByTag("progressBar")
+//        ProgressBar progressBar;
+//        @BindByTag("webView")
+//        BridgeWebView webView;
 
         OLXJAreaListAdapter mOLXJAreaListAdapter;
 
@@ -158,23 +132,25 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
             mOLXJAreaListAdapter = new OLXJAreaListAdapter(context);
             taskAreaListView.setAdapter(mOLXJAreaListAdapter);
 
-            webView.setFocusableInTouchMode(false);
-            webView.setWebViewClient(new MapWebViewClient(webView));
-            webView.setWebChromeClient(new MyWebChromeClient());
-            WebSettings settings = webView.getSettings();
-            settings.setAppCacheEnabled(true);
-            settings.setJavaScriptEnabled(true);
-            settings.setAllowFileAccess(true);
-            settings.setDatabaseEnabled(true);
-            settings.setDomStorageEnabled(true);
-            settings.setGeolocationEnabled(true);
+//            webView.setFocusableInTouchMode(true);
+//            webView.setWebViewClient(new MapWebViewClient(webView));
+//            webView.setWebChromeClient(new MyWebChromeClient());
+//            WebSettings settings = webView.getSettings();
+////            settings.setAppCacheEnabled(true);
+//            settings.setJavaScriptEnabled(true);
+//            settings.setAllowFileAccess(true);
+//            settings.setDatabaseEnabled(true);
+//            settings.setDomStorageEnabled(true);
+//            settings.setGeolocationEnabled(true);
+//            settings.setUseWideViewPort(true);
+//
 //            settings.setBuiltInZoomControls(true); // 显示放大缩小
-            settings.setSupportZoom(true); // 可以缩放
-            settings.setDisplayZoomControls(false);
-            settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-            settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-
-            settings.setLoadWithOverviewMode(true);
+//            settings.setSupportZoom(true); // 可以缩放
+//            settings.setDisplayZoomControls(true);
+//            settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+//            settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+//
+//            settings.setLoadWithOverviewMode(true);
 
         }
 
@@ -202,32 +178,32 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
             });
 
 
-            if(webView!=null){
-                webView.registerHandler("areaClick", new BridgeHandler() {
-
-                    @Override
-                    public void handler(String data, CallBackFunction function) {
-                        LogUtil.e("areaClick" + data);
-                        try {
-                            JSONObject jsonObject = new JSONObject(data);
-                            String code = jsonObject.getString("id");
-                            if(mOLXJAreaEntities == null){
-                                onItemChildViewClick(taskExpandBtn, 0, getItem(0));
-                            }
-                            else if (!TextUtils.isEmpty(code))
-                                for (OLXJAreaEntity areaEntity : mOLXJAreaEntities) {
-                                    if (code.equals(areaEntity._code)) {
-                                        onItemChildViewClick(taskAreaListView, 0, areaEntity);
-                                        return;
-                                    }
-                                }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                });
-            }
+//            if(webView!=null){
+//                webView.registerHandler("areaClick", new BridgeHandler() {
+//
+//                    @Override
+//                    public void handler(String data, CallBackFunction function) {
+//                        LogUtil.e("areaClick" + data);
+//                        try {
+//                            JSONObject jsonObject = new JSONObject(data);
+//                            String code = jsonObject.getString("id");
+//                            if(mOLXJAreaEntities == null){
+//                                onItemChildViewClick(taskExpandBtn, 0, getItem(0));
+//                            }
+//                            else if (!TextUtils.isEmpty(code))
+//                                for (OLXJAreaEntity areaEntity : mOLXJAreaEntities) {
+//                                    if (code.equals(areaEntity._code)) {
+//                                        onItemChildViewClick(taskAreaListView, 0, areaEntity);
+//                                        return;
+//                                    }
+//                                }
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//                });
+//            }
         }
 
         private void shrink(int position) {
@@ -291,27 +267,28 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
         @Override
         protected void update(OLXJTaskEntity data) {
             int position = getAdapterPosition();
-            if (map) {
-                listLayout.setVisibility(View.GONE);
-                taskExpandBtn.setVisibility(View.GONE);
-                mapLayout.setVisibility(View.VISIBLE);
-            } else {
-                mapLayout.setVisibility(View.GONE);
-                listLayout.setVisibility(View.VISIBLE);
-                taskExpandBtn.setVisibility(View.VISIBLE);
-            }
-
-            //当页面正在加载时，禁止链接的点击事件
-            Map<String, String> header = new HashMap<>();
-            String url = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
-                    + Constant.WebUrl.XJ + data.id + "&WorkGroupID=" + data.workGroupID.id;
-            if (!TextUtils.isEmpty(EamApplication.getCooki())) {
-                header.put("Cookie", EamApplication.getCooki());
-            }
-            if (!TextUtils.isEmpty(EamApplication.getAuthorization())) {
-                header.put("Authorization", EamApplication.getAuthorization());
-            }
-            webView.loadUrl(url, header);
+//            if (map) {
+//                listLayout.setVisibility(View.GONE);
+//                taskExpandBtn.setVisibility(View.GONE);
+//                mapLayout.setVisibility(View.VISIBLE);
+//
+//                //当页面正在加载时，禁止链接的点击事件
+//                Map<String, String> header = new HashMap<>();
+//                String url = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
+//                        + Constant.WebUrl.XJ + data.id + "&WorkGroupID=" + data.workGroupID.id;
+//                if (!TextUtils.isEmpty(EamApplication.getCooki())) {
+//                    header.put("Cookie", EamApplication.getCooki());
+//                }
+//                if (!TextUtils.isEmpty(EamApplication.getAuthorization())) {
+//                    header.put("Authorization", EamApplication.getAuthorization());
+//                }
+//
+//                webView.loadUrl(url, header);
+//            } else {
+//                mapLayout.setVisibility(View.GONE);
+            listLayout.setVisibility(View.VISIBLE);
+            taskExpandBtn.setVisibility(View.VISIBLE);
+//            }
 
 
             if (data.isStart) {
@@ -386,154 +363,6 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
             return false;
         }
 
-        private class MyWebViewClient extends WebViewClient {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                return true;
-            }
-
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT
-                        , context.getResources().getDisplayMetrics().heightPixels - Util.dpToPx(context, 160));
-                webView.setLayoutParams(lp);
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-
-
-            }
-
-            @Override
-            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                super.onReceivedError(view, request, error);
-            }
-        }
-
-        private class MapWebViewClient extends BaseBridgeWebViewClient {
-
-            public MapWebViewClient(BridgeWebView webView) {
-                super(webView);
-            }
-
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                return super.shouldOverrideUrlLoading(view, url);
-            }
-
-            @Override
-            protected boolean dealUrl(WebView view, String url) {
-                return super.shouldOverrideUrlLoading(view, url);
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT
-                        , DisplayUtil.getScreenHeight(context) - DisplayUtil.dip2px(170, context));
-                webView.setLayoutParams(lp);
-                BridgeUtil.webViewLoadLocalJs(webView, "xj.js");
-
-            }
-
-            @Override
-            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                super.onReceivedError(view, request, error);
-            }
-
-        }
-
-        private class MyWebChromeClient extends WebChromeClient {
-            @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-                if (map) {
-                    if (newProgress == 100) {
-                        // 网页加载完成
-                        progressBar.setVisibility(View.GONE);
-                    } else {
-                        // 加载中
-                        progressBar.setVisibility(View.VISIBLE);
-                        progressBar.setProgress(newProgress);
-                    }
-                }
-                super.onProgressChanged(view, newProgress);
-            }
-        }
-    }
-
-    public class RecyclerViewOnTouchListener implements View.OnTouchListener {
-
-
-        private int mLastY;
-        private int mCurrentY;
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-
-            //获取WebView所在item的顶部相对于其父控件（即RecyclerView的父控件）的距离
-            if (viewHolder.mapLayout.getVisibility() != View.VISIBLE
-                    || !isInView(viewHolder.mapLayout, event)) {
-                return false;
-            }
-
-            //计算dy，用来判断滑动方向。dy<0-->向上滑动；dy>0-->向下滑动。
-            int dy = 0;
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    mLastY = (int) event.getY();
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    mCurrentY = (int) event.getY();
-                    dy = mCurrentY - mLastY;
-                    mLastY = mCurrentY;
-                    break;
-                case MotionEvent.ACTION_CANCEL:
-                case MotionEvent.ACTION_UP:
-                    dy = (int) (event.getY() - mLastY);
-                    mLastY = 0;
-                    mCurrentY = 0;
-                    break;
-            }
-
-            //如果WebView顶部距离其父控件距离未0，即WebView顶部滑动到RecyclerView父控件顶部重合时，
-            // 此时需要拦截滑动事件交给WebView处理。
-            if (shouldIntercept(viewHolder.webView, dy)) {
-                viewHolder.webView.onTouchEvent(event);
-                return true;
-            }
-            return true;
-        }
-
-        /**
-         * 是否拦截滑动事件，判断的逻辑是：<br/>
-         * 1,如果是向上滑动，并且webview能够向上滑动，则拦截事件；<br/>
-         * 2,如果是向下滑动，并且webview能够向下滑动，则拦截事件。
-         *
-         * @param view 判断能够滑动的view
-         * @param dy   滑动间距
-         * @return true拦截，false不拦截。
-         */
-        private boolean shouldIntercept(View view, int dy) {
-            //canScrollVertically方法的第二个参数direction，传1时返回是否能够向上滑动，传-1时返回能否向下滑动。
-            //dy<0-->向上滑动；dy>0-->向下滑动。
-            boolean scrollUp = dy < 0 && ViewCompat.canScrollVertically(view, 1);
-            boolean scrollDown = dy > 0 && ViewCompat.canScrollVertically(view, -1);
-            return scrollUp || scrollDown || dy == 0;
-        }
-
-        /**
-         * 判断触摸的点是否在View范围内
-         */
-        private boolean isInView(View v, MotionEvent event) {
-            Rect frame = new Rect();
-            v.getHitRect(frame);
-            float eventX = event.getX();
-            float eventY = event.getY();
-            return frame.contains((int) eventX, (int) eventY);
-        }
     }
 
 }
