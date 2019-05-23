@@ -23,7 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
-        tools:replace="android:allowBackup, android:label">
+        tools:replace="android:icon, android:theme,android:allowBackup, android:label">
         <meta-data
             android:name="APP_SHARE_ID"
             android:value="${APP_SHARE_ID}"/>

@@ -67,7 +67,7 @@ public class MapController extends BaseViewController {
         webView.setWebViewClient(new MapWebViewClient(webView));
         webView.setWebChromeClient(new MyWebChromeClient());
         WebSettings settings = webView.getSettings();
-//            settings.setAppCacheEnabled(true);
+        settings.setAppCacheEnabled(true);
         settings.setJavaScriptEnabled(true);
         settings.setAllowFileAccess(true);
         settings.setDatabaseEnabled(true);
@@ -79,7 +79,7 @@ public class MapController extends BaseViewController {
         settings.setSupportZoom(true); // 可以缩放
         settings.setDisplayZoomControls(true);
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 
         settings.setLoadWithOverviewMode(true);
     }

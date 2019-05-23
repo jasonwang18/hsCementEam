@@ -31,7 +31,7 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
 
     private int expandPosition = -1;
     private List<OLXJAreaEntity> mOLXJAreaEntities;
-//    private boolean map;
+    private boolean map;
     private ViewHolder viewHolder;
 
     public OLXJTaskListAdapter(Context context) {
@@ -44,9 +44,9 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
         notifyDataSetChanged();
     }
 
-//    public void setMap(boolean map) {
-//        this.map = map;
-//    }
+    public void setMap(boolean map) {
+        this.map = map;
+    }
 
 //    public void setLisenter(RecyclerView contentView) {
 //        contentView.setOnTouchListener(new RecyclerViewOnTouchListener());
@@ -159,7 +159,10 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
             super.initListener();
 
             taskExpandBtn.setOnClickListener(v -> {
-
+                if(map)
+                {
+                    return;
+                }
                 int position = getAdapterPosition();
                 boolean isExPand = expandPosition == position;
                 if (!isExPand) {

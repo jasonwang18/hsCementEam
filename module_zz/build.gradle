@@ -145,7 +145,7 @@ dependencies {
     implementation (name:'libwidgets-debug', ext:'aar')
     implementation (name:'projectlibs-debug', ext:'aar')
     api (name:'rxretrohttp-debug', ext:'aar')
-    api (name:'zhizhiapp-Dev-debug', ext:'aar')
+    api (name:'zhizhiapp-Dev-debug2', ext:'aar')
     implementation 'com.qmuiteam:qmui:1.0.6'
     implementation 'com.zhihu.android:matisse:0.5.0-beta3'
     implementation 'com.zhy:percent-support-extends:1.1.1'

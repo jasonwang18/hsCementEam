@@ -193,14 +193,12 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
         xjTitleMap.setOnClickListener(v -> {
             if (xjTitleMap.isSelected()) {
                 xjTitleMap.setSelected(false);
-//                mOLXJTaskListAdapter.setMap(false);
-
+                mOLXJTaskListAdapter.setMap(false);
                 btnLayout.setVisibility(View.VISIBLE);
-
                 getController(MapController.class).hide();
             } else {
                 xjTitleMap.setSelected(true);
-//                mOLXJTaskListAdapter.setMap(true);
+                mOLXJTaskListAdapter.setMap(true);
                 btnLayout.setVisibility(View.GONE);
 
                 if (mAreaEntities == null || mAreaEntities.size() == 0) {
