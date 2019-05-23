@@ -159,8 +159,8 @@ public class WXGDMaintenanceListActivity extends BaseRefreshRecyclerActivity<Mai
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void addMaintenance(RefMaintainEntity refMaintainEntity) {
         for (MaintainEntity maintainEntity : mEntities) {
-            if (maintainEntity.id != null && refMaintainEntity.id != null) {
-                if (maintainEntity.id.equals(refMaintainEntity.id)) {
+            if (maintainEntity.getJwxItem().id != null && refMaintainEntity.id != null) {
+                if (maintainEntity.getJwxItem().id.equals(refMaintainEntity.id)) {
                     ToastUtils.show(context, "当前维保业务已存在，请勿重复添加!");
                     refreshListController.refreshComplete(mEntities);
                     return;

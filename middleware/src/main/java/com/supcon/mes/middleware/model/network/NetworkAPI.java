@@ -306,7 +306,7 @@ public interface NetworkAPI {
      * @description 获取维保参照列表
      * @author zhangwenshuai1 2018/8/13
      */
-    @GET("/BEAM/baseInfo/jWXItem/maintainBeamRef-query.action?&permissionCode=BEAM_1.0.0_lubricateOil_oilRef&crossCompanyFlag=false")
+    @GET("/BEAM/baseInfo/jWXItem/maintainBeamRef-query.action?&permissionCode=BEAM_1.0.0_baseInfo_maintainBeamRef&crossCompanyFlag=")
     Flowable<RefMaintainListEntity> listRefMaintain(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
 }
