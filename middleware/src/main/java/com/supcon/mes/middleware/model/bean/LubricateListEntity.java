@@ -1,4 +1,4 @@
-package com.supcon.mes.module_wxgd.model.bean;
+package com.supcon.mes.middleware.model.bean;
 
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.LubricateOil;

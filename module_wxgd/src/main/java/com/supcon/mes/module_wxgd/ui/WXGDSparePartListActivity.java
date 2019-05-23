@@ -29,12 +29,14 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.Good;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
+import com.supcon.mes.middleware.model.bean.SparePartRefEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.event.SparePartAddEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
+import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.R;
 import com.supcon.mes.module_wxgd.model.api.SparePartAPI;
@@ -58,7 +60,10 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.functions.Consumer;
@@ -70,7 +75,7 @@ import io.reactivex.functions.Consumer;
  */
 @Router(Constant.Router.WXGD_SPARE_PART_LIST)
 @Presenter(value = {SparePartListPresenter.class, SparePartPresenter.class})
-public class WXGDSparePartListActivity extends BaseRefreshRecyclerActivity<SparePartEntity> implements SparePartListContract.View,SparePartContract.View {
+public class WXGDSparePartListActivity extends BaseRefreshRecyclerActivity<SparePartEntity> implements SparePartListContract.View, SparePartContract.View {
 
     @BindByTag("contentView")
     protected RecyclerView contentView;
@@ -96,7 +101,6 @@ public class WXGDSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
 
     protected List<SparePartEntity> mSparePartEntityList = new ArrayList<>();
     protected boolean editable = false, isAdd = false;
-    private long repairSum; // 工单执行次数
     private String tableStatus;
     private List<Long> dgDeletedIds = new ArrayList<>(); //表体删除记录ids
     private List<SparePartEntity> selectedEntityList = new ArrayList<>(); // 选中备件List
@@ -121,13 +125,11 @@ public class WXGDSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
         if (isAdd) {
             IntentRouter.go(context, Constant.Router.SPARE_PART_REF);
         }
-        repairSum = getIntent().getLongExtra(Constant.IntentKey.REPAIR_SUM, 1);
         tableStatus = getIntent().getStringExtra(Constant.IntentKey.TABLE_STATUS);
         tableAction = getIntent().getStringExtra(Constant.IntentKey.TABLE_ACTION);
-        workListId = getIntent().getLongExtra(Constant.IntentKey.LIST_ID,0);
-        eamID = getIntent().getLongExtra(Constant.IntentKey.EAM_ID,0);
+        workListId = getIntent().getLongExtra(Constant.IntentKey.LIST_ID, 0);
+        eamID = getIntent().getLongExtra(Constant.IntentKey.EAM_ID, 0);
         mSparePartAdapter.setEditable(editable);
-        mSparePartAdapter.setRepairSum((int) repairSum);
         mSparePartAdapter.setTableStatus(tableStatus);
         mSparePartAdapter.setTableAction(tableAction);
         String entityInfo = getIntent().getStringExtra(Constant.IntentKey.SPARE_PART_ENTITIES);
@@ -185,9 +187,8 @@ public class WXGDSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
                     @Override
                     public void accept(Object o) throws Exception {
                         Bundle bundle = new Bundle();
-                        bundle.putBoolean(Constant.IntentKey.IS_SPARE_PART_REF,false);
-                        bundle.putString(Constant.IntentKey.SPARE_PART_REF_YRL, "/MESBasic/product/product/refProduct_kc-query.action?&permissionCode=MESBasic_1_product_refProductLayout_kc&crossCompanyFlag=false");
-                        IntentRouter.go(context, Constant.Router.SPARE_PART_REF,bundle);
+                        bundle.putBoolean(Constant.IntentKey.IS_SPARE_PART_REF, false);
+                        IntentRouter.go(context, Constant.Router.SPARE_PART_REF, bundle);
                     }
                 });
         RxView.clicks(refBtn)
@@ -196,9 +197,9 @@ public class WXGDSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
                     @Override
                     public void accept(Object o) throws Exception {
                         Bundle bundle = new Bundle();
-                        bundle.putBoolean(Constant.IntentKey.IS_SPARE_PART_REF,true);
-                        bundle.putLong(Constant.IntentKey.EAM_ID,eamID);
-                        IntentRouter.go(context, Constant.Router.SPARE_PART_REF,bundle);
+                        bundle.putBoolean(Constant.IntentKey.IS_SPARE_PART_REF, true);
+                        bundle.putLong(Constant.IntentKey.EAM_ID, eamID);
+                        IntentRouter.go(context, Constant.Router.SPARE_PART_REF, bundle);
                     }
                 });
 
@@ -250,7 +251,7 @@ public class WXGDSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
                 if (TextUtils.isEmpty(sb.toString())) {
                     //表体全部更新
                     for (SparePartEntity sparePartEntity : mSparePartEntityList) {
-                        if (sparePartEntity.productID != null){
+                        if (sparePartEntity.productID != null) {
                             sb.append(sparePartEntity.productID.productCode).append(",");
                             allUpdateFlag = true;
                         }
@@ -267,24 +268,20 @@ public class WXGDSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
                     ToastUtils.show(context, "列表无备件", 2500);
                     return;
                 }
-                if (selectedEntityList.size() <= 0){
-                    ToastUtils.show(context,"请选择需要的备件生成领用出库单",2500);
+                if (selectedEntityList.size() <= 0) {
+                    ToastUtils.show(context, "请选择需要的备件生成领用出库单", 2500);
                     return;
                 }
-                for (SparePartEntity sparePartEntity  : selectedEntityList){
-                    if (sparePartEntity.productID == null){
+                for (SparePartEntity sparePartEntity : selectedEntityList) {
+                    if (sparePartEntity.productID == null) {
                         ToastUtils.show(context, "请去除无备件名称的项", 2500);
                         return;
                     }
-                    if (sparePartEntity.sum == null || new BigDecimal(0).compareTo(sparePartEntity.sum) >= 0){
-                        ToastUtils.show(context, sparePartEntity.productID.productName+"的计划领用量不允许为空或小于0！", 2000);
+                    if (sparePartEntity.sum == null || new BigDecimal(0).compareTo(sparePartEntity.sum) >= 0) {
+                        ToastUtils.show(context, sparePartEntity.productID.productName + "的计划领用量不允许为空或小于0！", 2000);
                         return;
                     }
                 }
-//                EventBus.getDefault().post(selectedEntityList);
-//                EventBus.getDefault().post(new SparePartEvent(mSparePartEntityList, dgDeletedIds,true));
-//                finish();
-
                 onLoading("备件生成领用出库单中...");
                 presenterRouter.create(SparePartListAPI.class).generateSparePartApply(generateSparePartApplyList(mSparePartEntityList));
 
@@ -299,14 +296,13 @@ public class WXGDSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
         GoodDto goodDto;
         SystemCodeEntity useState;
         SparePartJsonEntity.WorkListBean workListBean;
-        for (SparePartEntity sparePartEntity  : selectedEntityList){
+        for (SparePartEntity sparePartEntity : selectedEntityList) {
             sparePartJsonEntity = new SparePartJsonEntity();
             sparePartJsonEntity.setId(sparePartEntity.id == null ? "" : String.valueOf(sparePartEntity.id));
             sparePartJsonEntity.setSum(sparePartEntity.sum == null ? "" : String.valueOf(sparePartEntity.sum));
-            sparePartJsonEntity.setTimesNum(String.valueOf(sparePartEntity.timesNum));
-            sparePartJsonEntity.setUseQuantity(sparePartEntity.useQuantity == null ? "": String.valueOf(sparePartEntity.useQuantity));
+            sparePartJsonEntity.setUseQuantity(sparePartEntity.useQuantity == null ? "" : String.valueOf(sparePartEntity.useQuantity));
             sparePartJsonEntity.setActualQuantity(sparePartEntity.actualQuantity == null ? "" : String.valueOf(sparePartEntity.actualQuantity));
-            sparePartJsonEntity.setStandingCrop(sparePartEntity.standingCrop == null ? "": String.valueOf(sparePartEntity.standingCrop));
+            sparePartJsonEntity.setStandingCrop(sparePartEntity.standingCrop == null ? "" : String.valueOf(sparePartEntity.standingCrop));
             sparePartJsonEntity.setRemark(sparePartEntity.remark);
             sparePartJsonEntity.setSparePartId(sparePartEntity.sparePartId == null ? "" : String.valueOf(sparePartEntity.sparePartId));
 
@@ -315,7 +311,7 @@ public class WXGDSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
             sparePartJsonEntity.setProductID(goodDto);
 
             useState = new SystemCodeEntity();
-            useState.id = sparePartEntity.isDeliveried ? Constant.SparePartUseStatus.PRE_USE : sparePartEntity.useState.id;
+            useState.id = sparePartEntity.isDeliveried ? Constant.SparePartUseStatus.PRE_USE : Util.strFormat2(sparePartEntity.useState.id);
             sparePartJsonEntity.setUseState(useState);
 
             workListBean = new SparePartJsonEntity.WorkListBean();
@@ -328,14 +324,8 @@ public class WXGDSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
     }
 
     @Override
-    protected void initData() {
-        super.initData();
-//        refreshListController.refreshComplete(mSparePartEntityList);
-    }
-
-    @Override
     public void onBackPressed() {
-        for (SparePartEntity sparePartEntity : mSparePartEntityList){
+        for (SparePartEntity sparePartEntity : mSparePartEntityList) {
             if (sparePartEntity.isDeliveried) {
                 sparePartEntity.isDeliveried = false;
             }
@@ -352,32 +342,34 @@ public class WXGDSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void addSparePart(SparePartAddEvent sparePartAddEvent) {
-        //添加备件
-        Good good = sparePartAddEvent.getGood();
+        SparePartRefEntity sparePartRefEntity = sparePartAddEvent.getSparePartRefEntity();
+        Good good = sparePartRefEntity.getProductID();
         for (SparePartEntity sparePartEntity : mSparePartEntityList) {
-            if (sparePartEntity.productID != null && (sparePartEntity.timesNum >= repairSum)) {  //历史数据不做比较，只比较当前维修次数下
+            if (sparePartEntity.productID != null) {
                 if (sparePartEntity.productID.id.equals(good.id)) {
                     ToastUtils.show(context, "请勿重复添加备件!");
-                    refreshListController.refreshComplete(mSparePartEntityList);
-//                    refreshListController.refreshBegin();
+                    refreshListController.refreshComplete(removeDuplicte());
                     return;
                 }
             }
         }
-
         SparePartEntity sparePartEntity = new SparePartEntity();
         sparePartEntity.productID = good;
-        sparePartEntity.timesNum = (int) repairSum;
         sparePartEntity.sum = BigDecimal.valueOf(1);
-
-//        sparePartEntity.useState = new SystemCodeEntity(Constant.SparePartUseStatus.NO_USE, "未领用", "BEAM2011", "01", EamApplication.getIp());
         sparePartEntity.useState = SystemCodeManager.getInstance().getSystemCodeEntity("BEAM2011/01");
-
         sparePartEntity.isRef = sparePartAddEvent.isFlag();
+        sparePartEntity.lastDuration = sparePartRefEntity.getLastDuration();
+        sparePartEntity.lastTime = sparePartRefEntity.getLastTime();
+        sparePartEntity.nextDuration = sparePartRefEntity.getNextDuration();
+        sparePartEntity.nextTime = sparePartRefEntity.getNextTime();
+        sparePartEntity.period = sparePartRefEntity.getPeriod();
+        sparePartEntity.periodType = sparePartRefEntity.getPeriodType();
+        sparePartEntity.periodUnit = sparePartRefEntity.getPeriodUnit();
+        sparePartEntity.accessoryName = sparePartRefEntity.getAccessoryEamId().getAttachEamId().name;
+        sparePartEntity.remark = sparePartRefEntity.getSpareMemo();
+        sparePartEntity.standingCrop = sparePartRefEntity.getStandingCrop();
         mSparePartEntityList.add(sparePartEntity);
-        mSparePartAdapter.setRepairSum((int) repairSum);
-        refreshListController.refreshComplete(mSparePartEntityList);
-//        refreshListController.refreshBegin();
+        refreshListController.refreshComplete(removeDuplicte());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -385,8 +377,7 @@ public class WXGDSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
         if (refreshEvent.delId != null) {
             dgDeletedIds.add(refreshEvent.delId);
         }
-        refreshListController.refreshComplete(mSparePartEntityList);
-//        refreshListController.refreshBegin();
+        refreshListController.refreshComplete(removeDuplicte());
     }
 
     private void initEmptyView() {
@@ -396,10 +387,10 @@ public class WXGDSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
 
     @Override
     public void updateStandingCropSuccess(CommonListEntity entity) {
-        if (allUpdateFlag){
+        if (allUpdateFlag) {
             allUpdateFlag = false;
             loaderController.showMsgAndclose("列表全部备件库存更新成功!", true, 2000);
-        }else {
+        } else {
             loaderController.showMsgAndclose("库存更新成功!", true, 1000);
         }
         //回填页面现存量值
@@ -411,8 +402,7 @@ public class WXGDSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
                 }
             }
         }
-        refreshListController.refreshComplete(mSparePartEntityList); // 非网络刷新，否则未保存的数据丢失
-//        refreshListController.refreshBegin();
+        refreshListController.refreshComplete(removeDuplicte()); // 非网络刷新，否则未保存的数据丢失
     }
 
     @Override
@@ -460,12 +450,26 @@ public class WXGDSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
                 sparePartEntity.actualQuantity = sparePartEntity.actualQuantity.setScale(2, BigDecimal.ROUND_HALF_UP);
             }
         }
-        refreshListController.refreshComplete(mSparePartEntityList);
+        refreshListController.refreshComplete(removeDuplicte());
 
     }
 
     @Override
     public void listSparePartListFailed(String errorMsg) {
         onLoadFailed(ErrorMsgHelper.msgParse(errorMsg));
+    }
+
+    //排重
+    public List<SparePartEntity> removeDuplicte() {
+        Set<SparePartEntity> s = new TreeSet<>((o1, o2) -> {
+            if (o1.productID != null && o2.productID != null && o1.productID.id != null && o2.productID.id != null) {
+                int i = o1.productID.id.compareTo(o2.productID.id);
+                return i;
+            }
+            return -1;
+        });
+        s.addAll(mSparePartEntityList);
+        mSparePartEntityList = new LinkedList(s);
+        return mSparePartEntityList;
     }
 }

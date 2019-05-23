@@ -26,7 +26,7 @@
         style="@style/StatusText"
         android:background="@drawable/sh_table_status_edit"
         android:textColor="@color/table_edit"
-        />
+        android:visibility="gone"/>
 
     <CheckBox
         android:layout_width="wrap_content"

@@ -59,70 +59,7 @@
 
                 <include layout="@layout/ly_faultinfo" />
 
-                <include layout="@layout/ly_nofaultinfo" />
-
-                <include layout="@layout/ly_repairinfo_title" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_70"
-                    android:layout_marginTop="@dimen/dp_1"
-                    android:background="@color/white"
-                    android:paddingStart="@dimen/dp_10">
-
-                    <com.supcon.mes.mbap.view.CustomVerticalTextView
-                        android:id="@+id/repairGroup"
-                        style="@style/CustomStyle"
-                        android:paddingLeft="@dimen/dp_10"
-                        android:paddingEnd="10dp"
-                        android:tag="repairGroup"
-                        app:editable="false"
-                        app:key="@string/repairGroup"
-                        app:text_size="15" />
-
-                    <include layout="@layout/ly_vertical_line" />
-
-                    <com.supcon.mes.mbap.view.CustomVerticalTextView
-                        android:id="@+id/chargeStaff"
-                        style="@style/CustomStyle"
-                        android:paddingStart="@dimen/dp_10"
-                        android:paddingEnd="10dp"
-                        android:tag="chargeStaff"
-                        app:editable="false"
-                        app:key="@string/chargeStaff"
-                        app:text_size="15" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_70"
-                    android:layout_marginTop="@dimen/dp_1"
-                    android:layout_marginBottom="@dimen/dp_5"
-                    android:background="@color/white"
-                    android:paddingStart="@dimen/dp_10">
-
-                    <com.supcon.mes.mbap.view.CustomVerticalDateView
-                        android:id="@+id/planStartTime"
-                        style="@style/CustomStyle"
-                        android:paddingLeft="@dimen/dp_10"
-                        android:paddingRight="@dimen/dp_10"
-                        android:tag="planStartTime"
-                        app:editable="false"
-                        app:text="@string/planStartTime"
-                        app:text_size="14" />
-
-                    <include layout="@layout/ly_vertical_line" />
-
-                    <com.supcon.mes.mbap.view.CustomVerticalDateView
-                        android:id="@+id/planEndTime"
-                        style="@style/CustomStyle"
-                        android:paddingLeft="@dimen/dp_10"
-                        android:paddingRight="@dimen/dp_10"
-                        android:tag="planEndTime"
-                        app:editable="false"
-                        app:text="@string/planEndTime"
-                        app:text_size="14" />
-                </LinearLayout>
+                <include layout="@layout/ly_repairinfo" />
 
                 <com.supcon.mes.mbap.view.CustomListWidget
                     android:id="@+id/sparePartListWidget"
@@ -156,16 +93,6 @@
                     app:text_size="14"
                     app:title_bg_color="@color/white"
                     app:widget_name="润滑油" />
-
-                <com.supcon.mes.mbap.view.CustomListWidget
-                    android:id="@+id/acceptanceCheckListWidget"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:tag="acceptanceCheckListWidget"
-                    app:icon_res="@drawable/ic_ys"
-                    app:text_size="14"
-                    app:title_bg_color="@color/white"
-                    app:widget_name="验收" />
 
                 <com.supcon.mes.mbap.view.CustomListWidget
                     android:id="@+id/maintenanceListWidget"

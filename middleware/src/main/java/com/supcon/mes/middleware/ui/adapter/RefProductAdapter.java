@@ -11,6 +11,7 @@ import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.middleware.R;
 import com.supcon.mes.middleware.model.bean.Good;
+import com.supcon.mes.middleware.model.bean.SparePartRefEntity;
 import com.supcon.mes.middleware.util.Util;
 
 /**
@@ -20,17 +21,17 @@ import com.supcon.mes.middleware.util.Util;
  * ------------- Description -------------
  * 备件添加选择列表Adapter
  */
-public class RefProductAdapter extends BaseListDataRecyclerViewAdapter<Good> {
+public class RefProductAdapter extends BaseListDataRecyclerViewAdapter<SparePartRefEntity> {
     public RefProductAdapter(Context context) {
         super(context);
     }
 
     @Override
-    protected BaseRecyclerViewHolder<Good> getViewHolder(int viewType) {
+    protected BaseRecyclerViewHolder<SparePartRefEntity> getViewHolder(int viewType) {
         return new RefProductViewHolder(context);
     }
 
-    class RefProductViewHolder extends BaseRecyclerViewHolder<Good> {
+    class RefProductViewHolder extends BaseRecyclerViewHolder<SparePartRefEntity> {
         @BindByTag("layout_refproduct")
         RelativeLayout layout_refproduct;
         @BindByTag("productName")
@@ -59,11 +60,12 @@ public class RefProductAdapter extends BaseListDataRecyclerViewAdapter<Good> {
         }
 
         @Override
-        protected void update(Good data) {
+        protected void update(SparePartRefEntity data) {
+            Good good = data.getProductID();
             eamIc.setImageResource(R.drawable.ic_sparepart);
-            productName.setText(String.format(context.getResources().getString(R.string.device_style2), "物品名称:", Util.strFormat(data.productName)));
-            productSpecif.setText(String.format(context.getResources().getString(R.string.device_style2), "规格:", Util.strFormat(data.productSpecif)));
-            productCode.setText(String.format(context.getResources().getString(R.string.device_style2), "编码:", Util.strFormat(data.productCode)));
+            productName.setText(String.format(context.getResources().getString(R.string.device_style2), "物品名称:", Util.strFormat(good.productName)));
+            productSpecif.setText(String.format(context.getResources().getString(R.string.device_style2), "规格:", Util.strFormat(good.productSpecif)));
+            productCode.setText(String.format(context.getResources().getString(R.string.device_style2), "编码:", Util.strFormat(good.productCode)));
         }
     }
 

@@ -114,13 +114,8 @@ public class LubricateOilsController extends BaseViewController implements Lubri
             if (lubricateOilsEntity.remark == null) {
                 lubricateOilsEntity.remark = "";
             }
-            if (lubricateOilsEntity.oilQuantity != null) {
-                lubricateOilsEntity.oilQuantity = lubricateOilsEntity.oilQuantity.setScale(2, BigDecimal.ROUND_HALF_UP);
-            }
         }
         if (mCustomListWidget != null) {
-//            mCustomListWidget.setData(entity.result);
-//            mCustomListWidget.setTotal(entity.result.size());
             if (isEditable) {
                 mCustomListWidget.setShowText("编辑 (" + entity.result.size() + ")");
             } else {

@@ -14,10 +14,12 @@ public class LubricateOilsEntity extends BaseEntity {
 
     public Long id;
     public LubricateOil lubricate;
-    public BigDecimal oilQuantity;//数量
-    public Integer timesNum;//次数
+    public Float oilQuantity;//数量
     public SystemCodeEntity oilType;//加换油
     public String remark;//备注
     public String version;
 
+    public String content;//内容
+    public JWXItem jwxItemID; //业务规则
+    public String lubricatingPart;//备件名称
 }

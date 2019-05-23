@@ -9,6 +9,7 @@ import com.supcon.common.com_http.BaseEntity;
  * ------------- Description -------------
  */
 public class RepairStaffDto extends BaseEntity {
+
     public String id;
     public StaffDto repairStaff;//维修人员
     public String startTime;//实际开始时间

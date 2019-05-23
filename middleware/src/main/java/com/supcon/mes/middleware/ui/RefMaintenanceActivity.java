@@ -24,6 +24,7 @@ import com.supcon.mes.middleware.R;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.api.RefMaintainAPI;
 import com.supcon.mes.middleware.model.bean.MaintainEntity;
+import com.supcon.mes.middleware.model.bean.RefMaintainEntity;
 import com.supcon.mes.middleware.model.bean.RefMaintainListEntity;
 import com.supcon.mes.middleware.model.contract.RefMaintainContract;
 import com.supcon.mes.middleware.presenter.RefMaintainPresenter;
@@ -46,7 +47,7 @@ import java.util.Map;
  */
 @Presenter(RefMaintainPresenter.class)
 @Router(Constant.Router.MAINTAIN_REF)
-public class RefMaintenanceActivity extends BaseRefreshRecyclerActivity<MaintainEntity> implements RefMaintainContract.View {
+public class RefMaintenanceActivity extends BaseRefreshRecyclerActivity<RefMaintainEntity> implements RefMaintainContract.View {
     @BindByTag("contentView")
     RecyclerView contentView;
 
@@ -111,8 +112,8 @@ public class RefMaintenanceActivity extends BaseRefreshRecyclerActivity<Maintain
         maintainAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-                MaintainEntity maintainEntity = maintainAdapter.getItem(position);
-                EventBus.getDefault().post(maintainEntity);
+                RefMaintainEntity refMaintainEntity = maintainAdapter.getItem(position);
+                EventBus.getDefault().post(refMaintainEntity);
                 RefMaintenanceActivity.this.finish();
             }
         });

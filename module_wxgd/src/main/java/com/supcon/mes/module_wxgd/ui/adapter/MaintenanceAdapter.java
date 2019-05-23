@@ -86,8 +86,6 @@ public class MaintenanceAdapter extends BaseListDataRecyclerViewAdapter<Maintain
 
         @BindByTag("chkBox")
         CheckBox chkBox;
-        @BindByTag("timesNum")
-        TextView timesNum;
 
         public ViewHolder(Context context) {
             super(context);
@@ -123,7 +121,7 @@ public class MaintenanceAdapter extends BaseListDataRecyclerViewAdapter<Maintain
                     return;
                 }
                 new CustomDialog(context)
-                        .twoButtonAlertDialog("确认删除该备件：" + Util.strFormat(maintainEntity.getSparePartId().getProductID().productName))
+                        .twoButtonAlertDialog("确认删除该备件：" + Util.strFormat(maintainEntity.getJwxItem().getSparePartId().getProductID().productName))
                         .bindView(R.id.redBtn, "确认")
                         .bindView(R.id.grayBtn, "取消")
                         .bindClickListener(R.id.redBtn, new View.OnClickListener() {
@@ -143,7 +141,7 @@ public class MaintenanceAdapter extends BaseListDataRecyclerViewAdapter<Maintain
         protected void update(MaintainEntity data) {
             index.setText(String.valueOf(getAdapterPosition() + 1));
             sparePartName.setContent(Util.strFormat(data.getJwxItem().getSparePartId().getProductID().productName));
-            attachEam.setContent(Util.strFormat(data.getAccessoryEamId().getAttachEamId().name));
+            attachEam.setContent(Util.strFormat(data.getJwxItem().getAttachEamId().getAttachEamId().name));
 
             if (data.getJwxItem().isDuration()) {
                 durationLayout.setVisibility(View.VISIBLE);
@@ -158,7 +156,6 @@ public class MaintenanceAdapter extends BaseListDataRecyclerViewAdapter<Maintain
             claim.setContent(Util.strFormat(data.getJwxItem().claim));
             content.setContent(Util.strFormat(data.getJwxItem().content));
 
-            timesNum.setVisibility(View.GONE);
         }
     }
 

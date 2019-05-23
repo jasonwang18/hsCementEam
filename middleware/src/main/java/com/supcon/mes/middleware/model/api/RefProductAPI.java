@@ -15,14 +15,13 @@ import java.util.Map;
 @ContractFactory(entites = {RefProductListEntity.class, SparePartRefListEntity.class})
 public interface RefProductAPI {
 
-    void listRefProduct(String url,int pageNum, Map<String, Object> queryParam);
+    void listRefProduct(int pageNum, Map<String, Object> queryParam);
 
     /**
-     * @description 备件参照列表查询
      * @param
-     * @return  
+     * @return
+     * @description 备件参照列表查询
      * @author zhangwenshuai1 2018/10/25
-     *
      */
     void listRefSparePart(int pageNum, Long eamID, Map<String, Object> queryParam);
 }

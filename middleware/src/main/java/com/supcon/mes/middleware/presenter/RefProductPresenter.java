@@ -26,7 +26,7 @@ import io.reactivex.functions.Function;
  */
 public class RefProductPresenter extends RefProductContract.Presenter {
     @Override
-    public void listRefProduct(String url, int pageNum, Map<String, Object> queryParam) {
+    public void listRefProduct(int pageNum, Map<String, Object> queryParam) {
         FastQueryCondEntity fastQueryCondEntity = BAPQueryParamsHelper.createSingleFastQueryCond(queryParam);
         fastQueryCondEntity.modelAlias = "product";
         Map<String, Object> pageQueryParam = new HashMap<>();
@@ -34,7 +34,7 @@ public class RefProductPresenter extends RefProductContract.Presenter {
         pageQueryParam.put("page.maxPageSize", 500);
         pageQueryParam.put("page.pageNo", pageNum);
 
-        mCompositeSubscription.add(MiddlewareHttpClient.listRefProduct(url, fastQueryCondEntity, pageQueryParam)
+        mCompositeSubscription.add(MiddlewareHttpClient.listRefProduct(fastQueryCondEntity, pageQueryParam)
                 .onErrorReturn(throwable -> {
                     RefProductListEntity refProductListEntity = new RefProductListEntity();
                     refProductListEntity.errMsg = throwable.toString();

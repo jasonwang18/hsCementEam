@@ -24,6 +24,7 @@ import com.supcon.mes.mbap.view.CustomVerticalEditText;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.SparePartEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_yhgl.R;
 
 import org.greenrobot.eventbus.EventBus;
@@ -131,7 +132,7 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
                         ToastUtils.show(context, "来源“备件更换到期预警”的备件不允许删除!", 3000);
                         return;
                     }
-                    if (sparePartEntity.useState != null && !Constant.SparePartUseStatus.NO_USE.equals(sparePartEntity.useState.id)) {
+                    if (!Constant.SparePartUseStatus.NO_USE.equals(sparePartEntity.getUseState().id)) {
                         ToastUtils.show(context, "已领用或领用中状态的备件不允许删除!", 3000);
                         return;
                     }
@@ -233,7 +234,7 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
             sum.getNumViewInput().setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             actualQuantity.getNumViewInput().setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
-            if (editable || (data.useState != null && !Constant.SparePartUseStatus.USEING.equals(data.useState.id))) { // 领用中状态的备件无需checkbox
+            if (editable || !Constant.SparePartUseStatus.USEING.equals(data.getUseState().id)) { // 领用中状态的备件无需checkbox
                 sum.setEditable(true);
                 sum.getNumViewInput().setEnabled(true);
                 remark.setEditable(true);
@@ -250,7 +251,7 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
             } else {
                 actualQuantity.setVisibility(View.VISIBLE);
             }
-            if (data.useState != null && Constant.WxgdView.EXECUTE_OPEN_URL.equals(tableAction) && Constant.SparePartUseStatus.NO_USE.equals(data.useState.id)) {
+            if (Constant.WxgdView.EXECUTE_OPEN_URL.equals(tableAction) && Constant.SparePartUseStatus.NO_USE.equals(data.getUseState().id)) {
                 actualQuantity.setEditable(true);
                 actualQuantity.getNumViewInput().setEnabled(true);
             } else {
@@ -269,7 +270,7 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
 
             useQuantity.setValue(data.useQuantity != null ? String.valueOf(data.useQuantity.setScale(2, BigDecimal.ROUND_HALF_UP)) : "");
 
-            if (data.useState != null && !Constant.SparePartUseStatus.USEING.equals(data.useState.id)) {
+            if (!Constant.SparePartUseStatus.USEING.equals(data.getUseState().id)) {
                 actualQuantity.getNumViewInput().setText(data.actualQuantity == null ?
                         ((data.useQuantity == null || "0.00".equals(data.useQuantity.toString())) ?
                                 ((data.sum == null || "0.00".equals(data.sum.toString())) ? "" : String.valueOf(data.sum.setScale(2, BigDecimal.ROUND_HALF_UP)))
@@ -285,7 +286,7 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
             }
 
             standingCrop.setValue(data.standingCrop == null ? "" : String.valueOf(data.standingCrop.setScale(2, BigDecimal.ROUND_HALF_UP)));
-            useState.setValue(data.useState == null ? "" : data.useState.value);
+            useState.setValue(Util.strFormat2(data.getUseState().value));
             remark.setInput(data.remark);
         }
 

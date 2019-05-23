@@ -116,6 +116,9 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
                 public void onClick(View v) {
                     WXGDEntity wxgdEntity = getItem(getAdapterPosition());
 
+                    if (wxgdEntity == null) {
+                        return;
+                    }
                     Bundle bundle = new Bundle();
                     bundle.putSerializable(Constant.IntentKey.WXGD_ENTITY, wxgdEntity);
 
@@ -169,11 +172,7 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
                 claim.setVisibility(View.GONE);
             } else {
 
-                if (data.faultInfo != null && TextUtils.isEmpty(data.faultInfo.tableNo)) {
-                    workSource.setBackgroundResource(R.color.faultWarn);
-                    tableStatus.setTextColor(context.getResources().getColor(R.color.faultWarn));
-                    tableStatus.setBackgroundResource(R.drawable.sh_bg_worksource_tablestatus_faultinfo);
-                }
+
                 if (Constant.WxgdWorkSource.patrolcheck.equals(data.workSource.id)) {
                     workSource.setBackgroundResource(R.color.repairOrange);
                     tableStatus.setTextColor(context.getResources().getColor(R.color.repairOrange));
@@ -188,6 +187,11 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
                     workSource.setBackgroundResource(R.color.sparePartBlue);
                     tableStatus.setTextColor(context.getResources().getColor(R.color.sparePartBlue));
                     tableStatus.setBackgroundResource(R.drawable.sh_bg_worksource_tablestatus_sparepart);
+                }
+                if (Constant.WxgdWorkSource.other.equals(data.workSource.id)) {
+                    workSource.setBackgroundResource(R.color.faultWarn);
+                    tableStatus.setTextColor(context.getResources().getColor(R.color.faultWarn));
+                    tableStatus.setBackgroundResource(R.drawable.sh_bg_worksource_tablestatus_faultinfo);
                 }
 
                 if (Constant.WxgdWorkSource.lubrication.equals(data.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(data.workSource.id) || Constant.WxgdWorkSource.sparepart.equals(data.workSource.id)) {

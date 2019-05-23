@@ -1,6 +1,7 @@
 package com.supcon.mes.middleware.model.event;
 
 import com.supcon.mes.middleware.model.bean.Good;
+import com.supcon.mes.middleware.model.bean.SparePartRefEntity;
 
 /**
  * SparePartAddEvent 备件添加回调Event
@@ -8,21 +9,21 @@ import com.supcon.mes.middleware.model.bean.Good;
  */
 public class SparePartAddEvent {
     private boolean flag;
-    private Good good;
+    private SparePartRefEntity sparePartRefEntity;
 
     public SparePartAddEvent() {
     }
 
-    public SparePartAddEvent(boolean flag, Good good) {
+    public SparePartAddEvent(boolean flag, SparePartRefEntity sparePartRefEntity) {
         this.flag = flag;
-        this.good = good;
+        this.sparePartRefEntity = sparePartRefEntity;
     }
 
     public boolean isFlag() {
         return flag;
     }
 
-    public Good getGood() {
-        return good;
+    public SparePartRefEntity getSparePartRefEntity() {
+        return sparePartRefEntity;
     }
 }

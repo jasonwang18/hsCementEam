@@ -61,6 +61,7 @@ import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
+import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_yhgl.IntentRouter;
 import com.supcon.mes.module_yhgl.R;
 import com.supcon.mes.module_yhgl.controller.LubricateOilsController;
@@ -865,24 +866,18 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
         Map<String, Object> map = new HashMap<>();
         map.put("bap_validate_user_id", String.valueOf(EamApplication.getAccountInfo().userId));
-        map.put("faultInfo.createStaffId", mYHEntity.findStaffID == null || mYHEntity.findStaffID.checkNil() ? "" : mYHEntity.findStaffID.id);
+        map.put("faultInfo.createStaffId", (mYHEntity.findStaffID == null || mYHEntity.findStaffID.checkNil()) ? "" :  Util.strFormat2(mYHEntity.findStaffID.id));
         map.put("faultInfo.createTime", DateUtil.dateTimeFormat(mYHEntity.findTime));
-        map.put("faultInfo.findStaffID.id", mYHEntity.findStaffID == null || mYHEntity.findStaffID.checkNil() ? "" : mYHEntity.findStaffID.id);
+        map.put("faultInfo.findStaffID.id", (mYHEntity.findStaffID == null || mYHEntity.findStaffID.checkNil()) ? "" :  Util.strFormat2(mYHEntity.findStaffID.id));
         map.put("faultInfo.findTime", DateUtil.dateTimeFormat(mYHEntity.findTime));
         map.put("faultInfo.createPositionId", EamApplication.getAccountInfo().positionId);
-
-        if (mYHEntity.id != 0) {
-            map.put("id", mYHEntity.id);
-            map.put("faultInfo.id", mYHEntity.id);
-        } else {
-            map.put("id", "");
-            map.put("faultInfo.id", "");
-        }
+        map.put("viewselect", "faultInfoEdit");
+        map.put("id", mYHEntity.id != 0 ? mYHEntity.id : "");
+        map.put("faultInfo.id", mYHEntity.id != 0 ? mYHEntity.id : "");
 
         if (mYHEntity.pending != null && mYHEntity.pending.id != null) {
-
-            map.put("pendingId", mYHEntity.pending.id);
-            map.put("deploymentId", mYHEntity.pending.deploymentId);
+            map.put("pendingId",  Util.strFormat2(mYHEntity.pending.id));
+            map.put("deploymentId",  Util.strFormat2(mYHEntity.pending.deploymentId));
         } else {
             map.put("deploymentId", deploymentId);
             map.put("faultInfo.version", 1);
@@ -890,31 +885,29 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
 
         if (mYHEntity.eamID != null && mYHEntity.eamID.id != null) {
-            map.put("faultInfo.eamID.id", mYHEntity.eamID.id);
+            map.put("faultInfo.eamID.id",  Util.strFormat2(mYHEntity.eamID.id));
         } else {
             map.put("faultInfo.eamID.id", "");
         }
 
-
         if (mYHEntity.areaInstall != null && mYHEntity.areaInstall.id != 0) {
-            map.put("faultInfo.areaInstall.id", mYHEntity.areaInstall.id);
+            map.put("faultInfo.areaInstall.id",  Util.strFormat2(mYHEntity.areaInstall.id));
         } else {
             map.put("faultInfo.areaInstall.id", "");
         }
         if (mYHEntity.repiarGroup != null && mYHEntity.repiarGroup.id != null) {
-            map.put("faultInfo.repiarGroup.id", mYHEntity.repiarGroup.id);
+            map.put("faultInfo.repiarGroup.id",  Util.strFormat2(mYHEntity.repiarGroup.id));
         } else {
             map.put("faultInfo.repiarGroup.id", "");
         }
 
         if (mYHEntity.faultInfoType != null) {
-            map.put("faultInfo.faultInfoType.id", mYHEntity.faultInfoType.id);
-            map.put("faultInfo.faultInfoType.value", mYHEntity.faultInfoType.value);
+            map.put("faultInfo.faultInfoType.id", Util.strFormat2(mYHEntity.faultInfoType.id));
+            map.put("faultInfo.faultInfoType.value", Util.strFormat2(mYHEntity.faultInfoType.value));
         } else {
             map.put("faultInfo.faultInfoType.id", "");
             map.put("faultInfo.faultInfoType.value", "");
         }
-
         if (mYHEntity.priority != null) {
             map.put("faultInfo.priority.id", mYHEntity.priority.id);
         } else {
@@ -950,6 +943,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             map.put("operateType", "save");
         }
         map.put("taskDescription", "BEAM2_1.0.0.faultInfoFW.task342");
+        map.put("activityName", "task342");
         map.put("workFlowVar.comment", yhEditCommentInput.getInput());
 
         map.put("viewCode", "BEAM2_1.0.0_faultInfo_faultInfoEdit");
@@ -963,26 +957,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         List<RepairStaffDto> repairStaffDtos = YHGLMapManager.translateStaffDto(mRepairStaffController.getRepairStaffEntities());
         List<LubricateOilsEntityDto> lubricateOilsEntityDtos = YHGLMapManager.translateLubricateOilsDto(mLubricateOilsController.getLubricateOilsEntities());
         List<MaintainDto> maintainDtos = YHGLMapManager.translateMaintainDto(maintenanceController.getMaintenanceEntities());
-//        if (Constant.Transition.SUBMIT.equals(map.get("operateType"))) {
-//            for (RepairStaffDto repairStaffDto : repairStaffDtos) {
-//                if (TextUtils.isEmpty(repairStaffDto.repairStaff.id)) {
-//                    onLoadFailed("维修人员列表禁止存在空人员信息");
-//                    return;
-//                }
-//            }
-//            for (SparePartEntityDto sparePartEntityDto : sparePartEntityDtos) {
-//                if (TextUtils.isEmpty(sparePartEntityDto.productID.id)) {
-//                    onLoadFailed("备件列表禁止存在空备件信息");
-//                    return;
-//                }
-//            }
-//            for (LubricateOilsEntityDto lubricateOilsEntityDto : lubricateOilsEntityDtos) {
-//                if (TextUtils.isEmpty(lubricateOilsEntityDto.lubricate.id)) {
-//                    onLoadFailed("润滑油列表禁止存在空润滑油信息");
-//                    return;
-//                }
-//            }
-//        }
+
         map = YHGLMapManager.dgDeleted(map, dgDeletedIds_sparePart, "dg1557402465409");
         map.put("dg1557402465409ModelCode", "BEAM2_1.0.0_faultInfo_FaultSparePart");
         map.put("dg1557402465409ListJson", sparePartEntityDtos.toString());

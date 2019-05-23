@@ -11,8 +11,10 @@ public class LubricateOil extends BaseEntity {
     public String code;
     public String name;
     public Long id;
-    public String unit;
+    public String unit;//单位
     public String specify; //规格
+    public String model; //型号
+    public String remark; //备注
 
 
 }

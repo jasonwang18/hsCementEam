@@ -11,10 +11,10 @@ import com.supcon.common.com_http.BaseEntity;
 public class JWXItem extends BaseEntity {
     public Long id;
     public Long period;
-    public SystemCodeEntity periodType;//周期类型
-    public SystemCodeEntity periodUnit;//周期单位
+    public ValueEntity periodType;//周期类型
+    public ValueEntity periodUnit;//周期单位
 
-    public AttachEamEntity attachEamId;
+    public AccessoryEamId attachEamId;
     public String claim;//要求
     public String content;//内容
     public Float lastDuration;
@@ -23,16 +23,16 @@ public class JWXItem extends BaseEntity {
     public Long nextTime;
     public SparePartId sparePartId;//备件编码
 
-    public SystemCodeEntity getPeriodType() {
+    public ValueEntity getPeriodType() {
         if (periodType == null) {
-            periodType = new SystemCodeEntity();
+            periodType = new ValueEntity();
         }
         return periodType;
     }
 
-    public SystemCodeEntity getPeriodUnit() {
+    public ValueEntity getPeriodUnit() {
         if (periodUnit == null) {
-            periodUnit = new SystemCodeEntity();
+            periodUnit = new ValueEntity();
         }
         return periodUnit;
     }
@@ -53,9 +53,9 @@ public class JWXItem extends BaseEntity {
         return sparePartId;
     }
 
-    public AttachEamEntity getAttachEamId() {
+    public AccessoryEamId getAttachEamId() {
         if (attachEamId==null) {
-            attachEamId = new AttachEamEntity();
+            attachEamId = new AccessoryEamId();
         }
         return attachEamId;
     }

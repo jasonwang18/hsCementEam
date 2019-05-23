@@ -21,7 +21,9 @@ import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.JWXItem;
 import com.supcon.mes.middleware.model.bean.MaintainEntity;
+import com.supcon.mes.middleware.model.bean.RefMaintainEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.module_wxgd.IntentRouter;
@@ -51,8 +53,8 @@ public class WXGDMaintenanceListActivity extends BaseRefreshRecyclerActivity<Mai
     @BindByTag("leftBtn")
     protected ImageButton leftBtn;
 
-    @BindByTag("rightBtn")
-    protected ImageButton rightBtn;
+    @BindByTag("refBtn")
+    protected ImageButton refBtn;
 
     @BindByTag("titleText")
     protected TextView titleText;
@@ -110,7 +112,7 @@ public class WXGDMaintenanceListActivity extends BaseRefreshRecyclerActivity<Mai
         contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(5, context)));
         contentView.addOnItemTouchListener(new CustomSwipeLayout.OnSwipeItemTouchListener(this));
         if (editable) {
-            rightBtn.setVisibility(View.VISIBLE);
+            refBtn.setVisibility(View.VISIBLE);
         }
         findViewById(R.id.includeSparePartLy).setVisibility(View.GONE);
 
@@ -126,7 +128,7 @@ public class WXGDMaintenanceListActivity extends BaseRefreshRecyclerActivity<Mai
         RxView.clicks(leftBtn)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> onBackPressed());
-        RxView.clicks(rightBtn)
+        RxView.clicks(refBtn)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
                     Bundle bundle = new Bundle();
@@ -155,18 +157,32 @@ public class WXGDMaintenanceListActivity extends BaseRefreshRecyclerActivity<Mai
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void addMaintenance(MaintainEntity maintenance) {
+    public void addMaintenance(RefMaintainEntity refMaintainEntity) {
         for (MaintainEntity maintainEntity : mEntities) {
-            if (maintainEntity.id != null && maintenance.id != null) {
-                if (maintainEntity.id.equals(maintenance.id)) {
+            if (maintainEntity.id != null && refMaintainEntity.id != null) {
+                if (maintainEntity.id.equals(refMaintainEntity.id)) {
                     ToastUtils.show(context, "当前维保业务已存在，请勿重复添加!");
                     refreshListController.refreshComplete(mEntities);
                     return;
                 }
             }
         }
-        maintenance.sparePartName = maintenance.getSparePartId().getProductID().productName;
-        mEntities.add(maintenance);
+        MaintainEntity maintainEntity = new MaintainEntity();
+        JWXItem jwxItem = new JWXItem();
+        jwxItem.attachEamId = refMaintainEntity.accessoryEamId;
+        jwxItem.claim = refMaintainEntity.claim;
+        jwxItem.content = refMaintainEntity.content;
+        jwxItem.id = refMaintainEntity.id;
+        jwxItem.lastDuration = refMaintainEntity.lastDuration;
+        jwxItem.nextDuration = refMaintainEntity.nextDuration;
+        jwxItem.lastTime = refMaintainEntity.lastTime;
+        jwxItem.nextTime = refMaintainEntity.nextTime;
+        jwxItem.period = refMaintainEntity.period;
+        jwxItem.periodType = refMaintainEntity.periodType;
+        jwxItem.periodUnit = refMaintainEntity.periodUnit;
+        jwxItem.sparePartId = refMaintainEntity.sparePartId;
+        maintainEntity.jwxItemID = jwxItem;
+        mEntities.add(maintainEntity);
         refreshListController.refreshComplete(mEntities);
     }
 

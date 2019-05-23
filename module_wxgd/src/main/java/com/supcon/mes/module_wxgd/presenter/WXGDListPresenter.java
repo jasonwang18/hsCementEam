@@ -31,13 +31,14 @@ public class WXGDListPresenter extends WXGDListContract.Presenter {
                             wxgdListEntity.success = false;
                             wxgdListEntity.errMsg = throwable.toString();
                             return wxgdListEntity;
-                        }).subscribe(wxgdListEntity -> {
-                    if (wxgdListEntity.errMsg == null) {
-                        getView().listWxgdsSuccess(wxgdListEntity);
-                    } else {
-                        getView().listWxgdsFailed(wxgdListEntity.errMsg);
-                    }
-                })
+                        })
+                        .subscribe(wxgdListEntity -> {
+                            if (wxgdListEntity.errMsg == null) {
+                                getView().listWxgdsSuccess(wxgdListEntity);
+                            } else {
+                                getView().listWxgdsFailed(wxgdListEntity.errMsg);
+                            }
+                        })
         );
     }
 }

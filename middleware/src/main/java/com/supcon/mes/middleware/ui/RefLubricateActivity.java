@@ -25,9 +25,13 @@ import com.supcon.mes.mbap.view.CustomSearchView;
 import com.supcon.mes.middleware.R;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.api.RefLubricateAPI;
+import com.supcon.mes.middleware.model.api.RefProductAPI;
+import com.supcon.mes.middleware.model.bean.Good;
+import com.supcon.mes.middleware.model.bean.LubricateListEntity;
 import com.supcon.mes.middleware.model.bean.LubricateOil;
 import com.supcon.mes.middleware.model.bean.RefLubricateEntity;
 import com.supcon.mes.middleware.model.bean.RefLubricateListEntity;
+import com.supcon.mes.middleware.model.bean.SparePartRefEntity;
 import com.supcon.mes.middleware.model.contract.RefLubricateContract;
 import com.supcon.mes.middleware.presenter.RefLubricatePresenter;
 import com.supcon.mes.middleware.ui.adapter.RefLubricateAdapter;
@@ -39,8 +43,11 @@ import com.supcon.mes.middleware.util.Util;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Flowable;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -68,6 +75,7 @@ public class RefLubricateActivity extends BaseRefreshRecyclerActivity<RefLubrica
     private RefLubricateAdapter lubricateAdapter;
     private Map<String, Object> queryParam = new HashMap<>();
     private Long eamID;
+    private boolean isSparePartRef;
 
     @Override
     protected IListAdapter createAdapter() {
@@ -84,6 +92,7 @@ public class RefLubricateActivity extends BaseRefreshRecyclerActivity<RefLubrica
     protected void onInit() {
         super.onInit();
         eamID = getIntent().getLongExtra(Constant.IntentKey.EAM_ID, 0);
+        isSparePartRef = getIntent().getBooleanExtra(Constant.IntentKey.IS_SPARE_PART_REF, false);
     }
 
     @Override
@@ -111,7 +120,11 @@ public class RefLubricateActivity extends BaseRefreshRecyclerActivity<RefLubrica
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(RefLubricateAPI.class).listRefLubricate(pageIndex, eamID, queryParam);
+                if (isSparePartRef) {
+                    presenterRouter.create(RefLubricateAPI.class).listRefLubricate(pageIndex, eamID, queryParam);
+                } else {
+                    presenterRouter.create(RefLubricateAPI.class).listLubricate(pageIndex, queryParam);
+                }
             }
         });
         lubricateAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
@@ -160,6 +173,29 @@ public class RefLubricateActivity extends BaseRefreshRecyclerActivity<RefLubrica
         }
         queryParam.put(Constant.BAPQuery.NAME, searchContent);
         refreshListController.refreshBegin();
+    }
+
+    @SuppressLint("CheckResult")
+    @Override
+    public void listLubricateSuccess(LubricateListEntity entity) {
+        List<LubricateOil> result = entity.result;
+        List<RefLubricateEntity> refLubricateEntities = new LinkedList<>();
+        Flowable.fromIterable(result)
+                .map(lubricateOil -> {
+                    RefLubricateEntity refLubricateEntity = new RefLubricateEntity();
+                    refLubricateEntity.setLubricateOil(lubricateOil);
+                    return refLubricateEntity;
+                })
+                .subscribe(refLubricateEntity -> {
+                    refLubricateEntities.add(refLubricateEntity);
+                }, throwable -> {
+                }, () -> refreshListController.refreshComplete(refLubricateEntities));
+    }
+
+    @Override
+    public void listLubricateFailed(String errorMsg) {
+        SnackbarHelper.showError(rootView, errorMsg);
+        refreshListController.refreshComplete();
     }
 
     @Override
