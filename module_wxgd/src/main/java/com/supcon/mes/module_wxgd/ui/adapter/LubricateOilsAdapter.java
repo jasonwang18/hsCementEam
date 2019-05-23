@@ -23,6 +23,7 @@ import com.supcon.mes.mbap.view.CustomVerticalSpinner;
 import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.bean.LubricateOilsEntity;
+import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_wxgd.R;
 
 import org.greenrobot.eventbus.EventBus;
@@ -75,8 +76,6 @@ public class LubricateOilsAdapter extends BaseListDataRecyclerViewAdapter<Lubric
         LinearLayout main;
         @BindByTag("index")
         TextView index;
-        @BindByTag("timesNum")
-        TextView timesNum;
         @BindByTag("oilCode")
         CustomVerticalTextView oilCode;
         @BindByTag("oilName")
@@ -121,16 +120,16 @@ public class LubricateOilsAdapter extends BaseListDataRecyclerViewAdapter<Lubric
 
                         if (TextUtils.isEmpty(charSequence)) {
                             if (lubricateOilsEntity != null) {
-                                lubricateOilsEntity.oilQuantity = BigDecimal.valueOf(0);
+                                lubricateOilsEntity.oilQuantity = 0F;
                             }
                             return;
                         }
-                        if (charSequence.toString().indexOf(".") == 0){
+                        if (charSequence.toString().indexOf(".") == 0) {
 //                            ToastUtils.show(context,"首位禁止輸入小数点！");
                             sum.getNumViewInput().setText(null);
                             return;
                         }
-                        lubricateOilsEntity.oilQuantity = new BigDecimal(charSequence.toString());
+                        lubricateOilsEntity.oilQuantity = Float.valueOf(charSequence.toString());
                     });
 
             oilType.setOnChildViewClickListener(new OnChildViewClickListener() {
@@ -157,24 +156,20 @@ public class LubricateOilsAdapter extends BaseListDataRecyclerViewAdapter<Lubric
                         ToastUtils.show(context, tableStatus + "环节，润滑油不允许删除!");
                         return;
                     }
-                    if (lubricateOilsEntity.timesNum >= repairSum) {
-                        new CustomDialog(context)
-                                .twoButtonAlertDialog("确认删除该润滑油：" + (lubricateOilsEntity.lubricate == null ? "--" : lubricateOilsEntity.lubricate.name))
-                                .bindView(R.id.redBtn, "确认")
-                                .bindView(R.id.grayBtn, "取消")
-                                .bindClickListener(R.id.redBtn, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        List<LubricateOilsEntity> list = LubricateOilsAdapter.this.getList();
-                                        list.remove(getAdapterPosition());
-                                        EventBus.getDefault().post(new RefreshEvent(lubricateOilsEntity.id));
-                                    }
-                                }, true)
-                                .bindClickListener(R.id.grayBtn, null, true)
-                                .show();
-                    } else {
-                        ToastUtils.show(context, "历史润滑油数据,不允许删除!");
-                    }
+                    new CustomDialog(context)
+                            .twoButtonAlertDialog("确认删除该润滑油：" + (lubricateOilsEntity.lubricate == null ? "--" : lubricateOilsEntity.lubricate.name))
+                            .bindView(R.id.redBtn, "确认")
+                            .bindView(R.id.grayBtn, "取消")
+                            .bindClickListener(R.id.redBtn, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    List<LubricateOilsEntity> list = LubricateOilsAdapter.this.getList();
+                                    list.remove(getAdapterPosition());
+                                    EventBus.getDefault().post(new RefreshEvent(lubricateOilsEntity.id));
+                                }
+                            }, true)
+                            .bindClickListener(R.id.grayBtn, null, true)
+                            .show();
                 }
             });
 
@@ -195,7 +190,7 @@ public class LubricateOilsAdapter extends BaseListDataRecyclerViewAdapter<Lubric
             index.setText(String.valueOf(getAdapterPosition() + 1));
 
             sum.getNumViewInput().setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            if (editable && data.timesNum == repairSum) {
+            if (editable) {
                 sum.setEditable(true);
                 sum.getNumViewInput().setEnabled(true);
                 oilType.setEditable(true);
@@ -207,23 +202,22 @@ public class LubricateOilsAdapter extends BaseListDataRecyclerViewAdapter<Lubric
                 remark.setEditable(false);
             }
 
-            sum.getNumViewInput().setText(data.oilQuantity != null ? String.valueOf(data.oilQuantity.setScale(2, BigDecimal.ROUND_HALF_UP)) : "");
+            sum.getNumViewInput().setText(Util.big(data.oilQuantity));
 
-            if (data.oilType != null){
+            if (data.oilType != null) {
                 oilType.setSpinner(data.oilType.value);
-            }else {
+            } else {
                 oilType.setSpinner("");
             }
 
             if (data.lubricate != null) {
                 oilCode.setValue(data.lubricate.code);
                 oilName.setValue(data.lubricate.name);
-            }else {
+            } else {
                 oilCode.setValue("");
                 oilName.setValue("");
             }
 
-            timesNum.setText(String.format(context.getResources().getString(R.string.wxTimes), String.valueOf(data.timesNum)));
             remark.setInput(data.remark);
         }
     }

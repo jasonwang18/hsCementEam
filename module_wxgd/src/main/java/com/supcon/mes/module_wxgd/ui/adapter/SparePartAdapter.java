@@ -23,6 +23,7 @@ import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomVerticalEditText;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_wxgd.R;
 import com.supcon.mes.middleware.model.bean.SparePartEntity;
 
@@ -34,7 +35,6 @@ import java.util.List;
 public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartEntity> {
 
     private boolean editable;
-    private int repairSum;
     private String tableStatus; //单据状态
     private String tableAction; //单据ViewAction
 
@@ -59,16 +59,6 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
     /**
      * @param
      * @return
-     * @description 设置工单维修次数变量，用于判断数量是否可编辑
-     * @author zhangwenshuai1 2018/9/5
-     */
-    public void setRepairSum(int repairSum) {
-        this.repairSum = repairSum;
-    }
-
-    /**
-     * @param
-     * @return
      * @description 维修工单单据状态Url
      * @author zhangwenshuai1 2018/10/11
      */
@@ -80,8 +70,6 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
 
         @BindByTag("index")
         TextView index;
-        @BindByTag("timesNum")
-        TextView timesNum;
         @BindByTag("sparePartDelete")
         ImageView sparePartDelete;
         @BindByTag("sparePartName")
@@ -130,14 +118,6 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
         protected void initListener() {
             super.initListener();
 
-//            main.setOnLongClickListener(new View.OnLongClickListener() {
-//                @Override
-//                public boolean onLongClick(View v) {
-//                    itemSwipeLayout.open();
-//                    return true;
-//                }
-//            });
-
             itemViewDelBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -152,32 +132,27 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
                         ToastUtils.show(context, "来源“备件更换到期预警”的备件不允许删除!", 3000);
                         return;
                     }
-                    if (sparePartEntity.useState != null && !Constant.SparePartUseStatus.NO_USE.equals(sparePartEntity.useState.id)) {
+                    if (!Constant.SparePartUseStatus.NO_USE.equals(sparePartEntity.getUseState().id)) {
                         ToastUtils.show(context, "已领用或领用中状态的备件不允许删除!", 3000);
                         return;
                     }
+                    new CustomDialog(context)
+                            .twoButtonAlertDialog("确认删除该备件：" + (sparePartEntity.productID == null ? "--" : sparePartEntity.productID.productName))
+                            .bindView(R.id.redBtn, "确认")
+                            .bindView(R.id.grayBtn, "取消")
+                            .bindClickListener(R.id.redBtn, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    notifyItemRemoved(getLayoutPosition());
+                                    notifyItemRangeChanged(getLayoutPosition(), getItemCount());
+                                    List<SparePartEntity> list = SparePartAdapter.this.getList();
+                                    list.remove(getLayoutPosition());
 
-                    if (sparePartEntity.timesNum >= repairSum) {
-                        new CustomDialog(context)
-                                .twoButtonAlertDialog("确认删除该备件：" + (sparePartEntity.productID == null ? "--" : sparePartEntity.productID.productName))
-                                .bindView(R.id.redBtn, "确认")
-                                .bindView(R.id.grayBtn, "取消")
-                                .bindClickListener(R.id.redBtn, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        notifyItemRemoved(getLayoutPosition());
-                                        notifyItemRangeChanged(getLayoutPosition(), getItemCount());
-                                        List<SparePartEntity> list = SparePartAdapter.this.getList();
-                                        list.remove(getLayoutPosition());
-
-                                        EventBus.getDefault().post(new RefreshEvent(sparePartEntity.id));
-                                    }
-                                }, true)
-                                .bindClickListener(R.id.grayBtn, null, true)
-                                .show();
-                    } else {
-                        ToastUtils.show(context, "历史备件数据,不允许删除!");
-                    }
+                                    EventBus.getDefault().post(new RefreshEvent(sparePartEntity.id));
+                                }
+                            }, true)
+                            .bindClickListener(R.id.grayBtn, null, true)
+                            .show();
                 }
             });
 
@@ -198,7 +173,7 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
                             sum.getNumViewInput().setText(null);
                             return;
                         }
-                        sparePartEntity.sum = new BigDecimal(charSequence.toString()).setScale(2,BigDecimal.ROUND_HALF_UP);
+                        sparePartEntity.sum = new BigDecimal(charSequence.toString()).setScale(2, BigDecimal.ROUND_HALF_UP);
                     });
 
             RxTextView.textChanges(remark.editText())
@@ -258,7 +233,7 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
             sum.getNumViewInput().setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             actualQuantity.getNumViewInput().setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
-            if (editable && data.timesNum == repairSum && data.useState != null && !Constant.SparePartUseStatus.USEING.equals(data.useState.id)) { // 领用中状态的备件无需checkbox
+            if (editable && !Constant.SparePartUseStatus.USEING.equals(data.getUseState().id)) {
                 sum.setEditable(true);
                 sum.getNumViewInput().setEnabled(true);
                 remark.setEditable(true);
@@ -270,15 +245,15 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
                 chkBox.setVisibility(View.GONE);
             }
             chkBox.setChecked(false);//还原状态false
-            if ((Constant.WxgdView.DISPATCH_OPEN_URL.equals(tableAction) || Constant.WxgdView.RECEIVE_OPEN_URL.equals(tableAction)) && data.timesNum == repairSum){
+            if ((Constant.WxgdView.DISPATCH_OPEN_URL.equals(tableAction) || Constant.WxgdView.RECEIVE_OPEN_URL.equals(tableAction))) {
                 actualQuantity.setVisibility(View.GONE);
-            }else {
+            } else {
                 actualQuantity.setVisibility(View.VISIBLE);
             }
-            if (data.useState!=null && Constant.WxgdView.EXECUTE_OPEN_URL.equals(tableAction) && Constant.SparePartUseStatus.NO_USE.equals(data.useState.id) && data.timesNum == repairSum ) {
+            if (Constant.WxgdView.EXECUTE_OPEN_URL.equals(tableAction) && Constant.SparePartUseStatus.NO_USE.equals(data.getUseState().id)) {
                 actualQuantity.setEditable(true);
                 actualQuantity.getNumViewInput().setEnabled(true);
-            }else {
+            } else {
                 actualQuantity.setEditable(false);
                 actualQuantity.getNumViewInput().setEnabled(false);
             }
@@ -288,34 +263,30 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
             if (data.productID != null) {
                 sparePartName.setValue(data.productID.productName);
                 sparePartSpecific.setValue(data.productID.productSpecif);
-            }else {
+            } else {
                 sparePartName.setContent("");
                 sparePartSpecific.setContent("");
             }
 
-            timesNum.setText(String.format(context.getResources().getString(R.string.wxTimes), String.valueOf(data.timesNum)));
             useQuantity.setValue(data.useQuantity != null ? String.valueOf(data.useQuantity.setScale(2, BigDecimal.ROUND_HALF_UP)) : "");
 
-            if (data.useState != null && !Constant.SparePartUseStatus.USEING.equals(data.useState.id)) {
+            if (!Constant.SparePartUseStatus.USEING.equals(data.getUseState().id)) {
                 actualQuantity.getNumViewInput().setText(data.actualQuantity == null ?
                         ((data.useQuantity == null || "0.00".equals(data.useQuantity.toString())) ?
-                                ((data.sum == null  || "0.00".equals(data.sum.toString())) ? "" : String.valueOf(data.sum.setScale(2, BigDecimal.ROUND_HALF_UP)))
+                                ((data.sum == null || "0.00".equals(data.sum.toString())) ? "" : String.valueOf(data.sum.setScale(2, BigDecimal.ROUND_HALF_UP)))
                                 : String.valueOf(data.useQuantity.setScale(2, BigDecimal.ROUND_HALF_UP)))
                         : String.valueOf(data.actualQuantity.setScale(2, BigDecimal.ROUND_HALF_UP))
                 );
-            }else {
+            } else {
                 actualQuantity.getNumViewInput().setText(data.actualQuantity == null ?
                         ((data.useQuantity == null || "0.00".equals(data.useQuantity.toString())) ? ""
                                 : String.valueOf(data.useQuantity.setScale(2, BigDecimal.ROUND_HALF_UP)))
                         : String.valueOf(data.actualQuantity.setScale(2, BigDecimal.ROUND_HALF_UP))
                 );
             }
-
             standingCrop.setValue(data.standingCrop == null ? "" : String.valueOf(data.standingCrop.setScale(2, BigDecimal.ROUND_HALF_UP)));
-            useState.setValue(data.useState == null ? "" : data.useState.value);
+            useState.setValue(Util.strFormat2(data.getUseState().value));
             remark.setInput(data.remark);
         }
-
     }
-
 }

@@ -70,9 +70,11 @@ public class WXGDEntity extends BaseEntity implements Cloneable {
 
     public SystemCodeEntity workSource; //工单来源
 
+    public SystemCodeEntity repairType; //维修类型
+
     public SystemCodeEntity workType; //工单状态
 
-    public String tableNo ;//单据编号
+    public String tableNo;//单据编号
 
     public PendingEntity pending;  //待办
 
@@ -89,6 +91,8 @@ public class WXGDEntity extends BaseEntity implements Cloneable {
     public JWXItem jwxItem; //业务规则
 
     public Boolean whetherBornSparePart; // 是否生成领用单
+
+    public String repairAdvise; //维修建议
 
     @Override
     public Object clone() throws CloneNotSupportedException {

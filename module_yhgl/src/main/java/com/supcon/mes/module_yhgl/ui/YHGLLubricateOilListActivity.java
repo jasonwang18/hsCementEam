@@ -24,7 +24,7 @@ import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
-import com.supcon.mes.middleware.model.bean.LubricateOil;
+import com.supcon.mes.middleware.model.bean.JWXItem;
 import com.supcon.mes.middleware.model.bean.LubricateOilsEntity;
 import com.supcon.mes.middleware.model.bean.RefLubricateEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
@@ -40,6 +40,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -61,6 +62,9 @@ public class YHGLLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
 
     @BindByTag("rightBtn")
     protected ImageButton rightBtn;
+
+    @BindByTag("refBtn")
+    protected ImageButton refBtn;
 
     @BindByTag("titleText")
     protected TextView titleText;
@@ -131,6 +135,7 @@ public class YHGLLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
         contentView.addOnItemTouchListener(new CustomSwipeLayout.OnSwipeItemTouchListener(this));
         if (editable) {
             rightBtn.setVisibility(View.VISIBLE);
+            refBtn.setVisibility(View.VISIBLE);
         }
         findViewById(R.id.includeSparePartLy).setVisibility(View.GONE);
 
@@ -154,7 +159,14 @@ public class YHGLLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
         RxView.clicks(rightBtn)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
+                    IntentRouter.go(context, Constant.Router.LUBRICATE_REF);
+                });
+
+        RxView.clicks(refBtn)
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(o -> {
                     Bundle bundle = new Bundle();
+                    bundle.putBoolean(Constant.IntentKey.IS_SPARE_PART_REF, true);
                     bundle.putLong(Constant.IntentKey.EAM_ID, eamID);
                     IntentRouter.go(context, Constant.Router.LUBRICATE_REF, bundle);
                 });
@@ -214,6 +226,24 @@ public class YHGLLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
         LubricateOilsEntity lubricateOilsEntity = new LubricateOilsEntity();
         lubricateOilsEntity.lubricate = refLubricateEntity.lubricateOil;
         lubricateOilsEntity.id = refLubricateEntity.id;
+        lubricateOilsEntity.oilQuantity = refLubricateEntity.sum;
+        lubricateOilsEntity.remark = refLubricateEntity.remark;
+        lubricateOilsEntity.lubricatingPart = refLubricateEntity.lubricatePart;
+        lubricateOilsEntity.oilType = refLubricateEntity.oilType;
+        JWXItem jwxItem = new JWXItem();
+        jwxItem.attachEamId = refLubricateEntity.accessoryEamId;
+        jwxItem.claim = refLubricateEntity.claim;
+        jwxItem.content = refLubricateEntity.content;
+        jwxItem.id = refLubricateEntity.id;
+        jwxItem.lastDuration = refLubricateEntity.lastDuration;
+        jwxItem.nextDuration = refLubricateEntity.nextDuration;
+        jwxItem.lastTime = refLubricateEntity.lastTime;
+        jwxItem.nextTime = refLubricateEntity.nextTime;
+        jwxItem.period = refLubricateEntity.period;
+        jwxItem.periodType = refLubricateEntity.periodType;
+        jwxItem.periodUnit = refLubricateEntity.periodUnit;
+        jwxItem.sparePartId = refLubricateEntity.sparePartId;
+        lubricateOilsEntity.jwxItemID = jwxItem;
 
         mEntities.add(lubricateOilsEntity);
         refreshListController.refreshComplete(mEntities);

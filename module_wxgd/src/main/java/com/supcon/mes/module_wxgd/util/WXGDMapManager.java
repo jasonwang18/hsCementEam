@@ -1,22 +1,21 @@
 package com.supcon.mes.module_wxgd.util;
 
 import android.annotation.SuppressLint;
-import android.text.TextUtils;
 
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.middleware.EamApplication;
-import com.supcon.mes.middleware.model.bean.MaintainEntity;
-import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.AcceptanceCheckEntity;
 import com.supcon.mes.middleware.model.bean.LubricateOilsEntity;
+import com.supcon.mes.middleware.model.bean.MaintainEntity;
 import com.supcon.mes.middleware.model.bean.RepairStaffEntity;
 import com.supcon.mes.middleware.model.bean.SparePartEntity;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.ValueEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_wxgd.model.dto.AcceptanceCheckEntityDto;
 import com.supcon.mes.module_wxgd.model.dto.GoodDto;
-import com.supcon.mes.module_wxgd.model.dto.LubricateOilDto;
+import com.supcon.mes.module_wxgd.model.dto.IdDto;
 import com.supcon.mes.module_wxgd.model.dto.LubricateOilsEntityDto;
 import com.supcon.mes.module_wxgd.model.dto.MaintainDto;
 import com.supcon.mes.module_wxgd.model.dto.RepairStaffDto;
@@ -54,29 +53,31 @@ public class WXGDMapManager {
         map.put("workRecord.createTime", format.format(mWXGDEntity.createTime));
         map.put("id", mWXGDEntity.id);
         map.put("workRecord.version", mWXGDEntity.version);
-        map.put("deploymentId", (mWXGDEntity.pending != null && mWXGDEntity.pending.deploymentId != null) ? mWXGDEntity.pending.deploymentId : "");
+        map.put("deploymentId", mWXGDEntity.pending != null ? Util.strFormat2(mWXGDEntity.pending.deploymentId) : "");
         map.put("webSignetFlag", false);
-        map.put("pendingId", (mWXGDEntity.pending != null && mWXGDEntity.pending.id != null) ? mWXGDEntity.pending.id : "");
-        map.put("workRecord.repairGroup.id", mWXGDEntity.repairGroup != null && mWXGDEntity.repairGroup.id != null ? mWXGDEntity.repairGroup.id : "");
-        map.put("workRecord.faultInfo.id", (mWXGDEntity.faultInfo != null && mWXGDEntity.faultInfo.id != null) ? mWXGDEntity.faultInfo.id : "");
-        map.put("workRecord.id", mWXGDEntity.id);
-        map.put("workRecord.chargeStaff.id", (mWXGDEntity.chargeStaff != null && mWXGDEntity.chargeStaff.id != null) ? mWXGDEntity.chargeStaff.id : "");
-        map.put("workRecord.eamID.id", (mWXGDEntity.eamID != null && mWXGDEntity.eamID.id != null) ? mWXGDEntity.eamID.id : "");
+        map.put("pendingId", mWXGDEntity.pending != null ? Util.strFormat2(mWXGDEntity.pending.id) : "");
+        map.put("workRecord.repairGroup.id", mWXGDEntity.repairGroup != null ? Util.strFormat2(mWXGDEntity.repairGroup.id) : "");
+        map.put("workRecord.faultInfo.id", mWXGDEntity.faultInfo != null ? Util.strFormat2(mWXGDEntity.faultInfo.id) : "");
+        map.put("workRecord.id", Util.strFormat2(mWXGDEntity.id));
+        map.put("workRecord.chargeStaff.id", mWXGDEntity.chargeStaff != null ? Util.strFormat2(mWXGDEntity.chargeStaff.id) : "");
+        map.put("workRecord.eamID.id", (mWXGDEntity.eamID != null && mWXGDEntity.eamID.id != null) ? Util.strFormat2(mWXGDEntity.eamID.id) : "");
         map.put("workRecord.planStartDate", mWXGDEntity.planStartDate == null ? "" : format.format(mWXGDEntity.planStartDate));
         map.put("workRecord.planEndDate", mWXGDEntity.planEndDate == null ? "" : format.format(mWXGDEntity.planEndDate));
-        map.put("workRecord.workSource.id", (mWXGDEntity.workSource != null && mWXGDEntity.workSource.id != null) ? mWXGDEntity.workSource.id : "");
-        map.put("workRecord.workSource.value", mWXGDEntity.workSource != null ? mWXGDEntity.workSource.value : "");
-        map.put("workRecord.content", TextUtils.isEmpty(mWXGDEntity.content) ? "" : mWXGDEntity.content);
-        map.put("workRecord.claim", TextUtils.isEmpty(mWXGDEntity.claim) ? "" : mWXGDEntity.claim);
+        map.put("workRecord.repairAdvise", Util.strFormat2(mWXGDEntity.repairAdvise));
+        map.put("workRecord.workSource.id", mWXGDEntity.workSource != null ? Util.strFormat2(mWXGDEntity.workSource.id) : "");
+        map.put("workRecord.workSource.value", mWXGDEntity.workSource != null ? Util.strFormat2(mWXGDEntity.workSource.value) : "");
+        map.put("workRecord.repairType.id", mWXGDEntity.repairType != null ? Util.strFormat2(mWXGDEntity.repairType.id) : "");
+        map.put("workRecord.repairType.value", mWXGDEntity.repairType != null ? Util.strFormat2(mWXGDEntity.repairType.value) : "");
+        map.put("workRecord.content", Util.strFormat2(mWXGDEntity.content));
+        map.put("workRecord.claim", Util.strFormat2(mWXGDEntity.claim));
         map.put("workRecord.period", mWXGDEntity.period == null ? "" : mWXGDEntity.period);
-        map.put("workRecord.thisDuration", mWXGDEntity.thisDuration == null ? "" : mWXGDEntity.thisDuration);
-        map.put("workRecord.totalDuration", mWXGDEntity.totalDuration == null ? "" : mWXGDEntity.totalDuration);
-        map.put("workRecord.lastDuration", mWXGDEntity.lastDuration == null ? "" : mWXGDEntity.lastDuration);
+        map.put("workRecord.thisDuration", Util.strFormat2(mWXGDEntity.thisDuration));
+        map.put("workRecord.totalDuration", Util.strFormat2(mWXGDEntity.totalDuration));
+        map.put("workRecord.lastDuration", Util.strFormat2(mWXGDEntity.lastDuration));
         map.put("workRecord.lastTime", mWXGDEntity.lastTime != null ? format.format(mWXGDEntity.lastTime) : "");
-//        map.put("workRecord.nextTime", mWXGDEntity.nextTime != null ? sdf.format(Long.valueOf(mWXGDEntity.nextTime)) : "");
         map.put("workRecord.realEndDate", mWXGDEntity.realEndDate == null ? "" : format.format(mWXGDEntity.realEndDate));
-        map.put("workRecord.periodUnit.id", mWXGDEntity.periodUnit != null ? mWXGDEntity.periodUnit.id : "");
-        map.put("workRecord.periodUnit.value", mWXGDEntity.periodUnit != null ? mWXGDEntity.periodUnit.value : "");
+        map.put("workRecord.periodUnit.id", mWXGDEntity.periodUnit != null ? Util.strFormat2(mWXGDEntity.periodUnit.id) : "");
+        map.put("workRecord.periodUnit.value", mWXGDEntity.periodUnit != null ? Util.strFormat2(mWXGDEntity.periodUnit.value) : "");
 
         map.put("__file_upload", true);
         return map;
@@ -93,12 +94,7 @@ public class WXGDMapManager {
             repairStaffDto.rowIndex = String.valueOf(i);
 
             staff = new StaffDto();
-//            if (staffs.get(i).repairStaff == null) {
-//                return null;
-//            }
-
             staff.id = staffs.get(i).repairStaff == null ? "" : String.valueOf(staffs.get(i).repairStaff.id);
-//            staff.name = staffs.get(i).repairStaff != null ? staffs.get(i).repairStaff.name : "";
             repairStaffDto.repairStaff = staff;
             repairStaffDto.startTime = staffs.get(i).startTime != null ? format.format(staffs.get(i).startTime) : "";
             repairStaffDto.endTime = staffs.get(i).endTime != null ? format.format(staffs.get(i).endTime) : "";
@@ -121,37 +117,42 @@ public class WXGDMapManager {
     public static LinkedList<SparePartEntityDto> translateSparePartDto(List<SparePartEntity> list) {
         LinkedList<SparePartEntityDto> sparePartEntityDtos = new LinkedList<>();
         SparePartEntityDto sparePartEntityDto;
-        GoodDto goodDto;
-        SystemCodeEntity useState;
+        IdDto idDto;
         String index;
         for (SparePartEntity sparePartEntity : list) {
             sparePartEntityDto = new SparePartEntityDto();
             sparePartEntityDto.id = sparePartEntity.id == null ? "" : String.valueOf(sparePartEntity.id);
-
-//            if (sparePartEntity.productID == null) {
-//                return null;
-//            }
-            goodDto = new GoodDto();
-            goodDto.id = sparePartEntity.productID == null ? "" : String.valueOf(sparePartEntity.productID.id);
-            sparePartEntityDto.productID = goodDto;
+            idDto = new IdDto();
+            idDto.id = sparePartEntity.productID == null ? "" : String.valueOf(sparePartEntity.productID.id);
+            sparePartEntityDto.productID = idDto;
             sparePartEntityDto.checkbox = "true";
             sparePartEntityDto.version = sparePartEntity.version != null ? sparePartEntity.version : "";
             sparePartEntityDto.sum = sparePartEntity.sum == null ? "" : String.valueOf(sparePartEntity.sum);
-            sparePartEntityDto.timesNum = String.valueOf(sparePartEntity.timesNum);
             index = String.valueOf(list.indexOf(sparePartEntity));
             sparePartEntityDto.sort = index;
             sparePartEntityDto.rowIndex = index;
             sparePartEntityDto.remark = sparePartEntity.remark;
-//            sparePartEntityDto.standingCrop = sparePartEntity.standingCrop == null ? "" : String.valueOf(sparePartEntity.standingCrop);
+            sparePartEntityDto.standingCrop = sparePartEntity.standingCrop == null ? "" : String.valueOf(sparePartEntity.standingCrop);
             sparePartEntityDto.useQuantity = sparePartEntity.useQuantity == null ? "" : String.valueOf(sparePartEntity.useQuantity);
             sparePartEntityDto.sparePartId = sparePartEntity.sparePartId == null ? "" : String.valueOf(sparePartEntity.sparePartId);
-            sparePartEntityDto.actualQuantity = sparePartEntity.actualQuantity != null && sparePartEntity.actualQuantity.intValue() != 0 ? String.valueOf(sparePartEntity.actualQuantity)
-                    : "";
-            useState = new SystemCodeEntity();
-            useState.id = sparePartEntity.useState == null ? "" : sparePartEntity.useState.id;
-            sparePartEntityDto.useState = useState;
-
-
+            sparePartEntityDto.actualQuantity = (sparePartEntity.actualQuantity != null && sparePartEntity.actualQuantity.intValue() != 0) ?
+                    String.valueOf(sparePartEntity.actualQuantity) : "";
+            idDto = new IdDto();
+            idDto.id = sparePartEntity.useState == null ? "" : Util.strFormat2(sparePartEntity.useState.id);
+            sparePartEntityDto.useState = idDto;
+            idDto = new IdDto();
+            idDto.id = sparePartEntity.periodType != null ? Util.strFormat2(sparePartEntity.periodType.id) : "";
+            sparePartEntityDto.periodType = idDto;
+            sparePartEntityDto.period = Util.strFormat2(sparePartEntity.period);
+            idDto = new IdDto();
+            idDto.id = sparePartEntity.periodUnit != null ? Util.strFormat2(sparePartEntity.periodUnit.id) : "";
+            sparePartEntityDto.periodUnit = idDto;
+            sparePartEntityDto.lastTime = sparePartEntity.lastTime != null ? format.format(sparePartEntity.lastTime) : "";
+            sparePartEntityDto.nextTime = sparePartEntity.nextTime != null ? format.format(sparePartEntity.nextTime) : "";
+            sparePartEntityDto.lastDuration = Util.strFormat2(sparePartEntity.lastDuration);
+            sparePartEntityDto.nextDuration = Util.strFormat2(sparePartEntity.nextDuration);
+            sparePartEntityDto.accessoryName = Util.strFormat2(sparePartEntity.accessoryName);
+            sparePartEntityDto.isRef = Util.strFormat2(sparePartEntity.isRef);
             sparePartEntityDtos.add(sparePartEntityDto);
         }
 
@@ -167,30 +168,23 @@ public class WXGDMapManager {
     public static LinkedList<LubricateOilsEntityDto> translateLubricateOilsDto(List<LubricateOilsEntity> list) {
         LinkedList<LubricateOilsEntityDto> lubricateOilsEntityDtos = new LinkedList<>();
         LubricateOilsEntityDto lubricateOilsEntityDto;
-        LubricateOilDto lubricateOilDto;
-        SystemCodeEntity oilType;
+        IdDto idDto;
         for (LubricateOilsEntity lubricateOilsEntity : list) {
             lubricateOilsEntityDto = new LubricateOilsEntityDto();
-            lubricateOilsEntityDto.id = lubricateOilsEntity.id == null ? "" : String.valueOf(lubricateOilsEntity.id);
-            lubricateOilsEntityDto.version = lubricateOilsEntity.version == null ? "" : lubricateOilsEntity.version;
+            lubricateOilsEntityDto.id = lubricateOilsEntity.id == null ? "" : Util.strFormat2(lubricateOilsEntity.id);
+            idDto = new IdDto();
+            idDto.id = lubricateOilsEntity.lubricate == null ? "" : Util.strFormat2(lubricateOilsEntity.lubricate.id);
+            lubricateOilsEntityDto.lubricate = idDto;
 
-//            if (lubricateOilsEntity.lubricate == null) {
-//                return null;
-//            }
-            lubricateOilDto = new LubricateOilDto();
-            lubricateOilDto.id = lubricateOilsEntity.lubricate == null ? "" :String.valueOf(lubricateOilsEntity.lubricate.id);
-            lubricateOilsEntityDto.lubricate = lubricateOilDto;
-
-            oilType = new SystemCodeEntity();
-            oilType.id = lubricateOilsEntity.oilType == null ? "" : lubricateOilsEntity.oilType.id;
-            lubricateOilsEntityDto.oilType = oilType;
-
-            lubricateOilsEntityDto.oilQuantity = lubricateOilsEntity.oilQuantity == null ? "" : String.valueOf(lubricateOilsEntity.oilQuantity);
-            lubricateOilsEntityDto.timesNum = String.valueOf(lubricateOilsEntity.timesNum);
-            String index = String.valueOf(list.indexOf(lubricateOilsEntity));
-            lubricateOilsEntityDto.sort = index;
-            lubricateOilsEntityDto.rowIndex = index;
+            idDto = new IdDto();
+            idDto.id = lubricateOilsEntity.oilType == null ? "" : lubricateOilsEntity.oilType.id;
+            lubricateOilsEntityDto.oilType = idDto;
+            idDto = new IdDto();
+            idDto.id = lubricateOilsEntity.jwxItemID == null ? "" : Util.strFormat2(lubricateOilsEntity.jwxItemID.id);
+            lubricateOilsEntityDto.jwxItemID = idDto;
+            lubricateOilsEntityDto.oilQuantity = lubricateOilsEntity.oilQuantity == null ? "" : Util.strFormat2(lubricateOilsEntity.oilQuantity);
             lubricateOilsEntityDto.remark = lubricateOilsEntity.remark;
+            lubricateOilsEntityDto.lubricatingPart = Util.strFormat2(lubricateOilsEntity.lubricatingPart);
 
             lubricateOilsEntityDtos.add(lubricateOilsEntityDto);
         }
@@ -207,14 +201,10 @@ public class WXGDMapManager {
         LinkedList<MaintainDto> maintainDtos = new LinkedList<>();
         for (MaintainEntity maintainEntity : list) {
             MaintainDto maintainDto = new MaintainDto();
-
-            ValueEntity jwxItemID = new ValueEntity();
-            jwxItemID.id = Util.strFormat2(maintainEntity.getJwxItem().id);
-            maintainDto.jwxItemID = jwxItemID;
-            maintainDto.claim = maintainEntity.claim;
-            maintainDto.sparePartName = maintainEntity.sparePartName;
-            maintainDto.lastTime = maintainEntity.lastTime != null ? DateUtil.dateFormat(maintainEntity.lastTime) : "";
-            maintainDto.nextTime = maintainEntity.nextTime != null ? DateUtil.dateFormat(maintainEntity.nextTime) : "";
+            maintainDto.id = Util.strFormat2(maintainEntity.id);
+            IdDto idDto = new IdDto();
+            idDto.id = Util.strFormat2(maintainEntity.getJwxItem().id);
+            maintainDto.jwxItemID = idDto;
             maintainDtos.add(maintainDto);
         }
         return maintainDtos;
@@ -232,22 +222,16 @@ public class WXGDMapManager {
         SystemCodeEntity checkResult;
         for (AcceptanceCheckEntity entity : list) {
             acceptanceCheckEntityDto = new AcceptanceCheckEntityDto();
-            acceptanceCheckEntityDto.id = entity.id == null ? "" : String.valueOf(entity.id);
 
-            StaffDto staffDto = new StaffDto();
-            staffDto.id = entity.checkStaff == null ? "" : String.valueOf(entity.checkStaff.id);
-            acceptanceCheckEntityDto.checkStaff = staffDto;
+            IdDto idDto = new IdDto();
+            idDto.id = entity.checkStaff == null ? "" : Util.strFormat2(entity.checkStaff.id);
+            acceptanceCheckEntityDto.checkStaff = idDto;
+            idDto = new IdDto();
+            idDto.id = entity.checkResult == null ? "" : Util.strFormat2(entity.checkResult.id);
+            acceptanceCheckEntityDto.checkResult = idDto;
 
             acceptanceCheckEntityDto.checkTime = entity.checkTime == null ? "" : DateUtil.dateFormat(entity.checkTime, "yyyy-MM-dd HH:mm:ss");
-
-            checkResult = new SystemCodeEntity();
-            checkResult.id = entity.checkResult == null ? "" : entity.checkResult.id;
-            acceptanceCheckEntityDto.checkResult = checkResult;
-
-            acceptanceCheckEntityDto.timesNum = entity.timesNum == null ? "" : String.valueOf(entity.timesNum);
-            acceptanceCheckEntityDto.rowIndex = "";
             acceptanceCheckEntityDto.remark = entity.remark;
-
             acceptanceCheckEntityDtos.add(acceptanceCheckEntityDto);
         }
         return acceptanceCheckEntityDtos;

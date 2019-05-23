@@ -30,12 +30,14 @@ import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.Good;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
 import com.supcon.mes.middleware.model.bean.SparePartEntity;
+import com.supcon.mes.middleware.model.bean.SparePartRefEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.event.SparePartAddEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
+import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_yhgl.IntentRouter;
 import com.supcon.mes.module_yhgl.R;
 import com.supcon.mes.module_yhgl.model.api.SparePartAPI;
@@ -189,7 +191,6 @@ public class YHGLSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
                     public void accept(Object o) throws Exception {
                         Bundle bundle = new Bundle();
                         bundle.putBoolean(Constant.IntentKey.IS_SPARE_PART_REF, false);
-                        bundle.putString(Constant.IntentKey.SPARE_PART_REF_YRL, "/MESBasic/product/product/refProduct_sp-query.action?&permissionCode=MESBasic_1_product_refProductLayout_sp&crossCompanyFlag=false");
                         IntentRouter.go(context, Constant.Router.SPARE_PART_REF, bundle);
                     }
                 });
@@ -306,7 +307,6 @@ public class YHGLSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
             sparePartJsonEntity = new SparePartJsonEntity();
             sparePartJsonEntity.setId(sparePartEntity.id == null ? "" : String.valueOf(sparePartEntity.id));
             sparePartJsonEntity.setSum(sparePartEntity.sum == null ? "" : String.valueOf(sparePartEntity.sum));
-            sparePartJsonEntity.setTimesNum(String.valueOf(sparePartEntity.timesNum));
             sparePartJsonEntity.setUseQuantity(sparePartEntity.useQuantity == null ? "" : String.valueOf(sparePartEntity.useQuantity));
             sparePartJsonEntity.setActualQuantity(sparePartEntity.actualQuantity == null ? "" : String.valueOf(sparePartEntity.actualQuantity));
             sparePartJsonEntity.setStandingCrop(sparePartEntity.standingCrop == null ? "" : String.valueOf(sparePartEntity.standingCrop));
@@ -318,7 +318,7 @@ public class YHGLSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
             sparePartJsonEntity.setProductID(goodDto);
 
             useState = new SystemCodeEntity();
-            useState.id = sparePartEntity.isDeliveried ? Constant.SparePartUseStatus.PRE_USE : sparePartEntity.useState.id;
+            useState.id = sparePartEntity.isDeliveried ? Constant.SparePartUseStatus.PRE_USE : Util.strFormat2(sparePartEntity.useState.id);
             sparePartJsonEntity.setUseState(useState);
 
             workListBean = new SparePartJsonEntity.WorkListBean();
@@ -349,27 +349,35 @@ public class YHGLSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void addSparePart(SparePartAddEvent sparePartAddEvent) {
-        //添加备件
-        Good good = sparePartAddEvent.getGood();
+        SparePartRefEntity sparePartRefEntity = sparePartAddEvent.getSparePartRefEntity();
+        Good good = sparePartRefEntity.getProductID();
         for (SparePartEntity sparePartEntity : mSparePartEntityList) {
             if (sparePartEntity.productID != null) {
                 if (sparePartEntity.productID.id.equals(good.id)) {
                     ToastUtils.show(context, "请勿重复添加备件!");
-                    refreshListController.refreshComplete(removeDuplicte());
+                    refreshListController.refreshComplete(mSparePartEntityList);
                     return;
                 }
             }
         }
-
         SparePartEntity sparePartEntity = new SparePartEntity();
         sparePartEntity.productID = good;
         sparePartEntity.sum = BigDecimal.valueOf(1);
         sparePartEntity.useState = SystemCodeManager.getInstance().getSystemCodeEntity("BEAM2011/01");
-
         sparePartEntity.isRef = sparePartAddEvent.isFlag();
+        sparePartEntity.lastDuration = sparePartRefEntity.getLastDuration();
+        sparePartEntity.lastTime = sparePartRefEntity.getLastTime();
+        sparePartEntity.nextDuration = sparePartRefEntity.getNextDuration();
+        sparePartEntity.nextTime = sparePartRefEntity.getNextTime();
+        sparePartEntity.period = sparePartRefEntity.getPeriod();
+        sparePartEntity.periodType = sparePartRefEntity.getPeriodType();
+        sparePartEntity.periodUnit = sparePartRefEntity.getPeriodUnit();
+        sparePartEntity.accessoryName = sparePartRefEntity.getAccessoryEamId().getAttachEamId().name;
+        sparePartEntity.remark = sparePartRefEntity.getSpareMemo();
+        sparePartEntity.standingCrop = sparePartRefEntity.getStandingCrop();
+
         mSparePartEntityList.add(sparePartEntity);
         refreshListController.refreshComplete(removeDuplicte());
-//        refreshListController.refreshBegin();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

@@ -338,6 +338,22 @@ public class Util {
      * @param d
      * @return
      */
+    public static String big(Float d) {
+        if (d == null || d == 0) {
+            return "";
+        }
+        BigDecimal d1 = new BigDecimal(Double.toString(d));
+        BigDecimal d2 = new BigDecimal(Integer.toString(1));
+        // 四舍五入,保留2位小数
+        return d1.divide(d2, 2, BigDecimal.ROUND_HALF_UP).toString();
+    }
+
+    /**
+     * 浮点型保留两位小数
+     *
+     * @param d
+     * @return
+     */
     public static String big2(Float d) {
         if (d == null || d == 0) {
             return "--";

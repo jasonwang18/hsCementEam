@@ -2,19 +2,12 @@ package com.supcon.mes.module_wxgd.presenter;
 
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
-import com.supcon.mes.middleware.util.FormDataHelper;
-import com.supcon.mes.module_wxgd.model.bean.SparePartJsonEntity;
 import com.supcon.mes.module_wxgd.model.bean.StandingCropResultEntity;
 import com.supcon.mes.module_wxgd.model.contract.SparePartListContract;
-import com.supcon.mes.module_wxgd.model.dto.SparePartJsonEntityDto;
 import com.supcon.mes.module_wxgd.model.network.HttpClient;
-
-import java.util.List;
-import java.util.Map;
 
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import okhttp3.RequestBody;
 
 /**
  * SparePartListPresenter 表体备件列表Presenter

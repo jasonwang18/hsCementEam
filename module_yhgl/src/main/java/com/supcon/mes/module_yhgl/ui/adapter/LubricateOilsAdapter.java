@@ -23,6 +23,7 @@ import com.supcon.mes.mbap.view.CustomVerticalSpinner;
 import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.middleware.model.bean.LubricateOilsEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_yhgl.R;
 
 import org.greenrobot.eventbus.EventBus;
@@ -106,7 +107,7 @@ public class LubricateOilsAdapter extends BaseListDataRecyclerViewAdapter<Lubric
                         LubricateOilsEntity lubricateOilsEntity = getItem(getAdapterPosition());
                         if (TextUtils.isEmpty(charSequence)) {
                             if (lubricateOilsEntity != null) {
-                                lubricateOilsEntity.oilQuantity = BigDecimal.valueOf(0);
+                                lubricateOilsEntity.oilQuantity = 0F;
                             }
                             return;
                         }
@@ -115,7 +116,7 @@ public class LubricateOilsAdapter extends BaseListDataRecyclerViewAdapter<Lubric
                             sum.getNumViewInput().setText(null);
                             return;
                         }
-                        lubricateOilsEntity.oilQuantity = new BigDecimal(charSequence.toString());
+                        lubricateOilsEntity.oilQuantity = Float.valueOf(charSequence.toString());
                     });
 
             oilType.setOnChildViewClickListener(new OnChildViewClickListener() {
@@ -188,7 +189,7 @@ public class LubricateOilsAdapter extends BaseListDataRecyclerViewAdapter<Lubric
                 remark.setEditable(false);
             }
 
-            sum.getNumViewInput().setText(data.oilQuantity != null ? String.valueOf(data.oilQuantity.setScale(2, BigDecimal.ROUND_HALF_UP)) : "");
+            sum.getNumViewInput().setText(Util.big(data.oilQuantity));
 
             if (data.oilType != null) {
                 oilType.setSpinner(data.oilType.value);

@@ -13,5 +13,6 @@ public class FaultInfo extends BaseEntity {
     public SystemCodeEntity faultInfoType;//隐患类型
     public SystemCodeEntity repairType;//维修类型
     public SystemCodeEntity priority;//优先级
+    public Staff findStaffID;//发现人
     public String tableNo;//隐患单据编号
 }

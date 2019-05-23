@@ -4,24 +4,35 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.common.view.listener.OnChildViewClickListener;
+import com.supcon.common.view.util.ToastUtils;
+import com.supcon.common.view.view.CustomSwipeLayout;
 import com.supcon.mes.mbap.utils.DateUtil;
+import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomVerticalDateView;
 import com.supcon.mes.mbap.view.CustomVerticalEditText;
 import com.supcon.mes.mbap.view.CustomVerticalSpinner;
 import com.supcon.mes.mbap.view.CustomVerticalTextView;
+import com.supcon.mes.middleware.model.bean.MaintainEntity;
+import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_wxgd.R;
 import com.supcon.mes.middleware.model.bean.AcceptanceCheckEntity;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.List;
 
 public class AcceptanceCheckAdapter extends BaseListDataRecyclerViewAdapter<AcceptanceCheckEntity> {
 
     private boolean isEditable;
-    private long repairSum;
 
     public AcceptanceCheckAdapter(Context context, boolean isEditable) {
         super(context);
@@ -33,10 +44,6 @@ public class AcceptanceCheckAdapter extends BaseListDataRecyclerViewAdapter<Acce
         return new ViewHolder(context);
     }
 
-    public void setRepairSum(long repairSum) {
-        this.repairSum = repairSum;
-    }
-
     public void setEditable(boolean isEditable) {
         this.isEditable = isEditable;
     }
@@ -45,10 +52,6 @@ public class AcceptanceCheckAdapter extends BaseListDataRecyclerViewAdapter<Acce
 
         @BindByTag("index")
         TextView index;
-        @BindByTag("timesNum")
-        TextView timesNum;
-        //        @BindByTag("acceptanceDelete")
-//        ImageView acceptanceDelete;
         @BindByTag("acceptanceStaffName")
         CustomVerticalTextView acceptanceStaffName;
         @BindByTag("acceptanceStaffCode")
@@ -57,10 +60,15 @@ public class AcceptanceCheckAdapter extends BaseListDataRecyclerViewAdapter<Acce
         CustomVerticalDateView acceptanceTime;
         @BindByTag("acceptanceResult")
         CustomVerticalSpinner acceptanceResult;
-        @BindByTag("remark")
-        CustomVerticalEditText remark;
         @BindByTag("chkBox")
         CheckBox chkBox;
+
+        @BindByTag("itemSwipeLayout")
+        CustomSwipeLayout itemSwipeLayout;
+        @BindByTag("main")
+        LinearLayout main;
+        @BindByTag("itemViewDelBtn")
+        TextView itemViewDelBtn;
 
 
         public ViewHolder(Context context) {
@@ -84,24 +92,37 @@ public class AcceptanceCheckAdapter extends BaseListDataRecyclerViewAdapter<Acce
             super.initListener();
 
             acceptanceStaffName.setOnChildViewClickListener(this);
+            acceptanceStaffCode.setOnChildViewClickListener(this);
+            acceptanceTime.setOnChildViewClickListener(this);
+            acceptanceResult.setOnChildViewClickListener(this::onChildViewClick);
 
-//            RxTextView.textChanges(remark.editText()).subscribe(charSequence -> {
-//                AcceptanceCheckEntity acceptanceCheckEntity = getItem(getAdapterPosition());
-//                acceptanceCheckEntity.remark = charSequence.toString();
-//            });
-
-            acceptanceTime.setOnChildViewClickListener(new OnChildViewClickListener() {
-                @Override
-                public void onChildViewClick(View childView, int action, Object obj) {
-                    onItemChildViewClick(acceptanceTime, 0, getItem(getAdapterPosition()));
-                }
+            main.setOnLongClickListener(v -> {
+                itemSwipeLayout.open();
+                return true;
+            });
+            itemViewDelBtn.setOnClickListener(v -> {
+                AcceptanceCheckEntity item = getItem(getAdapterPosition());
+                itemSwipeLayout.close();
+                new CustomDialog(context)
+                        .twoButtonAlertDialog("确认删除该备件：" + Util.strFormat(item.getCheckStaff().name))
+                        .bindView(R.id.redBtn, "确认")
+                        .bindView(R.id.grayBtn, "取消")
+                        .bindClickListener(R.id.redBtn, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                List<AcceptanceCheckEntity> list = getList();
+                                AcceptanceCheckAdapter.this.list.remove(getAdapterPosition());
+                                EventBus.getDefault().post(new RefreshEvent(item.id));
+                            }
+                        }, true)
+                        .bindClickListener(R.id.grayBtn, null, true)
+                        .show();
             });
         }
 
         @Override
         protected void update(AcceptanceCheckEntity data) {
             index.setText(String.valueOf(getAdapterPosition() + 1));
-            timesNum.setText(String.format(context.getResources().getString(R.string.acceptanceTimes), String.valueOf(getAdapterPosition() + 1)));
 
             if (data.checkStaff != null) {
                 acceptanceStaffName.setValue(data.checkStaff.name);
@@ -112,13 +133,7 @@ public class AcceptanceCheckAdapter extends BaseListDataRecyclerViewAdapter<Acce
             }
             acceptanceTime.setDate(data.checkTime == null ? "" : DateUtil.dateTimeFormat(data.checkTime));
 
-            if (data.checkResult != null){
-                acceptanceResult.setSpinner(data.checkResult.value);
-            }else {
-                acceptanceResult.setSpinner("");
-            }
-
-            timesNum.setText(String.format(context.getResources().getString(R.string.wxTimes), String.valueOf(data.timesNum)));
+            acceptanceResult.setSpinner(data.getCheckResult().value);
 
         }
 

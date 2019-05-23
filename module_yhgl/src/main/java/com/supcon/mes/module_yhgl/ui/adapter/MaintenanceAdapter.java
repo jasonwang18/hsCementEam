@@ -123,7 +123,7 @@ public class MaintenanceAdapter extends BaseListDataRecyclerViewAdapter<Maintain
                     return;
                 }
                 new CustomDialog(context)
-                        .twoButtonAlertDialog("确认删除该备件：" + Util.strFormat(maintainEntity.sparePartName))
+                        .twoButtonAlertDialog("确认删除该备件：" + Util.strFormat(maintainEntity.getJwxItem().getSparePartId().getProductID().productName))
                         .bindView(R.id.redBtn, "确认")
                         .bindView(R.id.grayBtn, "取消")
                         .bindClickListener(R.id.redBtn, new View.OnClickListener() {
@@ -142,21 +142,21 @@ public class MaintenanceAdapter extends BaseListDataRecyclerViewAdapter<Maintain
         @Override
         protected void update(MaintainEntity data) {
             index.setText(String.valueOf(getAdapterPosition() + 1));
-            sparePartName.setContent(Util.strFormat(data.sparePartName));
-            attachEam.setContent(data.getAccessoryEamId().getAttachEamId().name);
+            sparePartName.setContent(Util.strFormat(data.getJwxItem().getSparePartId().getProductID().productName));
+            attachEam.setContent(data.getJwxItem().getAttachEamId().getAttachEamId().name);
 
             if (data.getJwxItem().isDuration()) {
                 durationLayout.setVisibility(View.VISIBLE);
-                lastDuration.setValue(Util.big2(data.lastDuration));
-                nextDuration.setValue(Util.big2(data.nextDuration));
+                lastDuration.setValue(Util.big2(data.getJwxItem().lastDuration));
+                nextDuration.setValue(Util.big2(data.getJwxItem().nextDuration));
             } else {
                 timeLayout.setVisibility(View.VISIBLE);
-                lastTime.setContent(data.lastTime != null ? DateUtil.dateFormat(data.lastTime) : "");
-                nextTime.setContent(data.nextTime != null ? DateUtil.dateFormat(data.nextTime) : "");
+                lastTime.setContent(data.getJwxItem().lastTime != null ? DateUtil.dateFormat(data.getJwxItem().lastTime) : "");
+                nextTime.setContent(data.getJwxItem().nextTime != null ? DateUtil.dateFormat(data.getJwxItem().nextTime) : "");
             }
 
-            claim.setContent(Util.strFormat(data.claim));
-            content.setContent(Util.strFormat(data.content));
+            claim.setContent(Util.strFormat(data.getJwxItem().claim));
+            content.setContent(Util.strFormat(data.getJwxItem().content));
         }
     }
 

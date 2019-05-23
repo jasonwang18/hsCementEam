@@ -3,6 +3,7 @@ package com.supcon.mes.middleware.presenter;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.JoinSubcondEntity;
+import com.supcon.mes.middleware.model.bean.LubricateListEntity;
 import com.supcon.mes.middleware.model.bean.RefLubricateListEntity;
 import com.supcon.mes.middleware.model.contract.RefLubricateContract;
 import com.supcon.mes.middleware.model.network.MiddlewareHttpClient;
@@ -18,6 +19,28 @@ import java.util.Map;
  * ------------- Description -------------
  */
 public class RefLubricatePresenter extends RefLubricateContract.Presenter {
+    @Override
+    public void listLubricate(int pageNum, Map<String, Object> queryParam) {
+        FastQueryCondEntity fastQueryCondEntity = BAPQueryParamsHelper.createSingleFastQueryCond(queryParam);
+        fastQueryCondEntity.modelAlias = "lubricateOil";
+        Map<String, Object> pageQueryParam = new HashMap<>();
+        pageQueryParam.put("page.pageSize", 20);
+        pageQueryParam.put("page.maxPageSize", 500);
+        pageQueryParam.put("page.pageNo", pageNum);
+
+        mCompositeSubscription.add(MiddlewareHttpClient.listLubricate(fastQueryCondEntity, pageQueryParam).onErrorReturn(throwable -> {
+            LubricateListEntity lubricateListEntity = new LubricateListEntity();
+            lubricateListEntity.errMsg = throwable.toString();
+            return lubricateListEntity;
+        }).subscribe(lubricateListEntity -> {
+            if (lubricateListEntity.errMsg == null) {
+                getView().listLubricateSuccess(lubricateListEntity);
+            } else {
+                getView().listLubricateFailed(lubricateListEntity.errMsg);
+            }
+        }));
+    }
+
     @Override
     public void listRefLubricate(int pageNum, Long eamID, Map<String, Object> queryParam) {
         FastQueryCondEntity fastQueryCondEntity = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());

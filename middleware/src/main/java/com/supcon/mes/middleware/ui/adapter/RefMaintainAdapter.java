@@ -14,6 +14,7 @@ import com.supcon.mes.mbap.view.CustomVerticalEditText;
 import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.middleware.R;
 import com.supcon.mes.middleware.model.bean.MaintainEntity;
+import com.supcon.mes.middleware.model.bean.RefMaintainEntity;
 import com.supcon.mes.middleware.util.Util;
 
 /**
@@ -23,17 +24,17 @@ import com.supcon.mes.middleware.util.Util;
  * 维保参照
  * ------------- Description -------------
  */
-public class RefMaintainAdapter extends BaseListDataRecyclerViewAdapter<MaintainEntity> {
+public class RefMaintainAdapter extends BaseListDataRecyclerViewAdapter<RefMaintainEntity> {
     public RefMaintainAdapter(Context context) {
         super(context);
     }
 
     @Override
-    protected BaseRecyclerViewHolder<MaintainEntity> getViewHolder(int viewType) {
+    protected BaseRecyclerViewHolder<RefMaintainEntity> getViewHolder(int viewType) {
         return new RefProductViewHolder(context);
     }
 
-    class RefProductViewHolder extends BaseRecyclerViewHolder<MaintainEntity> {
+    class RefProductViewHolder extends BaseRecyclerViewHolder<RefMaintainEntity> {
         @BindByTag("layout_refproduct")
         RelativeLayout layout_refproduct;
 
@@ -63,7 +64,7 @@ public class RefMaintainAdapter extends BaseListDataRecyclerViewAdapter<Maintain
         }
 
         @Override
-        protected void update(MaintainEntity data) {
+        protected void update(RefMaintainEntity data) {
             sparePartName.setContent(Util.strFormat(data.getSparePartId().getProductID().productName));
             attachEam.setContent(data.getAccessoryEamId().getAttachEamId().name);
             claim.setContent(Util.strFormat(data.claim));

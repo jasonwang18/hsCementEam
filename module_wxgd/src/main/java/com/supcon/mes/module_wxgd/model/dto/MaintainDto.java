@@ -8,11 +8,8 @@ import com.supcon.mes.middleware.model.bean.ValueEntity;
  * created by zhangwenshuai1 2018/9/5
  */
 public class MaintainDto extends BaseEntity {
-    public ValueEntity jwxItemID;
-    public String sparePartName;
-    public String claim;
-    public String content;
-    public String lastTime;
-    public String nextTime;
+
+    public String id;
+    public IdDto jwxItemID;
 
 }

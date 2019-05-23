@@ -12,12 +12,13 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
+import com.supcon.common.com_http.BaseEntity;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
-import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
+import com.supcon.common.view.view.picker.SinglePicker;
 import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.beans.WorkFlowVar;
 import com.supcon.mes.mbap.listener.OnTextListener;
@@ -25,47 +26,52 @@ import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.utils.controllers.DatePickController;
+import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomEditText;
-import com.supcon.mes.mbap.view.CustomListWidget;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomVerticalDateView;
+import com.supcon.mes.mbap.view.CustomVerticalEditText;
+import com.supcon.mes.mbap.view.CustomVerticalSpinner;
 import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.mbap.view.CustomWorkFlowView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.controller.EamPicController;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.RoleController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
+import com.supcon.mes.middleware.model.bean.SparePartEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
+import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
-import com.supcon.mes.middleware.controller.EamPicController;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
+import com.supcon.mes.middleware.util.SystemCodeManager;
 import com.supcon.mes.module_wxgd.R;
-import com.supcon.mes.module_wxgd.controller.AcceptanceCheckController;
 import com.supcon.mes.module_wxgd.controller.LubricateOilsController;
+import com.supcon.mes.module_wxgd.controller.MaintenanceController;
 import com.supcon.mes.module_wxgd.controller.RepairStaffController;
 import com.supcon.mes.module_wxgd.controller.SparePartController;
 import com.supcon.mes.module_wxgd.controller.WXGDSubmitController;
 import com.supcon.mes.module_wxgd.model.api.WXGDListAPI;
 import com.supcon.mes.module_wxgd.model.api.WXGDStopOrActivateAPI;
-import com.supcon.mes.middleware.model.bean.AcceptanceCheckEntity;
-import com.supcon.mes.middleware.model.bean.SparePartEntity;
-import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.module_wxgd.model.bean.WXGDListEntity;
 import com.supcon.mes.module_wxgd.model.contract.WXGDListContract;
 import com.supcon.mes.module_wxgd.model.contract.WXGDStopOrActivateContract;
 import com.supcon.mes.module_wxgd.model.dto.LubricateOilsEntityDto;
+import com.supcon.mes.module_wxgd.model.dto.MaintainDto;
 import com.supcon.mes.module_wxgd.model.dto.RepairStaffDto;
 import com.supcon.mes.module_wxgd.model.dto.SparePartEntityDto;
 import com.supcon.mes.module_wxgd.model.event.ListEvent;
 import com.supcon.mes.module_wxgd.model.event.LubricateOilsEvent;
+import com.supcon.mes.module_wxgd.model.event.MaintenanceEvent;
 import com.supcon.mes.module_wxgd.model.event.RepairStaffEvent;
 import com.supcon.mes.module_wxgd.model.event.SparePartEvent;
 import com.supcon.mes.module_wxgd.model.event.VersionRefreshEvent;
 import com.supcon.mes.module_wxgd.presenter.WXGDListPresenter;
 import com.supcon.mes.module_wxgd.presenter.WXGDStopOrActivatePresenter;
+import com.supcon.mes.module_wxgd.util.FieldHepler;
 import com.supcon.mes.module_wxgd.util.WXGDMapManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -76,6 +82,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -91,8 +98,8 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  */
 @Router(Constant.Router.WXGD_EXECUTE)
 @Presenter(value = {WXGDStopOrActivatePresenter.class, WXGDListPresenter.class})
-@Controller(value = {SparePartController.class,RepairStaffController.class,LubricateOilsController.class,AcceptanceCheckController.class})
-public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubmitController.OnSubmitResultListener, WXGDStopOrActivateContract.View,WXGDListContract.View {
+@Controller(value = {SparePartController.class, RepairStaffController.class, MaintenanceController.class, LubricateOilsController.class})
+public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubmitController.OnSubmitResultListener, WXGDStopOrActivateContract.View, WXGDListContract.View {
 
     @BindByTag("leftBtn")
     ImageButton leftBtn;
@@ -110,50 +117,37 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
     @BindByTag("eamArea")
     CustomTextView eamArea;
 
+    @BindByTag("discoverer")
+    CustomVerticalTextView discoverer;
     @BindByTag("faultInfoType")
     CustomVerticalTextView faultInfoType;
-    @BindByTag("repairType")
-    CustomVerticalTextView repairType;
     @BindByTag("priority")
     CustomTextView priority;
     @BindByTag("faultInfoDescribe")
     CustomVerticalTextView faultInfoDescribe;
     @BindByTag("faultInfo")
     LinearLayout faultInfo;
-    @BindByTag("noFaultInfo")
-    LinearLayout noFaultInfo;
-
-    @BindByTag("content")
-    CustomTextView content;
-    @BindByTag("claim")
-    CustomTextView claim;
-    @BindByTag("period")
-    CustomTextView period;
-    @BindByTag("periodUnit")
-    CustomTextView periodUnit;
-    @BindByTag("lastExecuteTime")
-    CustomVerticalDateView lastExecuteTime;
-    @BindByTag("nextExecuteTime")
-    CustomTextView nextExecuteTime;
-    @BindByTag("lastDuration")
-    CustomVerticalDateView lastDuration;
-    @BindByTag("realEndDate")
-    CustomVerticalDateView realEndDate;
 
     @BindByTag("repairGroup")
     CustomVerticalTextView repairGroup;
     @BindByTag("chargeStaff")
     CustomVerticalTextView chargeStaff;
+    @BindByTag("wosource")
+    CustomVerticalTextView wosource;
+    @BindByTag("repairType")
+    CustomVerticalSpinner repairType;
     @BindByTag("planStartTime")
     CustomVerticalDateView planStartTime;
     @BindByTag("planEndTime")
     CustomVerticalDateView planEndTime;
-    @BindByTag("acceptanceCheckListWidget")
-    CustomListWidget<AcceptanceCheckEntity> acceptanceCheckListWidget;
+    @BindByTag("realEndTime")
+    CustomVerticalDateView realEndTime;
     @BindByTag("commentInput")
     CustomEditText commentInput;
     @BindByTag("transition")
     CustomWorkFlowView transition;
+    @BindByTag("repairAdvise")
+    CustomVerticalEditText repairAdvise;
 
     @BindByTag("stop")
     Button stop;
@@ -163,11 +157,12 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
     private RepairStaffController mRepairStaffController;
     private SparePartController mSparePartController;
     private LubricateOilsController mLubricateOilsController;
-    private AcceptanceCheckController mAcceptanceCheckController;
+    private MaintenanceController maintenanceController;
 
     private WXGDEntity mWXGDEntity;//传入维修工单实体参数
     private LinkController mLinkController;
     private DatePickController mDatePickController;
+    private SinglePickController mSinglePickController;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private RoleController roleController;
@@ -181,12 +176,15 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
     private String lubricateOilsListStr;
     private String repairStaffListStr;
     private String sparePartListStr;
+    private String maintenanceListStr;
     //dataGrid删除数据id
     private List<Long> dgDeletedIds_sparePart = new ArrayList<>();
     private List<Long> dgDeletedIds_repairStaff = new ArrayList<>();
     private List<Long> dgDeletedIds_lubricateOils = new ArrayList<>();
+    private List<Long> dgDeletedIds_maintenance = new ArrayList<>();
     private WXGDEntity oldWxgdEntity;
     private CustomDialog customDialog;
+    private Map<String, SystemCodeEntity> wxTypes;
 
 
     @Override
@@ -231,9 +229,11 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         mRepairStaffController.setEditable(true);
         mLubricateOilsController = getController(LubricateOilsController.class);
         mLubricateOilsController.setEditable(true);
-        mAcceptanceCheckController = getController(AcceptanceCheckController.class);
-        mAcceptanceCheckController.setEditable(false);
-
+        maintenanceController = getController(MaintenanceController.class);
+        maintenanceController.setEditable(true);
+        mSinglePickController = new SinglePickController<String>(this);
+        mSinglePickController.textSize(18);
+        mSinglePickController.setCanceledOnTouchOutside(true);
     }
 
 
@@ -250,6 +250,8 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
     @Override
     protected void initData() {
         super.initData();
+        List<SystemCodeEntity> wxTypeEntities = SystemCodeManager.getInstance().getSystemCodeListByCode(Constant.SystemCode.YH_WX_TYPE);
+        wxTypes = initEntities(wxTypeEntities);
         String type = mWXGDEntity.workType != null ? mWXGDEntity.workType.id : "";
         if (type.equals(Constant.WxgdAction.ACTIVATE)) {
             isActivate = true;
@@ -267,32 +269,22 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
      * @author zhangwenshuai1 2018/8/16
      */
     private void initTableHeadView() {
-        if (mWXGDEntity.workSource == null) {
+        if (mWXGDEntity.faultInfo == null) {
             faultInfo.setVisibility(View.GONE);
-            noFaultInfo.setVisibility(View.GONE);
-            acceptanceCheckListWidget.setVisibility(View.GONE);
         } else {
-            if (Constant.WxgdWorkSource.lubrication.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.sparepart.equals(mWXGDEntity.workSource.id)) {
-                findViewById(R.id.faultInfoTitle).setVisibility(View.GONE);
+            if (TextUtils.isEmpty(mWXGDEntity.faultInfo.tableNo)) {
                 faultInfo.setVisibility(View.GONE);
-                noFaultInfo.setVisibility(View.VISIBLE);
-                if (Constant.PeriodType.RUNTIME_LENGTH.equals(mWXGDEntity.jwxItem.periodType == null ? "" : mWXGDEntity.jwxItem.periodType.id)) {
-                    lastDuration.setVisibility(View.VISIBLE);
-                    lastExecuteTime.setVisibility(View.GONE);
-                } else {
-                    lastExecuteTime.setVisibility(View.VISIBLE);
-                    lastDuration.setVisibility(View.GONE);
-                }
-                realEndDate.setEditable(true);
-                realEndDate.setNecessary(true);
-                acceptanceCheckListWidget.setVisibility(View.GONE);
             } else {
-                findViewById(R.id.faultInfoTitle).setVisibility(View.VISIBLE);
                 faultInfo.setVisibility(View.VISIBLE);
-                noFaultInfo.setVisibility(View.GONE);
-                acceptanceCheckListWidget.setVisibility(View.VISIBLE);
             }
         }
+        repairGroup.setEditable(false);
+        chargeStaff.setEditable(false);
+        planStartTime.setEditable(false);
+        planEndTime.setEditable(false);
+        realEndTime.setEditable(true);
+        realEndTime.setNecessary(false);
+        repairType.setEditable(true);
     }
 
     /**
@@ -302,43 +294,28 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
      * @author zhangwenshuai1 2018/8/16
      */
     private void initTableHeadData() {
-        String value = mWXGDEntity.workSource == null ? "" : mWXGDEntity.workSource.value;
-        if (TextUtils.isEmpty(value)) {
-            workSource.setVisibility(View.GONE);
-        }
-        workSource.setText(value);
-        if (mWXGDEntity.eamID != null && mWXGDEntity.eamID.id!=null) {
+        workSource.setText(mWXGDEntity.workSource == null ? "" : mWXGDEntity.workSource.value);
+        if (mWXGDEntity.eamID != null && mWXGDEntity.eamID.id != null) {
             eamName.setValue(mWXGDEntity.eamID.name);
             eamCode.setValue(mWXGDEntity.eamID.code);
             eamArea.setValue(mWXGDEntity.eamID.installPlace == null ? "" : mWXGDEntity.eamID.installPlace.name);
-
             new EamPicController().initEamPic(eamIc, mWXGDEntity.eamID.id);
-
         }
 
         if (mWXGDEntity.faultInfo != null) {
-            if (mWXGDEntity.workSource != null && Constant.WxgdWorkSource.lubrication.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.sparepart.equals(mWXGDEntity.workSource.id)) {
-                content.setValue(mWXGDEntity.content);
-                claim.setValue(mWXGDEntity.claim);
-                period.setValue(mWXGDEntity.period == null ? "" : String.valueOf(mWXGDEntity.period));
-                periodUnit.setValue(mWXGDEntity.periodUnit == null ? "" : mWXGDEntity.periodUnit.value);
-                lastExecuteTime.setDate(mWXGDEntity.lastTime == null ? "" : DateUtil.dateFormat(mWXGDEntity.lastTime, "yyyy-MM-dd HH:mm:ss"));
-//                nextExecuteTime.setValue(mWXGDEntity.nextTime == null ? "" : DateUtil.dateFormat(mWXGDEntity.nextTime,"yyyy-MM-dd HH:mm:ss"));
-                lastDuration.setDate(mWXGDEntity.lastDuration == null ? "" : String.valueOf(mWXGDEntity.lastDuration));
-                realEndDate.setDate(mWXGDEntity.realEndDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.realEndDate, "yyyy-MM-dd HH:mm:ss"));
-            } else {
-                if (mWXGDEntity.faultInfo != null) {
-                    faultInfoType.setValue(mWXGDEntity.faultInfo.faultInfoType == null ? "" : mWXGDEntity.faultInfo.faultInfoType.value);
-                    repairType.setValue(mWXGDEntity.faultInfo.repairType == null ? "" : mWXGDEntity.faultInfo.repairType.value);
-                    priority.setValue(mWXGDEntity.faultInfo.priority == null ? "" : mWXGDEntity.faultInfo.priority.value);
-                    faultInfoDescribe.setValue(mWXGDEntity.faultInfo.describe);
-                }
-            }
+            discoverer.setValue(mWXGDEntity.faultInfo.findStaffID != null ? mWXGDEntity.faultInfo.findStaffID.name : "");
+            faultInfoType.setValue(mWXGDEntity.faultInfo.faultInfoType == null ? "" : mWXGDEntity.faultInfo.faultInfoType.value);
+            priority.setValue(mWXGDEntity.faultInfo.priority == null ? "" : mWXGDEntity.faultInfo.priority.value);
+            faultInfoDescribe.setValue(mWXGDEntity.faultInfo.describe);
         }
+        wosource.setContent(mWXGDEntity.workSource != null ? mWXGDEntity.workSource.value : "");
+        repairType.setSpinner(mWXGDEntity.repairType != null ? mWXGDEntity.repairType.value : "");
+        repairAdvise.setContent(mWXGDEntity.repairAdvise);
         chargeStaff.setValue(mWXGDEntity.chargeStaff != null ? mWXGDEntity.chargeStaff.name : "");
         repairGroup.setValue(mWXGDEntity.repairGroup != null ? mWXGDEntity.repairGroup.name : "");
         planStartTime.setDate(mWXGDEntity.planStartDate == null ? "" : sdf.format(mWXGDEntity.planStartDate));
         planEndTime.setDate(mWXGDEntity.planEndDate == null ? "" : sdf.format(mWXGDEntity.planEndDate));
+        realEndTime.setDate(mWXGDEntity.realEndDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.realEndDate, "yyyy-MM-dd HH:mm:ss"));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -378,7 +355,14 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         }
         dgDeletedIds_lubricateOils = oilsEvent.getDgDeletedIds();
     }
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshRepairStaff(MaintenanceEvent event) {
+        maintenanceController.updateMaintenanceEntities(event.getList());
+        if (event.getList().size() <= 0) {
+            maintenanceController.clear();
+        }
+        dgDeletedIds_maintenance = event.getDgDeletedIds();
+    }
     /**
      * @param
      * @return
@@ -417,11 +401,11 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void reSubmit(LoginEvent loginEvent) {
-        SnackbarHelper.showMessage(content, "登陆成功，请重新操作!");
+        SnackbarHelper.showMessage(rootView, "登陆成功，请重新操作!");
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void versionRefresh(VersionRefreshEvent versionRefreshEvent){
+    public void versionRefresh(VersionRefreshEvent versionRefreshEvent) {
         refreshController.refreshBegin();
     }
 
@@ -432,33 +416,33 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         refreshController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Map<String,Object> queryParam = new HashMap<>();
-                queryParam.put(Constant.BAPQuery.TABLE_NO,mWXGDEntity.tableNo);
-                presenterRouter.create(WXGDListAPI.class).listWxgds(1,queryParam);
+                Map<String, Object> queryParam = new HashMap<>();
+                queryParam.put(Constant.BAPQuery.TABLE_NO, mWXGDEntity.tableNo);
+                presenterRouter.create(WXGDListAPI.class).listWxgds(1, queryParam);
             }
         });
 
         leftBtn.setOnClickListener(v -> {
             onBackPressed();
         });
-
-        realEndDate.setOnChildViewClickListener(new OnChildViewClickListener() {
-            @Override
-            public void onChildViewClick(View childView, int action, Object obj) {
-                if (action == -1) {
-                    mWXGDEntity.realEndDate = null;
-                } else {
-                    mDatePickController.listener((year, month, day, hour, minute, second) -> {
-                        String dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
-                        mWXGDEntity.realEndDate = DateUtil.dateFormat(dateStr, "yyyy-MM-dd HH:mm:ss");
-                        realEndDate.setDate(dateStr);
-
-                    }).show(mWXGDEntity.realEndDate == null ? new Date().getTime() : mWXGDEntity.realEndDate);
-                }
+        realEndTime.setOnChildViewClickListener((childView, action, obj) -> {
+            if (action == -1) {
+                mWXGDEntity.realEndDate = null;
+            } else {
+                mDatePickController.listener((year, month, day, hour, minute, second) -> {
+                    String dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+                    long select = DateUtil.dateFormat(dateStr, "yyyy-MM-dd HH:mm:ss");
+                    //计算大小
+                    if (mWXGDEntity.planStartDate != null && select < mWXGDEntity.planStartDate) {
+                        ToastUtils.show(context, "实际结束时间不能小于计划开始时间", 3000);
+                        return;
+                    }
+                    mWXGDEntity.realEndDate = select;
+                    realEndTime.setDate(dateStr);
+                }).show((mWXGDEntity.realEndDate == null) ? new Date().getTime() : mWXGDEntity.realEndDate);
             }
+
         });
-
-
         transition.setOnChildViewClickListener((childView, action, obj) -> {
             WorkFlowVar workFlowVar = (WorkFlowVar) obj;
             switch (action) {
@@ -476,10 +460,10 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
                         return;
                     }
                     // 润滑、维保、备件更换 判断实际结束时间必填
-                    if (!Constant.Transition.REJECT_CN.equals(workFlowVar.dec)){
-                        if (Constant.WxgdWorkSource.lubrication.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.sparepart.equals(mWXGDEntity.workSource.id)){
-                            if (mWXGDEntity.realEndDate == null){
-                                SnackbarHelper.showError(rootView,"请填写实际结束时间");
+                    if (!Constant.Transition.REJECT_CN.equals(workFlowVar.dec)) {
+                        if (Constant.WxgdWorkSource.lubrication.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.sparepart.equals(mWXGDEntity.workSource.id)) {
+                            if (mWXGDEntity.realEndDate == null) {
+                                SnackbarHelper.showError(rootView, "请填写实际结束时间");
                                 return;
                             }
                         }
@@ -562,19 +546,37 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
                         .show();
             }
         });
+        repairType.setOnChildViewClickListener((childView, action, obj) -> {
+            if (action == -1) {
+                mWXGDEntity.repairType = null;
+            } else {
+                List<String> list = new ArrayList<>(wxTypes.keySet());
+                if (list.size() <= 0) {
+                    ToastUtils.show(context, "维修类型列表数据为空,请重新加载页面！");
+                    return;
+                }
+                mSinglePickController
+                        .list(list)
+                        .listener((SinglePicker.OnItemPickListener<String>) (index, item) -> {
+                            SystemCodeEntity wxType = wxTypes.get(item);
+                            mWXGDEntity.repairType = wxType;
+                            repairType.setSpinner(item);
+                        })
+                        .show(repairType.getSpinnerValue());
+            }
+        });
     }
 
     /**
-     * @description 判断是否存在领用中的备件
      * @param
-     * @return  
+     * @return
+     * @description 判断是否存在领用中的备件
      * @author zhangwenshuai1 2018/10/11
-     *
      */
     private boolean doCheckSparePartUsing() {
         List<SparePartEntity> sparePartEntityList = mSparePartController.getSparePartEntities();
         for (SparePartEntity sparePartEntity : sparePartEntityList) {
-            if (sparePartEntity.useState != null && Constant.SparePartUseStatus.USEING.equals(sparePartEntity.useState.id)){
+            if (Constant.SparePartUseStatus.USEING.equals(sparePartEntity.getUseState().id)) {
                 return true;
             }
         }
@@ -585,7 +587,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
     private void doSave() {
         Map<String, Object> map = WXGDMapManager.createMap(mWXGDEntity);
         map.put("operateType", Constant.Transition.SAVE);
-        if (isActionSop){
+        if (isActionSop) {
             map.put("workRecord.pauseReason", reason);
         }
 
@@ -604,7 +606,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         map.put("operateType", Constant.Transition.SUBMIT);
         map.put("workFlowVar.outcomeMapJson", workFlowVar.outcomeMapJson.toString());
         map.put("workFlowVar.outcome", workFlowVar.outCome);
-        map.put("workFlowVarStatus","");
+        map.put("workFlowVarStatus", "");
         if (Constant.Transition.REJECT_CN.equals(workFlowVar.dec)) {
             map.put("workFlowVarStatus", Constant.Transition.REJECT);
         }
@@ -617,8 +619,6 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
 
     //请求接口
     private void doSubmit(Map<String, Object> map) {
-//        RoleEntity roleEntity = roleController.getRoleEntity(0);
-//        map.put("workRecord.createPositionId", EamApplication.getAccountInfo().positionId);
         map.put("viewselect", "workExecuteEdit");
         map.put("datagridKey", "BEAM2_workList_workRecord_workExecuteEdit_datagrids");
         map.put("viewCode", "BEAM2_1.0.0_workList_workExecuteEdit");
@@ -630,20 +630,21 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         List<SparePartEntityDto> sparePartEntityDtos = WXGDMapManager.translateSparePartDto(mSparePartController.getSparePartEntities());
         List<RepairStaffDto> repairStaffDtos = WXGDMapManager.translateStaffDto(mRepairStaffController.getRepairStaffEntities());
         List<LubricateOilsEntityDto> lubricateOilsEntityDtos = WXGDMapManager.translateLubricateOilsDto(mLubricateOilsController.getLubricateOilsEntities());
-        if (Constant.Transition.SUBMIT.equals(map.get("operateType")) && TextUtils.isEmpty(map.get("workFlowVarStatus").toString())){
-            for (RepairStaffDto repairStaffDto : repairStaffDtos){
+        List<MaintainDto> maintainDtos = WXGDMapManager.translateMaintainDto(maintenanceController.getMaintenanceEntities());
+        if (Constant.Transition.SUBMIT.equals(map.get("operateType")) && TextUtils.isEmpty(map.get("workFlowVarStatus").toString())) {
+            for (RepairStaffDto repairStaffDto : repairStaffDtos) {
                 if (TextUtils.isEmpty(repairStaffDto.repairStaff.id)) {
                     onLoadFailed("维修人员列表禁止存在空人员信息");
                     return;
                 }
             }
-            for (SparePartEntityDto sparePartEntityDto : sparePartEntityDtos){
+            for (SparePartEntityDto sparePartEntityDto : sparePartEntityDtos) {
                 if (TextUtils.isEmpty(sparePartEntityDto.productID.id)) {
                     onLoadFailed("备件列表禁止存在空备件信息");
                     return;
                 }
             }
-            for (LubricateOilsEntityDto lubricateOilsEntityDto : lubricateOilsEntityDtos){
+            for (LubricateOilsEntityDto lubricateOilsEntityDto : lubricateOilsEntityDtos) {
                 if (TextUtils.isEmpty(lubricateOilsEntityDto.lubricate.id)) {
                     onLoadFailed("润滑油列表禁止存在空润滑油信息");
                     return;
@@ -665,9 +666,10 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         map.put("dg1531695921784ListJson", lubricateOilsEntityDtos);
         map.put("dgLists['dg1531695921784']", lubricateOilsEntityDtos);
 
-        map.put("dg1531695921847ModelCode", "BEAM2_1.0.0_workList_AccceptanceCheck");
-        map.put("dg1531695921847ListJson", new LinkedList());
-        map.put("dgLists['dg1531695921847']", new ArrayList<>());
+        map = WXGDMapManager.dgDeleted(map, dgDeletedIds_maintenance, "dg1557993341033");
+        map.put("dg1557993341033ModelCode", "BEAM2_1.0.0_workList_Maintenance");
+        map.put("dg1557993341033ListJson", maintainDtos);
+        map.put("dgLists['dg1557993341033']", maintainDtos);
 
         wxgdSubmitController.doExecuteSubmit(map);
     }
@@ -677,7 +679,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         Map<String, Object> map = new HashMap<>();
         if (stop) {
             map.put("workType", Constant.WxgdAction.STOP);
-            map.put("stopReason",reason);
+            map.put("stopReason", reason);
         } else {
             map.put("workType", Constant.WxgdAction.ACTIVATE);
         }
@@ -749,7 +751,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
 
     @Override
     public void listWxgdsFailed(String errorMsg) {
-        SnackbarHelper.showError(rootView,errorMsg);
+        SnackbarHelper.showError(rootView, errorMsg);
     }
 
     @Override
@@ -783,12 +785,34 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
             return true;
         }
 
-        if ((!TextUtils.isEmpty(lubricateOilsListStr) && !lubricateOilsListStr.equals(mLubricateOilsController.getLubricateOilsEntities().toString()))
-                || (!TextUtils.isEmpty(repairStaffListStr) && !repairStaffListStr.equals(mRepairStaffController.getRepairStaffEntities().toString()))
-                || (!TextUtils.isEmpty(sparePartListStr) && !sparePartListStr.equals(mSparePartController.getSparePartEntities().toString()))) {
+        if (!TextUtils.isEmpty(sparePartListStr) && !sparePartListStr.equals(mSparePartController.getSparePartEntities().toString())) {
+            return true;
+        }
+        if (!TextUtils.isEmpty(repairStaffListStr) && !repairStaffListStr.equals(mRepairStaffController.getRepairStaffEntities().toString())) {
+            return true;
+        }
+        if (!TextUtils.isEmpty(lubricateOilsListStr) && !lubricateOilsListStr.equals(mLubricateOilsController.getLubricateOilsEntities().toString())) {
+            return true;
+        }
+        if (!TextUtils.isEmpty(maintenanceListStr) && !maintenanceListStr.equals(maintenanceController.getMaintenanceEntities().toString())) {
             return true;
         }
         return false;
     }
+    private <T extends BaseEntity> Map<String, T> initEntities(List<T> entities) {
+        Map<String, T> map = new LinkedHashMap<>();
+        for (T entity : entities) {
+            String name = FieldHepler.getFieldValue(entity.getClass(), entity, "name");
+            if (!TextUtils.isEmpty(name)) {
+                map.put(name, entity);
+                continue;
+            }
+            String value = FieldHepler.getFieldValue(entity.getClass(), entity, "value");
+            if (!TextUtils.isEmpty(value)) {
+                map.put(value, entity);
+            }
 
+        }
+        return map;
+    }
 }

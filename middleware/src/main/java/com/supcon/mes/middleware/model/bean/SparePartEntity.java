@@ -1,6 +1,7 @@
 package com.supcon.mes.middleware.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
+import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.Good;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 
@@ -11,11 +12,18 @@ import java.math.BigDecimal;
  * created by zhangwenshuai1 2018/8/15
  */
 public class SparePartEntity extends BaseEntity {
-
     public Long id;
+    public Float lastDuration;
+    public Float nextDuration;
+    public Long lastTime;
+    public Long nextTime;
+    public Long period;
+    public ValueEntity periodType;
+    public ValueEntity periodUnit;
+
     public Good productID;//备件
     public BigDecimal sum;  //计划领用量
-    public int timesNum;//次数
+    public String accessoryName;//附属设备
     public String remark;//备注
     public BigDecimal useQuantity; // 领用量
     public SystemCodeEntity useState; // 状态
@@ -26,4 +34,12 @@ public class SparePartEntity extends BaseEntity {
     public boolean isRef; // 是否参照
     public String version;
 
+
+    public SystemCodeEntity getUseState() {
+        if (useState == null) {
+            useState = new SystemCodeEntity();
+            useState.id = Constant.SparePartUseStatus.NO_USE;
+        }
+        return useState;
+    }
 }

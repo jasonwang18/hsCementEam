@@ -1,5 +1,6 @@
 package com.supcon.mes.module_wxgd.ui;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
 import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
@@ -33,6 +35,8 @@ import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomListWidget;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomVerticalDateView;
+import com.supcon.mes.mbap.view.CustomVerticalEditText;
+import com.supcon.mes.mbap.view.CustomVerticalSpinner;
 import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.mbap.view.CustomWorkFlowView;
 import com.supcon.mes.middleware.EamApplication;
@@ -90,15 +94,16 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * WXGDDispatcherActivity
  * created by zhangwenshuai1 2018/8/15
- * 维修工单派单
+ * 待派单
  */
 @Router(value = Constant.Router.WXGD_DISPATCHER)
 @Presenter(value = {WXGDDispatcherPresenter.class, WXGDListPresenter.class})
-@Controller(value = {SparePartController.class, RepairStaffController.class, MaintenanceController.class, LubricateOilsController.class, AcceptanceCheckController.class})
+@Controller(value = {SparePartController.class, RepairStaffController.class, MaintenanceController.class, LubricateOilsController.class})
 public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDDispatcherContract.View, WXGDListContract.View, WXGDSubmitController.OnSubmitResultListener {
 
     @BindByTag("leftBtn")
@@ -119,56 +124,41 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     CustomTextView eamCode;
     @BindByTag("eamArea")
     CustomTextView eamArea;
+    @BindByTag("discoverer")
+    CustomVerticalTextView discoverer;
     @BindByTag("faultInfoType")
     CustomVerticalTextView faultInfoType;
-    @BindByTag("repairType")
-    CustomVerticalTextView repairType;
     @BindByTag("priority")
     CustomTextView priority;
     @BindByTag("faultInfoDescribe")
     CustomVerticalTextView faultInfoDescribe;
     @BindByTag("faultInfo")
     LinearLayout faultInfo;
+
     @BindByTag("repairLl")
     LinearLayout repairLl;
-    @BindByTag("noFaultInfo")
-    LinearLayout noFaultInfo;
-    @BindByTag("content")
-    CustomTextView content;
-    @BindByTag("claim")
-    CustomTextView claim;
-    @BindByTag("period")
-    CustomTextView period;
-    @BindByTag("periodUnit")
-    CustomTextView periodUnit;
-    @BindByTag("lastExecuteTime")
-    CustomVerticalDateView lastExecuteTime;
-    @BindByTag("nextExecuteTime")
-    CustomTextView nextExecuteTime;
     @BindByTag("repairGroup")
     CustomVerticalTextView repairGroup;
     @BindByTag("chargeStaff")
     CustomVerticalTextView chargeStaff;
+    @BindByTag("wosource")
+    CustomVerticalTextView wosource;
+    @BindByTag("repairType")
+    CustomVerticalSpinner repairType;
     @BindByTag("planStartTime")
     CustomVerticalDateView planStartTime;
     @BindByTag("planEndTime")
     CustomVerticalDateView planEndTime;
-    @BindByTag("lastDuration")
-    CustomVerticalDateView lastDuration;
-    @BindByTag("realEndDate")
-    CustomVerticalDateView realEndDate;
+    @BindByTag("realEndTime")
+    CustomVerticalDateView realEndTime;
+    @BindByTag("repairAdvise")
+    CustomVerticalEditText repairAdvise;
 
-    @BindByTag("acceptanceCheckListWidget")
-    CustomListWidget<AcceptanceCheckEntity> acceptanceCheckListWidget;
     @BindByTag("commentInput")
     CustomEditText commentInput;
     @BindByTag("transition")
     CustomWorkFlowView transition;
 
-    @BindByTag("contentView")
-    ScrollView contentView;
-    @BindByTag("refreshFrameLayout")
-    PtrFrameLayout refreshFrameLayout;
 
     private LinkController mLinkController;
 
@@ -182,7 +172,6 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     private SparePartController mSparePartController;
     private RepairStaffController mRepairStaffController;
     private LubricateOilsController mLubricateOilsController;
-    private AcceptanceCheckController mAcceptanceCheckController;
     private MaintenanceController maintenanceController;
 
     private WXGDSubmitController mWxgdSubmitController;
@@ -222,8 +211,6 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         mRepairStaffController.setEditable(true);
         mLubricateOilsController = getController(LubricateOilsController.class);
         mLubricateOilsController.setEditable(true);
-        mAcceptanceCheckController = getController(AcceptanceCheckController.class);
-        mAcceptanceCheckController.setEditable(false);
         maintenanceController = getController(MaintenanceController.class);
         maintenanceController.setEditable(true);
 
@@ -296,41 +283,18 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
      * @author zhangwenshuai1 2018/8/16
      */
     private void initTableHeadView() {
-        if (mWXGDEntity.workSource == null) {
+        if (mWXGDEntity.faultInfo == null) {
             faultInfo.setVisibility(View.GONE);
-            noFaultInfo.setVisibility(View.GONE);
         } else {
-            if (Constant.WxgdWorkSource.lubrication.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.sparepart.equals(mWXGDEntity.workSource.id)) {
+            if (TextUtils.isEmpty(mWXGDEntity.faultInfo.tableNo)) {
                 repairLl.setVisibility(View.GONE);
-                findViewById(R.id.faultInfoTitle).setVisibility(View.GONE);
-                findViewById(R.id.noFaultInfoTitle).setVisibility(View.VISIBLE);
                 faultInfo.setVisibility(View.GONE);
-                noFaultInfo.setVisibility(View.VISIBLE);
-                if (Constant.PeriodType.RUNTIME_LENGTH.equals(mWXGDEntity.jwxItem.periodType == null ? "" : mWXGDEntity.jwxItem.periodType.id)) {
-                    lastDuration.setVisibility(View.VISIBLE);
-                    lastExecuteTime.setVisibility(View.GONE);
-                } else {
-                    lastExecuteTime.setVisibility(View.VISIBLE);
-                    lastDuration.setVisibility(View.GONE);
-                }
-                acceptanceCheckListWidget.setVisibility(View.GONE);
             } else {
-                noFaultInfo.setVisibility(View.GONE);
-                findViewById(R.id.faultInfoTitle).setVisibility(View.VISIBLE);
-                findViewById(R.id.noFaultInfoTitle).setVisibility(View.GONE);
+                repairLl.setVisibility(View.VISIBLE);
                 faultInfo.setVisibility(View.VISIBLE);
-                acceptanceCheckListWidget.setVisibility(View.VISIBLE);
-
-                if (mWXGDEntity.faultInfo != null && TextUtils.isEmpty(mWXGDEntity.faultInfo.tableNo)) {
-                    repairLl.setVisibility(View.VISIBLE);
-                } else {
-                    repairLl.setVisibility(View.GONE);
-                }
             }
-
-//            chargeStaff.setValue(EamApplication.getAccountInfo().staffName);
         }
-
+        realEndTime.setVisibility(View.GONE);
     }
 
     @Override
@@ -355,34 +319,24 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
 
             new EamPicController().initEamPic(eamIc, mWXGDEntity.eamID.id);
         }
-        if (mWXGDEntity.workSource == null) {
 
-        } else {
-            if (Constant.WxgdWorkSource.lubrication.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.sparepart.equals(mWXGDEntity.workSource.id)) {
-                content.setValue(mWXGDEntity.content);
-                claim.setValue(mWXGDEntity.claim);
-                period.setValue(mWXGDEntity.period == null ? "" : String.valueOf(mWXGDEntity.period));
-                periodUnit.setValue(mWXGDEntity.periodUnit == null ? "" : mWXGDEntity.periodUnit.value);
-                lastExecuteTime.setDate(mWXGDEntity.lastTime == null ? "" : DateUtil.dateFormat(mWXGDEntity.lastTime, "yyyy-MM-dd HH:mm:ss"));
-//                nextExecuteTime.setValue(mWXGDEntity.nextTime == null ? "" : DateUtil.dateFormat(mWXGDEntity.nextTime, "yyyy-MM-dd HH:mm:ss"));
-                lastDuration.setDate(mWXGDEntity.lastDuration == null ? "" : String.valueOf(mWXGDEntity.lastDuration));
-                realEndDate.setDate(mWXGDEntity.realEndDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.realEndDate, "yyyy-MM-dd HH:mm:ss"));
-            } else {
-                if (mWXGDEntity.faultInfo != null) {
-                    faultInfoType.setValue(mWXGDEntity.faultInfo.faultInfoType == null ? "" : mWXGDEntity.faultInfo.faultInfoType.value);
-                    repairType.setValue(mWXGDEntity.faultInfo.repairType == null ? "" : mWXGDEntity.faultInfo.repairType.value);
-                    priority.setValue(mWXGDEntity.faultInfo.priority == null ? "" : mWXGDEntity.faultInfo.priority.value);
-                    faultInfoDescribe.setValue(mWXGDEntity.faultInfo.describe);
-                }
-            }
+        if (mWXGDEntity.faultInfo != null) {
+            discoverer.setValue(mWXGDEntity.faultInfo.findStaffID != null ? mWXGDEntity.faultInfo.findStaffID.name : "");
+            faultInfoType.setValue(mWXGDEntity.faultInfo.faultInfoType == null ? "" : mWXGDEntity.faultInfo.faultInfoType.value);
+            priority.setValue(mWXGDEntity.faultInfo.priority == null ? "" : mWXGDEntity.faultInfo.priority.value);
+            faultInfoDescribe.setValue(mWXGDEntity.faultInfo.describe);
         }
+
+        wosource.setContent(mWXGDEntity.workSource != null ? mWXGDEntity.workSource.value : "");
+        repairType.setSpinner(mWXGDEntity.repairType != null ? mWXGDEntity.repairType.value : "");
+        repairAdvise.setContent(mWXGDEntity.repairAdvise);
         chargeStaff.setValue(mWXGDEntity.chargeStaff != null ? mWXGDEntity.chargeStaff.name : "");
         repairGroup.setValue(mWXGDEntity.repairGroup == null ? "" : mWXGDEntity.repairGroup.name);
         planStartTime.setDate(mWXGDEntity.planStartDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.planStartDate, "yyyy-MM-dd HH:mm:ss"));
         planEndTime.setDate(mWXGDEntity.planEndDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.planEndDate, "yyyy-MM-dd HH:mm:ss"));
-
     }
 
+    @SuppressLint("CheckResult")
     @Override
     protected void initListener() {
         super.initListener();
@@ -532,6 +486,16 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
             }
         });
 
+        RxTextView.textChanges(repairAdvise.editText())
+                .skipInitialValue()
+                .debounce(1, TimeUnit.MILLISECONDS)
+                .subscribe(charSequence -> {
+                    if (TextUtils.isEmpty(charSequence.toString())) {
+                        mWXGDEntity.repairAdvise = "";
+                    } else {
+                        mWXGDEntity.repairAdvise = charSequence.toString();
+                    }
+                });
 //        transition.setOnChildViewClickListener(new OnChildViewClickListener() {
 //            @Override
 //            public void onChildViewClick(View childView, int action, Object obj) {
@@ -604,7 +568,6 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
      */
     private void doSubmit(WorkFlowVar workFlowVar) {
 
-
         if (!Constant.Transition.CANCEL_CN.equals(workFlowVar.dec) && checkTableBlank()) {
             return;
         }
@@ -655,14 +618,12 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     private void generateParamsDtoAndSubmit(Map<String, Object> map) {
 
         //其他参数
-//        RoleEntity roleEntity = roleController.getRoleEntity(0);
-//        map.put("workRecord.createPositionId", EamApplication.getAccountInfo().positionId);
         map.put("viewselect", "workEdit");
         map.put("workRecord.receiptInfo", "paidan"); //派单、接单环节必传字段
         map.put("datagridKey", "BEAM2_workList_workRecord_workEdit_datagrids");
         map.put("viewCode", "BEAM2_1.0.0_workList_workEdit");
         map.put("workFlowVar.comment", commentInput.getInput());
-
+        map.put("taskDescription", "BEAM2_1.0.0.work.task338");
         //表体dataGrids
         LinkedList<RepairStaffDto> repairStaffDtos = WXGDMapManager.translateStaffDto(mRepairStaffController.getRepairStaffEntities());
         LinkedList<SparePartEntityDto> sparePartEntityDtos = WXGDMapManager.translateSparePartDto(mSparePartController.getSparePartEntities());
@@ -701,13 +662,10 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         map.put("dg1531680481787ModelCode", "BEAM2_1.0.0_workList_LubricateOil");
         map.put("dgLists['dg1531680481787']", lubricateOilsEntityDtos);
 
-        map = WXGDMapManager.dgDeleted(map, dgDeletedIds_maintenance, "dg1557994493235");
-        map.put("dg1557994493235ModelCode", "BEAM2_1.0.0_workList_Maintenance");
-        map.put("dg1557994493235ListJson", maintainDtos);
-        map.put("dgLists['dg1557994493235']", maintainDtos);
-
-        map.put("dg1531680512710ModelCode", "BEAM2_1.0.0_workList_AccceptanceCheck");
-        map.put("dgLists['dg1531680512710']", new ArrayList<>());
+        map = WXGDMapManager.dgDeleted(map, dgDeletedIds_maintenance, "dg1557832434442");
+        map.put("dg1557832434442ModelCode", "BEAM2_1.0.0_workList_Maintenance");
+        map.put("dg1557832434442ListJson", maintainDtos);
+        map.put("dgLists['dg1557832434442']", maintainDtos);
 
         mWxgdSubmitController.doDispatcherSubmit(map);
 
@@ -905,7 +863,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void reSubmit(LoginEvent loginEvent) {
-        SnackbarHelper.showMessage(content, "登陆成功，请重新操作!");
+        SnackbarHelper.showMessage(rootView, "登陆成功，请重新操作!");
     }
 
     /**
@@ -941,7 +899,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
      */
     private boolean checkTableBlank() {
         if (TextUtils.isEmpty(repairGroup.getValue()) && TextUtils.isEmpty(chargeStaff.getValue())) {
-            SnackbarHelper.showError(content, "维修组和负责人不允许同时为空！");
+            SnackbarHelper.showError(rootView, "维修组和负责人不允许同时为空！");
             return true;
         }
         return false;

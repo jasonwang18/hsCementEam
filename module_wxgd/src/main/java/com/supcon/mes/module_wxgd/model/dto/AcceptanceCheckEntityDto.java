@@ -9,12 +9,8 @@ import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
  */
 public class AcceptanceCheckEntityDto extends BaseEntity {
 
-    public String id;
-    public String version;
-    public String timesNum;
-    public String rowIndex;
     public String checkTime;
-    public StaffDto checkStaff;
-    public SystemCodeEntity checkResult;
+    public IdDto checkStaff;
+    public IdDto checkResult;
     public String remark;
 }

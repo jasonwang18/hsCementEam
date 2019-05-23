@@ -1,6 +1,7 @@
 package com.supcon.mes.module_wxgd.ui;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -24,7 +25,9 @@ import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.JWXItem;
 import com.supcon.mes.middleware.model.bean.LubricateOil;
+import com.supcon.mes.middleware.model.bean.RefLubricateEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntityDao;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
@@ -39,6 +42,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -62,6 +66,9 @@ public class WXGDLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
     @BindByTag("rightBtn")
     protected ImageButton rightBtn;
 
+    @BindByTag("refBtn")
+    protected ImageButton refBtn;
+
     @BindByTag("titleText")
     protected TextView titleText;
 
@@ -76,6 +83,7 @@ public class WXGDLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
     private List<SystemCodeEntity> oilTypeList = new ArrayList<>();  //加换油
     private List<String> oilTypeListStr = new ArrayList<>();
     private List<Long> dgDeletedIds = new ArrayList<>(); //表体删除记录ids
+    private Long eamID;
 
     @Override
     protected int getLayoutID() {
@@ -90,10 +98,11 @@ public class WXGDLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
         editable = getIntent().getBooleanExtra(Constant.IntentKey.IS_EDITABLE, false);
         isAdd = getIntent().getBooleanExtra(Constant.IntentKey.IS_ADD, false);
         if (isAdd) {
-            IntentRouter.go(context, Constant.Router.LUBRICATE);
+            IntentRouter.go(context, Constant.Router.LUBRICATE_REF);
         }
         repairSum = getIntent().getLongExtra(Constant.IntentKey.REPAIR_SUM, 1);
         tableStatus = getIntent().getStringExtra(Constant.IntentKey.TABLE_STATUS);
+        eamID = getIntent().getLongExtra(Constant.IntentKey.EAM_ID, 0);
         mLubricateOilsAdapter.setEditable(editable);
         mLubricateOilsAdapter.setRepairSum((int) repairSum);
         mLubricateOilsAdapter.setTableStatus(tableStatus);
@@ -132,6 +141,7 @@ public class WXGDLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
         contentView.addOnItemTouchListener(new CustomSwipeLayout.OnSwipeItemTouchListener(this));
         if (editable) {
             rightBtn.setVisibility(View.VISIBLE);
+            refBtn.setVisibility(View.VISIBLE);
         }
         findViewById(R.id.includeSparePartLy).setVisibility(View.GONE);
 
@@ -157,7 +167,18 @@ public class WXGDLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        IntentRouter.go(context, Constant.Router.LUBRICATE);
+                        IntentRouter.go(context, Constant.Router.LUBRICATE_REF);
+                    }
+                });
+        RxView.clicks(refBtn)
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean(Constant.IntentKey.IS_SPARE_PART_REF, true);
+                        bundle.putLong(Constant.IntentKey.EAM_ID, eamID);
+                        IntentRouter.go(context, Constant.Router.LUBRICATE_REF, bundle);
                     }
                 });
 
@@ -168,10 +189,10 @@ public class WXGDLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
                 LubricateOilsEntity lubricateOilsEntity = (LubricateOilsEntity) obj;
                 switch (tag) {
                     case "oilType":
-                        if (action == -1){
+                        if (action == -1) {
                             lubricateOilsEntity.oilType = null;
                             mLubricateOilsAdapter.notifyItemChanged(position);
-                        }else {
+                        } else {
                             mSinglePickController.list(oilTypeListStr)
                                     .listener((index, item) -> {
 
@@ -192,7 +213,7 @@ public class WXGDLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
 
     @Override
     public void onBackPressed() {
-        EventBus.getDefault().post(new LubricateOilsEvent(mEntities,dgDeletedIds));
+        EventBus.getDefault().post(new LubricateOilsEvent(mEntities, dgDeletedIds));
         super.onBackPressed();
     }
 
@@ -209,21 +230,37 @@ public class WXGDLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void addLuricateOil(LubricateOil lubricateOil) {
+    public void addLuricateOil(RefLubricateEntity refLubricateEntity) {
 
         for (LubricateOilsEntity lubricateOilsEntity : mEntities) {
-            if (lubricateOilsEntity.lubricate != null && lubricateOilsEntity.timesNum >= repairSum) {
-                if (lubricateOilsEntity.lubricate.id.equals(lubricateOil.id)) {
-                    ToastUtils.show(context, "请勿重复添加润滑油!");
-                    refreshListController.refreshComplete(mEntities);
-                    return;
-                }
+            if (lubricateOilsEntity.id.equals(refLubricateEntity.id)) {
+                ToastUtils.show(context, "请勿重复添加润滑油!");
+                refreshListController.refreshComplete(mEntities);
+                return;
             }
         }
 
         LubricateOilsEntity lubricateOilsEntity = new LubricateOilsEntity();
-        lubricateOilsEntity.lubricate = lubricateOil;
-        lubricateOilsEntity.timesNum = (int) repairSum;
+        lubricateOilsEntity.lubricate = refLubricateEntity.lubricateOil;
+        lubricateOilsEntity.id = refLubricateEntity.id;
+        lubricateOilsEntity.oilQuantity = refLubricateEntity.sum;
+        lubricateOilsEntity.remark = refLubricateEntity.remark;
+        lubricateOilsEntity.lubricatingPart = refLubricateEntity.lubricatePart;
+        lubricateOilsEntity.oilType = refLubricateEntity.oilType;
+        JWXItem jwxItem = new JWXItem();
+        jwxItem.attachEamId = refLubricateEntity.accessoryEamId;
+        jwxItem.claim = refLubricateEntity.claim;
+        jwxItem.content = refLubricateEntity.content;
+        jwxItem.id = refLubricateEntity.id;
+        jwxItem.lastDuration = refLubricateEntity.lastDuration;
+        jwxItem.nextDuration = refLubricateEntity.nextDuration;
+        jwxItem.lastTime = refLubricateEntity.lastTime;
+        jwxItem.nextTime = refLubricateEntity.nextTime;
+        jwxItem.period = refLubricateEntity.period;
+        jwxItem.periodType = refLubricateEntity.periodType;
+        jwxItem.periodUnit = refLubricateEntity.periodUnit;
+        jwxItem.sparePartId = refLubricateEntity.sparePartId;
+        lubricateOilsEntity.jwxItemID = jwxItem;
 
         mLubricateOilsAdapter.setRepairSum((int) repairSum);
         mEntities.add(lubricateOilsEntity);
@@ -232,14 +269,14 @@ public class WXGDLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refresh(RefreshEvent refreshEvent) {
-        if (refreshEvent.delId != null){
+        if (refreshEvent.delId != null) {
             dgDeletedIds.add(refreshEvent.delId);
         }
         refreshListController.refreshComplete(mEntities);
     }
 
     private void initEmptyView() {
-        refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context,"暂无数据"));
+        refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, "暂无数据"));
     }
 
 }

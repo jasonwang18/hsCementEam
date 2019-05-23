@@ -6,19 +6,16 @@ import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
 import com.supcon.mes.module_wxgd.model.bean.AcceptanceCheckListEntity;
-import com.supcon.mes.module_wxgd.model.bean.LubricateListEntity;
+import com.supcon.mes.middleware.model.bean.LubricateListEntity;
 import com.supcon.mes.module_wxgd.model.bean.LubricateOilsListEntity;
 import com.supcon.mes.module_wxgd.model.bean.MaintenanceListEntity;
 import com.supcon.mes.module_wxgd.model.bean.RefProductListEntity;
 import com.supcon.mes.module_wxgd.model.bean.RepairStaffListEntity;
-import com.supcon.mes.module_wxgd.model.bean.SparePartJsonEntity;
 import com.supcon.mes.module_wxgd.model.bean.SparePartListEntity;
 import com.supcon.mes.module_wxgd.model.bean.SparePartRefListEntity;
 import com.supcon.mes.module_wxgd.model.bean.StandingCropResultEntity;
 import com.supcon.mes.module_wxgd.model.bean.WXGDListEntity;
-import com.supcon.mes.module_wxgd.model.dto.SparePartJsonEntityDto;
 
-import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Flowable;
@@ -85,24 +82,6 @@ public interface ApiService {
     @GET("/BEAM2/workList/workRecord/data-dg1531695961378.action")
     Flowable<SparePartListEntity> listSpareParts(@Query("workRecord.id") long id);
 
-
-    /**
-     * @param
-     * @return
-     * @description 获取备件物品列表
-     * @author zhangwenshuai1 2018/8/13
-     */
-    @GET("/MESBasic/product/product/refProduct_kc-query.action?&permissionCode=MESBasic_1_product_refProductLayout_kc&crossCompanyFlag=false")
-    Flowable<RefProductListEntity> listRefProduct(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
-
-    /**
-     * @param
-     * @return
-     * @description 获取润滑列表
-     * @author zhangwenshuai1 2018/8/13
-     */
-    @GET("/BEAM/lubricateOil/lubricateOil/oilRef-query.action?&permissionCode=BEAM_1.0.0_lubricateOil_oilRef&crossCompanyFlag=false")
-    Flowable<LubricateListEntity> listLubricate(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
     /**
      * @param

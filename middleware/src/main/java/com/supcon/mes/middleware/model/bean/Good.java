@@ -1,6 +1,7 @@
 package com.supcon.mes.middleware.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
+import com.supcon.mes.middleware.constant.Constant;
 
 import java.math.BigDecimal;
 
@@ -11,6 +12,8 @@ import java.math.BigDecimal;
 public class Good extends BaseEntity {
 
     public Long id;
+    public SystemCodeEntity batch;
+    public Long cid;
     public String productCode;
     public String productName;
     public String productModel;
@@ -20,7 +23,7 @@ public class Good extends BaseEntity {
     public BigDecimal productCostPrice; // 参考采购价
 
     public Unit getProductBaseUnit() {
-        if (productBaseUnit==null) {
+        if (productBaseUnit == null) {
             productBaseUnit = new Unit();
         }
         return productBaseUnit;

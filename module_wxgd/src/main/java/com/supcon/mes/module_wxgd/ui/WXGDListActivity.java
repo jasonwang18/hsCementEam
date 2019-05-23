@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
+import com.jakewharton.rxbinding2.widget.RxRadioGroup;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.com_http.util.RxSchedulers;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
@@ -66,6 +67,8 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 
 /**
  * WXGDListActivity 维修工单列表
@@ -189,6 +192,7 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
             @Override
             public void onRefresh(int pageIndex) {
                 presenterRouter.create(WXGDListAPI.class).listWxgds(pageIndex, queryParam);
+                setRadioEnable(false);
             }
         });
         radioGroup1.setOnCheckedChangeListener((group, checkedId) -> {
@@ -315,8 +319,8 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
         map.put("taskDescription", "BEAM2_1.0.0.work.task457");
 
 
-        map.put("dg1531695879537ModelCode", "BEAM2_1.0.0_workList_AccceptanceCheck");
-        map.put("dg1531695879537ListJson", new LinkedList().toString());
+        map.put("dg1557994493235ModelCode", "BEAM2_1.0.0_workList_Maintenance");
+        map.put("dg1557994493235ListJson", new LinkedList().toString());
 
         map.put("dg1531695879443ModelCode", "BEAM2_1.0.0_workList_LubricateOil");
         map.put("dg1531695879443ListJson", new LinkedList().toString());
@@ -338,17 +342,6 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
     private void doSearchTableNo(String eamName) {
         queryParam.put(Constant.BAPQuery.EAM_NAME, eamName);
         refreshListController.refreshBegin();
-//        if (queryParam.containsKey(Constant.BAPQuery.TABLE_NO) || queryParam.containsKey(Constant.BAPQuery.EAM_NAME)) {
-//            queryParam.remove(Constant.BAPQuery.TABLE_NO);
-//            queryParam.remove(Constant.BAPQuery.EAM_NAME);
-//        }
-//
-//        if (Util.isContainChinese(tableNo)) {
-//            queryParam.put(Constant.BAPQuery.EAM_NAME, tableNo);
-//        } else {
-//            queryParam.put(Constant.BAPQuery.TABLE_NO, tableNo);
-//        }
-//        refreshListController.refreshBegin();
     }
 
     /**
@@ -388,6 +381,7 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
      * @description 封装工作流状态过滤条件
      * @author zhangwenshuai1 2018/8/14
      */
+    @SuppressLint("CheckResult")
     private void generateFilterWorkflow(String workState) {
         String workStateId = "";
         switch (workState) {
@@ -407,7 +401,8 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
                 break;
         }
         queryParam.put(Constant.BAPQuery.WORK_STATE, workStateId);
-        doFilter();
+        Flowable.timer(500, TimeUnit.MILLISECONDS)
+                .subscribe(aLong -> doFilter());
     }
 
 
@@ -454,25 +449,14 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
     @Override
     public void listWxgdsSuccess(WXGDListEntity entity) {
         refreshListController.refreshComplete(entity.result);
-//        List<WXGDEntity> list = entity.result;
-//        List<WXGDEntity> filterList = new ArrayList<>();
-//        if (!TextUtils.isEmpty(tableNoFilter)) {
-//            for (WXGDEntity wxgdEntity : list) {
-//                if (wxgdEntity.tableNo.contains(tableNoFilter)) {
-//                    filterList.add(wxgdEntity);
-//                }
-//            }
-//            refreshListController.refreshComplete(filterList);
-//        } else {
-//            refreshListController.refreshComplete(list);
-//        }
-
+        setRadioEnable(true);
     }
 
     @Override
     public void listWxgdsFailed(String errorMsg) {
         SnackbarHelper.showError(rootView, errorMsg);
         refreshListController.refreshComplete();
+        setRadioEnable(true);
     }
 
     /**
@@ -496,6 +480,12 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
                 refreshListController.refreshBegin();
             }
         });
+    }
+
+    public void setRadioEnable(boolean enable) {
+        for (int i = 0; i < radioGroup1.getChildCount(); i++) {
+            radioGroup1.getChildAt(i).setEnabled(enable);
+        }
     }
 
     @Override

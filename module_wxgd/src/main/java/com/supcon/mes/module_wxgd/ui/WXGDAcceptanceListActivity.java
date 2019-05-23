@@ -15,18 +15,40 @@ import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
+import com.supcon.common.view.listener.OnChildViewClickListener;
+import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.util.DisplayUtil;
+import com.supcon.common.view.view.CustomSwipeLayout;
+import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
+import com.supcon.mes.mbap.utils.controllers.DatePickController;
+import com.supcon.mes.mbap.utils.controllers.SinglePickController;
+import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.SparePartEntity;
+import com.supcon.mes.middleware.model.bean.Staff;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntityDao;
+import com.supcon.mes.middleware.model.bean.UserInfo;
+import com.supcon.mes.middleware.model.event.CommonSearchEvent;
+import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
+import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.R;
 import com.supcon.mes.middleware.model.bean.AcceptanceCheckEntity;
+import com.supcon.mes.module_wxgd.model.event.AcceptanceEvent;
+import com.supcon.mes.module_wxgd.model.event.SparePartEvent;
 import com.supcon.mes.module_wxgd.ui.adapter.AcceptanceCheckAdapter;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -55,8 +77,14 @@ public class WXGDAcceptanceListActivity extends BaseRefreshRecyclerActivity<Acce
     private AcceptanceCheckAdapter mAcceptanceCheckAdapter;
 
     protected List<AcceptanceCheckEntity> mEntities = new ArrayList<>();
-    protected boolean isEditable = false, isAdd = false;
-    private long repairSum; // 工单执行次数
+    protected boolean isEditable = false;
+    private int currentPosition;
+    private DatePickController mDatePickController;
+    private SinglePickController mSinglePickController;
+
+    private List<String> checkResultListStr = new ArrayList<>();
+    private List<SystemCodeEntity> checkResultList = new ArrayList<>();
+    private List<Long> dgDeletedIds = new ArrayList<>(); //表体删除记录ids
 
     @Override
     protected int getLayoutID() {
@@ -65,25 +93,26 @@ public class WXGDAcceptanceListActivity extends BaseRefreshRecyclerActivity<Acce
 
     @Override
     protected void onInit() {
-
         super.onInit();
+        EventBus.getDefault().register(this);
         Intent intent = getIntent();
         String entityInfo = intent.getStringExtra(Constant.IntentKey.ACCEPTANCE_ENTITIES);
-        if(TextUtils.isEmpty(entityInfo)){
+        if (TextUtils.isEmpty(entityInfo)) {
             finish();
         }
         mEntities.addAll(GsonUtil.jsonToList(entityInfo, AcceptanceCheckEntity.class));
 
         isEditable = intent.getBooleanExtra(Constant.IntentKey.IS_EDITABLE, false);
-        isAdd  =  intent.getBooleanExtra(Constant.IntentKey.IS_ADD, false);
-        if (isAdd) {
-            Bundle bundle = new Bundle();
-            bundle.putString(Constant.IntentKey.COMMON_SAERCH_MODE, Constant.CommonSearchMode.STAFF);
-            IntentRouter.go(context, Constant.Router.COMMON_SEARCH, bundle);
-        }
-        repairSum = intent.getLongExtra(Constant.IntentKey.REPAIR_SUM,1);
-        mAcceptanceCheckAdapter.setRepairSum(repairSum);
+//        rightBtn.setVisibility(View.VISIBLE);
         mAcceptanceCheckAdapter.setEditable(isEditable);
+
+        mDatePickController = new DatePickController(this);
+        mDatePickController.setCanceledOnTouchOutside(true);
+        mDatePickController.setDividerVisible(true);
+        mDatePickController.setSecondVisible(true);
+        mSinglePickController = new SinglePickController(this);
+        mSinglePickController.setDividerVisible(true);
+        mSinglePickController.setCanceledOnTouchOutside(true);
 
         refreshListController.setAutoPullDownRefresh(false);
         refreshListController.setPullDownRefreshEnabled(false);
@@ -102,10 +131,19 @@ public class WXGDAcceptanceListActivity extends BaseRefreshRecyclerActivity<Acce
         titleText.setText("验收列表");
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(5, context)));
+        contentView.addOnItemTouchListener(new CustomSwipeLayout.OnSwipeItemTouchListener(this));
 
         findViewById(R.id.includeSparePartLy).setVisibility(View.GONE);
 
         initEmptyView();
+        initCheckResult();
+    }
+
+    private void initCheckResult() {
+        checkResultList = EamApplication.dao().getSystemCodeEntityDao().queryBuilder().where(SystemCodeEntityDao.Properties.EntityCode.eq(Constant.SystemCode.CHECK_RESULT)).list();
+        for (SystemCodeEntity entity : checkResultList) {
+            checkResultListStr.add(entity.value);
+        }
     }
 
     @SuppressLint("CheckResult")
@@ -115,13 +153,68 @@ public class WXGDAcceptanceListActivity extends BaseRefreshRecyclerActivity<Acce
 
         RxView.clicks(leftBtn)
                 .throttleFirst(2, TimeUnit.SECONDS)
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-                        onBackPressed();
+                .subscribe(o -> onBackPressed());
+        RxView.clicks(rightBtn)
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(o -> {
+                    if (mAcceptanceCheckAdapter != null && mAcceptanceCheckAdapter.getList().size() == 0) {
+                        AcceptanceCheckEntity acceptanceCheckEntity = new AcceptanceCheckEntity();
+                        mEntities.add(acceptanceCheckEntity);
+                        refreshListController.refreshComplete(mEntities);
+                    } else {
+                        SnackbarHelper.showMessage(rootView, "本次工单维修已新增验收数据，无需再次新增！");
                     }
                 });
+        mAcceptanceCheckAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
+            @Override
+            public void onItemChildViewClick(View childView, int position, int action, Object obj) {
+                AcceptanceCheckEntity acceptanceCheckEntity = (AcceptanceCheckEntity) obj;
+                currentPosition = position;
+                String tag = (String) childView.getTag();
+                switch (tag) {
+                    case "acceptanceStaffCode":
+                    case "acceptanceStaffName":
+                        Bundle bundle = new Bundle();
+                        bundle.putString(Constant.IntentKey.COMMON_SAERCH_MODE, Constant.CommonSearchMode.STAFF);
+                        bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, childView.getTag().toString());
+                        IntentRouter.go(context, Constant.Router.COMMON_SEARCH, bundle);
+                        break;
+                    case "acceptanceTime":
+                        mDatePickController.listener((year, month, day, hour, minute, second) -> {
+                            String currentAcceptChkDateTime = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+                            acceptanceCheckEntity.checkTime = DateUtil.dateFormat(currentAcceptChkDateTime, "yyyy-MM-dd HH:mm:ss");
+                            mAcceptanceCheckAdapter.notifyItemChanged(position);
+                        }).show("".equals(acceptanceCheckEntity.checkTime) ? new Date().getTime() : acceptanceCheckEntity.checkTime);
+                        break;
+                    case "acceptanceResult":
+                        mSinglePickController.list(checkResultListStr)
+                                .listener((index, item) -> {
+                                    acceptanceCheckEntity.checkResult = checkResultList.get(checkResultListStr.indexOf(String.valueOf(item)));
+                                    mAcceptanceCheckAdapter.notifyItemChanged(position);
+                                }).show(acceptanceCheckEntity.checkResult != null ? acceptanceCheckEntity.checkResult.value : "");
+                        break;
+                }
+            }
+        });
+    }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getAcceptChkStaff(CommonSearchEvent event) {
+        UserInfo userInfo = (UserInfo) event.commonSearchEntity;
+        AcceptanceCheckEntity item = mAcceptanceCheckAdapter.getItem(currentPosition);
+        Staff staff = new Staff();
+        staff.name = userInfo.staffName;
+        staff.code = userInfo.staffCode;
+        item.checkStaff = staff;
+        mAcceptanceCheckAdapter.notifyItemChanged(currentPosition);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refresh(RefreshEvent refreshEvent) {
+        if (refreshEvent.delId != null) {
+            dgDeletedIds.add(refreshEvent.delId);
+        }
+        refreshListController.refreshComplete(mEntities);
     }
 
     @Override
@@ -131,8 +224,19 @@ public class WXGDAcceptanceListActivity extends BaseRefreshRecyclerActivity<Acce
     }
 
     private void initEmptyView() {
-        refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context,"暂无数据"));
+        refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, "暂无数据"));
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        EventBus.getDefault().post(new AcceptanceEvent(mEntities, dgDeletedIds));
+        super.onBackPressed();
+    }
 
 }

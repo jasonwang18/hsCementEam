@@ -77,6 +77,7 @@ public class LubricateOilsController extends BaseViewController implements Lubri
                         bundle.putBoolean(Constant.IntentKey.IS_ADD, false);
                         bundle.putLong(Constant.IntentKey.REPAIR_SUM, mWXGDEntity.repairSum);
                         bundle.putString(Constant.IntentKey.TABLE_STATUS, mWXGDEntity.pending.taskDescription);
+                        bundle.putLong(Constant.IntentKey.EAM_ID,mWXGDEntity.eamID.id);
                         IntentRouter.go(context, Constant.Router.WXGD_LUBRICATE_OIL_LIST, bundle);
                         break;
 //                    case CustomListWidget.ACTION_ITEM_DELETE:
@@ -111,13 +112,8 @@ public class LubricateOilsController extends BaseViewController implements Lubri
             if (lubricateOilsEntity.remark == null) {
                 lubricateOilsEntity.remark = "";
             }
-            if (lubricateOilsEntity.oilQuantity != null) {
-                lubricateOilsEntity.oilQuantity = lubricateOilsEntity.oilQuantity.setScale(2, BigDecimal.ROUND_HALF_UP);
-            }
         }
         if (mCustomListWidget != null) {
-//            mCustomListWidget.setData(entity.result);
-//            mCustomListWidget.setTotal(entity.result.size());
             if (isEditable) {
                 mCustomListWidget.setShowText("编辑 (" + entity.result.size() + ")");
             } else {
@@ -179,8 +175,6 @@ public class LubricateOilsController extends BaseViewController implements Lubri
             return;
         this.mLubricateOilsEntities = list;
         if (mCustomListWidget != null) {
-//            mCustomListWidget.setData(list);
-//            mCustomListWidget.setTotal(list.size());
             if (isEditable) {
                 mCustomListWidget.setShowText("编辑 (" + list.size() + ")");
             } else {

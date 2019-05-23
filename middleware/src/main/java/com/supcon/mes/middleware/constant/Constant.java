@@ -108,10 +108,6 @@ public interface Constant {
         String COMMON_SEARCH = "COMMON_SEARCH";
 
         //参照
-        String SPARE_PART = "SPARE_PART";//备件选择列表
-        String LUBRICATE = "LUBRICATE";//润滑选择列表
-
-        //参照
         String SPARE_PART_REF = "SPARE_PART_REF";//备件参照选择列表
         String LUBRICATE_REF = "LUBRICATE_REF";//润滑参照选择列表
         String MAINTAIN_REF = "MAINTAIN_REF";//维保参照选择列表
@@ -214,7 +210,6 @@ public interface Constant {
 
         String LIST_ID = "LIST_ID"; // 工单ID
         String IS_SPARE_PART_REF = "IS_SPARE_PART_REF"; // 备件参照清单
-        String SPARE_PART_REF_YRL = "SPARE_PART_REF_YRL"; // 备件参照URL
 
         String EAM_ID = "EAM_ID"; // 设备ID
         String XJ_YHGL_ENTITY = "XJ_YHGL_ENTITY"; //巡检隐患
@@ -495,10 +490,10 @@ public interface Constant {
      * 维修工单单据状态
      */
     interface WxgdStatus_CH {
-        String DISPATCH = "派工";
-        String CONFIRM = "接收";
-        String IMPLEMENT = "执行";
-        String ACCEPTANCE = "验收";
+        String DISPATCH = "待派工";
+        String CONFIRM = "待接收";
+        String IMPLEMENT = "待执行";
+        String ACCEPTANCE = "待验收";
     }
 
     interface WxgdWorkSource {
@@ -549,11 +544,11 @@ public interface Constant {
     }
 
     interface WxgdView {
-        String DISPATCH_OPEN_URL = "/BEAM2/workList/workRecord/workEdit.action";
-        String RECEIVE_OPEN_URL = "/BEAM2/workList/workRecord/workReceiptEdit.action";
-        String EXECUTE_OPEN_URL = "/BEAM2/workList/workRecord/workExecuteEdit.action";
+        String DISPATCH_OPEN_URL = "/BEAM2/workList/workRecord/workEdit.action";//派单
+        String RECEIVE_OPEN_URL = "/BEAM2/workList/workRecord/workReceiptEdit.action";//接单
+        String EXECUTE_OPEN_URL = "/BEAM2/workList/workRecord/workExecuteEdit.action";//执行
         String STOP_OPEN_URL = "/BEAM2/workList/workRecord/workExecuteEdit.action";
-        String ACCEPTANCE_OPEN_URL = "/BEAM2/workList/workRecord/workCheckEdit.action";
+        String ACCEPTANCE_OPEN_URL = "/BEAM2/workList/workRecord/workCheckEdit.action";//验收
     }
 
     /**

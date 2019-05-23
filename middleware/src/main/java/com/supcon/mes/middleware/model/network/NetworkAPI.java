@@ -11,6 +11,7 @@ import com.supcon.mes.middleware.model.bean.DepartmentInfoListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.LinkListEntity;
 import com.supcon.mes.middleware.model.bean.LongResultEntity;
+import com.supcon.mes.middleware.model.bean.LubricateListEntity;
 import com.supcon.mes.middleware.model.bean.RefLubricateListEntity;
 import com.supcon.mes.middleware.model.bean.MyInfo;
 import com.supcon.mes.middleware.model.bean.RefMaintainListEntity;
@@ -277,8 +278,8 @@ public interface NetworkAPI {
      * @description 获取备件物品列表
      * @author zhangwenshuai1 2018/8/13
      */
-    @GET
-    Flowable<RefProductListEntity> listRefProduct(@Url String url, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+    @GET("/MESBasic/product/product/refProduct_sp-query.action?&permissionCode=MESBasic_1_product_refProductLayout_sp&crossCompanyFlag=false")
+    Flowable<RefProductListEntity> listRefProduct(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
     /**
      * @param
@@ -287,7 +288,7 @@ public interface NetworkAPI {
      * @author zhangwenshuai1 2018/8/13
      */
     @GET("/BEAM/lubricateOil/lubricateOil/oilRef-query.action?&permissionCode=BEAM_1.0.0_lubricateOil_oilRef&crossCompanyFlag=false")
-    Flowable<RefLubricateListEntity> listLubricate(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+    Flowable<LubricateListEntity> listLubricate(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
     /**
      * @param
@@ -305,7 +306,7 @@ public interface NetworkAPI {
      * @description 获取维保参照列表
      * @author zhangwenshuai1 2018/8/13
      */
-    @GET("/BEAM/baseInfo/jWXItem/maintainBeamRef-query.action?&permissionCode=BEAM_1.0.0_lubricateOil_oilRef&crossCompanyFlag=false")
+    @GET("/BEAM/baseInfo/jWXItem/maintainBeamRef-query.action?&permissionCode=BEAM_1.0.0_baseInfo_maintainBeamRef&crossCompanyFlag=")
     Flowable<RefMaintainListEntity> listRefMaintain(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
 }

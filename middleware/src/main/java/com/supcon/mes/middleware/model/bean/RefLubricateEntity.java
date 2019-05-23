@@ -9,14 +9,23 @@ import java.math.BigDecimal;
  * created by zhangwenshuai1 2018/8/15
  */
 public class RefLubricateEntity extends BaseEntity {
-
+    public Long cid;
     public Long id;
     public LubricateOil lubricateOil;
-    public Integer timesNum;//次数
+
+    public Float lastDuration;
+    public Float nextDuration;
+    public Long lastTime;
+    public Long nextTime;
+    public Long period;
+    public ValueEntity periodType;
+    public ValueEntity periodUnit;
+
     public SystemCodeEntity oilType;//加换油
     public String remark;//备注
-    public String claim;
-    public String lubricatePart;
+    public String claim;//要求
+    public String content;//内容
+    public String lubricatePart;//润滑部位
     public String version;
     public String unitName;//单位
     public Float sum;//用量
@@ -36,5 +45,9 @@ public class RefLubricateEntity extends BaseEntity {
             lubricateOil = new LubricateOil();
         }
         return lubricateOil;
+    }
+
+    public void setLubricateOil(LubricateOil lubricateOil) {
+        this.lubricateOil = lubricateOil;
     }
 }
