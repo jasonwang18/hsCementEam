@@ -1,6 +1,7 @@
 package com.supcon.mes.module_olxj.controller;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -21,9 +22,14 @@ import com.supcon.common.view.view.js.BridgeWebView;
 import com.supcon.common.view.view.js.CallBackFunction;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.event.UhfRfidEvent;
 import com.supcon.mes.module_olxj.model.bean.OLXJAreaEntity;
 import com.supcon.mes.module_olxj.model.bean.OLXJTaskEntity;
+import com.supcon.mes.module_olxj.model.event.AreaRefreshEvent;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,7 +50,7 @@ public class MapController extends BaseViewController {
     ProgressBar progressBar;
     @BindByTag("webView")
     BridgeWebView webView;
-
+    private boolean isShow = false;
 
 
     private OnMapAreaClickListener mOnMapAreaClickListener;
@@ -57,7 +63,32 @@ public class MapController extends BaseViewController {
     @Override
     public void onInit() {
         super.onInit();
+        EventBus.getDefault().register(this);
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onAreaRefresh(AreaRefreshEvent areaRefreshEvent) {
+
+        if(isShow)
+        webView.reload();
     }
 
     @Override
@@ -67,7 +98,7 @@ public class MapController extends BaseViewController {
         webView.setWebViewClient(new MapWebViewClient(webView));
         webView.setWebChromeClient(new MyWebChromeClient());
         WebSettings settings = webView.getSettings();
-        settings.setAppCacheEnabled(true);
+//        settings.setAppCacheEnabled(true);
         settings.setJavaScriptEnabled(true);
         settings.setAllowFileAccess(true);
         settings.setDatabaseEnabled(true);
@@ -79,7 +110,7 @@ public class MapController extends BaseViewController {
         settings.setSupportZoom(true); // 可以缩放
         settings.setDisplayZoomControls(true);
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
 
         settings.setLoadWithOverviewMode(true);
     }
@@ -128,7 +159,7 @@ public class MapController extends BaseViewController {
     }
 
     public void show(OLXJTaskEntity data) {
-
+        isShow = true;
         mapLayout.setVisibility(View.VISIBLE);
 
         //当页面正在加载时，禁止链接的点击事件
@@ -147,7 +178,7 @@ public class MapController extends BaseViewController {
     }
 
     public void hide() {
-
+        isShow = false;
         mapLayout.setVisibility(View.GONE);
 
     }

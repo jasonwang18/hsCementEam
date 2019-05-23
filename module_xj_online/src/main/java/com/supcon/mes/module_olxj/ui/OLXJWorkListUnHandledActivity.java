@@ -67,6 +67,7 @@ import com.supcon.mes.module_olxj.model.bean.OLXJHistorySheetEntity;
 import com.supcon.mes.module_olxj.model.bean.OLXJWorkItem;
 import com.supcon.mes.module_olxj.model.bean.OLXJWorkItemEntity;
 import com.supcon.mes.module_olxj.model.contract.OLXJWorkSubmitContract;
+import com.supcon.mes.module_olxj.model.event.AreaRefreshEvent;
 import com.supcon.mes.module_olxj.presenter.OLXJWorkSubmitPresenter;
 import com.supcon.mes.module_olxj.ui.adapter.OLXJHistorySheetAdapter;
 import com.supcon.mes.module_olxj.ui.adapter.OLXJWorkListAdapter;
@@ -962,6 +963,7 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
     @Override
     public void uploadOLXJAreaDataSuccess() {
         EventBus.getDefault().post(mXJAreaEntity);
+        EventBus.getDefault().post(new AreaRefreshEvent());
         onLoadSuccessAndExit("数据上传成功！", new OnLoaderFinishListener() {
             @Override
             public void onLoaderFinished() {
