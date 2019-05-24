@@ -31,28 +31,27 @@
                 android:paddingBottom="@dimen/dp_5">
 
                 <com.supcon.mes.mbap.view.CustomVerticalTextView
-                    android:id="@+id/sparePartName"
+                    android:id="@+id/attachEam"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:paddingRight="5dp"
-                    android:tag="sparePartName"
+                    android:tag="attachEam"
                     app:editable="false"
-                    app:key="@string/sparePartName"
-                    app:necessary="false"
+                    app:text="附属设备:"
                     app:text_size="15" />
 
                 <include layout="@layout/ly_vertical_line" />
 
                 <com.supcon.mes.mbap.view.CustomVerticalTextView
-                    android:id="@+id/attachEam"
+                    android:id="@+id/sparePartName"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:paddingStart="@dimen/dp_5"
-                    android:tag="attachEam"
+                    android:tag="sparePartName"
                     app:editable="false"
-                    app:text="附属设备:"
+                    app:key="零部件："
+                    app:necessary="false"
                     app:text_size="15" />
 
             </LinearLayout>

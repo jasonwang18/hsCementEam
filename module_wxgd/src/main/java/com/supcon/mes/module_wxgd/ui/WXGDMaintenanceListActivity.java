@@ -169,7 +169,7 @@ public class WXGDMaintenanceListActivity extends BaseRefreshRecyclerActivity<Mai
         }
         MaintainEntity maintainEntity = new MaintainEntity();
         JWXItem jwxItem = new JWXItem();
-        jwxItem.attachEamId = refMaintainEntity.accessoryEamId;
+        jwxItem.accessoryEamId = refMaintainEntity.accessoryEamId;
         jwxItem.claim = refMaintainEntity.claim;
         jwxItem.content = refMaintainEntity.content;
         jwxItem.id = refMaintainEntity.id;
