@@ -70,14 +70,14 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
 
         @BindByTag("index")
         TextView index;
-        @BindByTag("sparePartDelete")
-        ImageView sparePartDelete;
         @BindByTag("sparePartName")
         CustomTextView sparePartName;
         @BindByTag("sum")
         CustomNumView sum;
         @BindByTag("sparePartSpecific")
         CustomTextView sparePartSpecific;
+        @BindByTag("sparePartId")
+        CustomTextView sparePartId;
 
         @BindByTag("remark")
         CustomVerticalEditText remark;
@@ -260,13 +260,9 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
 //            sum.setNum(data.sum != null ? data.sum.doubleValue() : 0);
             sum.getNumViewInput().setText(data.sum != null ? String.valueOf(data.sum.setScale(2, BigDecimal.ROUND_HALF_UP)) : "");
 
-            if (data.productID != null) {
-                sparePartName.setValue(data.productID.productName);
-                sparePartSpecific.setValue(data.productID.productSpecif);
-            } else {
-                sparePartName.setContent("");
-                sparePartSpecific.setContent("");
-            }
+            sparePartName.setValue(data.productID != null ? Util.strFormat2(data.productID.productName) : "");
+            sparePartSpecific.setValue(data.productID != null ? Util.strFormat2(data.productID.productSpecif) : "");
+            sparePartId.setContent(Util.strFormat2(data.accessoryName));
 
             useQuantity.setValue(data.useQuantity != null ? String.valueOf(data.useQuantity.setScale(2, BigDecimal.ROUND_HALF_UP)) : "");
 

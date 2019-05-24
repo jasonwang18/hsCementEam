@@ -27,8 +27,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:orientation="horizontal"
-                android:paddingBottom="@dimen/dp_5"
-                android:paddingLeft="@dimen/dp_10">
+                android:paddingLeft="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_5">
 
                 <com.supcon.mes.mbap.view.CustomVerticalTextView
                     android:id="@+id/oilName"
@@ -55,12 +55,46 @@
                     app:text_size="15" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_5">
+
+                <com.supcon.mes.mbap.view.CustomVerticalTextView
+                    android:id="@+id/attachEam"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:tag="attachEam"
+                    app:editable="false"
+                    app:key="附属设备:"
+                    app:text_size="15" />
+
+                <include layout="@layout/ly_vertical_line" />
+
+                <com.supcon.mes.mbap.view.CustomVerticalTextView
+                    android:id="@+id/sparePartId"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingStart="@dimen/dp_10"
+                    android:tag="sparePartId"
+                    app:editable="false"
+                    app:key="零部件:"
+                    app:necessary="false"
+                    app:text_size="15" />
+            </LinearLayout>
+
             <com.supcon.mes.mbap.view.CustomNumView
                 android:id="@+id/sum"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"
                 android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/white"
                 android:padding="@dimen/dp_5"
                 android:tag="sum"
                 app:editable="true"
@@ -94,13 +128,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_1"
                 android:background="@color/white"
-                android:paddingBottom="@dimen/dp_5"
                 android:paddingLeft="@dimen/dp_10"
                 android:paddingTop="@dimen/dp_5"
+                android:paddingBottom="@dimen/dp_5"
                 android:tag="remark"
                 app:edit_hint="请输入备注信息"
-                app:key="@string/remark"
                 app:edit_maxLine="4"
+                app:key="@string/remark"
                 app:text_size="15" />
 
 

@@ -248,7 +248,7 @@ public class WXGDLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
         lubricateOilsEntity.lubricatingPart = refLubricateEntity.lubricatePart;
         lubricateOilsEntity.oilType = refLubricateEntity.oilType;
         JWXItem jwxItem = new JWXItem();
-        jwxItem.attachEamId = refLubricateEntity.accessoryEamId;
+        jwxItem.accessoryEamId = refLubricateEntity.accessoryEamId;
         jwxItem.claim = refLubricateEntity.claim;
         jwxItem.content = refLubricateEntity.content;
         jwxItem.id = refLubricateEntity.id;
