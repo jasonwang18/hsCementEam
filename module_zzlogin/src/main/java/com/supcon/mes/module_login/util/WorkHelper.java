@@ -47,10 +47,9 @@ public class WorkHelper {
         if (works == null) {
             String cache = SharedPreferencesUtils.getParam(context, Constant.SPKey.WORKS, "");
 
-            if(TextUtils.isEmpty(cache)){
+            if (TextUtils.isEmpty(cache)) {
                 works = new ArrayList<>();
-            }
-            else {
+            } else {
                 works = GsonUtil.jsonToList(cache, WorkInfo.class);
             }
         }
@@ -145,6 +144,10 @@ public class WorkHelper {
 
                     workInfo.iconResId = R.drawable.ic_work_lubr_warn;
                     workInfo.router = Constant.Router.LUBRICATION_EARLY_WARN;
+                    break;
+                case Constant.WorkType.DAILY_LUBRICATION_EARLY_WARN:
+                    workInfo.iconResId = R.drawable.ic_work_daily_lubr_warn;
+                    workInfo.router = Constant.Router.DAILY_LUBRICATION_EARLY_WARN;
                     break;
                 case Constant.WorkType.MAINTENANCE_EARLY_WARN:
 

@@ -30,7 +30,7 @@ import com.supcon.mes.module_warn.model.bean.LubricationWarnEntity;
 import com.supcon.mes.module_warn.model.bean.LubricationWarnListEntity;
 import com.supcon.mes.module_warn.model.contract.LubricationWarnContract;
 import com.supcon.mes.module_warn.presenter.LubricationWarnPresenter;
-import com.supcon.mes.module_warn.ui.adapter.LubricationWarnAdapter;
+import com.supcon.mes.module_warn.ui.adapter.DailyLubricationWarnAdapter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,10 +40,11 @@ import java.util.Map;
  * @ClassName hongShiCementEam
  * @date 2019/4/29
  * ------------- Description -------------
+ * 日常润滑
  */
-@Router(Constant.Router.LUBRICATION_EARLY_WARN)
+@Router(Constant.Router.DAILY_LUBRICATION_EARLY_WARN)
 @Presenter(value = LubricationWarnPresenter.class)
-public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<LubricationWarnEntity> implements LubricationWarnContract.View {
+public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<LubricationWarnEntity> implements LubricationWarnContract.View {
 
     @BindByTag("leftBtn")
     AppCompatImageButton leftBtn;
@@ -69,14 +70,14 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
 
     @Override
     protected IListAdapter<LubricationWarnEntity> createAdapter() {
-        LubricationWarnAdapter lubricationWarnAdapter = new LubricationWarnAdapter(this);
-        return lubricationWarnAdapter;
+        return new DailyLubricationWarnAdapter(this);
     }
 
     @Override
     protected int getLayoutID() {
         return R.layout.ac_early_warn_list;
     }
+
 
     @Override
     protected void initView() {
@@ -89,7 +90,7 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
         contentView.addItemDecoration(new SpaceItemDecoration(15));
         //设置搜索框默认提示语
         titleSearchView.setHint("请输入设备编码");
-        searchTitleBar.setTitleText("润滑预警");
+        searchTitleBar.setTitleText("日常润滑预警");
         searchTitleBar.setBackgroundResource(R.color.gradient_start);
         searchTitleBar.disableRightBtn();
     }
@@ -97,7 +98,7 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
     @Override
     protected void initData() {
         super.initData();
-        url = "/BEAM/baseInfo/jWXItem/data-dg1530747504994.action";
+        url = "/BEAM/baseInfo/jWXItem/data-dg1558429781181.action";
     }
 
     @SuppressLint("CheckResult")
@@ -129,9 +130,9 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.warnRadioBtn1) {
-                    url = "/BEAM/baseInfo/jWXItem/data-dg1530747504994.action";
+                    url = "/BEAM/baseInfo/jWXItem/data-dg1558429781181.action";
                 } else if (checkedId == R.id.warnRadioBtn2) {
-                    url = "/BEAM/baseInfo/jWXItem/data-dg1530749613834.action";
+                    url = "/BEAM/baseInfo/jWXItem/data-dg1558429781252.action";
                 }
                 doRefresh();
             }
