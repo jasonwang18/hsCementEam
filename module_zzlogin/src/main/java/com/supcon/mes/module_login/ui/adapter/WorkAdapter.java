@@ -160,6 +160,7 @@ public class WorkAdapter extends HeaderRecyclerViewAdapter<WorkInfo> {
                         case Constant.Router.SJXZ:
                         case Constant.Router.SPARE_EARLY_WARN:
                         case Constant.Router.LUBRICATION_EARLY_WARN:
+                        case Constant.Router.DAILY_LUBRICATION_EARLY_WARN:
                         case Constant.Router.MAINTENANCE_EARLY_WARN:
                             break;
                         default:

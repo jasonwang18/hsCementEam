@@ -147,6 +147,7 @@ public interface Constant {
         String STOP_POLICE = "STOP_POLICE";//停机报警
         String SPARE_EARLY_WARN = "SPARE_EARLY_WARN";//备件更换预警
         String LUBRICATION_EARLY_WARN = "LUBRICATION_EARLY_WARN";//润滑预警
+        String DAILY_LUBRICATION_EARLY_WARN = "DAILY_LUBRICATION_EARLY_WARN";//日常润滑预警
         String MAINTENANCE_EARLY_WARN = "MAINTENANCE_EARLY_WARN";//维保预警
 
     }
@@ -271,7 +272,8 @@ public interface Constant {
         int JXJH = 21;
         int SPARE_EARLY_WARN = 23;//备件更换预警
         int LUBRICATION_EARLY_WARN = 24;//润滑预警
-        int MAINTENANCE_EARLY_WARN = 25;//维保预警
+        int DAILY_LUBRICATION_EARLY_WARN = 25;//日常润滑预警
+        int MAINTENANCE_EARLY_WARN = 26;//维保预警
     }
 
     interface SPKey {

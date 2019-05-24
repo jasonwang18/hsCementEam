@@ -4,8 +4,6 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -27,12 +25,12 @@ import java.text.SimpleDateFormat;
  * @date 2019/4/1
  * ------------- Description -------------
  */
-public class LubricationWarnAdapter extends BaseListDataRecyclerViewAdapter<LubricationWarnEntity> {
+public class DailyLubricationWarnAdapter extends BaseListDataRecyclerViewAdapter<LubricationWarnEntity> {
 
     private int checkPosition = -1;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-    public LubricationWarnAdapter(Context context) {
+    public DailyLubricationWarnAdapter(Context context) {
         super(context);
     }
 
@@ -71,8 +69,6 @@ public class LubricationWarnAdapter extends BaseListDataRecyclerViewAdapter<Lubr
 
         @BindByTag("chkBox")
         CheckBox chkBox;
-        @BindByTag("lubriLayout")
-        RelativeLayout lubriLayout;
 
         public ViewHolder(Context context) {
             super(context);
