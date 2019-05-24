@@ -57,6 +57,21 @@
 
             <include layout="@layout/ly_line_light" />
 
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/sparePartId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/dp_10"
+                android:tag="sparePartId"
+                android:background="@color/white"
+                app:content_hint="--"
+                app:editable="false"
+                app:key="零部件:"
+                app:necessary="false"
+                app:text_size="15" />
+
+            <include layout="@layout/ly_line_light" />
+
             <com.supcon.mes.mbap.view.CustomNumView
                 android:id="@+id/sum"
                 android:layout_width="match_parent"

@@ -80,6 +80,10 @@ public class LubricateOilsAdapter extends BaseListDataRecyclerViewAdapter<Lubric
         CustomVerticalTextView oilCode;
         @BindByTag("oilName")
         CustomVerticalTextView oilName;
+        @BindByTag("attachEam")
+        CustomVerticalTextView attachEam;
+        @BindByTag("sparePartId")
+        CustomVerticalTextView sparePartId;
         @BindByTag("sum")
         CustomNumView sum;
         @BindByTag("oilType")
@@ -204,20 +208,11 @@ public class LubricateOilsAdapter extends BaseListDataRecyclerViewAdapter<Lubric
 
             sum.getNumViewInput().setText(Util.big(data.oilQuantity));
 
-            if (data.oilType != null) {
-                oilType.setSpinner(data.oilType.value);
-            } else {
-                oilType.setSpinner("");
-            }
-
-            if (data.lubricate != null) {
-                oilCode.setValue(data.lubricate.code);
-                oilName.setValue(data.lubricate.name);
-            } else {
-                oilCode.setValue("");
-                oilName.setValue("");
-            }
-
+            oilType.setSpinner(data.oilType != null ? Util.strFormat2(data.oilType.value) : "");
+            attachEam.setValue(Util.strFormat2(data.getJwxItemID().getAttachEamId().getAttachEamId().name));
+            sparePartId.setValue(Util.strFormat2(data.getJwxItemID().getSparePartId().getProductID().productName));
+            oilCode.setValue(data.lubricate != null ? Util.strFormat2(data.lubricate.code) : "");
+            oilName.setValue(data.lubricate != null ? Util.strFormat2(data.lubricate.name) : "");
             remark.setInput(data.remark);
         }
     }

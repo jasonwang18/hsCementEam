@@ -14,7 +14,7 @@ public class JWXItem extends BaseEntity {
     public ValueEntity periodType;//周期类型
     public ValueEntity periodUnit;//周期单位
 
-    public AccessoryEamId attachEamId;
+    public AccessoryEamId accessoryEamId;
     public String claim;//要求
     public String content;//内容
     public Float lastDuration;
@@ -54,9 +54,9 @@ public class JWXItem extends BaseEntity {
     }
 
     public AccessoryEamId getAttachEamId() {
-        if (attachEamId==null) {
-            attachEamId = new AccessoryEamId();
+        if (accessoryEamId==null) {
+            accessoryEamId = new AccessoryEamId();
         }
-        return attachEamId;
+        return accessoryEamId;
     }
 }

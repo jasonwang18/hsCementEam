@@ -21,5 +21,12 @@ public class LubricateOilsEntity extends BaseEntity {
 
     public String content;//内容
     public JWXItem jwxItemID; //业务规则
-    public String lubricatingPart;//备件名称
+    public String lubricatingPart;//润滑部位
+
+    public JWXItem getJwxItemID() {
+        if (jwxItemID==null) {
+            jwxItemID = new JWXItem();
+        }
+        return jwxItemID;
+    }
 }
