@@ -71,7 +71,7 @@ public class DeviceTokenController extends BaseDataController implements DeviceT
             return;
         }
         this.mDeviceToken = deviceToken;
-        SharedPreferencesUtils.setParam(context, Constant.SPKey.DEVICE_TOKEN, deviceToken);
+//        SharedPreferencesUtils.setParam(context, Constant.SPKey.DEVICE_TOKEN, deviceToken);
 
         presenterRouter.create(DeviceTokenAPI.class).sendLoginDeviceToken(deviceToken);
     }

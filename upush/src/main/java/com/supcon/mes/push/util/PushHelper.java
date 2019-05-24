@@ -183,6 +183,7 @@ public class PushHelper {
             @Override
             public void onSuccess(String deviceToken) {
                 Log.d("UMLog","device token: " + deviceToken);
+                SharedPreferencesUtils.setParam(context, "DEVICE_TOKEN", deviceToken);
 //                context.sendBroadcast(new Intent(UPDATE_STATUS_ACTION));
                 EventBus.getDefault().post(new DeviceTokenEvent(deviceToken));
             }
