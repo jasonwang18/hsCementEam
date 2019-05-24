@@ -74,8 +74,8 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
         CustomNumView sum;
         @BindByTag("sparePartSpecific")
         CustomTextView sparePartSpecific;
-        @BindByTag("sparePartId")
-        CustomTextView sparePartId;
+        @BindByTag("attachEam")
+        CustomTextView attachEam;
 
         @BindByTag("remark")
         CustomVerticalEditText remark;
@@ -259,7 +259,7 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
 
             sparePartName.setValue(data.productID != null ? Util.strFormat2(data.productID.productName) : "");
             sparePartSpecific.setValue(data.productID != null ? Util.strFormat2(data.productID.productSpecif) : "");
-            sparePartId.setContent(Util.strFormat2(data.accessoryName));
+            attachEam.setContent(Util.strFormat2(data.accessoryName));
 
             useQuantity.setValue(data.useQuantity != null ? String.valueOf(data.useQuantity.setScale(2, BigDecimal.ROUND_HALF_UP)) : "");
 

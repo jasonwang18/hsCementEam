@@ -58,15 +58,15 @@
             <include layout="@layout/ly_line_light" />
 
             <com.supcon.mes.mbap.view.CustomTextView
-                android:id="@+id/sparePartId"
+                android:id="@+id/attachEam"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="@dimen/dp_10"
-                android:tag="sparePartId"
+                android:tag="attachEam"
                 android:background="@color/white"
                 app:content_hint="--"
                 app:editable="false"
-                app:key="零部件:"
+                app:key="附属设备:"
                 app:necessary="false"
                 app:text_size="15" />
 
