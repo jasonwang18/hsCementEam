@@ -51,8 +51,11 @@ public class SparePartWarnAdapter extends BaseListDataRecyclerViewAdapter<SpareP
         CustomTextView itemSpareSpecifLastDateTv;
         @BindByTag("itemSpareSpecifNextDateTv")
         CustomTextView itemSpareSpecifNextDateTv;
-        @BindByTag("itemSpareSpecifAdvanceTv")
-        CustomTextView itemSpareSpecifAdvanceTv;
+        @BindByTag("itemSpareLastDurationTv")
+        CustomTextView itemSpareLastDurationTv;
+        @BindByTag("itemSpareNextDurationTv")
+        CustomTextView itemSpareNextDurationTv;
+
         @BindByTag("itemMaintenanceMemoTv")
         CustomTextView itemMaintenanceMemoTv;
 
@@ -105,9 +108,28 @@ public class SparePartWarnAdapter extends BaseListDataRecyclerViewAdapter<SpareP
                     , Util.strFormat(data.getProductID().productModel));
             itemSpareSpecifModelTv.contentView().setText(HtmlParser.buildSpannedText(specifModel, new HtmlTagHandler()));
 
-            itemSpareSpecifLastDateTv.setValue(data.lastTime != null ? dateFormat.format(data.lastTime) : "");
-            itemSpareSpecifNextDateTv.setValue(data.nextTime != null ? dateFormat.format(data.nextTime) : "");
-            itemSpareSpecifAdvanceTv.setContent(data.advanceTime != null ? String.valueOf(data.advanceTime) : "");
+            itemSpareLastDurationTv.setVisibility(View.GONE);
+            itemSpareNextDurationTv.setVisibility(View.GONE);
+            itemSpareSpecifLastDateTv.setVisibility(View.GONE);
+            itemSpareSpecifNextDateTv.setVisibility(View.GONE);
+            if (data.isDuration()) {
+                itemSpareLastDurationTv.setVisibility(View.VISIBLE);
+                itemSpareNextDurationTv.setVisibility(View.VISIBLE);
+                itemSpareLastDurationTv.setValue(Util.big2(data.lastDuration));
+                itemSpareNextDurationTv.setValue(Util.big2(data.nextDuration));
+                if (data.currentDuration > data.nextDuration) {
+                    itemSpareNextDurationTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
+                }
+            } else {
+                itemSpareSpecifLastDateTv.setVisibility(View.VISIBLE);
+                itemSpareSpecifNextDateTv.setVisibility(View.VISIBLE);
+                itemSpareSpecifLastDateTv.setValue(data.lastTime != null ? dateFormat.format(data.lastTime) : "");
+                itemSpareSpecifNextDateTv.setValue(data.nextTime != null ? dateFormat.format(data.nextTime) : "");
+                long currentTime = System.currentTimeMillis();
+                if (data.nextTime < currentTime) {
+                    itemSpareSpecifNextDateTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
+                }
+            }
 
             if (!TextUtils.isEmpty(data.spareMemo)) {
                 itemMaintenanceMemoTv.setVisibility(View.VISIBLE);

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/dp_1"
     android:background="@color/white"
     android:descendantFocusability="blocksDescendants"
     tools:ignore="MissingDefaultResource">
@@ -15,8 +16,8 @@
         android:layout_centerVertical="true"
         android:layout_gravity="center_vertical"
         android:button="@drawable/sl_checkbox_selector"
-        android:enabled="false"
         android:clickable="false"
+        android:enabled="false"
         android:tag="chkBox" />
 
     <LinearLayout
@@ -139,15 +140,28 @@
             app:key_width="110dp" />
 
         <com.supcon.mes.mbap.view.CustomTextView
-            android:id="@+id/itemLubriAdvanceTimeTv"
+            android:id="@+id/itemLubriLastDurationTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dp_5"
-            android:tag="itemLubriAdvanceTimeTv"
+            android:paddingTop="@dimen/dp_5"
+            android:tag="itemLubriLastDurationTv"
             app:content_hint="--"
             app:gravity="right"
-            app:key="提  前  期  (天):"
-            app:key_width="110dp" />
+            app:key="上次运行时长(h):"
+            app:key_width="140dp" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemLubriNextDurationTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_5"
+            android:tag="itemLubriNextDurationTv"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="下次运行时长(h):"
+            app:key_width="140dp" />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/itemLubriClaimTv"

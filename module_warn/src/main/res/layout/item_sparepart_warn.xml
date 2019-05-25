@@ -15,19 +15,19 @@
         android:layout_centerVertical="true"
         android:layout_gravity="center_vertical"
         android:button="@drawable/sl_checkbox_selector"
-        android:enabled="false"
         android:clickable="false"
+        android:enabled="false"
         android:tag="chkBox" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/dp_15"
         android:layout_marginTop="@dimen/dp_10"
         android:layout_marginRight="@dimen/dp_15"
         android:layout_marginBottom="@dimen/dp_10"
         android:layout_toRightOf="@+id/chkBox"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dp_15">
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/itemSpareEquipmentNameTv"
@@ -88,15 +88,28 @@
             app:key_width="110dp" />
 
         <com.supcon.mes.mbap.view.CustomTextView
-            android:id="@+id/itemSpareSpecifAdvanceTv"
+            android:id="@+id/itemSpareLastDurationTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dp_5"
-            android:tag="itemSpareSpecifAdvanceTv"
+            android:paddingTop="@dimen/dp_5"
+            android:tag="itemSpareLastDurationTv"
             app:content_hint="--"
             app:gravity="right"
-            app:key="提  前  期  (天):"
-            app:key_width="110dp" />
+            app:key="上次更换时长(h):"
+            app:key_width="140dp" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemSpareNextDurationTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_5"
+            android:tag="itemSpareNextDurationTv"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="下次更换时长(h):"
+            app:key_width="140dp" />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/itemMaintenanceMemoTv"

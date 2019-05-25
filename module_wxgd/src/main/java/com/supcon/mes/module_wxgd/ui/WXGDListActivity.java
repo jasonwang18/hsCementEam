@@ -428,6 +428,7 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
         refreshListController.refreshBegin();
     }
 
+    @SuppressLint("CheckResult")
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refresh(LoginValidEvent loginValidEvent) {
         LogUtil.w("---------------------------------", "测试登录失效刷新...");

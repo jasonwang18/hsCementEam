@@ -18,7 +18,10 @@ public class MaintenanceWarnEntity extends BaseEntity {
     public ValueEntity periodUnit;
     public Long lastTime;
     public Long nextTime;
-    public Long advanceTime;
+    public Float currentDuration;//当前运行时长
+    public Float lastDuration;//上次维保时长
+    public Float nextDuration;//下次维保时长
+    public ValueEntity periodType;//类型
 
     public boolean isCheck;
 
@@ -27,5 +30,12 @@ public class MaintenanceWarnEntity extends BaseEntity {
             eamID = new WXGDEam();
         }
         return eamID;
+    }
+    //是否润滑时长
+    public boolean isDuration() {
+        if (periodType != null && periodType.id.equals("BEAM014/02")) {
+            return true;
+        }
+        return false;
     }
 }

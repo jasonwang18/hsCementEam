@@ -62,15 +62,29 @@
             app:key_width="110dp" />
 
         <com.supcon.mes.mbap.view.CustomTextView
-            android:id="@+id/itemMaintenanceAdvanceTimeTv"
+            android:id="@+id/itemMaintenanceLastDurationTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dp_5"
-            android:tag="itemMaintenanceAdvanceTimeTv"
+            android:paddingTop="@dimen/dp_5"
+            android:tag="itemMaintenanceLastDurationTv"
             app:content_hint="--"
             app:gravity="right"
-            app:key="提  前  期  (天):"
-            app:key_width="110dp" />
+            app:key="上次维保时长(h):"
+            app:key_width="140dp" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemMaintenanceNextDurationTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_5"
+            android:tag="itemMaintenanceNextDurationTv"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="下次维保时长(h):"
+            app:key_width="140dp" />
+
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/itemMaintenanceClaimTv"

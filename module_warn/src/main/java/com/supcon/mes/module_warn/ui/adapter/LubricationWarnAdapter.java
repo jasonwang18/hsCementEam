@@ -57,8 +57,10 @@ public class LubricationWarnAdapter extends BaseListDataRecyclerViewAdapter<Lubr
         CustomTextView itemLubriLastDateTv;
         @BindByTag("itemLubriNextDateTv")
         CustomTextView itemLubriNextDateTv;
-        @BindByTag("itemLubriAdvanceTimeTv")
-        CustomTextView itemLubriAdvanceTimeTv;
+        @BindByTag("itemLubriLastDurationTv")
+        CustomTextView itemLubriLastDurationTv;
+        @BindByTag("itemLubriNextDurationTv")
+        CustomTextView itemLubriNextDurationTv;
         @BindByTag("itemLubriClaimTv")
         CustomTextView itemLubriClaimTv;
         @BindByTag("itemLubriContentTv")
@@ -115,10 +117,28 @@ public class LubricationWarnAdapter extends BaseListDataRecyclerViewAdapter<Lubr
             itemLubriChangeTv.setText(String.format(context.getString(R.string.device_style1), "加/换油:", Util.strFormat(data.getOilType().value)));
             itemLubriNumTv.setText(String.format(context.getString(R.string.device_style1), "用量:", Util.big2(data.sum)));
             itemLubriPartTv.setValue(Util.strFormat(data.lubricatePart));
-
-            itemLubriLastDateTv.setValue(data.lastTime != null ? dateFormat.format(data.lastTime) : "");
-            itemLubriNextDateTv.setValue(data.nextTime != null ? dateFormat.format(data.nextTime) : "");
-            itemLubriAdvanceTimeTv.setContent(data.advanceTime != null ? String.valueOf(data.advanceTime) : "");
+            itemLubriLastDurationTv.setVisibility(View.GONE);
+            itemLubriNextDurationTv.setVisibility(View.GONE);
+            itemLubriLastDateTv.setVisibility(View.GONE);
+            itemLubriNextDateTv.setVisibility(View.GONE);
+            if (data.isDuration()) {
+                itemLubriLastDurationTv.setVisibility(View.VISIBLE);
+                itemLubriNextDurationTv.setVisibility(View.VISIBLE);
+                itemLubriLastDurationTv.setValue(Util.big2(data.lastDuration));
+                itemLubriNextDurationTv.setValue(Util.big2(data.nextDuration));
+                if (data.currentDuration > data.nextDuration) {
+                    itemLubriNextDurationTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
+                }
+            } else {
+                itemLubriLastDateTv.setVisibility(View.VISIBLE);
+                itemLubriNextDateTv.setVisibility(View.VISIBLE);
+                itemLubriLastDateTv.setValue(data.lastTime != null ? dateFormat.format(data.lastTime) : "");
+                itemLubriNextDateTv.setValue(data.nextTime != null ? dateFormat.format(data.nextTime) : "");
+                long currentTime = System.currentTimeMillis();
+                if (data.nextTime < currentTime) {
+                    itemLubriNextDateTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
+                }
+            }
 
             if (!TextUtils.isEmpty(data.getAccessoryEamId().getAttachEamId().code)) {
                 itemLubriAttachEamTv.setVisibility(View.VISIBLE);

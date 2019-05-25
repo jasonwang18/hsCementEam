@@ -47,8 +47,10 @@ public class MaintenanceWarnAdapter extends BaseListDataRecyclerViewAdapter<Main
         CustomTextView itemMaintenanceLastDateTv;
         @BindByTag("itemMaintenanceNextDateTv")
         CustomTextView itemMaintenanceNextDateTv;
-        @BindByTag("itemMaintenanceAdvanceTimeTv")
-        CustomTextView itemMaintenanceAdvanceTimeTv;
+        @BindByTag("itemMaintenanceLastDurationTv")
+        CustomTextView itemMaintenanceLastDurationTv;
+        @BindByTag("itemMaintenanceNextDurationTv")
+        CustomTextView itemMaintenanceNextDurationTv;
         @BindByTag("itemMaintenanceClaimTv")
         CustomTextView itemMaintenanceClaimTv;
         @BindByTag("itemMaintenanceContentTv")
@@ -95,10 +97,28 @@ public class MaintenanceWarnAdapter extends BaseListDataRecyclerViewAdapter<Main
                     , Util.strFormat(data.getEamID().code));
             itemMaintenanceEquipmentNameTv.contentView().setText(HtmlParser.buildSpannedText(eam, new HtmlTagHandler()));
 
-            itemMaintenanceLastDateTv.setValue(data.lastTime != null ? dateFormat.format(data.lastTime) : "");
-            itemMaintenanceNextDateTv.setValue(data.nextTime != null ? dateFormat.format(data.nextTime) : "");
-            itemMaintenanceAdvanceTimeTv.setContent(data.advanceTime != null ? String.valueOf(data.advanceTime) : "");
-
+            itemMaintenanceLastDateTv.setVisibility(View.GONE);
+            itemMaintenanceNextDateTv.setVisibility(View.GONE);
+            itemMaintenanceLastDurationTv.setVisibility(View.GONE);
+            itemMaintenanceNextDurationTv.setVisibility(View.GONE);
+            if (data.isDuration()) {
+                itemMaintenanceLastDurationTv.setVisibility(View.VISIBLE);
+                itemMaintenanceNextDurationTv.setVisibility(View.VISIBLE);
+                itemMaintenanceLastDurationTv.setValue(Util.big2(data.lastDuration));
+                itemMaintenanceNextDurationTv.setValue(Util.big2(data.nextDuration));
+                if (data.currentDuration > data.nextDuration) {
+                    itemMaintenanceNextDurationTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
+                }
+            } else {
+                itemMaintenanceLastDateTv.setVisibility(View.VISIBLE);
+                itemMaintenanceNextDateTv.setVisibility(View.VISIBLE);
+                itemMaintenanceLastDateTv.setValue(data.lastTime != null ? dateFormat.format(data.lastTime) : "");
+                itemMaintenanceNextDateTv.setValue(data.nextTime != null ? dateFormat.format(data.nextTime) : "");
+                long currentTime = System.currentTimeMillis();
+                if (data.nextTime < currentTime) {
+                    itemMaintenanceNextDateTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
+                }
+            }
             if (!TextUtils.isEmpty(data.claim)) {
                 itemMaintenanceClaimTv.setVisibility(View.VISIBLE);
                 itemMaintenanceClaimTv.setContent(data.claim);
