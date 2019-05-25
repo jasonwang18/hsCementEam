@@ -128,6 +128,8 @@ public class LubricationWarnAdapter extends BaseListDataRecyclerViewAdapter<Lubr
                 itemLubriNextDurationTv.setValue(Util.big2(data.nextDuration));
                 if (data.currentDuration > data.nextDuration) {
                     itemLubriNextDurationTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
+                }else {
+                    itemLubriNextDurationTv.setContentTextColor(context.getResources().getColor(R.color.textColorGray));
                 }
             } else {
                 itemLubriLastDateTv.setVisibility(View.VISIBLE);
@@ -137,6 +139,8 @@ public class LubricationWarnAdapter extends BaseListDataRecyclerViewAdapter<Lubr
                 long currentTime = System.currentTimeMillis();
                 if (data.nextTime < currentTime) {
                     itemLubriNextDateTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
+                }else {
+                    itemLubriNextDateTv.setContentTextColor(context.getResources().getColor(R.color.textColorGray));
                 }
             }
 

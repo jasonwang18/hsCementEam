@@ -2,6 +2,7 @@ package com.supcon.mes.module_warn.model.network;
 
 import com.app.annotation.apt.ApiFactory;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
+import com.supcon.mes.module_warn.model.bean.DelayEntity;
 import com.supcon.mes.module_warn.model.bean.LubricationWarnListEntity;
 import com.supcon.mes.module_warn.model.bean.MaintenanceWarnListEntity;
 import com.supcon.mes.module_warn.model.bean.SparePartWarnListEntity;
@@ -31,5 +32,9 @@ public interface ApiService {
     //备件
     @GET
     Flowable<SparePartWarnListEntity> getSparePart(@Url String url, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+
+    //备件
+    @GET("/BEAM/baseInfo/jWXItem/jwxDelaySetting.action")
+    Flowable<DelayEntity> delayDate(@QueryMap Map<String, Object> pageQueryMap);
 
 }

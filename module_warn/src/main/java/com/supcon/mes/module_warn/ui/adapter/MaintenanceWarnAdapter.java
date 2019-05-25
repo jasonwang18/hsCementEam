@@ -108,6 +108,8 @@ public class MaintenanceWarnAdapter extends BaseListDataRecyclerViewAdapter<Main
                 itemMaintenanceNextDurationTv.setValue(Util.big2(data.nextDuration));
                 if (data.currentDuration > data.nextDuration) {
                     itemMaintenanceNextDurationTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
+                }else {
+                    itemMaintenanceNextDurationTv.setContentTextColor(context.getResources().getColor(R.color.textColorGray));
                 }
             } else {
                 itemMaintenanceLastDateTv.setVisibility(View.VISIBLE);
@@ -117,6 +119,8 @@ public class MaintenanceWarnAdapter extends BaseListDataRecyclerViewAdapter<Main
                 long currentTime = System.currentTimeMillis();
                 if (data.nextTime < currentTime) {
                     itemMaintenanceNextDateTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
+                }else {
+                    itemMaintenanceNextDateTv.setContentTextColor(context.getResources().getColor(R.color.textColorGray));
                 }
             }
             if (!TextUtils.isEmpty(data.claim)) {

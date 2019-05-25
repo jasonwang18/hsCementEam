@@ -15,6 +15,8 @@ import com.supcon.mes.middleware.model.bean.WXGDEam;
  * ------------- Description -------------
  */
 public class LubricationWarnEntity extends BaseEntity {
+
+    public Long id;
     public WXGDEam eamID;
     public String content;
     public String claim;
@@ -39,21 +41,21 @@ public class LubricationWarnEntity extends BaseEntity {
     public int viewType = 0;
 
     public WXGDEam getEamID() {
-        if (eamID==null) {
+        if (eamID == null) {
             eamID = new WXGDEam();
         }
         return eamID;
     }
 
     public LubricateOil getLubricateOil() {
-        if (lubricateOil==null) {
+        if (lubricateOil == null) {
             lubricateOil = new LubricateOil();
         }
         return lubricateOil;
     }
 
     public ValueEntity getOilType() {
-        if (oilType==null) {
+        if (oilType == null) {
             oilType = new ValueEntity();
         }
         return oilType;

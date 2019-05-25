@@ -119,6 +119,8 @@ public class SparePartWarnAdapter extends BaseListDataRecyclerViewAdapter<SpareP
                 itemSpareNextDurationTv.setValue(Util.big2(data.nextDuration));
                 if (data.currentDuration > data.nextDuration) {
                     itemSpareNextDurationTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
+                }else {
+                    itemSpareNextDurationTv.setContentTextColor(context.getResources().getColor(R.color.textColorGray));
                 }
             } else {
                 itemSpareSpecifLastDateTv.setVisibility(View.VISIBLE);
@@ -128,6 +130,8 @@ public class SparePartWarnAdapter extends BaseListDataRecyclerViewAdapter<SpareP
                 long currentTime = System.currentTimeMillis();
                 if (data.nextTime < currentTime) {
                     itemSpareSpecifNextDateTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
+                }else {
+                    itemSpareSpecifNextDateTv.setContentTextColor(context.getResources().getColor(R.color.textColorGray));
                 }
             }
 

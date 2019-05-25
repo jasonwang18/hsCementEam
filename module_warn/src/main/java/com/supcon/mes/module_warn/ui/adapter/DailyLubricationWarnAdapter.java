@@ -128,15 +128,15 @@ public class DailyLubricationWarnAdapter extends BaseListDataRecyclerViewAdapter
                     LubricationWarnEntity item = getItem(getAdapterPosition());
                     item.isCheck = !item.isCheck;
                     notifyItemChanged(getAdapterPosition());
-                    if (checkPosition != -1) {
-                        if (checkPosition != getAdapterPosition()) {
-                            LubricationWarnEntity item1 = getItem(checkPosition);
-                            item1.isCheck = false;
-                        }
-                        notifyItemChanged(checkPosition);
-                    }
-                    checkPosition = getAdapterPosition();
-                    onItemChildViewClick(itemView, checkPosition, getItem(checkPosition));
+//                    if (checkPosition != -1) {
+//                        if (checkPosition != getAdapterPosition()) {
+//                            LubricationWarnEntity item1 = getItem(checkPosition);
+//                            item1.isCheck = false;
+//                        }
+//                        notifyItemChanged(checkPosition);
+//                    }
+//                    checkPosition = getAdapterPosition();
+//                    onItemChildViewClick(itemView, checkPosition, getItem(checkPosition));
                 }
             });
         }
@@ -159,6 +159,8 @@ public class DailyLubricationWarnAdapter extends BaseListDataRecyclerViewAdapter
                 itemLubriNextDurationTv.setValue(Util.big2(data.nextDuration));
                 if (data.currentDuration > data.nextDuration) {
                     itemLubriNextDurationTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
+                } else {
+                    itemLubriNextDurationTv.setContentTextColor(context.getResources().getColor(R.color.textColorGray));
                 }
             } else {
                 itemLubriLastDateTv.setVisibility(View.VISIBLE);
@@ -168,6 +170,8 @@ public class DailyLubricationWarnAdapter extends BaseListDataRecyclerViewAdapter
                 long currentTime = System.currentTimeMillis();
                 if (data.nextTime < currentTime) {
                     itemLubriNextDateTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
+                } else {
+                    itemLubriNextDateTv.setContentTextColor(context.getResources().getColor(R.color.textColorGray));
                 }
             }
 

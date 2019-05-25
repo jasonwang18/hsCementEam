@@ -149,6 +149,7 @@ public interface Constant {
         String LUBRICATION_EARLY_WARN = "LUBRICATION_EARLY_WARN";//润滑预警
         String DAILY_LUBRICATION_EARLY_WARN = "DAILY_LUBRICATION_EARLY_WARN";//日常润滑预警
         String MAINTENANCE_EARLY_WARN = "MAINTENANCE_EARLY_WARN";//维保预警
+        String DELAYDIALOG = "DELAYDIALOG";//延期弹出框
 
     }
 
@@ -234,6 +235,11 @@ public interface Constant {
 
         String IS_FROM_PENDING = "IS_FROM_PENDING";
         String PENDING_ENTITY = "";
+
+        String WARN_NEXT_TIME = "WARN_NEXT_TIME";//下次运行时间
+        String WARN_SOURCE_TYPE = "WARN_SOURCE_TYPE";//延期来源  润滑BEAM062/01,备件BEAM062/02,维保BEAM062/03
+        String WARN_SOURCE_IDS = "WARN_SOURCE_IDS";//延期ids
+        String WARN_PEROID_TYPE = "WARN_PEROID_TYPE";//周期类型
     }
 
     interface FilterSearchParam {
@@ -448,6 +454,12 @@ public interface Constant {
         String OPEN_TIME_STOP = "OPEN_TIME_STOP";//时间
         String OPEN_TIME = "OPEN_TIME";//时间
         String ON_OR_OFF = "ON_OR_OFF";//开关状态
+
+        String sourceIds = "sourceIds";
+        String sourceType = "sourceType";
+        String delayDate = "delayDate";
+        String delayReason = "delayReason";
+        String peroidType = "peroidType";
     }
 
 
