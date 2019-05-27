@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@color/white"
-    android:layout_marginTop="@dimen/dp_5"
     tools:ignore="MissingDefaultResource">
 
     <com.supcon.mes.mbap.view.CustomTextView

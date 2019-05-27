@@ -150,6 +150,7 @@ public interface Constant {
         String DAILY_LUBRICATION_EARLY_WARN = "DAILY_LUBRICATION_EARLY_WARN";//日常润滑预警
         String MAINTENANCE_EARLY_WARN = "MAINTENANCE_EARLY_WARN";//维保预警
         String DELAYDIALOG = "DELAYDIALOG";//延期弹出框
+        String DELAY_RECORD = "DELAY_RECORD";//延期记录
 
     }
 

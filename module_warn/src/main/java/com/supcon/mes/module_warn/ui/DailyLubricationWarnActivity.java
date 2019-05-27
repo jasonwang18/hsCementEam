@@ -30,6 +30,7 @@ import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.KeyExpandHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
+import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_warn.IntentRouter;
 import com.supcon.mes.module_warn.R;
 import com.supcon.mes.module_warn.model.api.LubricationWarnAPI;
@@ -178,15 +179,22 @@ public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<Lu
         RxView.clicks(dispatch)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
-                    LinkedList<LubricationWarnEntity> lubricationWarnEntities = new LinkedList<>();
                     List<LubricationWarnEntity> list = warnAdapter.getList();
+                    StringBuffer sourceIds = new StringBuffer();
+                    Bundle bundle = new Bundle();
                     Flowable.fromIterable(list)
                             .filter(lubricationWarnEntity -> lubricationWarnEntity.isCheck)
                             .subscribe(lubricationWarnEntity -> {
-                                lubricationWarnEntities.add(lubricationWarnEntity);
+                                sourceIds.append(lubricationWarnEntity.id).append(",");
                             }, throwable -> {
                             }, () -> {
-
+                                if (!TextUtils.isEmpty(sourceIds)) {
+                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_TYPE, "BEAM062/01");
+                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_IDS, sourceIds.toString());
+//                                    IntentRouter.go(this, Constant.Router.DELAYDIALOG, bundle);
+                                } else {
+                                    ToastUtils.show(this, "请选择操作项!");
+                                }
                             });
                 });
         RxView.clicks(delay)
@@ -200,6 +208,11 @@ public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<Lu
                             .subscribe(lubricationWarnEntity -> {
                                 bundle.putString(Constant.IntentKey.WARN_PEROID_TYPE, lubricationWarnEntity.periodType != null ? lubricationWarnEntity.periodType.id : "");
                                 sourceIds.append(lubricationWarnEntity.id).append(",");
+                                if (TextUtils.isEmpty(sourceIds)) {
+                                    sourceIds.append(lubricationWarnEntity.id);
+                                } else {
+                                    sourceIds.append(",").append(lubricationWarnEntity.id);
+                                }
                                 if (!lubricationWarnEntity.isDuration() && nextTime < lubricationWarnEntity.nextTime) {
                                     nextTime = lubricationWarnEntity.nextTime;
                                 }
@@ -219,17 +232,27 @@ public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<Lu
         RxView.clicks(overdue)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
-                    LinkedList<LubricationWarnEntity> lubricationWarnEntities = new LinkedList<>();
                     List<LubricationWarnEntity> list = warnAdapter.getList();
+                    StringBuffer sourceIds = new StringBuffer();
+                    Bundle bundle = new Bundle();
                     Flowable.fromIterable(list)
                             .filter(lubricationWarnEntity -> lubricationWarnEntity.isCheck)
                             .subscribe(lubricationWarnEntity -> {
-                                lubricationWarnEntities.add(lubricationWarnEntity);
+                                if (TextUtils.isEmpty(sourceIds)) {
+                                    sourceIds.append(lubricationWarnEntity.id);
+                                } else {
+                                    sourceIds.append(",").append(lubricationWarnEntity.id);
+                                }
                             }, throwable -> {
                             }, () -> {
-
+                                if (!TextUtils.isEmpty(sourceIds)) {
+                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_TYPE, "BEAM062/01");
+                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_IDS, sourceIds.toString());
+                                    IntentRouter.go(this, Constant.Router.DELAY_RECORD, bundle);
+                                } else {
+                                    ToastUtils.show(this, "请选择操作项!");
+                                }
                             });
-
                 });
     }
 
