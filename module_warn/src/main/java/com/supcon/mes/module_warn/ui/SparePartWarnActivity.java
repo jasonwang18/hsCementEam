@@ -24,6 +24,7 @@ import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.KeyExpandHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
+import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_warn.R;
 import com.supcon.mes.module_warn.model.api.SparePartWarnAPI;
 import com.supcon.mes.module_warn.model.bean.SparePartWarnEntity;
@@ -34,6 +35,9 @@ import com.supcon.mes.module_warn.ui.adapter.SparePartWarnAdapter;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Flowable;
 
 /**
  * @author yangfei.cao
@@ -111,6 +115,7 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
             if (!TextUtils.isEmpty(selecStr)) {
                 queryParam.put(Constant.BAPQuery.PRODUCT_CODE, selecStr);
             }
+            setRadioEnable(false);
             presenterRouter.create(SparePartWarnAPI.class).getSparePart(url, queryParam, pageIndex);
         });
         RxTextView.textChanges(titleSearchView.editText())
@@ -134,7 +139,8 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
                 } else if (checkedId == R.id.warnRadioBtn2) {
                     url = "/BEAM/baseInfo/sparePart/data-dg1543250233613.action";
                 }
-                doRefresh();
+                Flowable.timer(500, TimeUnit.MILLISECONDS)
+                        .subscribe(aLong -> doRefresh());
             }
         });
     }
@@ -160,6 +166,7 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
             btnLayout.setVisibility(View.VISIBLE);
         }
         refreshListController.refreshComplete(entity.result);
+        setRadioEnable(true);
     }
 
     @Override
@@ -167,5 +174,11 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
         btnLayout.setVisibility(View.GONE);
         SnackbarHelper.showError(rootView, ErrorMsgHelper.msgParse(errorMsg));
         refreshListController.refreshComplete(null);
+        setRadioEnable(true);
+    }
+    public void setRadioEnable(boolean enable) {
+        for (int i = 0; i < warnRadioGroup.getChildCount(); i++) {
+            warnRadioGroup.getChildAt(i).setEnabled(enable);
+        }
     }
 }

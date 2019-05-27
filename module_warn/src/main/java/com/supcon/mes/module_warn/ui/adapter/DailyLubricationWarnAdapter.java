@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -76,6 +77,13 @@ public class DailyLubricationWarnAdapter extends BaseListDataRecyclerViewAdapter
             String eam = String.format(context.getString(R.string.device_style10), Util.strFormat(data.getEamID().name)
                     , Util.strFormat(data.getEamID().code));
             itemEquipmentNameTv.contentView().setText(HtmlParser.buildSpannedText(eam, new HtmlTagHandler()));
+
+            if (getAdapterPosition() != 0) {
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                params.setMargins(0, Util.dpToPx(context, 5), 0, 0);
+                itemView.setLayoutParams(params);
+            }
         }
     }
 

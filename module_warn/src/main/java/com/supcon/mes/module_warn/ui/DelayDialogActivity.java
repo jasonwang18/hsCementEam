@@ -17,7 +17,6 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.activity.BasePresenterActivity;
 import com.supcon.common.view.util.ToastUtils;
-import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.controllers.DatePickController;
 import com.supcon.mes.mbap.view.CustomVerticalDateView;
@@ -32,15 +31,12 @@ import com.supcon.mes.module_warn.model.contract.DelayContract;
 import com.supcon.mes.module_warn.presenter.DelayPresenter;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
-import io.reactivex.functions.Consumer;
 
 @Router(Constant.Router.DELAYDIALOG)
 @Presenter(value = DelayPresenter.class)
@@ -97,6 +93,7 @@ public class DelayDialogActivity extends BasePresenterActivity implements DelayC
         if (!TextUtils.isEmpty(peroidType) && peroidType.equals(Constant.PeriodType.TIME_FREQUENCY)) {
             delayDuration.setVisibility(View.GONE);
             delayDateTv.setDate(DateUtil.dateFormat(nextTime));
+            delayDate = DateUtil.dateFormat(nextTime);
         } else {
             delayDateTv.setVisibility(View.GONE);
         }
@@ -145,7 +142,7 @@ public class DelayDialogActivity extends BasePresenterActivity implements DelayC
 
     public boolean doCheck() {
         long select = DateUtil.dateFormat(delayDate, "yyyy-MM-dd");
-        if (select < nextTime) {
+        if (select <= nextTime) {
             ToastUtils.show(this, "延期日期必须大于" + DateUtil.dateFormat(nextTime));
             return false;
         }
