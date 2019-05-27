@@ -142,7 +142,7 @@ public class DelayDialogActivity extends BasePresenterActivity implements DelayC
 
     public boolean doCheck() {
         long select = DateUtil.dateFormat(delayDate, "yyyy-MM-dd");
-        if (select < nextTime) {
+        if (select <= nextTime) {
             ToastUtils.show(this, "延期日期必须大于" + DateUtil.dateFormat(nextTime));
             return false;
         }
