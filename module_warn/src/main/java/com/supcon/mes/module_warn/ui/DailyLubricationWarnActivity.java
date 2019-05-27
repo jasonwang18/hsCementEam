@@ -19,6 +19,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.util.ToastUtils;
+import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.constant.ListType;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
@@ -33,10 +34,14 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_warn.IntentRouter;
 import com.supcon.mes.module_warn.R;
+import com.supcon.mes.module_warn.model.api.CompleteAPI;
 import com.supcon.mes.module_warn.model.api.LubricationWarnAPI;
+import com.supcon.mes.module_warn.model.bean.DelayEntity;
 import com.supcon.mes.module_warn.model.bean.LubricationWarnEntity;
 import com.supcon.mes.module_warn.model.bean.LubricationWarnListEntity;
+import com.supcon.mes.module_warn.model.contract.CompleteContract;
 import com.supcon.mes.module_warn.model.contract.LubricationWarnContract;
+import com.supcon.mes.module_warn.presenter.CompletePresenter;
 import com.supcon.mes.module_warn.presenter.LubricationWarnPresenter;
 import com.supcon.mes.module_warn.ui.adapter.DailyLubricationWarnAdapter;
 
@@ -64,8 +69,8 @@ import io.reactivex.functions.Predicate;
  * 日常润滑
  */
 @Router(Constant.Router.DAILY_LUBRICATION_EARLY_WARN)
-@Presenter(value = LubricationWarnPresenter.class)
-public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<LubricationWarnEntity> implements LubricationWarnContract.View {
+@Presenter(value = {LubricationWarnPresenter.class, CompletePresenter.class})
+public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<LubricationWarnEntity> implements LubricationWarnContract.View, CompleteContract.View {
 
     @BindByTag("leftBtn")
     AppCompatImageButton leftBtn;
@@ -185,13 +190,18 @@ public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<Lu
                     Flowable.fromIterable(list)
                             .filter(lubricationWarnEntity -> lubricationWarnEntity.isCheck)
                             .subscribe(lubricationWarnEntity -> {
-                                sourceIds.append(lubricationWarnEntity.id).append(",");
+                                if (TextUtils.isEmpty(sourceIds)) {
+                                    sourceIds.append(lubricationWarnEntity.id);
+                                } else {
+                                    sourceIds.append(",").append(lubricationWarnEntity.id);
+                                }
                             }, throwable -> {
                             }, () -> {
                                 if (!TextUtils.isEmpty(sourceIds)) {
-                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_TYPE, "BEAM062/01");
-                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_IDS, sourceIds.toString());
-//                                    IntentRouter.go(this, Constant.Router.DELAYDIALOG, bundle);
+                                    Map<String, Object> param = new HashMap<>();
+                                    param.put(Constant.BAPQuery.sourceIds, sourceIds);
+                                    onLoading("处理中...");
+                                    presenterRouter.create(CompleteAPI.class).dailyComplete(param);
                                 } else {
                                     ToastUtils.show(this, "请选择操作项!");
                                 }
@@ -297,6 +307,7 @@ public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<Lu
                 }, new Action() {
                     @Override
                     public void run() throws Exception {
+                        eamCode = "";
                         refreshListController.refreshComplete(lubricationWarnEntities);
                         setRadioEnable(true);
                     }
@@ -319,8 +330,20 @@ public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<Lu
     }
 
     @Override
+    public void dailyCompleteSuccess(DelayEntity entity) {
+        onLoadSuccessAndExit("任务完成", () -> refreshListController.refreshBegin());
+    }
+
+    @Override
+    public void dailyCompleteFailed(String errorMsg) {
+        onLoadFailed(ErrorMsgHelper.msgParse(errorMsg));
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(context);
     }
+
+
 }

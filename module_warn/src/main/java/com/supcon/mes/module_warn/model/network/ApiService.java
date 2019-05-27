@@ -34,11 +34,16 @@ public interface ApiService {
     @GET
     Flowable<SparePartWarnListEntity> getSparePart(@Url String url, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
+    //完成
+    @GET("/BEAM/baseInfo/jWXItem/jwxDailyLubRecord.action")
+    Flowable<DelayEntity> dailyComplete(@QueryMap Map<String, Object> pageQueryMap);
+
+
     //延期
     @GET("/BEAM/baseInfo/jWXItem/jwxDelaySetting.action")
     Flowable<DelayEntity> delayDate(@QueryMap Map<String, Object> pageQueryMap);
 
-    //延期
+    //延期记录
     @GET("/BEAM/baseInfo/delayRecords/delayRecordsList-query.action")
     Flowable<DelayRecordListEntity> delayRecords(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
