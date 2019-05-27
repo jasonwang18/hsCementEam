@@ -93,6 +93,7 @@ public class DelayDialogActivity extends BasePresenterActivity implements DelayC
         if (!TextUtils.isEmpty(peroidType) && peroidType.equals(Constant.PeriodType.TIME_FREQUENCY)) {
             delayDuration.setVisibility(View.GONE);
             delayDateTv.setDate(DateUtil.dateFormat(nextTime));
+            delayDate = DateUtil.dateFormat(nextTime);
         } else {
             delayDateTv.setVisibility(View.GONE);
         }
