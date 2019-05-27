@@ -94,15 +94,15 @@ public class LubricationWarnAdapter extends BaseListDataRecyclerViewAdapter<Lubr
                     LubricationWarnEntity item = getItem(getAdapterPosition());
                     item.isCheck = !item.isCheck;
                     notifyItemChanged(getAdapterPosition());
-                    if (checkPosition != -1) {
-                        if (checkPosition != getAdapterPosition()) {
-                            LubricationWarnEntity item1 = getItem(checkPosition);
-                            item1.isCheck = false;
-                        }
-                        notifyItemChanged(checkPosition);
-                    }
-                    checkPosition = getAdapterPosition();
-                    onItemChildViewClick(itemView, checkPosition, getItem(checkPosition));
+//                    if (checkPosition != -1) {
+//                        if (checkPosition != getAdapterPosition()) {
+//                            LubricationWarnEntity item1 = getItem(checkPosition);
+//                            item1.isCheck = false;
+//                        }
+//                        notifyItemChanged(checkPosition);
+//                    }
+//                    checkPosition = getAdapterPosition();
+//                    onItemChildViewClick(itemView, checkPosition, getItem(checkPosition));
                 }
             });
         }

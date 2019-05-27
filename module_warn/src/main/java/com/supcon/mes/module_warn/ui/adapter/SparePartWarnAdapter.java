@@ -81,15 +81,15 @@ public class SparePartWarnAdapter extends BaseListDataRecyclerViewAdapter<SpareP
                     SparePartWarnEntity item = getItem(getAdapterPosition());
                     item.isCheck = !item.isCheck;
                     notifyItemChanged(getAdapterPosition());
-                    if (checkPosition != -1) {
-                        if (checkPosition != getAdapterPosition()) {
-                            SparePartWarnEntity item1 = getItem(checkPosition);
-                            item1.isCheck = false;
-                        }
-                        notifyItemChanged(checkPosition);
-                    }
-                    checkPosition = getAdapterPosition();
-                    onItemChildViewClick(itemView, checkPosition, getItem(checkPosition));
+//                    if (checkPosition != -1) {
+//                        if (checkPosition != getAdapterPosition()) {
+//                            SparePartWarnEntity item1 = getItem(checkPosition);
+//                            item1.isCheck = false;
+//                        }
+//                        notifyItemChanged(checkPosition);
+//                    }
+//                    checkPosition = getAdapterPosition();
+//                    onItemChildViewClick(itemView, checkPosition, getItem(checkPosition));
                 }
             });
         }
