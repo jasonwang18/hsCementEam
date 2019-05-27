@@ -33,5 +33,5 @@
         android:layout_marginLeft="@dimen/dp_1"
         android:layout_weight="1"
         android:tag="overdue"
-        android:text="超期" />
+        android:text="延期记录" />
 </LinearLayout>

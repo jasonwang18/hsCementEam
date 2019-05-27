@@ -94,6 +94,12 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
         searchTitleBar.disableRightBtn();
     }
 
+    @Override
+    protected void initData() {
+        super.initData();
+        url = "/BEAM/baseInfo/sparePart/data-dg1535424823416.action";
+    }
+
     @SuppressLint("CheckResult")
     @Override
     protected void initListener() {
@@ -124,9 +130,9 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
                 if (checkedId == R.id.warnRadioBtn1) {
-                    url = "/BEAM/baseInfo/jWXItem/data-dg1531171100751.action";
+                    url = "/BEAM/baseInfo/sparePart/data-dg1535424823416.action";
                 } else if (checkedId == R.id.warnRadioBtn2) {
-                    url = "/BEAM/baseInfo/jWXItem/data-dg1531171100814.action";
+                    url = "/BEAM/baseInfo/sparePart/data-dg1543250233613.action";
                 }
                 doRefresh();
             }

@@ -1,29 +1,36 @@
 package com.supcon.mes.module_warn.ui;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
+import com.supcon.common.view.util.ToastUtils;
+import com.supcon.mes.mbap.constant.ListType;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
 import com.supcon.mes.mbap.view.CustomSearchView;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.KeyExpandHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
+import com.supcon.mes.module_warn.IntentRouter;
 import com.supcon.mes.module_warn.R;
 import com.supcon.mes.module_warn.model.api.LubricationWarnAPI;
 import com.supcon.mes.module_warn.model.bean.LubricationWarnEntity;
@@ -32,8 +39,21 @@ import com.supcon.mes.module_warn.model.contract.LubricationWarnContract;
 import com.supcon.mes.module_warn.presenter.LubricationWarnPresenter;
 import com.supcon.mes.module_warn.ui.adapter.DailyLubricationWarnAdapter;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Flowable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 
 /**
  * @author yangfei.cao
@@ -63,14 +83,24 @@ public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<Lu
 
     @BindByTag("btnLayout")
     LinearLayout btnLayout;
+    @BindByTag("dispatch")
+    Button dispatch;
+    @BindByTag("delay")
+    Button delay;
+    @BindByTag("overdue")
+    Button overdue;
 
     private final Map<String, Object> queryParam = new HashMap<>();
     private String selecStr;
     private String url;
+    private String eamCode = "";//设备编码
+    private DailyLubricationWarnAdapter warnAdapter;
+    private long nextTime = 0;
 
     @Override
     protected IListAdapter<LubricationWarnEntity> createAdapter() {
-        return new DailyLubricationWarnAdapter(this);
+        warnAdapter = new DailyLubricationWarnAdapter(this);
+        return warnAdapter;
     }
 
     @Override
@@ -78,6 +108,11 @@ public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<Lu
         return R.layout.ac_early_warn_list;
     }
 
+    @Override
+    protected void onInit() {
+        super.onInit();
+        EventBus.getDefault().register(this);
+    }
 
     @Override
     protected void initView() {
@@ -87,18 +122,18 @@ public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<Lu
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, null));
         contentView.setLayoutManager(new LinearLayoutManager(context));
-        contentView.addItemDecoration(new SpaceItemDecoration(15));
         //设置搜索框默认提示语
         titleSearchView.setHint("请输入设备编码");
         searchTitleBar.setTitleText("日常润滑预警");
         searchTitleBar.setBackgroundResource(R.color.gradient_start);
         searchTitleBar.disableRightBtn();
+        dispatch.setText("完成");
     }
 
     @Override
     protected void initData() {
         super.initData();
-        url = "/BEAM/baseInfo/jWXItem/data-dg1558429781181.action";
+        url = "/BEAM/baseInfo/jWXItem/data-dg1558678704208.action";
     }
 
     @SuppressLint("CheckResult")
@@ -112,6 +147,7 @@ public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<Lu
             if (!TextUtils.isEmpty(selecStr)) {
                 queryParam.put(Constant.BAPQuery.EAM_CODE, selecStr);
             }
+            setRadioEnable(false);
             presenterRouter.create(LubricationWarnAPI.class).getLubrication(url, queryParam, pageIndex);
         });
         RxTextView.textChanges(titleSearchView.editText())
@@ -129,14 +165,72 @@ public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<Lu
         warnRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                eamCode = "";
                 if (checkedId == R.id.warnRadioBtn1) {
-                    url = "/BEAM/baseInfo/jWXItem/data-dg1558429781181.action";
+                    url = "/BEAM/baseInfo/jWXItem/data-dg1558678704208.action";
                 } else if (checkedId == R.id.warnRadioBtn2) {
-                    url = "/BEAM/baseInfo/jWXItem/data-dg1558429781252.action";
+                    url = "/BEAM/baseInfo/jWXItem/data-dg1558678704255.action";
                 }
-                doRefresh();
+                Flowable.timer(500, TimeUnit.MILLISECONDS)
+                        .subscribe(aLong -> doRefresh());
             }
         });
+        RxView.clicks(dispatch)
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(o -> {
+                    LinkedList<LubricationWarnEntity> lubricationWarnEntities = new LinkedList<>();
+                    List<LubricationWarnEntity> list = warnAdapter.getList();
+                    Flowable.fromIterable(list)
+                            .filter(lubricationWarnEntity -> lubricationWarnEntity.isCheck)
+                            .subscribe(lubricationWarnEntity -> {
+                                lubricationWarnEntities.add(lubricationWarnEntity);
+                            }, throwable -> {
+                            }, () -> {
+
+                            });
+                });
+        RxView.clicks(delay)
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(o -> {
+                    List<LubricationWarnEntity> list = warnAdapter.getList();
+                    StringBuffer sourceIds = new StringBuffer();
+                    Bundle bundle = new Bundle();
+                    Flowable.fromIterable(list)
+                            .filter(lubricationWarnEntity -> lubricationWarnEntity.isCheck)
+                            .subscribe(lubricationWarnEntity -> {
+                                bundle.putString(Constant.IntentKey.WARN_PEROID_TYPE, lubricationWarnEntity.periodType != null ? lubricationWarnEntity.periodType.id : "");
+                                sourceIds.append(lubricationWarnEntity.id).append(",");
+                                if (!lubricationWarnEntity.isDuration() && nextTime < lubricationWarnEntity.nextTime) {
+                                    nextTime = lubricationWarnEntity.nextTime;
+                                }
+                            }, throwable -> {
+                            }, () -> {
+                                if (!TextUtils.isEmpty(sourceIds)) {
+                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_TYPE, "BEAM062/01");
+                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_IDS, sourceIds.toString());
+                                    bundle.putLong(Constant.IntentKey.WARN_NEXT_TIME, nextTime);
+                                    IntentRouter.go(this, Constant.Router.DELAYDIALOG, bundle);
+                                } else {
+                                    ToastUtils.show(this, "请选择操作项!");
+                                }
+                            });
+
+                });
+        RxView.clicks(overdue)
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(o -> {
+                    LinkedList<LubricationWarnEntity> lubricationWarnEntities = new LinkedList<>();
+                    List<LubricationWarnEntity> list = warnAdapter.getList();
+                    Flowable.fromIterable(list)
+                            .filter(lubricationWarnEntity -> lubricationWarnEntity.isCheck)
+                            .subscribe(lubricationWarnEntity -> {
+                                lubricationWarnEntities.add(lubricationWarnEntity);
+                            }, throwable -> {
+                            }, () -> {
+
+                            });
+
+                });
     }
 
     /**
@@ -151,6 +245,12 @@ public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<Lu
         refreshListController.refreshBegin();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRefresh(RefreshEvent event) {
+        refreshListController.refreshBegin();
+    }
+
+    @SuppressLint("CheckResult")
     @Override
     public void getLubricationSuccess(LubricationWarnListEntity entity) {
         if (entity.pageNo == 1 && entity.result.size() <= 0) {
@@ -158,7 +258,27 @@ public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<Lu
         } else {
             btnLayout.setVisibility(View.VISIBLE);
         }
-        refreshListController.refreshComplete(entity.result);
+        LinkedList<LubricationWarnEntity> lubricationWarnEntities = new LinkedList<>();
+        Flowable.fromIterable(entity.result)
+                .subscribe(lubricationWarnEntity -> {
+                    if (!lubricationWarnEntity.getEamID().code.equals(eamCode)) {
+                        eamCode = lubricationWarnEntity.getEamID().code;
+                        LubricationWarnEntity lubricationWarnTitle = new LubricationWarnEntity();
+                        lubricationWarnTitle.eamID = lubricationWarnEntity.getEamID();
+                        lubricationWarnTitle.viewType = ListType.TITLE.value();
+                        lubricationWarnEntities.add(lubricationWarnTitle);
+                    }
+                    lubricationWarnEntity.viewType = ListType.CONTENT.value();
+                    lubricationWarnEntities.add(lubricationWarnEntity);
+                }, throwable -> {
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        refreshListController.refreshComplete(lubricationWarnEntities);
+                        setRadioEnable(true);
+                    }
+                });
+
     }
 
     @Override
@@ -166,5 +286,18 @@ public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<Lu
         btnLayout.setVisibility(View.GONE);
         SnackbarHelper.showError(rootView, ErrorMsgHelper.msgParse(errorMsg));
         refreshListController.refreshComplete(null);
+        setRadioEnable(true);
+    }
+
+    public void setRadioEnable(boolean enable) {
+        for (int i = 0; i < warnRadioGroup.getChildCount(); i++) {
+            warnRadioGroup.getChildAt(i).setEnabled(enable);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(context);
     }
 }

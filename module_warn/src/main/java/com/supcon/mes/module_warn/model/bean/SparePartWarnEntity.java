@@ -19,7 +19,10 @@ public class SparePartWarnEntity extends BaseEntity {
     public Good productID;//备件
     public Long lastTime;
     public Long nextTime;
-    public Long advanceTime;
+    public Float currentDuration;//当前运行时长
+    public Float lastDuration;//上次更换时长
+    public Float nextDuration;//下次更换时长
+    public ValueEntity periodType;//类型
 
     public boolean isCheck;
 
@@ -35,5 +38,12 @@ public class SparePartWarnEntity extends BaseEntity {
             productID = new Good();
         }
         return productID;
+    }
+    //是否润滑时长
+    public boolean isDuration() {
+        if (periodType != null && periodType.id.equals("BEAM014/02")) {
+            return true;
+        }
+        return false;
     }
 }

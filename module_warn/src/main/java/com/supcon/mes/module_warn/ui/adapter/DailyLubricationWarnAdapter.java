@@ -1,6 +1,7 @@
 package com.supcon.mes.module_warn.ui.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
@@ -9,7 +10,10 @@ import android.widget.TextView;
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
+import com.supcon.common.view.util.ToastUtils;
+import com.supcon.mes.mbap.constant.ListType;
 import com.supcon.mes.mbap.view.CustomTextView;
+import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.util.HtmlParser;
 import com.supcon.mes.middleware.util.HtmlTagHandler;
 import com.supcon.mes.middleware.util.Util;
@@ -35,14 +39,48 @@ public class DailyLubricationWarnAdapter extends BaseListDataRecyclerViewAdapter
     }
 
     @Override
+    public int getItemViewType(int position, LubricationWarnEntity lubricationWarnEntity) {
+        return lubricationWarnEntity.viewType;
+    }
+
+    @Override
     protected BaseRecyclerViewHolder<LubricationWarnEntity> getViewHolder(int viewType) {
+        if (viewType == ListType.TITLE.value()) {
+            return new TitleViewHolder(context);
+        }
         return new ViewHolder(context);
+    }
+
+    class TitleViewHolder extends BaseRecyclerViewHolder<LubricationWarnEntity> {
+
+        @BindByTag("itemEquipmentNameTv")
+        CustomTextView itemEquipmentNameTv;
+
+
+        public TitleViewHolder(Context context) {
+            super(context, parent);
+        }
+
+        @Override
+        protected int layoutId() {
+            return R.layout.item_daily_lubri_warn_title;
+        }
+
+        @Override
+        protected void initView() {
+            super.initView();
+        }
+
+        @Override
+        protected void update(LubricationWarnEntity data) {
+            String eam = String.format(context.getString(R.string.device_style10), Util.strFormat(data.getEamID().name)
+                    , Util.strFormat(data.getEamID().code));
+            itemEquipmentNameTv.contentView().setText(HtmlParser.buildSpannedText(eam, new HtmlTagHandler()));
+        }
     }
 
     class ViewHolder extends BaseRecyclerViewHolder<LubricationWarnEntity> {
 
-        @BindByTag("itemLubriEquipmentNameTv")
-        CustomTextView itemLubriEquipmentNameTv;
         @BindByTag("itemLubriOilTv")
         CustomTextView itemLubriOilTv;
         @BindByTag("itemLubriChangeTv")
@@ -55,8 +93,10 @@ public class DailyLubricationWarnAdapter extends BaseListDataRecyclerViewAdapter
         CustomTextView itemLubriLastDateTv;
         @BindByTag("itemLubriNextDateTv")
         CustomTextView itemLubriNextDateTv;
-        @BindByTag("itemLubriAdvanceTimeTv")
-        CustomTextView itemLubriAdvanceTimeTv;
+        @BindByTag("itemLubriLastDurationTv")
+        CustomTextView itemLubriLastDurationTv;
+        @BindByTag("itemLubriNextDurationTv")
+        CustomTextView itemLubriNextDurationTv;
         @BindByTag("itemLubriClaimTv")
         CustomTextView itemLubriClaimTv;
         @BindByTag("itemLubriContentTv")
@@ -76,7 +116,7 @@ public class DailyLubricationWarnAdapter extends BaseListDataRecyclerViewAdapter
 
         @Override
         protected int layoutId() {
-            return R.layout.item_lubrication_warn;
+            return R.layout.item_daily_lubri_warn;
         }
 
         @Override
@@ -88,33 +128,52 @@ public class DailyLubricationWarnAdapter extends BaseListDataRecyclerViewAdapter
                     LubricationWarnEntity item = getItem(getAdapterPosition());
                     item.isCheck = !item.isCheck;
                     notifyItemChanged(getAdapterPosition());
-                    if (checkPosition != -1) {
-                        if (checkPosition != getAdapterPosition()) {
-                            LubricationWarnEntity item1 = getItem(checkPosition);
-                            item1.isCheck = false;
-                        }
-                        notifyItemChanged(checkPosition);
-                    }
-                    checkPosition = getAdapterPosition();
-                    onItemChildViewClick(itemView, checkPosition, getItem(checkPosition));
+//                    if (checkPosition != -1) {
+//                        if (checkPosition != getAdapterPosition()) {
+//                            LubricationWarnEntity item1 = getItem(checkPosition);
+//                            item1.isCheck = false;
+//                        }
+//                        notifyItemChanged(checkPosition);
+//                    }
+//                    checkPosition = getAdapterPosition();
+//                    onItemChildViewClick(itemView, checkPosition, getItem(checkPosition));
                 }
             });
         }
 
         @Override
         protected void update(LubricationWarnEntity data) {
-            String eam = String.format(context.getString(R.string.device_style10), Util.strFormat(data.getEamID().name)
-                    , Util.strFormat(data.getEamID().code));
-            itemLubriEquipmentNameTv.contentView().setText(HtmlParser.buildSpannedText(eam, new HtmlTagHandler()));
 
             itemLubriOilTv.setContent(data.getLubricateOil().name);
             itemLubriChangeTv.setText(String.format(context.getString(R.string.device_style1), "加/换油:", Util.strFormat(data.getOilType().value)));
             itemLubriNumTv.setText(String.format(context.getString(R.string.device_style1), "用量:", Util.big2(data.sum)));
             itemLubriPartTv.setValue(Util.strFormat(data.lubricatePart));
-
-            itemLubriLastDateTv.setValue(data.lastTime != null ? dateFormat.format(data.lastTime) : "");
-            itemLubriNextDateTv.setValue(data.nextTime != null ? dateFormat.format(data.nextTime) : "");
-            itemLubriAdvanceTimeTv.setContent(data.advanceTime != null ? String.valueOf(data.advanceTime) : "");
+            itemLubriLastDurationTv.setVisibility(View.GONE);
+            itemLubriNextDurationTv.setVisibility(View.GONE);
+            itemLubriLastDateTv.setVisibility(View.GONE);
+            itemLubriNextDateTv.setVisibility(View.GONE);
+            if (data.isDuration()) {
+                itemLubriLastDurationTv.setVisibility(View.VISIBLE);
+                itemLubriNextDurationTv.setVisibility(View.VISIBLE);
+                itemLubriLastDurationTv.setValue(Util.big2(data.lastDuration));
+                itemLubriNextDurationTv.setValue(Util.big2(data.nextDuration));
+                if (data.currentDuration > data.nextDuration) {
+                    itemLubriNextDurationTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
+                } else {
+                    itemLubriNextDurationTv.setContentTextColor(context.getResources().getColor(R.color.textColorGray));
+                }
+            } else {
+                itemLubriLastDateTv.setVisibility(View.VISIBLE);
+                itemLubriNextDateTv.setVisibility(View.VISIBLE);
+                itemLubriLastDateTv.setValue(data.lastTime != null ? dateFormat.format(data.lastTime) : "");
+                itemLubriNextDateTv.setValue(data.nextTime != null ? dateFormat.format(data.nextTime) : "");
+                long currentTime = System.currentTimeMillis();
+                if (data.nextTime < currentTime) {
+                    itemLubriNextDateTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
+                } else {
+                    itemLubriNextDateTv.setContentTextColor(context.getResources().getColor(R.color.textColorGray));
+                }
+            }
 
             if (!TextUtils.isEmpty(data.getAccessoryEamId().getAttachEamId().code)) {
                 itemLubriAttachEamTv.setVisibility(View.VISIBLE);
@@ -132,11 +191,15 @@ public class DailyLubricationWarnAdapter extends BaseListDataRecyclerViewAdapter
             if (!TextUtils.isEmpty(data.claim)) {
                 itemLubriClaimTv.setVisibility(View.VISIBLE);
                 itemLubriClaimTv.setContent(data.claim);
+            } else {
+                itemLubriClaimTv.setVisibility(View.GONE);
             }
 
             if (!TextUtils.isEmpty(data.content)) {
                 itemLubriContentTv.setVisibility(View.VISIBLE);
                 itemLubriContentTv.setContent(data.content);
+            } else {
+                itemLubriContentTv.setVisibility(View.GONE);
             }
 
             if (data.isCheck) {

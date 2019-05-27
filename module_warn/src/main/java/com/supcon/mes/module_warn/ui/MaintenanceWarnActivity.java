@@ -95,6 +95,12 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
         searchTitleBar.disableRightBtn();
     }
 
+    @Override
+    protected void initData() {
+        super.initData();
+        url = "/BEAM/baseInfo/jWXItem/data-dg1531171100751.action";
+    }
+
     @SuppressLint("CheckResult")
     @Override
     protected void initListener() {
@@ -124,7 +130,6 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
         warnRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-
                 if (checkedId == R.id.warnRadioBtn1) {
                     url = "/BEAM/baseInfo/jWXItem/data-dg1531171100751.action";
                 } else if (checkedId == R.id.warnRadioBtn2) {
