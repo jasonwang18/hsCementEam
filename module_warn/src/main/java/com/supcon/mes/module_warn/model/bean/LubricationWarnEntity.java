@@ -8,6 +8,9 @@ import com.supcon.mes.middleware.model.bean.SparePartId;
 import com.supcon.mes.middleware.model.bean.ValueEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEam;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * @author yangfei.cao
  * @ClassName hongShiCementEam
@@ -37,8 +40,14 @@ public class LubricationWarnEntity extends BaseEntity {
     public AccessoryEamId accessoryEamId;//附属设备
 
     public boolean isCheck;
+
+
     @Expose
     public int viewType = 0;
+    @Expose
+    public boolean isExpand;// 是否展开
+
+    public List<LubricationWarnEntity> lubricationWarnEntities = new LinkedList<>();
 
     public WXGDEam getEamID() {
         if (eamID == null) {

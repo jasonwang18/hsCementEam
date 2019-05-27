@@ -1,10 +1,17 @@
 package com.supcon.mes.module_warn.ui.adapter;
 
+import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,6 +29,7 @@ import com.supcon.mes.module_warn.R;
 import com.supcon.mes.module_warn.model.bean.LubricationWarnEntity;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 
 /**
@@ -34,6 +42,8 @@ public class DailyLubricationWarnAdapter extends BaseListDataRecyclerViewAdapter
 
     private int checkPosition = -1;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+    private OnScrollListener mOnScrollListener;
 
     public DailyLubricationWarnAdapter(Context context) {
         super(context);
@@ -52,8 +62,16 @@ public class DailyLubricationWarnAdapter extends BaseListDataRecyclerViewAdapter
         return new ViewHolder(context);
     }
 
+    @Override
+    public void onBindViewHolder(@NonNull BaseRecyclerViewHolder<LubricationWarnEntity> holder, int position, @NonNull List<Object> payloads) {
+        super.onBindViewHolder(holder, position, payloads);
+
+    }
+
     class TitleViewHolder extends BaseRecyclerViewHolder<LubricationWarnEntity> {
 
+        @BindByTag("expend")
+        ImageView expend;
         @BindByTag("itemEquipmentNameTv")
         CustomTextView itemEquipmentNameTv;
 
@@ -73,9 +91,38 @@ public class DailyLubricationWarnAdapter extends BaseListDataRecyclerViewAdapter
         }
 
         @Override
+        protected void initListener() {
+            super.initListener();
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int adapterPosition = getAdapterPosition();
+                    LubricationWarnEntity item = getItem(getAdapterPosition());
+                    if (item.viewType == ListType.TITLE.value()) {
+                        if (item.isExpand) {
+                            item.isExpand = false;
+                            getList().removeAll(item.lubricationWarnEntities);
+                            notifyItemRangeRemoved(getAdapterPosition() + 1, item.lubricationWarnEntities.size());
+                            notifyItemRangeChanged(0, getItemCount(), item.lubricationWarnEntities);
+                            rotationExpandIcon(90, 0);
+                        } else {
+                            item.isExpand = true;
+                            getList().addAll(getAdapterPosition() + 1, item.lubricationWarnEntities);
+                            notifyItemRangeInserted(getAdapterPosition() + 1, item.lubricationWarnEntities.size());
+                            notifyItemRangeChanged(0, getItemCount(), item.lubricationWarnEntities);
+                            rotationExpandIcon(0, 90);
+                        }
+                        mOnScrollListener.scrollTo(adapterPosition);
+                    }
+                }
+            });
+        }
+
+        @SuppressLint("StringFormatMatches")
+        @Override
         protected void update(LubricationWarnEntity data) {
-            String eam = String.format(context.getString(R.string.device_style10), Util.strFormat(data.getEamID().name)
-                    , Util.strFormat(data.getEamID().code));
+            String eam = String.format(context.getString(R.string.device_style11), Util.strFormat(data.getEamID().name)
+                    , Util.strFormat(data.getEamID().code), data.lubricationWarnEntities.size());
             itemEquipmentNameTv.contentView().setText(HtmlParser.buildSpannedText(eam, new HtmlTagHandler()));
 
             if (getAdapterPosition() != 0) {
@@ -83,6 +130,23 @@ public class DailyLubricationWarnAdapter extends BaseListDataRecyclerViewAdapter
                         LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 params.setMargins(0, Util.dpToPx(context, 5), 0, 0);
                 itemView.setLayoutParams(params);
+            }
+        }
+
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+        private void rotationExpandIcon(float from, float to) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                ValueAnimator valueAnimator = ValueAnimator.ofFloat(from, to);//属性动画
+                valueAnimator.setDuration(500);
+                valueAnimator.setInterpolator(new DecelerateInterpolator());
+                valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                        expend.setRotation((Float) valueAnimator.getAnimatedValue());
+                    }
+                });
+                valueAnimator.start();
             }
         }
     }
@@ -216,5 +280,16 @@ public class DailyLubricationWarnAdapter extends BaseListDataRecyclerViewAdapter
                 chkBox.setChecked(false);
             }
         }
+    }
+
+    /**
+     * 滚动监听接口
+     */
+    public interface OnScrollListener {
+        void scrollTo(int pos);
+    }
+
+    public void setOnScrollListener(OnScrollListener onScrollListener) {
+        this.mOnScrollListener = onScrollListener;
     }
 }

@@ -102,6 +102,7 @@ public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<Lu
     private String eamCode = "";//设备编码
     private DailyLubricationWarnAdapter warnAdapter;
     private long nextTime = 0;
+    private LubricationWarnEntity lubricationWarnTitle;
 
     @Override
     protected IListAdapter<LubricationWarnEntity> createAdapter() {
@@ -130,7 +131,7 @@ public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<Lu
         contentView.setLayoutManager(new LinearLayoutManager(context));
         //设置搜索框默认提示语
         titleSearchView.setHint("请输入设备编码");
-        searchTitleBar.setTitleText("日常润滑预警");
+        searchTitleBar.setTitleText("日常润滑任务");
         searchTitleBar.setBackgroundResource(R.color.gradient_start);
         searchTitleBar.disableRightBtn();
         dispatch.setText("完成");
@@ -264,6 +265,13 @@ public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<Lu
                                 }
                             });
                 });
+        //滚动监听
+        warnAdapter.setOnScrollListener(new DailyLubricationWarnAdapter.OnScrollListener() {
+            @Override
+            public void scrollTo(int pos) {
+                contentView.scrollToPosition(pos);
+            }
+        });
     }
 
     /**
@@ -296,21 +304,18 @@ public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<Lu
                 .subscribe(lubricationWarnEntity -> {
                     if (!lubricationWarnEntity.getEamID().code.equals(eamCode)) {
                         eamCode = lubricationWarnEntity.getEamID().code;
-                        LubricationWarnEntity lubricationWarnTitle = new LubricationWarnEntity();
+                        lubricationWarnTitle = new LubricationWarnEntity();
                         lubricationWarnTitle.eamID = lubricationWarnEntity.getEamID();
                         lubricationWarnTitle.viewType = ListType.TITLE.value();
                         lubricationWarnEntities.add(lubricationWarnTitle);
                     }
                     lubricationWarnEntity.viewType = ListType.CONTENT.value();
-                    lubricationWarnEntities.add(lubricationWarnEntity);
+                    lubricationWarnTitle.lubricationWarnEntities.add(lubricationWarnEntity);
                 }, throwable -> {
-                }, new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        eamCode = "";
-                        refreshListController.refreshComplete(lubricationWarnEntities);
-                        setRadioEnable(true);
-                    }
+                }, () -> {
+                    eamCode = "";
+                    refreshListController.refreshComplete(lubricationWarnEntities);
+                    setRadioEnable(true);
                 });
 
     }
