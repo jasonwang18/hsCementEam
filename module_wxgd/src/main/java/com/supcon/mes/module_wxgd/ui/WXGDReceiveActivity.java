@@ -224,9 +224,10 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
         chargeStaff.setEditable(false);
         planStartTime.setEditable(false);
         planEndTime.setEditable(false);
+        repairType.setEditable(false);
         realEndTime.setEditable(false);
         realEndTime.setNecessary(false);
-        repairType.setEditable(true);
+        repairAdvise.setEditable(false);
     }
 
 

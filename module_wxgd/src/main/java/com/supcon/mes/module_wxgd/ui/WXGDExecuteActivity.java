@@ -282,9 +282,10 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         chargeStaff.setEditable(false);
         planStartTime.setEditable(false);
         planEndTime.setEditable(false);
+        repairType.setEditable(false);
         realEndTime.setEditable(true);
-        realEndTime.setNecessary(false);
-        repairType.setEditable(true);
+        realEndTime.setNecessary(true);
+        repairAdvise.setEditable(false);
     }
 
     /**
@@ -355,6 +356,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         }
         dgDeletedIds_lubricateOils = oilsEvent.getDgDeletedIds();
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshRepairStaff(MaintenanceEvent event) {
         maintenanceController.updateMaintenanceEntities(event.getList());
@@ -363,6 +365,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         }
         dgDeletedIds_maintenance = event.getDgDeletedIds();
     }
+
     /**
      * @param
      * @return
@@ -459,16 +462,12 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
                         ToastUtils.show(context, "存在领用中备件，单据不可提交", 2500);
                         return;
                     }
-                    // 润滑、维保、备件更换 判断实际结束时间必填
                     if (!Constant.Transition.REJECT_CN.equals(workFlowVar.dec)) {
-                        if (Constant.WxgdWorkSource.lubrication.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.sparepart.equals(mWXGDEntity.workSource.id)) {
-                            if (mWXGDEntity.realEndDate == null) {
-                                SnackbarHelper.showError(rootView, "请填写实际结束时间");
-                                return;
-                            }
+                        if (mWXGDEntity.realEndDate == null) {
+                            SnackbarHelper.showError(rootView, "请填写实际结束时间");
+                            return;
                         }
                     }
-
                     onLoading("正在处理中...");
                     tip = "处理成功";
                     doSubmit(workFlowVar);
@@ -799,6 +798,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         }
         return false;
     }
+
     private <T extends BaseEntity> Map<String, T> initEntities(List<T> entities) {
         Map<String, T> map = new LinkedHashMap<>();
         for (T entity : entities) {
