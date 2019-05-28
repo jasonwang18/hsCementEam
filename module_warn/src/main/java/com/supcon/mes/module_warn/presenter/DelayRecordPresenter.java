@@ -14,12 +14,12 @@ import java.util.Map;
 
 public class DelayRecordPresenter extends DelayRecordContract.Presenter {
     @Override
-    public void delayRecords(Map<String, Object> params) {
+    public void delayRecords(String url, Map<String, Object> params) {
         FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
         JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(params, "EAM_BaseInfo,EAM_ID,BEAM_DELAY_RECORDS,DELAY_EAM_ID");
         fastQuery.subconds.add(joinSubcondEntity);
         fastQuery.modelAlias = "delayRecords";
-        mCompositeSubscription.add(EarlyWarnHttpClient.delayRecords(fastQuery, params)
+        mCompositeSubscription.add(EarlyWarnHttpClient.delayRecords(url, fastQuery, params)
                 .onErrorReturn(throwable -> {
                     DelayRecordListEntity delayRecordListEntity = new DelayRecordListEntity();
                     delayRecordListEntity.errMsg = throwable.toString();

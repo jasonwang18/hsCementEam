@@ -25,6 +25,7 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_warn.R;
 import com.supcon.mes.module_warn.model.api.DelayRecordAPI;
+import com.supcon.mes.module_warn.model.bean.DelayRecordEntity;
 import com.supcon.mes.module_warn.model.bean.DelayRecordListEntity;
 import com.supcon.mes.module_warn.model.contract.DelayRecordContract;
 import com.supcon.mes.module_warn.presenter.DelayRecordPresenter;
@@ -35,7 +36,7 @@ import java.util.Map;
 
 @Router(Constant.Router.DELAY_RECORD)
 @Presenter(value = DelayRecordPresenter.class)
-public class DelayRecordActivity extends BaseRefreshRecyclerActivity implements DelayRecordContract.View {
+public class DelayRecordActivity extends BaseRefreshRecyclerActivity<DelayRecordEntity> implements DelayRecordContract.View {
 
     @BindByTag("leftBtn")
     AppCompatImageButton leftBtn;
@@ -50,13 +51,14 @@ public class DelayRecordActivity extends BaseRefreshRecyclerActivity implements 
     RecyclerView contentView;
 
     private Map<String, Object> queryParam = new HashMap<>();
-    private String ids, sourceType;
+    private String ids, sourceType, url;
 
     @Override
     protected void onInit() {
         super.onInit();
         ids = getIntent().getStringExtra(Constant.IntentKey.WARN_SOURCE_IDS);
         sourceType = getIntent().getStringExtra(Constant.IntentKey.WARN_SOURCE_TYPE);
+        url = getIntent().getStringExtra(Constant.IntentKey.WARN_SOURCE_URL);
     }
 
     @Override
@@ -116,7 +118,7 @@ public class DelayRecordActivity extends BaseRefreshRecyclerActivity implements 
                 queryParam.put("page.pageNo", pageIndex);
                 queryParam.put("jwxItemId", ids);
                 queryParam.put("workProperty", sourceType);
-                presenterRouter.create(DelayRecordAPI.class).delayRecords(queryParam);
+                presenterRouter.create(DelayRecordAPI.class).delayRecords(url, queryParam);
             }
         });
     }

@@ -130,7 +130,7 @@ public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<Lu
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, null));
         contentView.setLayoutManager(new LinearLayoutManager(context));
         //设置搜索框默认提示语
-        titleSearchView.setHint("请输入设备编码");
+        titleSearchView.setHint("请输入设备名称");
         searchTitleBar.setTitleText("日常润滑任务");
         searchTitleBar.setBackgroundResource(R.color.gradient_start);
         searchTitleBar.disableRightBtn();
@@ -148,11 +148,11 @@ public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<Lu
     protected void initListener() {
         super.initListener();
         refreshListController.setOnRefreshPageListener(pageIndex -> {
-            if (queryParam.containsKey(Constant.BAPQuery.EAM_CODE)) {
-                queryParam.remove(Constant.BAPQuery.EAM_CODE);
+            if (queryParam.containsKey(Constant.BAPQuery.EAM_NAME)) {
+                queryParam.remove(Constant.BAPQuery.EAM_NAME);
             }
             if (!TextUtils.isEmpty(selecStr)) {
-                queryParam.put(Constant.BAPQuery.EAM_CODE, selecStr);
+                queryParam.put(Constant.BAPQuery.EAM_NAME, selecStr);
             }
             setRadioEnable(false);
             presenterRouter.create(LubricationWarnAPI.class).getLubrication(url, queryParam, pageIndex);
@@ -259,6 +259,7 @@ public class DailyLubricationWarnActivity extends BaseRefreshRecyclerActivity<Lu
                                 if (!TextUtils.isEmpty(sourceIds)) {
                                     bundle.putString(Constant.IntentKey.WARN_SOURCE_TYPE, "BEAM062/01");
                                     bundle.putString(Constant.IntentKey.WARN_SOURCE_IDS, sourceIds.toString());
+                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_URL, "/BEAM/baseInfo/delayRecords/delayRecordsList-query.action");
                                     IntentRouter.go(this, Constant.Router.DELAY_RECORD, bundle);
                                 } else {
                                     ToastUtils.show(this, "请选择操作项!");

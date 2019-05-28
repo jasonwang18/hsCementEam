@@ -2,4 +2,5 @@
     <string name="app_name">module_warn</string>
 
     <string name="device_style11"><![CDATA[<font color="#222222" size="16">%1$s</font><font color="#2f22f1" size="12"> (%2$s)</font><font color="#2f22f1" size="12"> (%3$s)</font>]]></string>
+    <string name="device_style12"><![CDATA[<font color="#222222" size="16">%1$s</font><font color="#2f22f1" size="12"> (%2$s)</font>]]></string>
 </resources>

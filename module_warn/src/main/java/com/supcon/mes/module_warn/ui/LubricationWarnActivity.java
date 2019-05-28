@@ -1,20 +1,24 @@
 package com.supcon.mes.module_warn.ui;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
@@ -24,7 +28,7 @@ import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.KeyExpandHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
-import com.supcon.mes.middleware.util.Util;
+import com.supcon.mes.module_warn.IntentRouter;
 import com.supcon.mes.module_warn.R;
 import com.supcon.mes.module_warn.model.api.LubricationWarnAPI;
 import com.supcon.mes.module_warn.model.bean.LubricationWarnEntity;
@@ -34,6 +38,7 @@ import com.supcon.mes.module_warn.presenter.LubricationWarnPresenter;
 import com.supcon.mes.module_warn.ui.adapter.LubricationWarnAdapter;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -67,13 +72,22 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
     @BindByTag("btnLayout")
     LinearLayout btnLayout;
 
+    @BindByTag("dispatch")
+    Button dispatch;
+    @BindByTag("delay")
+    Button delay;
+    @BindByTag("overdue")
+    Button overdue;
+
     private final Map<String, Object> queryParam = new HashMap<>();
     private String selecStr;
     private String url;
+    private LubricationWarnAdapter lubricationWarnAdapter;
+    private long nextTime = 0;
 
     @Override
     protected IListAdapter<LubricationWarnEntity> createAdapter() {
-        LubricationWarnAdapter lubricationWarnAdapter = new LubricationWarnAdapter(this);
+        lubricationWarnAdapter = new LubricationWarnAdapter(this);
         return lubricationWarnAdapter;
     }
 
@@ -142,6 +156,65 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
                         .subscribe(aLong -> doRefresh());
             }
         });
+
+        RxView.clicks(delay)
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(o -> {
+                    List<LubricationWarnEntity> list = lubricationWarnAdapter.getList();
+                    StringBuffer sourceIds = new StringBuffer();
+                    Bundle bundle = new Bundle();
+                    Flowable.fromIterable(list)
+                            .filter(lubricationWarnEntity -> lubricationWarnEntity.isCheck)
+                            .subscribe(lubricationWarnEntity -> {
+                                bundle.putString(Constant.IntentKey.WARN_PEROID_TYPE, lubricationWarnEntity.periodType != null ? lubricationWarnEntity.periodType.id : "");
+                                sourceIds.append(lubricationWarnEntity.id).append(",");
+                                if (TextUtils.isEmpty(sourceIds)) {
+                                    sourceIds.append(lubricationWarnEntity.id);
+                                } else {
+                                    sourceIds.append(",").append(lubricationWarnEntity.id);
+                                }
+                                if (!lubricationWarnEntity.isDuration() && nextTime < lubricationWarnEntity.nextTime) {
+                                    nextTime = lubricationWarnEntity.nextTime;
+                                }
+                            }, throwable -> {
+                            }, () -> {
+                                if (!TextUtils.isEmpty(sourceIds)) {
+                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_TYPE, "BEAM062/01");
+                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_IDS, sourceIds.toString());
+                                    bundle.putLong(Constant.IntentKey.WARN_NEXT_TIME, nextTime);
+                                    IntentRouter.go(this, Constant.Router.DELAYDIALOG, bundle);
+                                } else {
+                                    ToastUtils.show(this, "请选择操作项!");
+                                }
+                            });
+
+                });
+        RxView.clicks(overdue)
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(o -> {
+                    List<LubricationWarnEntity> list = lubricationWarnAdapter.getList();
+                    StringBuffer sourceIds = new StringBuffer();
+                    Bundle bundle = new Bundle();
+                    Flowable.fromIterable(list)
+                            .filter(lubricationWarnEntity -> lubricationWarnEntity.isCheck)
+                            .subscribe(lubricationWarnEntity -> {
+                                if (TextUtils.isEmpty(sourceIds)) {
+                                    sourceIds.append(lubricationWarnEntity.id);
+                                } else {
+                                    sourceIds.append(",").append(lubricationWarnEntity.id);
+                                }
+                            }, throwable -> {
+                            }, () -> {
+                                if (!TextUtils.isEmpty(sourceIds)) {
+                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_TYPE, "BEAM062/01");
+                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_IDS, sourceIds.toString());
+                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_URL, "/BEAM/baseInfo/delayRecords/delayRecordsList-query.action");
+                                    IntentRouter.go(this, Constant.Router.DELAY_RECORD, bundle);
+                                } else {
+                                    ToastUtils.show(this, "请选择操作项!");
+                                }
+                            });
+                });
     }
 
     /**

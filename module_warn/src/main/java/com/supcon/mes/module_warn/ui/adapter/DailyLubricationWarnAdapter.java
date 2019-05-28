@@ -121,8 +121,8 @@ public class DailyLubricationWarnAdapter extends BaseListDataRecyclerViewAdapter
         @SuppressLint("StringFormatMatches")
         @Override
         protected void update(LubricationWarnEntity data) {
-            String eam = String.format(context.getString(R.string.device_style11), Util.strFormat(data.getEamID().name)
-                    , Util.strFormat(data.getEamID().code), data.lubricationWarnEntities.size());
+            String eam = String.format(context.getString(R.string.device_style12), Util.strFormat(data.getEamID().name)
+                    , data.lubricationWarnEntities.size());
             itemEquipmentNameTv.contentView().setText(HtmlParser.buildSpannedText(eam, new HtmlTagHandler()));
 
             if (getAdapterPosition() != 0) {
@@ -224,55 +224,55 @@ public class DailyLubricationWarnAdapter extends BaseListDataRecyclerViewAdapter
             itemLubriNextDurationTv.setVisibility(View.GONE);
             itemLubriLastDateTv.setVisibility(View.GONE);
             itemLubriNextDateTv.setVisibility(View.GONE);
-            if (data.isDuration()) {
-                itemLubriLastDurationTv.setVisibility(View.VISIBLE);
-                itemLubriNextDurationTv.setVisibility(View.VISIBLE);
-                itemLubriLastDurationTv.setValue(Util.big2(data.lastDuration));
-                itemLubriNextDurationTv.setValue(Util.big2(data.nextDuration));
-                if (data.currentDuration > data.nextDuration) {
-                    itemLubriNextDurationTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
-                } else {
-                    itemLubriNextDurationTv.setContentTextColor(context.getResources().getColor(R.color.textColorGray));
-                }
-            } else {
-                itemLubriLastDateTv.setVisibility(View.VISIBLE);
-                itemLubriNextDateTv.setVisibility(View.VISIBLE);
-                itemLubriLastDateTv.setValue(data.lastTime != null ? dateFormat.format(data.lastTime) : "");
-                itemLubriNextDateTv.setValue(data.nextTime != null ? dateFormat.format(data.nextTime) : "");
-                long currentTime = System.currentTimeMillis();
-                if (data.nextTime < currentTime) {
-                    itemLubriNextDateTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
-                } else {
-                    itemLubriNextDateTv.setContentTextColor(context.getResources().getColor(R.color.textColorGray));
-                }
-            }
+//            if (data.isDuration()) {
+//                itemLubriLastDurationTv.setVisibility(View.VISIBLE);
+//                itemLubriNextDurationTv.setVisibility(View.VISIBLE);
+//                itemLubriLastDurationTv.setValue(Util.big2(data.lastDuration));
+//                itemLubriNextDurationTv.setValue(Util.big2(data.nextDuration));
+//                if (data.currentDuration > data.nextDuration) {
+//                    itemLubriNextDurationTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
+//                } else {
+//                    itemLubriNextDurationTv.setContentTextColor(context.getResources().getColor(R.color.textColorGray));
+//                }
+//            } else {
+//                itemLubriLastDateTv.setVisibility(View.VISIBLE);
+//                itemLubriNextDateTv.setVisibility(View.VISIBLE);
+//                itemLubriLastDateTv.setValue(data.lastTime != null ? dateFormat.format(data.lastTime) : "");
+//                itemLubriNextDateTv.setValue(data.nextTime != null ? dateFormat.format(data.nextTime) : "");
+//                long currentTime = System.currentTimeMillis();
+//                if (data.nextTime < currentTime) {
+//                    itemLubriNextDateTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
+//                } else {
+//                    itemLubriNextDateTv.setContentTextColor(context.getResources().getColor(R.color.textColorGray));
+//                }
+//            }
 
-            if (!TextUtils.isEmpty(data.getAccessoryEamId().getAttachEamId().code)) {
-                itemLubriAttachEamTv.setVisibility(View.VISIBLE);
-                itemLubriAttachEamTv.setContent(data.getAccessoryEamId().getAttachEamId().code);
-            } else {
-                itemLubriAttachEamTv.setVisibility(View.GONE);
-            }
-            if (!TextUtils.isEmpty(data.getSparePartId().getProductID().productCode)) {
-                itemLubriSparePartIdTv.setVisibility(View.VISIBLE);
-                itemLubriSparePartIdTv.setContent(data.getSparePartId().getProductID().productCode);
-            } else {
-                itemLubriSparePartIdTv.setVisibility(View.GONE);
-            }
+//            if (!TextUtils.isEmpty(data.getAccessoryEamId().getAttachEamId().code)) {
+//                itemLubriAttachEamTv.setVisibility(View.VISIBLE);
+//                itemLubriAttachEamTv.setContent(data.getAccessoryEamId().getAttachEamId().code);
+//            } else {
+//                itemLubriAttachEamTv.setVisibility(View.GONE);
+//            }
+//            if (!TextUtils.isEmpty(data.getSparePartId().getProductID().productCode)) {
+//                itemLubriSparePartIdTv.setVisibility(View.VISIBLE);
+//                itemLubriSparePartIdTv.setContent(data.getSparePartId().getProductID().productCode);
+//            } else {
+//                itemLubriSparePartIdTv.setVisibility(View.GONE);
+//            }
 
-            if (!TextUtils.isEmpty(data.claim)) {
-                itemLubriClaimTv.setVisibility(View.VISIBLE);
-                itemLubriClaimTv.setContent(data.claim);
-            } else {
-                itemLubriClaimTv.setVisibility(View.GONE);
-            }
-
-            if (!TextUtils.isEmpty(data.content)) {
-                itemLubriContentTv.setVisibility(View.VISIBLE);
-                itemLubriContentTv.setContent(data.content);
-            } else {
-                itemLubriContentTv.setVisibility(View.GONE);
-            }
+//            if (!TextUtils.isEmpty(data.claim)) {
+//                itemLubriClaimTv.setVisibility(View.VISIBLE);
+//                itemLubriClaimTv.setContent(data.claim);
+//            } else {
+//                itemLubriClaimTv.setVisibility(View.GONE);
+//            }
+//
+//            if (!TextUtils.isEmpty(data.content)) {
+//                itemLubriContentTv.setVisibility(View.VISIBLE);
+//                itemLubriContentTv.setContent(data.content);
+//            } else {
+//                itemLubriContentTv.setVisibility(View.GONE);
+//            }
 
             if (data.isCheck) {
                 chkBox.setChecked(true);
