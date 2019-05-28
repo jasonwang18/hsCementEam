@@ -44,7 +44,7 @@ public interface ApiService {
     Flowable<DelayEntity> delayDate(@QueryMap Map<String, Object> pageQueryMap);
 
     //延期记录
-    @GET("/BEAM/baseInfo/delayRecords/delayRecordsList-query.action")
-    Flowable<DelayRecordListEntity> delayRecords(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+    @GET
+    Flowable<DelayRecordListEntity> delayRecords(@Url String url, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
 }

@@ -1,20 +1,24 @@
 package com.supcon.mes.module_warn.ui;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
@@ -24,7 +28,7 @@ import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.KeyExpandHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
-import com.supcon.mes.middleware.util.Util;
+import com.supcon.mes.module_warn.IntentRouter;
 import com.supcon.mes.module_warn.R;
 import com.supcon.mes.module_warn.model.api.MaintenanceWarnAPI;
 import com.supcon.mes.module_warn.model.bean.MaintenanceWarnEntity;
@@ -34,6 +38,7 @@ import com.supcon.mes.module_warn.presenter.MaintenanceWarnPresenter;
 import com.supcon.mes.module_warn.ui.adapter.MaintenanceWarnAdapter;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -67,14 +72,23 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
     @BindByTag("btnLayout")
     LinearLayout btnLayout;
 
+    @BindByTag("dispatch")
+    Button dispatch;
+    @BindByTag("delay")
+    Button delay;
+    @BindByTag("overdue")
+    Button overdue;
+
     private String url;
 
     private final Map<String, Object> queryParam = new HashMap<>();
     private String selecStr;
+    private MaintenanceWarnAdapter maintenanceWarnAdapter;
+    private long nextTime = 0;
 
     @Override
     protected IListAdapter<MaintenanceWarnEntity> createAdapter() {
-        MaintenanceWarnAdapter maintenanceWarnAdapter = new MaintenanceWarnAdapter(this);
+        maintenanceWarnAdapter = new MaintenanceWarnAdapter(this);
         return maintenanceWarnAdapter;
     }
 
@@ -144,6 +158,65 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
                         .subscribe(aLong -> doRefresh());
             }
         });
+
+        RxView.clicks(delay)
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(o -> {
+                    List<MaintenanceWarnEntity> list = maintenanceWarnAdapter.getList();
+                    StringBuffer sourceIds = new StringBuffer();
+                    Bundle bundle = new Bundle();
+                    Flowable.fromIterable(list)
+                            .filter(maintenanceWarnEntity -> maintenanceWarnEntity.isCheck)
+                            .subscribe(maintenanceWarnEntity -> {
+                                bundle.putString(Constant.IntentKey.WARN_PEROID_TYPE, maintenanceWarnEntity.periodType != null ? maintenanceWarnEntity.periodType.id : "");
+                                sourceIds.append(maintenanceWarnEntity.id).append(",");
+                                if (TextUtils.isEmpty(sourceIds)) {
+                                    sourceIds.append(maintenanceWarnEntity.id);
+                                } else {
+                                    sourceIds.append(",").append(maintenanceWarnEntity.id);
+                                }
+                                if (!maintenanceWarnEntity.isDuration() && nextTime < maintenanceWarnEntity.nextTime) {
+                                    nextTime = maintenanceWarnEntity.nextTime;
+                                }
+                            }, throwable -> {
+                            }, () -> {
+                                if (!TextUtils.isEmpty(sourceIds)) {
+                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_TYPE, "BEAM062/02");
+                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_IDS, sourceIds.toString());
+                                    bundle.putLong(Constant.IntentKey.WARN_NEXT_TIME, nextTime);
+                                    IntentRouter.go(this, Constant.Router.DELAYDIALOG, bundle);
+                                } else {
+                                    ToastUtils.show(this, "请选择操作项!");
+                                }
+                            });
+
+                });
+        RxView.clicks(overdue)
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(o -> {
+                    List<MaintenanceWarnEntity> list = maintenanceWarnAdapter.getList();
+                    StringBuffer sourceIds = new StringBuffer();
+                    Bundle bundle = new Bundle();
+                    Flowable.fromIterable(list)
+                            .filter(maintenanceWarnEntity -> maintenanceWarnEntity.isCheck)
+                            .subscribe(maintenanceWarnEntity -> {
+                                if (TextUtils.isEmpty(sourceIds)) {
+                                    sourceIds.append(maintenanceWarnEntity.id);
+                                } else {
+                                    sourceIds.append(",").append(maintenanceWarnEntity.id);
+                                }
+                            }, throwable -> {
+                            }, () -> {
+                                if (!TextUtils.isEmpty(sourceIds)) {
+                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_TYPE, "BEAM062/02");
+                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_IDS, sourceIds.toString());
+                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_URL, "/BEAM/baseInfo/delayRecords/delayRecordsList-query.action");
+                                    IntentRouter.go(this, Constant.Router.DELAY_RECORD, bundle);
+                                } else {
+                                    ToastUtils.show(this, "请选择操作项!");
+                                }
+                            });
+                });
     }
 
     public void doSearchTableNo(String search) {

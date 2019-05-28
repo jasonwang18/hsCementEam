@@ -11,6 +11,7 @@ import com.supcon.mes.middleware.model.bean.WXGDEam;
  * ------------- Description -------------
  */
 public class MaintenanceWarnEntity extends BaseEntity {
+    public Long id;
     public WXGDEam eamID;
     public String content;
     public String claim;

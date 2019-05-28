@@ -7,5 +7,5 @@ import java.util.Map;
 
 @ContractFactory(entites = DelayRecordListEntity.class)
 public interface DelayRecordAPI {
-    void delayRecords(Map<String, Object> params);
+    void delayRecords(String url,Map<String, Object> params);
 }
