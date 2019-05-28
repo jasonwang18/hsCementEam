@@ -169,7 +169,6 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
                             .filter(maintenanceWarnEntity -> maintenanceWarnEntity.isCheck)
                             .subscribe(maintenanceWarnEntity -> {
                                 bundle.putString(Constant.IntentKey.WARN_PEROID_TYPE, maintenanceWarnEntity.periodType != null ? maintenanceWarnEntity.periodType.id : "");
-                                sourceIds.append(maintenanceWarnEntity.id).append(",");
                                 if (TextUtils.isEmpty(sourceIds)) {
                                     sourceIds.append(maintenanceWarnEntity.id);
                                 } else {

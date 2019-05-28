@@ -169,7 +169,6 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
                             .filter(sparePartWarnEntity -> sparePartWarnEntity.isCheck)
                             .subscribe(sparePartWarnEntity -> {
                                 bundle.putString(Constant.IntentKey.WARN_PEROID_TYPE, sparePartWarnEntity.periodType != null ? sparePartWarnEntity.periodType.id : "");
-                                sourceIds.append(sparePartWarnEntity.id).append(",");
                                 if (TextUtils.isEmpty(sourceIds)) {
                                     sourceIds.append(sparePartWarnEntity.id);
                                 } else {

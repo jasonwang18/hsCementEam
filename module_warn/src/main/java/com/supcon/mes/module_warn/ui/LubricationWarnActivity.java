@@ -167,7 +167,6 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
                             .filter(lubricationWarnEntity -> lubricationWarnEntity.isCheck)
                             .subscribe(lubricationWarnEntity -> {
                                 bundle.putString(Constant.IntentKey.WARN_PEROID_TYPE, lubricationWarnEntity.periodType != null ? lubricationWarnEntity.periodType.id : "");
-                                sourceIds.append(lubricationWarnEntity.id).append(",");
                                 if (TextUtils.isEmpty(sourceIds)) {
                                     sourceIds.append(lubricationWarnEntity.id);
                                 } else {
