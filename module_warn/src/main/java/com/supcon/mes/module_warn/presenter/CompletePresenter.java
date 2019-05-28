@@ -17,7 +17,7 @@ public class CompletePresenter extends CompleteContract.Presenter {
                     delayEntity.errMsg = throwable.toString();
                     return delayEntity;
                 }).subscribe(delayEntity -> {
-                    if (delayEntity.delFlag) {
+                    if (delayEntity.success) {
                         getView().dailyCompleteSuccess(delayEntity);
                     } else {
                         getView().dailyCompleteFailed(TextUtils.isEmpty(delayEntity.errMsg) ? "任务未完成" : delayEntity.errMsg);

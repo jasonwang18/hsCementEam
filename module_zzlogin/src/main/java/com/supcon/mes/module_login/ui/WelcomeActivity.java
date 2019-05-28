@@ -28,16 +28,17 @@ public class WelcomeActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+
         boolean isHS = true;
         if(EamApplication.isHongshi()){
             isHS = true;
-            getWindow().setBackgroundDrawableResource(R.drawable.layer_welcome);
+            getWindow().getDecorView().setBackgroundResource(R.drawable.layer_welcome_hs);
         }
         else{
             isHS = false;
             getWindow().getDecorView().setBackgroundResource(R.drawable.layer_welcome_hl);
         }
+        super.onCreate(savedInstanceState);
         StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
         boolean finalIsHS = isHS;
         new Handler().postDelayed(() -> {

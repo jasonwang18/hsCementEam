@@ -137,6 +137,10 @@ public class EamApplication extends MBapApp {
                 ip = "192.168.90.115";
                 port = "8080";
             }
+            else if(channel.equals("supcon")){
+                ip = "10.30.22.227";
+                port = "8080";
+            }
             else{
                 ip = "192.168.90.9";
                 port = "8080";

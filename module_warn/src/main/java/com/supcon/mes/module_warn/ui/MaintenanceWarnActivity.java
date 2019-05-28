@@ -24,6 +24,7 @@ import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
 import com.supcon.mes.mbap.view.CustomSearchView;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.KeyExpandHelper;
@@ -31,11 +32,16 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_warn.IntentRouter;
 import com.supcon.mes.module_warn.R;
 import com.supcon.mes.module_warn.model.api.MaintenanceWarnAPI;
+import com.supcon.mes.module_warn.model.bean.LubricationWarnEntity;
 import com.supcon.mes.module_warn.model.bean.MaintenanceWarnEntity;
 import com.supcon.mes.module_warn.model.bean.MaintenanceWarnListEntity;
 import com.supcon.mes.module_warn.model.contract.MaintenanceWarnContract;
 import com.supcon.mes.module_warn.presenter.MaintenanceWarnPresenter;
 import com.supcon.mes.module_warn.ui.adapter.MaintenanceWarnAdapter;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.List;
@@ -71,7 +77,6 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
 
     @BindByTag("btnLayout")
     LinearLayout btnLayout;
-
     @BindByTag("dispatch")
     Button dispatch;
     @BindByTag("delay")
@@ -80,9 +85,9 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
     Button overdue;
 
     private String url;
-
     private final Map<String, Object> queryParam = new HashMap<>();
     private String selecStr;
+
     private MaintenanceWarnAdapter maintenanceWarnAdapter;
     private long nextTime = 0;
 
@@ -95,6 +100,24 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
     @Override
     protected int getLayoutID() {
         return R.layout.ac_early_warn_list;
+    }
+
+    @Override
+    protected void onInit() {
+        super.onInit();
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRefresh(RefreshEvent event) {
+        refreshListController.refreshBegin();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -158,7 +181,32 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
                         .subscribe(aLong -> doRefresh());
             }
         });
+        RxView.clicks(dispatch)
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(o -> {
+                    List<MaintenanceWarnEntity> list = maintenanceWarnAdapter.getList();
+                    StringBuffer sourceIds = new StringBuffer();
+                    Bundle bundle = new Bundle();
+                    Flowable.fromIterable(list)
+                            .filter(maintenanceWarnEntity -> maintenanceWarnEntity.isCheck)
+                            .subscribe(maintenanceWarnEntity -> {
+                                if (TextUtils.isEmpty(sourceIds)) {
+                                    sourceIds.append(maintenanceWarnEntity.id);
+                                } else {
+                                    sourceIds.append(",").append(maintenanceWarnEntity.id);
+                                }
+                            }, throwable -> {
+                            }, () -> {
+                                if (!TextUtils.isEmpty(sourceIds)) {
+                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_TYPE, "BEAM2003/03");
+                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_IDS, sourceIds.toString());
+                                    IntentRouter.go(this, Constant.Router.GENERATE_WORK_DIALOG, bundle);
+                                } else {
+                                    ToastUtils.show(this, "请选择操作项!");
+                                }
+                            });
 
+                });
         RxView.clicks(delay)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
@@ -169,7 +217,6 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
                             .filter(maintenanceWarnEntity -> maintenanceWarnEntity.isCheck)
                             .subscribe(maintenanceWarnEntity -> {
                                 bundle.putString(Constant.IntentKey.WARN_PEROID_TYPE, maintenanceWarnEntity.periodType != null ? maintenanceWarnEntity.periodType.id : "");
-                                sourceIds.append(maintenanceWarnEntity.id).append(",");
                                 if (TextUtils.isEmpty(sourceIds)) {
                                     sourceIds.append(maintenanceWarnEntity.id);
                                 } else {
@@ -223,6 +270,7 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
         selecStr = search;
         refreshListController.refreshBegin();
     }
+
 
     /**
      * 进行过滤查询

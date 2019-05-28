@@ -15,7 +15,7 @@ public class DelayPresenter extends DelayContract.Presenter {
                     delayEntity.errMsg = throwable.toString();
                     return delayEntity;
                 }).subscribe(delayEntity -> {
-                    if (delayEntity.delFlag) {
+                    if (delayEntity.success) {
                         getView().delayDateSuccess(delayEntity);
                     } else {
                         getView().delayDateFailed(delayEntity.errMsg);

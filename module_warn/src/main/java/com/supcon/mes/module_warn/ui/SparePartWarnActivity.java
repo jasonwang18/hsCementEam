@@ -24,11 +24,11 @@ import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
 import com.supcon.mes.mbap.view.CustomSearchView;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.KeyExpandHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
-import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_warn.IntentRouter;
 import com.supcon.mes.module_warn.R;
 import com.supcon.mes.module_warn.model.api.SparePartWarnAPI;
@@ -38,6 +38,10 @@ import com.supcon.mes.module_warn.model.bean.SparePartWarnListEntity;
 import com.supcon.mes.module_warn.model.contract.SparePartWarnContract;
 import com.supcon.mes.module_warn.presenter.SparePartWarnPresenter;
 import com.supcon.mes.module_warn.ui.adapter.SparePartWarnAdapter;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.List;
@@ -81,11 +85,14 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
     @BindByTag("overdue")
     Button overdue;
 
+    private SparePartWarnAdapter sparePartWarnAdapter;
+
     private final Map<String, Object> queryParam = new HashMap<>();
     private String selecStr;
     private String url;
-    private SparePartWarnAdapter sparePartWarnAdapter;
     private long nextTime = 0;
+
+
 
     @Override
     protected IListAdapter<SparePartWarnEntity> createAdapter() {
@@ -96,6 +103,23 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
     @Override
     protected int getLayoutID() {
         return R.layout.ac_early_warn_list;
+    }
+
+    @Override
+    protected void onInit() {
+        super.onInit();
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRefresh(RefreshEvent event) {
+        refreshListController.refreshBegin();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -159,6 +183,32 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
                         .subscribe(aLong -> doRefresh());
             }
         });
+        RxView.clicks(dispatch)
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(o -> {
+                    List<SparePartWarnEntity> list = sparePartWarnAdapter.getList();
+                    StringBuffer sourceIds = new StringBuffer();
+                    Bundle bundle = new Bundle();
+                    Flowable.fromIterable(list)
+                            .filter(sparePartWarnEntity -> sparePartWarnEntity.isCheck)
+                            .subscribe(sparePartWarnEntity -> {
+                                if (TextUtils.isEmpty(sourceIds)) {
+                                    sourceIds.append(sparePartWarnEntity.id);
+                                } else {
+                                    sourceIds.append(",").append(sparePartWarnEntity.id);
+                                }
+                            }, throwable -> {
+                            }, () -> {
+                                if (!TextUtils.isEmpty(sourceIds)) {
+                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_TYPE, "BEAM2003/04");
+                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_IDS, sourceIds.toString());
+                                    IntentRouter.go(this, Constant.Router.GENERATE_WORK_DIALOG, bundle);
+                                } else {
+                                    ToastUtils.show(this, "请选择操作项!");
+                                }
+                            });
+
+                });
         RxView.clicks(delay)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
@@ -169,7 +219,6 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
                             .filter(sparePartWarnEntity -> sparePartWarnEntity.isCheck)
                             .subscribe(sparePartWarnEntity -> {
                                 bundle.putString(Constant.IntentKey.WARN_PEROID_TYPE, sparePartWarnEntity.periodType != null ? sparePartWarnEntity.periodType.id : "");
-                                sourceIds.append(sparePartWarnEntity.id).append(",");
                                 if (TextUtils.isEmpty(sourceIds)) {
                                     sourceIds.append(sparePartWarnEntity.id);
                                 } else {
@@ -217,6 +266,7 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
                                 }
                             });
                 });
+
     }
 
     /**

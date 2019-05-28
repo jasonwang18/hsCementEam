@@ -12,9 +12,11 @@ import java.util.Map;
 
 import io.reactivex.Flowable;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import retrofit2.http.Url;
+
 
 /**
  * Created by Administrator on 2016/3/23.
@@ -46,5 +48,12 @@ public interface ApiService {
     //延期记录
     @GET
     Flowable<DelayRecordListEntity> delayRecords(@Url String url, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+
+    /**
+     *  派单
+     */
+    @POST("/BEAM2/workList/workRecord/generateWork.action")
+    Flowable<DelayEntity> generateWork(@QueryMap Map<String, Object> pageQueryMap);
+
 
 }

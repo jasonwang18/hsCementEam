@@ -151,7 +151,7 @@ public interface Constant {
         String MAINTENANCE_EARLY_WARN = "MAINTENANCE_EARLY_WARN";//维保预警
         String DELAYDIALOG = "DELAYDIALOG";//延期弹出框
         String DELAY_RECORD = "DELAY_RECORD";//延期记录
-
+        String GENERATE_WORK_DIALOG = "GENERATE_WORK_DIALOG";//派单弹出框
     }
 
 
@@ -462,6 +462,10 @@ public interface Constant {
         String delayDate = "delayDate";
         String delayReason = "delayReason";
         String peroidType = "peroidType";
+
+        String startDate = "startDate";
+        String endDate = "endDate";
+        String repairGroupId = "repairGroupId";
     }
 
 

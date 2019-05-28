@@ -34,5 +34,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleBarTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+        <activity
+            android:name=".ui.GenerateWorkDialogActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/dialogstyle"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
     </application>
 </manifest>
