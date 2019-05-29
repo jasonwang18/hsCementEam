@@ -62,7 +62,7 @@ public class SparePartController extends BaseViewController implements SparePart
     @Override
     public void initView() {
         super.initView();
-        mCustomListWidget.setAdapter(new SparePartAdapter(context, editable));
+        mCustomListWidget.setAdapter(new SparePartAdapter(context, false));
     }
 
     @Override
@@ -115,6 +115,7 @@ public class SparePartController extends BaseViewController implements SparePart
         if (mCustomListWidget != null) {
 //            mCustomListWidget.setData(entity.result);
 //            mCustomListWidget.setTotal(entity.result.size());
+            mCustomListWidget.setData(entity.result);
             if (editable) {
                 mCustomListWidget.setShowText("编辑 (" + entity.result.size() + ")");
             } else {
@@ -164,6 +165,7 @@ public class SparePartController extends BaseViewController implements SparePart
         if (mCustomListWidget != null) {
 //            mCustomListWidget.setData(mSparePartEntities);
 //            mCustomListWidget.setTotal(mSparePartEntities.size());
+            mCustomListWidget.setData(mSparePartEntities);
             if (editable) {
                 mCustomListWidget.setShowText("编辑 (" + mSparePartEntities.size() + ")");
             } else {

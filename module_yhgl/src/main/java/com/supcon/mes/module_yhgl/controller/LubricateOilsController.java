@@ -60,7 +60,7 @@ public class LubricateOilsController extends BaseViewController implements Lubri
     @Override
     public void initView() {
         super.initView();
-        mCustomListWidget.setAdapter(new LubricateOilsAdapter(context,isEditable));
+        mCustomListWidget.setAdapter(new LubricateOilsAdapter(context,false));
     }
 
     @Override
@@ -116,6 +116,7 @@ public class LubricateOilsController extends BaseViewController implements Lubri
             }
         }
         if (mCustomListWidget != null) {
+            mCustomListWidget.setData(entity.result);
             if (isEditable) {
                 mCustomListWidget.setShowText("编辑 (" + entity.result.size() + ")");
             } else {
@@ -179,6 +180,7 @@ public class LubricateOilsController extends BaseViewController implements Lubri
         if (mCustomListWidget != null) {
 //            mCustomListWidget.setData(list);
 //            mCustomListWidget.setTotal(list.size());
+            mCustomListWidget.setData(list);
             if (isEditable) {
                 mCustomListWidget.setShowText("编辑 (" + list.size() + ")");
             } else {

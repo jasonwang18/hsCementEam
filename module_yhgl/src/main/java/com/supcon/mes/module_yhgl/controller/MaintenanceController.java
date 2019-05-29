@@ -54,7 +54,7 @@ public class MaintenanceController extends BaseViewController implements Mainten
     @Override
     public void initView() {
         super.initView();
-        mCustomListWidget.setAdapter(new MaintenanceAdapter(context, isEditable));
+        mCustomListWidget.setAdapter(new MaintenanceAdapter(context, false));
     }
 
     @Override
@@ -93,6 +93,7 @@ public class MaintenanceController extends BaseViewController implements Mainten
     public void listMaintenanceSuccess(MaintenanceListEntity entity) {
         maintenanceEntities = entity.result;
         if (mCustomListWidget != null) {
+            mCustomListWidget.setData(entity.result);
             if (isEditable) {
                 mCustomListWidget.setShowText("编辑 (" + entity.result.size() + ")");
             } else {
@@ -141,6 +142,7 @@ public class MaintenanceController extends BaseViewController implements Mainten
             return;
         this.maintenanceEntities = list;
         if (mCustomListWidget != null) {
+            mCustomListWidget.setData(list);
             if (isEditable) {
                 mCustomListWidget.setShowText("编辑 (" + list.size() + ")");
             } else {

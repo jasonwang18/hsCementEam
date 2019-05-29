@@ -76,6 +76,8 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
@@ -621,15 +623,14 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
     @Override
     public void getOJXJLastTaskListSuccess(List entities) {
 
-        if(entities.size() !=0 && isCurrentTask((OLXJTaskEntity) entities.get(0))){
+        if (entities.size() != 0 && isCurrentTask((OLXJTaskEntity) entities.get(0))) {
             entities.set(0, mOLXJTaskEntity);
             refreshListController.refreshComplete(entities);
-        }
-        else {
+        } else {
             refreshListController.refreshComplete(entities); //成功获取数据
         }
 
-        if (entities.size() == 0){
+        if (entities.size() == 0) {
 
             ToastUtils.show(context, "没有巡检任务!");
             initEmptyView();
@@ -647,16 +648,23 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
     @SuppressLint("CheckResult")
     private void getAreaCache() {
         Flowable.timer(200, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Long>() {
+                .observeOn(Schedulers.io())
+                .map(new Function<Long, List<OLXJAreaEntity>>() {
                     @Override
-                    public void accept(Long aLong) throws Exception {
-                        String cache = SharedPreferencesUtils.getParam(context, Constant.SPKey.JHXJ_TASK_CONTENT, "");
+                    public List<OLXJAreaEntity> apply(Long aLong) throws Exception {
+                        String cache = SharedPreferencesUtils.getParam(context, Constant.SPKey.LSXJ_TASK_CONTENT, "");
                         if (!TextUtils.isEmpty(cache)) {
                             mAreaEntities = GsonUtil.jsonToList(cache, OLXJAreaEntity.class);
-                            mOLXJTaskListAdapter.setAreaEntities(mAreaEntities);
-                            getController(MapController.class).setOLXJAreaEntities(mAreaEntities);
                         }
+                        return mAreaEntities;
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<OLXJAreaEntity>>() {
+                    @Override
+                    public void accept(List<OLXJAreaEntity> mAreaEntities) throws Exception {
+                        mOLXJTaskListAdapter.setAreaEntities(mAreaEntities);
+                        getController(MapController.class).setOLXJAreaEntities(mAreaEntities);
                     }
                 });
     }
@@ -807,25 +815,25 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
         super.onBackPressed();
     }
 
-    private void saveAreaCache(String cache){
+    private void saveAreaCache(String cache) {
         SharedPreferencesUtils.setParam(context, Constant.SPKey.JHXJ_TASK_CONTENT, cache);
     }
 
-    private void saveTask(String task){
+    private void saveTask(String task) {
         SharedPreferencesUtils.setParam(context, Constant.SPKey.JHXJ_TASK_ENTITY, task);
     }
 
-    private boolean isCurrentTask(OLXJTaskEntity taskEntity){
+    private boolean isCurrentTask(OLXJTaskEntity taskEntity) {
 
-        if(taskEntity == null){
+        if (taskEntity == null) {
             return false;
         }
 
-        String taskCache = SharedPreferencesUtils.getParam(context,Constant.SPKey.JHXJ_TASK_ENTITY, "");
+        String taskCache = SharedPreferencesUtils.getParam(context, Constant.SPKey.JHXJ_TASK_ENTITY, "");
 
         OLXJTaskEntity cacheTask = GsonUtil.gsonToBean(taskCache, OLXJTaskEntity.class);
 
-        if(cacheTask!=null && taskEntity.id == cacheTask.id){
+        if (cacheTask != null && taskEntity.id == cacheTask.id) {
             mOLXJTaskEntity = cacheTask;
             return true;
         }

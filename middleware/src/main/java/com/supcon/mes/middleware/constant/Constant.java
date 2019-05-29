@@ -238,7 +238,7 @@ public interface Constant {
         String PENDING_ENTITY = "";
 
         String WARN_NEXT_TIME = "WARN_NEXT_TIME";//下次运行时间
-        String WARN_SOURCE_TYPE = "WARN_SOURCE_TYPE";//延期来源  润滑BEAM062/01,备件BEAM062/02,维保BEAM062/03
+        String WARN_SOURCE_TYPE = "WARN_SOURCE_TYPE";//延期来源  润滑BEAM062/01,备件BEAM062/03,维保BEAM062/02
         String WARN_SOURCE_IDS = "WARN_SOURCE_IDS";//延期ids
         String WARN_PEROID_TYPE = "WARN_PEROID_TYPE";//周期类型
         String WARN_SOURCE_URL = "WARN_SOURCE_URL";//URL
