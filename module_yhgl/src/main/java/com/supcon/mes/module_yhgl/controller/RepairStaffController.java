@@ -62,7 +62,7 @@ public class RepairStaffController extends BaseViewController implements RepairS
     @Override
     public void initView() {
         super.initView();
-        mCustomListWidget.setAdapter(new RepairStaffAdapter(context,isEditable));
+        mCustomListWidget.setAdapter(new RepairStaffAdapter(context,false));
     }
 
     @Override
@@ -79,6 +79,7 @@ public class RepairStaffController extends BaseViewController implements RepairS
         if(mCustomListWidget!=null){
 //            mCustomListWidget.setData(entity.result);
 //            mCustomListWidget.setTotal(entity.result.size());
+            mCustomListWidget.setData(entity.result);
             if (isEditable){
                 mCustomListWidget.setShowText("编辑 ("+entity.result.size()+")");
             }else {
@@ -191,6 +192,7 @@ public class RepairStaffController extends BaseViewController implements RepairS
         if (mCustomListWidget != null){
 //            mCustomListWidget.setData(list);
 //            mCustomListWidget.setTotal(list.size());
+            mCustomListWidget.setData(list);
             if (isEditable){
                 mCustomListWidget.setShowText("编辑 ("+list.size()+")");
             }else {

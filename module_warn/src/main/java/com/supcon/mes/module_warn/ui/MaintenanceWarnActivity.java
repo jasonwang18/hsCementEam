@@ -19,6 +19,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.util.ToastUtils;
+import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
@@ -113,7 +114,11 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
         refreshListController.refreshBegin();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLogin(LoginEvent loginEvent) {
 
+        refreshListController.refreshBegin();
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

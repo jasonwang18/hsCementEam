@@ -109,6 +109,10 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
         @Override
         protected void initView() {
             super.initView();
+            if (!editable) {
+                chkBox.setVisibility(View.GONE);
+                itemViewDelBtn.setVisibility(View.GONE);
+            }
         }
 
         @SuppressLint("CheckResult")
