@@ -43,61 +43,59 @@ public class NFCHelper {
     private PendingIntent mPendingIntent;
 
     private OnNFCListener onNFCListener;
+
     private NFCHelper() {
     }
 
 
-
-    public static NFCHelper getInstance(){
-        return NFCHelperHolder.INSTANCE;
+    public static NFCHelper getInstance() {
+        return new NFCHelper();
     }
 
     /**
-     * @description 获取NFC适配器
      * @param
+     * @description 获取NFC适配器
      * @author zhangwenshuai1
      * @date 2018/6/27
-     *
      */
-    public void setup(Context context){
+    public void setup(Context context) {
 
-         if (!checkNFC(context)){
-             return;
-         }
+        if (!checkNFC(context)) {
+            return;
+        }
 
         //创建PendingIntent对象,当检测到一个Tag标签就会执行此Intent; new Intent(context,context.getClass())自己的activity内接收intent
 //        if (mPendingIntent == null)
-            mPendingIntent = PendingIntent.getActivity(context,0,new Intent(context, context.getClass()),0);
+        mPendingIntent = PendingIntent.getActivity(context, 0, new Intent(context, context.getClass()), 0);
     }
 
     /**
      * 释放 mPendingIntent
      */
-    public void release(){
-        mPendingIntent =  null;
+    public void release() {
+        mPendingIntent = null;
     }
 
 
     /**
-     * @description 检测NFC功能,创建PendingIntent对象
      * @param
+     * @description 检测NFC功能, 创建PendingIntent对象
      * @author zhangwenshuai1
      * @date 2018/6/27
-     *
      */
-    public boolean checkNFC(Context context){
+    public boolean checkNFC(Context context) {
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(context);
 
         //判断设备是否支持NFC功能
-        if (mNfcAdapter == null){
-            ToastUtils.show(context,"设备不支持NFC功能!",3000);
+        if (mNfcAdapter == null) {
+            ToastUtils.show(context, "设备不支持NFC功能!", 3000);
             return false;
         }
 
         //判断设备NFC功能是否打开
-        if (!mNfcAdapter.isEnabled()){
-            ToastUtils.show(context,"请到系统设置中打开NFC功能!",3000);
+        if (!mNfcAdapter.isEnabled()) {
+            ToastUtils.show(context, "请到系统设置中打开NFC功能!", 3000);
             return false;
         }
 
@@ -105,37 +103,34 @@ public class NFCHelper {
     }
 
     /**
-     * @description 拦截NFC,设置处理优于所有其他NFC的处理,呈现在用户界面的最前面
-     * @param 
+     * @param
+     * @description 拦截NFC, 设置处理优于所有其他NFC的处理, 呈现在用户界面的最前面
      * @author zhangwenshuai1
      * @date 2018/6/27
-     *
      */
-    public void onResumeNFC(Activity activity){
+    public void onResumeNFC(Activity activity) {
         if (mNfcAdapter != null && mPendingIntent != null)
             mNfcAdapter.enableForegroundDispatch(activity, mPendingIntent, null, null);
     }
 
     /**
-     * @description 恢复默认状态
      * @param
+     * @description 恢复默认状态
      * @author zhangwenshuai1
      * @date 2018/6/27
-     *
      */
-    public void onPauseNFC(Activity activity){
+    public void onPauseNFC(Activity activity) {
         if (mNfcAdapter != null)
             mNfcAdapter.disableForegroundDispatch(activity);
     }
 
     /**
-     * @description 获取到Tag对象
      * @param
+     * @description 获取到Tag对象
      * @author zhangwenshuai1
      * @date 2018/6/27
-     *
      */
-    public String dealNFCTag(Intent intent){
+    public String dealNFCTag(Intent intent) {
         String action = intent.getAction();
 //        Log.d(TAG, "action " + action);
         if (TextUtils.isEmpty(action)) {
@@ -163,7 +158,6 @@ public class NFCHelper {
 //        nfcA.getTag().getTechList();
 
 
-
         //2.获取Ndef的实例
         String nfcMsg = "";
         if (action.equals(NfcAdapter.ACTION_NDEF_DISCOVERED)) {
@@ -183,7 +177,7 @@ public class NFCHelper {
         if (action.equals(NfcAdapter.ACTION_TAG_DISCOVERED)) {
             nfcMsg = fireTagEvent(tag);
         }
-         if (onNFCListener != null){
+        if (onNFCListener != null) {
             onNFCListener.onNFCReceived(nfcMsg);
         }
         return nfcMsg;
@@ -213,18 +207,18 @@ public class NFCHelper {
                     for (NdefRecord ndefRecord : ndefRecords) {
 
                         textRecord = parseTextRecord(ndefRecord);//读取写入的文本信息
-    //                    Log.d(TAG, textRecord);
+                        //                    Log.d(TAG, textRecord);
 
-    //                byte[] payload = ndefRecord.getPayload();
-    //                String resultStr = new String(payload);  //会带有无需要的前两个字节
-    //                Log.d(TAG, resultStr);
+                        //                byte[] payload = ndefRecord.getPayload();
+                        //                String resultStr = new String(payload);  //会带有无需要的前两个字节
+                        //                Log.d(TAG, resultStr);
                     }
 
-                    Map<String,String> jsonObject = new HashMap<>();
-                    jsonObject.put("id",id);
-                    jsonObject.put("type",ndef.getType());
-                    jsonObject.put("maxsize",ndef.getMaxSize() +" bytes");
-                    jsonObject.put("textRecord",textRecord);
+                    Map<String, String> jsonObject = new HashMap<>();
+                    jsonObject.put("id", id);
+                    jsonObject.put("type", ndef.getType());
+                    jsonObject.put("maxsize", ndef.getMaxSize() + " bytes");
+                    jsonObject.put("textRecord", textRecord);
 
                     Gson gson = new Gson();
                     String nfc = gson.toJson(jsonObject);
@@ -269,13 +263,13 @@ public class NFCHelper {
             }*/
             String[] techList = tag.getTechList();
             List<String> techTypes = new ArrayList<>();
-            for (String tech : techList){
+            for (String tech : techList) {
                 techTypes.add(tech);
             }
 
-            Map<String,Object> jsonObject = new HashMap<>();
-            jsonObject.put("id",id);
-            jsonObject.put("techTypes",techTypes);
+            Map<String, Object> jsonObject = new HashMap<>();
+            jsonObject.put("id", id);
+            jsonObject.put("techTypes", techTypes);
 
             Gson gson = new Gson();
             String nfc = gson.toJson(jsonObject);
@@ -357,11 +351,10 @@ public class NFCHelper {
 
 
     /**
+     * @param
      * @description 字节数组转为字符串信息
-     * @param 
      * @author zhangwenshuai1
      * @date 2018/6/19
-     *
      */
     public static String bytesToHexString(byte[] bytes) {
         final String HEX = "0123456789ABCDEF";
@@ -383,7 +376,7 @@ public class NFCHelper {
     public static String byteArrayToString(byte[] src) {
         StringBuilder stringBuilder = new StringBuilder();
         if (src != null && src.length > 0) {
-            for(int i = 0; i < src.length; ++i) {
+            for (int i = 0; i < src.length; ++i) {
                 int v = src[i] & 255;
                 String hv = Integer.toHexString(v);
                 if (hv.length() < 2) {
@@ -400,7 +393,7 @@ public class NFCHelper {
     }
 
 
-    public void setOnNFCListener (OnNFCListener onNFCListener){
+    public void setOnNFCListener(OnNFCListener onNFCListener) {
         this.onNFCListener = onNFCListener;
     }
 

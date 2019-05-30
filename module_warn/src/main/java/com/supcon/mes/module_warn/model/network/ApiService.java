@@ -2,6 +2,7 @@ package com.supcon.mes.module_warn.model.network;
 
 import com.app.annotation.apt.ApiFactory;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
+import com.supcon.mes.module_warn.model.bean.DailyLubricateTaskListEntity;
 import com.supcon.mes.module_warn.model.bean.DelayEntity;
 import com.supcon.mes.module_warn.model.bean.DelayRecordListEntity;
 import com.supcon.mes.module_warn.model.bean.LubricationWarnListEntity;
@@ -50,10 +51,18 @@ public interface ApiService {
     Flowable<DelayRecordListEntity> delayRecords(@Url String url, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
     /**
-     *  派单
+     * 派单
      */
     @POST("/BEAM2/workList/workRecord/generateWork.action")
     Flowable<DelayEntity> generateWork(@QueryMap Map<String, Object> pageQueryMap);
 
+
+    //日常润滑
+    @GET("/BEAM/baseInfo/jWXItem/data-dg1558678704208.action")
+    Flowable<DailyLubricateTaskListEntity> getLubrications(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+
+    //领取润滑任务
+    @GET("/BEAM/baseInfo/jWXItem/ReceiveLubTask.action")
+    Flowable<DelayEntity> receiveTask(@QueryMap Map<String, Object> pageQueryMap);
 
 }

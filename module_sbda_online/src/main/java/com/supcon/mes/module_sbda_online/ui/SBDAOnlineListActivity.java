@@ -105,11 +105,6 @@ public class SBDAOnlineListActivity extends BaseRefreshRecyclerActivity<SBDAOnli
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(5));
 
-
-        if (EamApplication.isHongshi()) {
-            queryParam.put(Constant.BAPQuery.EAM_AREA, 1040);
-        }
-
         initFilterView();
     }
 

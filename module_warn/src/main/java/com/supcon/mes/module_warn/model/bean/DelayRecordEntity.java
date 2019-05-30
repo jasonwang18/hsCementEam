@@ -5,6 +5,13 @@ import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.ValueEntity;
 
+/**
+ * @author yangfei.cao
+ * @ClassName hongShiCementEam
+ * @date 2019/4/29
+ * ------------- Description -------------
+ * 延期列表
+ */
 public class DelayRecordEntity extends BaseEntity {
 
     public Long afterDelDate;

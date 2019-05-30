@@ -148,6 +148,8 @@ public interface Constant {
         String SPARE_EARLY_WARN = "SPARE_EARLY_WARN";//备件更换预警
         String LUBRICATION_EARLY_WARN = "LUBRICATION_EARLY_WARN";//润滑预警
         String DAILY_LUBRICATION_EARLY_WARN = "DAILY_LUBRICATION_EARLY_WARN";//日常润滑预警
+        String DAILY_LUBRICATION_EARLY_PART_WARN = "DAILY_LUBRICATION_EARLY_PART_WARN";//日常润滑部位
+        String DAILY_LUBRICATION_EARLY_PART_ENSURE_WARN = "DAILY_LUBRICATION_EARLY_PART_ENSURE_WARN";//日常润滑部位确认
         String MAINTENANCE_EARLY_WARN = "MAINTENANCE_EARLY_WARN";//维保预警
         String DELAYDIALOG = "DELAYDIALOG";//延期弹出框
         String DELAY_RECORD = "DELAY_RECORD";//延期记录
@@ -242,6 +244,9 @@ public interface Constant {
         String WARN_SOURCE_IDS = "WARN_SOURCE_IDS";//延期ids
         String WARN_PEROID_TYPE = "WARN_PEROID_TYPE";//周期类型
         String WARN_SOURCE_URL = "WARN_SOURCE_URL";//URL
+
+        String EAM_CODE = "EAM_CODE";//EAM_CODE
+        String isEdit = "isEdit";//是否能编辑
     }
 
     interface FilterSearchParam {
@@ -421,6 +426,7 @@ public interface Constant {
         String TEXT = "TEXT";
         String SYSTEMCODE = "SYSTEMCODE";
         String BAPCODE = "BAPCODE";
+        String BOOLEAN = "BOOLEAN";
         String LONG = "LONG";
         String DATETIME = "DATETIME";
         String DATE = "DATE";
@@ -449,6 +455,7 @@ public interface Constant {
         String EAM_TYPE = "EAM_TYPE";//设备类型
         String EAM_AREA = "EAM_AREA";//区域类型
         String EAM_AREANAME = "EAM_AREANAME";//区域类型主设备
+        String IS_MAIN_EQUIP = "IS_MAIN_EQUIP";//是否主设备
 
         String CONTENT = "CONTENT";//内容
 
