@@ -512,6 +512,22 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
 //            }
 //        });
 
+        eamName.getCustomValue().setOnClickListener(v -> goSBDA());
+        eamIc.setOnClickListener(v -> goSBDA());
+        eamCode.getCustomValue().setOnClickListener(v -> goSBDA());
+    }
+
+    private void goSBDA() {
+
+        if (mWXGDEntity.eamID==null  || mWXGDEntity.eamID.id == null) {
+            ToastUtils.show(context, "无设备详情可查看！");
+            return;
+        }
+
+        Bundle bundle = new Bundle();
+        bundle.putLong(Constant.IntentKey.SBDA_ONLINE_EAMID, mWXGDEntity.eamID.id);
+        bundle.putString(Constant.IntentKey.SBDA_ONLINE_EAMCODE, mWXGDEntity.eamID.code);
+        IntentRouter.go(context, Constant.Router.SBDA_ONLINE_VIEW, bundle);
     }
 
     @Override

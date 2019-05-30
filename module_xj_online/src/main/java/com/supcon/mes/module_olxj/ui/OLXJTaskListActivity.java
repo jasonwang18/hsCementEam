@@ -648,11 +648,11 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
     @SuppressLint("CheckResult")
     private void getAreaCache() {
         Flowable.timer(200, TimeUnit.MILLISECONDS)
-                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
                 .map(new Function<Long, List<OLXJAreaEntity>>() {
                     @Override
                     public List<OLXJAreaEntity> apply(Long aLong) throws Exception {
-                        String cache = SharedPreferencesUtils.getParam(context, Constant.SPKey.LSXJ_TASK_CONTENT, "");
+                        String cache = SharedPreferencesUtils.getParam(context, Constant.SPKey.JHXJ_TASK_CONTENT, "");
                         if (!TextUtils.isEmpty(cache)) {
                             mAreaEntities = GsonUtil.jsonToList(cache, OLXJAreaEntity.class);
                         }

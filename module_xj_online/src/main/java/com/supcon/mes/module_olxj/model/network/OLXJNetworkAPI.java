@@ -138,4 +138,5 @@ public interface OLXJNetworkAPI {
     @POST("/mobileEAM/MobileInterfaceForAndroidAction/submitPotrolTaskByWork.action")
     Flowable<ResultEntity> submitPotrolTaskByWork(@Part List<MultipartBody.Part> file, @Query("zipFile") String zipFile);
 
+
 }

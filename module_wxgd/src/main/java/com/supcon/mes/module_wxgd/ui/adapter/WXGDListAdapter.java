@@ -14,9 +14,11 @@ import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.common.view.util.DisplayUtil;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.EamPicController;
+import com.supcon.mes.middleware.model.bean.YHEntity;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.R;
 import com.supcon.mes.module_wxgd.constant.WXGDConstant;
@@ -145,6 +147,22 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
 
                 }
             });
+
+            eamName.setOnClickListener(v -> goSBDA());
+            itemWXGDDeviceIc.setOnClickListener(v -> goSBDA());
+        }
+
+        private void goSBDA() {
+            WXGDEntity wxgdEntity = getItem(getAdapterPosition());
+            if (wxgdEntity.eamID == null || wxgdEntity.eamID.id == null) {
+                ToastUtils.show(context, "无设备详情可查看！");
+                return;
+            }
+
+            Bundle bundle = new Bundle();
+            bundle.putLong(Constant.IntentKey.SBDA_ONLINE_EAMID, wxgdEntity.eamID.id);
+            bundle.putString(Constant.IntentKey.SBDA_ONLINE_EAMCODE, wxgdEntity.eamID.code);
+            IntentRouter.go(context, Constant.Router.SBDA_ONLINE_VIEW, bundle);
         }
 
         @Override

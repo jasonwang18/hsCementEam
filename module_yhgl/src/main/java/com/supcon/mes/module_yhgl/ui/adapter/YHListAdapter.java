@@ -1,6 +1,5 @@
 package com.supcon.mes.module_yhgl.ui.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -12,9 +11,7 @@ import android.widget.TextView;
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
-import com.supcon.common.view.util.DisplayUtil;
-import com.supcon.common.view.util.LogUtil;
-import com.supcon.mes.mbap.beans.GalleryBean;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.view.CustomGalleryView;
 import com.supcon.mes.mbap.view.CustomTextView;
@@ -28,12 +25,9 @@ import com.supcon.mes.middleware.model.bean.AttachmentEntity;
 import com.supcon.mes.middleware.model.bean.AttachmentListEntity;
 import com.supcon.mes.middleware.model.bean.YHEntity;
 import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
-import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.module_yhgl.IntentRouter;
 import com.supcon.mes.module_yhgl.R;
-import com.supcon.mes.middleware.util.FaultPicHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -129,6 +123,23 @@ public class YHListAdapter extends BaseListDataRecyclerViewAdapter<YHEntity> {
             itemView.setOnClickListener(this);
             itemTableStatus.setOnClickListener(this);
             itemInfo.setOnClickListener(this);
+
+            itemYHDeviceName.setOnClickListener(v -> goSBDA());
+            itemYHDeviceIc.setOnClickListener(v -> goSBDA());
+            itemYHDeviceCode.setOnClickListener(v -> goSBDA());
+        }
+
+        private void goSBDA() {
+            YHEntity yhEntity = getItem(getAdapterPosition());
+            if (yhEntity.eamID == null || yhEntity.eamID.id == null) {
+                ToastUtils.show(context, "无设备详情可查看！");
+                return;
+            }
+
+            Bundle bundle = new Bundle();
+            bundle.putLong(Constant.IntentKey.SBDA_ONLINE_EAMID, yhEntity.eamID.id);
+            bundle.putString(Constant.IntentKey.SBDA_ONLINE_EAMCODE, yhEntity.eamID.code);
+            IntentRouter.go(context, Constant.Router.SBDA_ONLINE_VIEW, bundle);
         }
 
         @Override

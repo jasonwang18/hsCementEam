@@ -6,14 +6,16 @@ import com.supcon.mes.middleware.model.bean.AttachmentListEntity;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
+import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.ContractListEntity;
 import com.supcon.mes.middleware.model.bean.DepartmentInfoListEntity;
+import com.supcon.mes.middleware.model.bean.DeviceDCSEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.LinkListEntity;
 import com.supcon.mes.middleware.model.bean.LongResultEntity;
 import com.supcon.mes.middleware.model.bean.LubricateListEntity;
-import com.supcon.mes.middleware.model.bean.RefLubricateListEntity;
 import com.supcon.mes.middleware.model.bean.MyInfo;
+import com.supcon.mes.middleware.model.bean.RefLubricateListEntity;
 import com.supcon.mes.middleware.model.bean.RefMaintainListEntity;
 import com.supcon.mes.middleware.model.bean.RefProductListEntity;
 import com.supcon.mes.middleware.model.bean.RepairGroupListEntity;
@@ -38,7 +40,6 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
-import retrofit2.http.Url;
 
 /**
  * Created by wangshizhan on 2018/7/10
@@ -308,5 +309,12 @@ public interface NetworkAPI {
      */
     @GET("/BEAM/baseInfo/jWXItem/maintainBeamRef-query.action?&permissionCode=BEAM_1.0.0_baseInfo_maintainBeamRef&crossCompanyFlag=")
     Flowable<RefMaintainListEntity> listRefMaintain(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+
+
+    /**
+     * 获取DCS设备数据
+     */
+    @GET("/BEAM/baseInfo/baseInfo/getMeasParam.action")
+    Flowable<CommonListEntity<DeviceDCSEntity>> getMeasParam(@Query("eamId") long eamId);
 
 }

@@ -15,7 +15,7 @@ import com.supcon.mes.mbap.beans.FilterBean;
 import com.supcon.mes.mbap.constant.ListType;
 import com.supcon.mes.mbap.view.CustomAdView;
 import com.supcon.mes.mbap.view.CustomFilterView;
-import com.supcon.mes.mbap.view.CustomImageButton;
+import com.supcon.mes.module_olxj.R;
 import com.supcon.mes.module_olxj.model.bean.OLXJWorkItemEntity;
 
 /**
@@ -68,7 +68,7 @@ public class OLXJTitleController extends BaseViewController {
                 super.onScrollStateChanged(recyclerView, newState);
                 mState = newState;
                 if(headerView == null && contentView.getChildAt(0) != null){
-                    headerView = contentView.getChildAt(0).findViewById(com.supcon.mes.middleware.R.id.itemRecyclerPic);
+                    headerView = contentView.getChildAt(0).findViewById(R.id.itemRecyclerPic);
                 }
 
 //                if(newState != RecyclerView.SCROLL_STATE_IDLE){
@@ -84,7 +84,7 @@ public class OLXJTitleController extends BaseViewController {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if(headerView == null && contentView.getChildAt(0) != null){
-                    headerView = contentView.getChildAt(0).findViewById(com.supcon.mes.middleware.R.id.itemRecyclerPic);
+                    headerView = contentView.getChildAt(0).findViewById(R.id.itemRecyclerPic);
                 }
 
                 int scroll = getScroll();

@@ -8,4 +8,6 @@
     <string name="reorganizer">整改人员: %1$s</string>
     <string name="rectify_time">整改时间: %1$s</string>
     <string name="work_name">巡检区域: %1$s</string>
+
+    <string name="dcs_param">%1$s(%2$s)</string>
 </resources>

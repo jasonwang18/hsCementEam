@@ -39,6 +39,7 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_olxj.IntentRouter;
 import com.supcon.mes.module_olxj.R;
 import com.supcon.mes.module_olxj.constant.OLXJConstant;
+import com.supcon.mes.module_olxj.controller.DeviceDCSParamController;
 import com.supcon.mes.module_olxj.controller.OLXJCameraController;
 import com.supcon.mes.module_olxj.model.bean.OLXJWorkItemEntity;
 import com.supcon.mes.module_olxj.ui.OLXJWorkListUnHandledActivity;
@@ -1193,6 +1194,8 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
         @BindByTag("dividedViewIc")
         TextView dividedViewIc;
 
+        private DeviceDCSParamController mDeviceDCSParamController;
+
         public TitleViewHolder(Context context) {
             super(context, parent);
         }
@@ -1231,8 +1234,12 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
         protected void update(OLXJWorkItemEntity data) {
             if (data.eamID == null || TextUtils.isEmpty(data.eamID.name)) {
                 itemRecyclerTitle.setText("无关联设备");
-            } else
+            } else {
                 itemRecyclerTitle.setText(data.eamID.name);
+                mDeviceDCSParamController = new DeviceDCSParamController(itemView, data.eamID.id);
+                mDeviceDCSParamController.initView();
+                mDeviceDCSParamController.initData();
+            }
         }
     }
 }
