@@ -1,13 +1,12 @@
 package com.supcon.mes.module_warn.ui;
 
 import android.annotation.SuppressLint;
-import android.os.Bundle;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
@@ -15,17 +14,19 @@ import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
+import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
-import com.supcon.mes.mbap.beans.LoginEvent;
+import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomTitleBar;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.event.NFCEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.NFCHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
-import com.supcon.mes.module_warn.IntentRouter;
 import com.supcon.mes.module_warn.R;
 import com.supcon.mes.module_warn.model.api.CompleteAPI;
 import com.supcon.mes.module_warn.model.api.DailyLubricationWarnAPI;
@@ -49,28 +50,22 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
 
-@Router(Constant.Router.DAILY_LUBRICATION_EARLY_PART_WARN)
+@Router(Constant.Router.DAILY_LUBRICATION_EARLY_PART_ENSURE_WARN)
 @Presenter(value = {DailyLubricationWarnPresenter.class, CompletePresenter.class})
-public class DailyLubricationPartActivity extends BaseRefreshRecyclerActivity<DailyLubricateTaskEntity> implements DailyLubricationWarnContract.View, CompleteContract.View {
+public class DailyLubricationPartEnsureActivity extends BaseRefreshRecyclerActivity<DailyLubricateTaskEntity> implements DailyLubricationWarnContract.View, CompleteContract.View {
     @BindByTag("titleBar")
     CustomTitleBar titleBar;
     @BindByTag("contentView")
     RecyclerView contentView;
 
-    @BindByTag("btnLayout")
-    LinearLayout btnLayout;
-    @BindByTag("dispatch")
-    Button dispatch;
-    @BindByTag("delay")
-    Button delay;
-    @BindByTag("overdue")
-    Button overdue;
+    @BindByTag("ensure")
+    Button ensure;
 
     private final Map<String, Object> queryParam = new HashMap<>();
     private DailyLubricationPartAdapter dailyLubricationPartAdapter;
     private String eamCode;
-    private boolean isEdit;
-    private long nextTime = 0;
+
+    private NFCHelper nfcHelper;
 
     @Override
     protected IListAdapter<DailyLubricateTaskEntity> createAdapter() {
@@ -80,7 +75,7 @@ public class DailyLubricationPartActivity extends BaseRefreshRecyclerActivity<Da
 
     @Override
     protected int getLayoutID() {
-        return R.layout.ac_daily_part_list;
+        return R.layout.ac_daily_part_ensure_list;
     }
 
     @Override
@@ -88,8 +83,26 @@ public class DailyLubricationPartActivity extends BaseRefreshRecyclerActivity<Da
         super.onInit();
         EventBus.getDefault().register(this);
         eamCode = getIntent().getStringExtra(Constant.IntentKey.EAM_CODE);
-        isEdit = getIntent().getBooleanExtra(Constant.IntentKey.isEdit, false);
-        dailyLubricationPartAdapter.setEditable(isEdit);
+        dailyLubricationPartAdapter.setEditable(false);
+
+        nfcHelper = NFCHelper.getInstance();
+        if (nfcHelper != null) {
+            nfcHelper.setup(this);
+            nfcHelper.setOnNFCListener(new NFCHelper.OnNFCListener() {
+                @Override
+                public void onNFCReceived(String nfc) {
+                    LogUtil.d("NFC Received : " + nfc);
+                    EventBus.getDefault().post(new NFCEvent(nfc));
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (nfcHelper != null)
+            nfcHelper.onResumeNFC(this);
     }
 
     @Override
@@ -101,10 +114,6 @@ public class DailyLubricationPartActivity extends BaseRefreshRecyclerActivity<Da
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, null));
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(15));
-        dispatch.setText("完成");
-        if (!isEdit) {
-            btnLayout.setVisibility(View.GONE);
-        }
     }
 
     @SuppressLint("CheckResult")
@@ -115,7 +124,7 @@ public class DailyLubricationPartActivity extends BaseRefreshRecyclerActivity<Da
             queryParam.put(Constant.IntentKey.EAM_CODE, eamCode);
             Map<String, Object> pageQueryParams = new HashMap<>();
             pageQueryParams.put("page.pageNo", pageIndex);
-            presenterRouter.create(DailyLubricationWarnAPI.class).getLubrications(queryParam,pageQueryParams);
+            presenterRouter.create(DailyLubricationWarnAPI.class).getLubrications(queryParam, pageQueryParams);
         });
 
         titleBar.setOnTitleBarListener(new CustomTitleBar.OnTitleBarListener() {
@@ -130,13 +139,12 @@ public class DailyLubricationPartActivity extends BaseRefreshRecyclerActivity<Da
             }
         });
 
-        RxView.clicks(dispatch)
+        RxView.clicks(ensure)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
                     List<DailyLubricateTaskEntity> list = dailyLubricationPartAdapter.getList();
                     StringBuffer sourceIds = new StringBuffer();
                     Flowable.fromIterable(list)
-                            .filter(lubricationWarnEntity -> lubricationWarnEntity.isCheck)
                             .subscribe(lubricationWarnEntity -> {
                                 if (TextUtils.isEmpty(sourceIds)) {
                                     sourceIds.append(lubricationWarnEntity.id);
@@ -155,83 +163,65 @@ public class DailyLubricationPartActivity extends BaseRefreshRecyclerActivity<Da
                                 }
                             });
                 });
-        RxView.clicks(delay)
-                .throttleFirst(2, TimeUnit.SECONDS)
-                .subscribe(o -> {
-                    List<DailyLubricateTaskEntity> list = dailyLubricationPartAdapter.getList();
-                    StringBuffer sourceIds = new StringBuffer();
-                    Bundle bundle = new Bundle();
-                    Flowable.fromIterable(list)
-                            .filter(lubricationWarnEntity -> lubricationWarnEntity.isCheck)
-                            .subscribe(lubricationWarnEntity -> {
-                                bundle.putString(Constant.IntentKey.WARN_PEROID_TYPE, lubricationWarnEntity.periodType != null ? lubricationWarnEntity.periodType.id : "");
-                                if (TextUtils.isEmpty(sourceIds)) {
-                                    sourceIds.append(lubricationWarnEntity.id);
-                                } else {
-                                    sourceIds.append(",").append(lubricationWarnEntity.id);
-                                }
-                                if (!lubricationWarnEntity.isDuration() && nextTime < lubricationWarnEntity.nextTime) {
-                                    nextTime = lubricationWarnEntity.nextTime;
-                                }
-                            }, throwable -> {
-                            }, () -> {
-                                if (!TextUtils.isEmpty(sourceIds)) {
-                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_TYPE, "BEAM062/01");
-                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_IDS, sourceIds.toString());
-                                    bundle.putLong(Constant.IntentKey.WARN_NEXT_TIME, nextTime);
-                                    IntentRouter.go(this, Constant.Router.DELAYDIALOG, bundle);
-                                } else {
-                                    ToastUtils.show(this, "请选择操作项!");
-                                }
-                            });
-
-                });
-        RxView.clicks(overdue)
-                .throttleFirst(2, TimeUnit.SECONDS)
-                .subscribe(o -> {
-                    List<DailyLubricateTaskEntity> list = dailyLubricationPartAdapter.getList();
-                    StringBuffer sourceIds = new StringBuffer();
-                    Bundle bundle = new Bundle();
-                    Flowable.fromIterable(list)
-                            .filter(lubricationWarnEntity -> lubricationWarnEntity.isCheck)
-                            .subscribe(lubricationWarnEntity -> {
-                                if (TextUtils.isEmpty(sourceIds)) {
-                                    sourceIds.append(lubricationWarnEntity.id);
-                                } else {
-                                    sourceIds.append(",").append(lubricationWarnEntity.id);
-                                }
-                            }, throwable -> {
-                            }, () -> {
-                                if (!TextUtils.isEmpty(sourceIds)) {
-                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_TYPE, "BEAM062/01");
-                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_IDS, sourceIds.toString());
-                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_URL, "/BEAM/baseInfo/delayRecords/delayRecordsList-query.action");
-                                    IntentRouter.go(this, Constant.Router.DELAY_RECORD, bundle);
-                                } else {
-                                    ToastUtils.show(this, "请选择操作项!");
-                                }
-                            });
-                });
-
     }
 
+    /**
+     * @param
+     * @description NFC事件
+     * @author zhangwenshuai1
+     * @date 2018/6/28
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onRefresh(RefreshEvent event) {
-        refreshListController.refreshBegin();
+    public void getNFC(NFCEvent nfcEvent) {
+        LogUtil.d("NFC_TAG", nfcEvent.getNfc());
+        Map<String, Object> nfcJson = GsonUtil.gsonToMaps(nfcEvent.getNfc());
+        if (nfcJson.get("textRecord") == null) {
+            ToastUtils.show(context, "标签内容空！");
+            return;
+        }
+        doDeal((String) nfcJson.get("textRecord"));
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onLogin(LoginEvent loginEvent) {
-
-        refreshListController.refreshBegin();
+    @SuppressLint("CheckResult")
+    private void doDeal(String code) {
+        List<DailyLubricateTaskEntity> list = dailyLubricationPartAdapter.getList();
+        if (list == null)
+            return;
+        if (!code.equals(eamCode)) {
+            SnackbarHelper.showMessage(contentView, "请确认设备(" + eamCode + ")!");
+            return;
+        }
+        if (list.size() <= 0) {
+            SnackbarHelper.showMessage(contentView, "没有润滑部位!");
+            return;
+        }
+        StringBuffer sourceIds = new StringBuffer();
+        Flowable.fromIterable(list)
+                .subscribe(lubricationWarnEntity -> {
+                    if (TextUtils.isEmpty(sourceIds)) {
+                        sourceIds.append(lubricationWarnEntity.id);
+                    } else {
+                        sourceIds.append(",").append(lubricationWarnEntity.id);
+                    }
+                }, throwable -> {
+                }, () -> {
+                    if (!TextUtils.isEmpty(sourceIds)) {
+                        Map<String, Object> param = new HashMap<>();
+                        param.put(Constant.BAPQuery.sourceIds, sourceIds);
+                        onLoading("处理中...");
+                        presenterRouter.create(CompleteAPI.class).dailyComplete(param);
+                    } else {
+                        ToastUtils.show(this, "当前设备没有润滑部位!");
+                    }
+                });
     }
 
     @Override
     public void getLubricationsSuccess(DailyLubricateTaskListEntity entity) {
         if (entity.pageNo == 1 && entity.result.size() <= 0) {
-            btnLayout.setVisibility(View.GONE);
-        } else if (isEdit) {
-            btnLayout.setVisibility(View.VISIBLE);
+            ensure.setVisibility(View.GONE);
+        } else {
+            ensure.setVisibility(View.VISIBLE);
         }
 
         refreshListController.refreshComplete(entity.result);
@@ -239,14 +229,17 @@ public class DailyLubricationPartActivity extends BaseRefreshRecyclerActivity<Da
 
     @Override
     public void getLubricationsFailed(String errorMsg) {
-        btnLayout.setVisibility(View.GONE);
+        ensure.setVisibility(View.GONE);
         SnackbarHelper.showError(rootView, ErrorMsgHelper.msgParse(errorMsg));
         refreshListController.refreshComplete(null);
     }
 
     @Override
     public void dailyCompleteSuccess(DelayEntity entity) {
-        onLoadSuccessAndExit("任务完成", () -> refreshListController.refreshBegin());
+        onLoadSuccessAndExit("任务完成", () -> {
+            onBackPressed();
+            EventBus.getDefault().post(new RefreshEvent());
+        });
     }
 
     @Override
@@ -255,10 +248,27 @@ public class DailyLubricationPartActivity extends BaseRefreshRecyclerActivity<Da
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(context);
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        //获取到Tag对象
+        if (nfcHelper != null)
+            nfcHelper.dealNFCTag(intent);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (nfcHelper != null)
+            nfcHelper.onPauseNFC(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+        if (nfcHelper != null) {
+            nfcHelper.release();
+        }
+    }
 
 }

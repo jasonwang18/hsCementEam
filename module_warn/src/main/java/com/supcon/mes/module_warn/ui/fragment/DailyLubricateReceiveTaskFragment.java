@@ -56,8 +56,8 @@ import io.reactivex.Flowable;
 
 import static com.supcon.mes.middleware.constant.Constant.BAPQuery.sourceIds;
 
-@Presenter(value = {DailyLubricationWarnPresenter.class, CompletePresenter.class})
-public class DailyLubricateReceiveTaskFragment extends BaseRefreshRecyclerFragment<DailyLubricateTaskEntity> implements DailyLubricationWarnContract.View, CompleteContract.View {
+@Presenter(value = {DailyLubricationWarnPresenter.class})
+public class DailyLubricateReceiveTaskFragment extends BaseRefreshRecyclerFragment<DailyLubricateTaskEntity> implements DailyLubricationWarnContract.View {
 
     @BindByTag("contentView")
     RecyclerView contentView;
@@ -157,8 +157,8 @@ public class DailyLubricateReceiveTaskFragment extends BaseRefreshRecyclerFragme
         if (isFront) {
             LogUtil.d("NFC_TAG", nfcEvent.getNfc());
             Map<String, Object> nfcJson = GsonUtil.gsonToMaps(nfcEvent.getNfc());
-            if (nfcJson.get("textRecord") == null){
-                ToastUtils.show(context,"标签内容空！");
+            if (nfcJson.get("textRecord") == null) {
+                ToastUtils.show(context, "标签内容空！");
                 return;
             }
             doDeal((String) nfcJson.get("textRecord"));
@@ -171,33 +171,40 @@ public class DailyLubricateReceiveTaskFragment extends BaseRefreshRecyclerFragme
         if (list == null)
             return;
         if (list.size() <= 0) {
-            SnackbarHelper.showMessage(contentView, "没有签到设备!");
+            SnackbarHelper.showMessage(contentView, "没有润滑设备!");
             return;
         }
         for (DailyLubricateTaskEntity dailyLubricateTaskEntity : list) {
             if (dailyLubricateTaskEntity.getEamID().code.equals(code)) {
-                List<DailyLubricateTaskEntity> dailyLubricateTaskEntities = dailyLubricateTaskEntity.lubricationPartMap.get(code);
-                StringBuffer sourceIds = new StringBuffer();
-                Flowable.fromIterable(dailyLubricateTaskEntities)
-                        .subscribe(lubricationWarnEntity -> {
-                            if (TextUtils.isEmpty(sourceIds)) {
-                                sourceIds.append(lubricationWarnEntity.id);
-                            } else {
-                                sourceIds.append(",").append(lubricationWarnEntity.id);
-                            }
-                        }, throwable -> {
-                        }, () -> {
-                            if (!TextUtils.isEmpty(sourceIds)) {
-                                Map<String, Object> param = new HashMap<>();
-                                param.put(Constant.BAPQuery.sourceIds, sourceIds);
-                                onLoading("处理中...");
-                                presenterRouter.create(CompleteAPI.class).dailyComplete(param);
-                            } else {
-                                ToastUtils.show(getActivity(), "当前设备没有润滑部位!");
-                            }
-                        });
+                Bundle bundle = new Bundle();
+                bundle.putString(Constant.IntentKey.EAM_CODE, code);
+                IntentRouter.go(getActivity(), Constant.Router.DAILY_LUBRICATION_EARLY_PART_ENSURE_WARN, bundle);
+
+//                List<DailyLubricateTaskEntity> dailyLubricateTaskEntities = dailyLubricateTaskEntity.lubricationPartMap.get(code);
+//                StringBuffer sourceIds = new StringBuffer();
+//                Flowable.fromIterable(dailyLubricateTaskEntities)
+//                        .subscribe(lubricationWarnEntity -> {
+//                            if (TextUtils.isEmpty(sourceIds)) {
+//                                sourceIds.append(lubricationWarnEntity.id);
+//                            } else {
+//                                sourceIds.append(",").append(lubricationWarnEntity.id);
+//                            }
+//                        }, throwable -> {
+//                        }, () -> {
+//                            if (!TextUtils.isEmpty(sourceIds)) {
+//                                Map<String, Object> param = new HashMap<>();
+//                                param.put(Constant.BAPQuery.sourceIds, sourceIds);
+//                                onLoading("处理中...");
+//                                presenterRouter.create(CompleteAPI.class).dailyComplete(param);
+//                            } else {
+//                                ToastUtils.show(getActivity(), "当前设备没有润滑部位!");
+//                            }
+//                        });
+
+                return;
             }
         }
+        ToastUtils.show(getActivity(), "(" + code + ")设备无待执行润滑任务!");
     }
 
     @SuppressLint("CheckResult")
@@ -241,16 +248,6 @@ public class DailyLubricateReceiveTaskFragment extends BaseRefreshRecyclerFragme
     public void getLubricationsFailed(String errorMsg) {
         SnackbarHelper.showError(rootView, ErrorMsgHelper.msgParse(errorMsg));
         refreshListController.refreshComplete(null);
-    }
-
-    @Override
-    public void dailyCompleteSuccess(DelayEntity entity) {
-        onLoadSuccessAndExit("任务完成", () -> refreshListController.refreshBegin());
-    }
-
-    @Override
-    public void dailyCompleteFailed(String errorMsg) {
-        onLoadFailed(ErrorMsgHelper.msgParse(errorMsg));
     }
 
     @Override

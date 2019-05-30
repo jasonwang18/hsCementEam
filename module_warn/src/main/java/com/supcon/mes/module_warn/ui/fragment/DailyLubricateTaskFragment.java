@@ -107,7 +107,6 @@ public class DailyLubricateTaskFragment extends BaseRefreshRecyclerFragment<Dail
                     bundle.putBoolean(Constant.IntentKey.isEdit, false);
                     IntentRouter.go(getActivity(), Constant.Router.DAILY_LUBRICATION_EARLY_PART_WARN, bundle);
                 } else if (id == R.id.receive) {
-                    ToastUtils.show(getActivity(), "接单");
                     StringBuffer sourceIds = new StringBuffer();
                     Flowable.fromIterable(item.lubricationPartMap.values())
                             .map(dailyLubricateTaskEntities -> Flowable.fromIterable(dailyLubricateTaskEntities))
