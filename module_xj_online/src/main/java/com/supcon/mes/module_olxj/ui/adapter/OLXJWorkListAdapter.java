@@ -1236,9 +1236,16 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
                 itemRecyclerTitle.setText("无关联设备");
             } else {
                 itemRecyclerTitle.setText(data.eamID.name);
-                mDeviceDCSParamController = new DeviceDCSParamController(itemView, data.eamID.id);
-                mDeviceDCSParamController.initView();
-                mDeviceDCSParamController.initData();
+
+                if(mDeviceDCSParamController==null){
+                    mDeviceDCSParamController = new DeviceDCSParamController(itemView, data.eamID.id);
+                    mDeviceDCSParamController.initView();
+                    mDeviceDCSParamController.initData();
+                }
+                else {
+                    mDeviceDCSParamController.getDeviceParams(data.eamID.id);
+
+                }
             }
         }
     }

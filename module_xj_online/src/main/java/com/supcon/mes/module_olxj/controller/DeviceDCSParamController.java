@@ -81,4 +81,17 @@ public class DeviceDCSParamController extends BaseViewController implements Devi
         LogUtil.e("errorMsg:"+errorMsg);
 
     }
+
+    public void clear(){
+        mDeviceDCSParamAdapter.clear();
+        mDeviceDCSParamAdapter.notifyDataSetChanged();
+    }
+
+    public void getDeviceParams(Long eamId){
+        if(eamId!=null && !eamId.equals(this.eamId)){
+            clear();
+            presenterRouter.create(DeviceDCSParamQueryAPI.class).getDeviceDCSParams(eamId);
+        }
+
+    }
 }
