@@ -27,8 +27,10 @@ public class SBDAOnlineListPresenter extends SBDAOnlineListContract.Presenter {
     @SuppressLint("CheckResult")
     @Override
     public void getSearchSBDA(Map<String, Object> params, int page) {
+        Map<String, Object> mainParam = new HashMap();
+        mainParam.put(Constant.BAPQuery.IS_MAIN_EQUIP, "1");
+        FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(mainParam);
 
-        FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap());
         if (params.containsKey(Constant.BAPQuery.EAM_CODE)) {
             Map<String, Object> codeParam = new HashMap();
             codeParam.put(Constant.BAPQuery.EAM_CODE, params.get(Constant.BAPQuery.EAM_CODE));
@@ -50,9 +52,6 @@ public class SBDAOnlineListPresenter extends SBDAOnlineListContract.Presenter {
         if (params.containsKey(Constant.BAPQuery.EAM_AREA)) {
             Map<String, Object> areaParam = new HashMap();
             areaParam.put(Constant.BAPQuery.EAM_AREA, params.get(Constant.BAPQuery.EAM_AREA));
-            if (EamApplication.isHongshi()) {
-                areaParam.put(Constant.BAPQuery.EAM_AREANAME, "主设备");
-            }
             JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(areaParam, "BEAM_AREAS,ID,EAM_BaseInfo,INSTALL_PLACE");
             fastQuery.subconds.add(joinSubcondEntity);
         }

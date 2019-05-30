@@ -4,15 +4,5 @@
     <string name="device_new">%1$s [%2$s](新增)</string>
     <string name="device_num_choose">已选%1$s个设备</string>
 
-    <string name="device_style1">%1$s (%2$s)</string>
-    <string name="device_style2">%1$s\t\t\t\t\t\t\t%2$s</string>
-    <string name="device_style3">%1$s \n[%2$s]</string>
-    <string name="device_style4">%1$s [%2$s]</string>
-    <string name="device_style5">%1$s (%2$s) [%3$s]</string>
-
-    <string name="device_style7"><![CDATA[<font color="#222222" size="16">%1$s\t\t</font><font color="#222222" size="14"> (%2$s)</font>]]></string>
-    <string name="device_style8"><![CDATA[<font color="#222222" size="16">%1$s\t\t</font><font color="#222222" size="16">%2$s</font><font color="#222222" size="14"> (%3$s)</font>]]></string>
-    <string name="device_style10"><![CDATA[<font color="#222222" size="16">%1$s</font><font color="#2f22f1" size="12"> (%2$s)</font>]]></string>
-
     <string name="device_style9">%1$s 天 %2$s 时 %3$s 分 %4$s 秒</string>
 </resources>

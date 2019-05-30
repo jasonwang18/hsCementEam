@@ -29,13 +29,8 @@ public class ScreenAreaPresenter extends ScreenAreaContract.Presenter {
     @Override
     public void screenPart(CustomFilterView customFilterView) {
         ScreenEntity screenEntity = new ScreenEntity();
-        String channel = ChannelUtil.getUMengChannel();
-        if (channel.equals("hongshi")) {
-            screenEntity.name = "3线水泥制成";
-            screenEntity.id = 1040L;
-        } else {
-            screenEntity.name = "区域不限";
-        }
+        screenEntity.name = "区域不限";
+
         List<ScreenEntity> screenEntities = new LinkedList<>();
         screenEntities.add(screenEntity);
         url = "/BEAM/area/area/areaList-query.action?page.pageSize=500";
@@ -48,7 +43,7 @@ public class ScreenAreaPresenter extends ScreenAreaContract.Presenter {
                     if (screenListEntity.result != null && screenListEntity.result.size() > 0) {
                         Flowable.fromIterable(screenListEntity.result)
                                 .filter(screenEntity12 -> {
-                                    if (Util.countStr(screenEntity12.layRec, "-") > 1 || screenEntity12.name.equals("3线水泥制成")) {
+                                    if (Util.countStr(screenEntity12.layRec, "-") > 1) {
                                         return false;
                                     } else {
                                         return true;

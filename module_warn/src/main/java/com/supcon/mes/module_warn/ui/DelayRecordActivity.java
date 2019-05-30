@@ -34,6 +34,13 @@ import com.supcon.mes.module_warn.ui.adapter.DelayRecordAdapter;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author yangfei.cao
+ * @ClassName hongShiCementEam
+ * @date 2019/4/29
+ * ------------- Description -------------
+ * 延期列表
+ */
 @Router(Constant.Router.DELAY_RECORD)
 @Presenter(value = DelayRecordPresenter.class)
 public class DelayRecordActivity extends BaseRefreshRecyclerActivity<DelayRecordEntity> implements DelayRecordContract.View {
