@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
+import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.model.bean.DeviceDCSEntity;
 import com.supcon.mes.module_olxj.R;
@@ -53,9 +54,16 @@ public class DeviceDCSParamAdapter extends BaseListDataRecyclerViewAdapter<Devic
         }
 
         @Override
-        protected void update(DeviceDCSEntity data) {
+        protected void initView() {
+            super.initView();
+            itemDCSParam.keyView().setMaxLines(2);
+            itemDCSParam.contentView().setPadding(20,0,0,0);
+        }
 
-            itemDCSParam.setKey(String.format(context.getString(R.string.dcs_param), data.name, data.itemNumber));
+        @Override
+        protected void update(DeviceDCSEntity data) {
+            itemDCSParam.setKey(data.name);
+//            itemDCSParam.setKey(String.format(context.getString(R.string.dcs_param), data.name, data.itemNumber));
             itemDCSParam.setContent(data.latestValue);
             if(!TextUtils.isEmpty(data.maxValue)){
                 itemDCSParamMax.setContent(data.maxValue);
