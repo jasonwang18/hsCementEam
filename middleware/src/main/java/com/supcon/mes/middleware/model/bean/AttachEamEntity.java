@@ -14,6 +14,7 @@ import com.supcon.mes.middleware.model.bean.EamType;
 public class AttachEamEntity extends BaseEntity {
     public String code;
     public EamType eamType;
+    public Long id;
     public String name;
     public String state;
     public String stateForDisplay;

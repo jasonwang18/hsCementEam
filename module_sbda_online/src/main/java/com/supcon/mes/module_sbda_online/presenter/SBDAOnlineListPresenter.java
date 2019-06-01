@@ -27,10 +27,14 @@ public class SBDAOnlineListPresenter extends SBDAOnlineListContract.Presenter {
     @SuppressLint("CheckResult")
     @Override
     public void getSearchSBDA(Map<String, Object> params, int page) {
-        Map<String, Object> mainParam = new HashMap();
-        mainParam.put(Constant.BAPQuery.IS_MAIN_EQUIP, "1");
-        FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(mainParam);
+        FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
 
+        if (params.containsKey(Constant.BAPQuery.IS_MAIN_EQUIP)) {
+            Map<String, Object> mainParam = new HashMap();
+            mainParam.put(Constant.BAPQuery.IS_MAIN_EQUIP, params.get(Constant.BAPQuery.IS_MAIN_EQUIP));
+            List<BaseSubcondEntity> subcondEntities = BAPQueryParamsHelper.crateSubcondEntity(mainParam);
+            fastQuery.subconds.addAll(subcondEntities);
+        }
         if (params.containsKey(Constant.BAPQuery.EAM_CODE)) {
             Map<String, Object> codeParam = new HashMap();
             codeParam.put(Constant.BAPQuery.EAM_CODE, params.get(Constant.BAPQuery.EAM_CODE));

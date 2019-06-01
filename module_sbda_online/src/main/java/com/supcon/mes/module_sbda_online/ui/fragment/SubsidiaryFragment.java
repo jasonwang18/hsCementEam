@@ -1,16 +1,21 @@
 package com.supcon.mes.module_sbda_online.ui.fragment;
 
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.base.fragment.BaseRefreshRecyclerFragment;
+import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
+import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
+import com.supcon.mes.module_sbda_online.IntentRouter;
 import com.supcon.mes.module_sbda_online.R;
 import com.supcon.mes.module_sbda_online.model.api.SubsidiaryAPI;
 import com.supcon.mes.module_sbda_online.model.bean.SubsidiaryEntity;
@@ -58,6 +63,17 @@ public class SubsidiaryFragment extends BaseRefreshRecyclerFragment<SubsidiaryEn
         refreshListController.setOnRefreshPageListener((page) -> {
 
             presenterRouter.create(SubsidiaryAPI.class).attachPart(eamId, page);
+        });
+        subsidiaryAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
+            @Override
+            public void onItemChildViewClick(View childView, int position, int action, Object obj) {
+                SubsidiaryEntity item = subsidiaryAdapter.getItem(position);
+                Bundle bundle = new Bundle();
+                bundle.putLong(Constant.IntentKey.SBDA_ONLINE_EAMID, item.getAttachEamId().id);
+                bundle.putString(Constant.IntentKey.SBDA_ONLINE_EAMCODE, item.getAttachEamId().code);
+                IntentRouter.go(context, Constant.Router.SBDA_ONLINE_VIEW, bundle);
+                getActivity().finish();
+            }
         });
     }
 

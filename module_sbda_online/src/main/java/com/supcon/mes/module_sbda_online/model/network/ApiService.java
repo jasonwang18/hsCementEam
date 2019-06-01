@@ -4,6 +4,7 @@ import com.app.annotation.apt.ApiFactory;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.module_sbda_online.model.bean.LubriListEntity;
 import com.supcon.mes.module_sbda_online.model.bean.MaintenanceListEntity;
+import com.supcon.mes.module_sbda_online.model.bean.ParamListEntity;
 import com.supcon.mes.module_sbda_online.model.bean.RepairListEntity;
 import com.supcon.mes.module_sbda_online.model.bean.RoutineCommonEntity;
 import com.supcon.mes.module_sbda_online.model.bean.SBDAOnlineListEntity;
@@ -33,8 +34,8 @@ public interface ApiService {
     Flowable<SBDAOnlineListEntity> getPartForview(@Query("advQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
     //附属
-    @GET("/BEAM/baseInfo/attachPart/data-dg1543374150818.action")
-    Flowable<SubsidiaryListEntity> attachPart(@Query("beamID") Long beamID, @QueryMap Map<String, Object> pageQueryMap);
+    @GET("/BEAM/baseInfo/baseInfo/data-dg1461551623906.action")
+    Flowable<SubsidiaryListEntity> attachPart(@Query("baseInfo.id") Long beamID, @QueryMap Map<String, Object> pageQueryMap);
 
     //备件
     @GET("/BEAM/baseInfo/baseInfo/data-dg1461551624000.action")
@@ -67,5 +68,9 @@ public interface ApiService {
     //查看设备
     @GET("/BEAM2/runningGather/runningGathers/runningGatherList-query.action")
     Flowable<StopPoliceListEntity> runningGatherList(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+
+    //技术参数
+    @GET("/BEAM/baseInfo/baseInfo/data-dg1461551857214.action")
+    Flowable<ParamListEntity> getEamParam(@QueryMap Map<String, Object> pageQueryMap);
 
 }

@@ -67,6 +67,12 @@ public class SubsidiaryAdapter extends BaseListDataRecyclerViewAdapter<Subsidiar
         }
 
         @Override
+        protected void initListener() {
+            super.initListener();
+            itemView.setOnClickListener(v -> onItemChildViewClick(itemView,0,getItem(getLayoutPosition())));
+        }
+
+        @Override
         protected void update(SubsidiaryEntity data) {
 
             String eam = String.format(context.getString(R.string.device_style10), Util.strFormat(data.getAttachEamId().name)
