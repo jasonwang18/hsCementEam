@@ -13,6 +13,7 @@ import com.supcon.mes.module_sbda_online.R;
 import com.supcon.mes.module_sbda_online.ui.adapter.SBDAOnlineViewAdapter;
 import com.supcon.mes.module_sbda_online.ui.fragment.LubricationFragment;
 import com.supcon.mes.module_sbda_online.ui.fragment.MaintenanceFragment;
+import com.supcon.mes.module_sbda_online.ui.fragment.ParamFragment;
 import com.supcon.mes.module_sbda_online.ui.fragment.RepairFragment;
 import com.supcon.mes.module_sbda_online.ui.fragment.RoutineFragment;
 import com.supcon.mes.module_sbda_online.ui.fragment.SparePartFragment;
@@ -58,6 +59,7 @@ public class SBDAOnlineViewActivity extends BaseFragmentActivity {
         sbdaOnlineViewAdapter.addFragment(RoutineFragment.newInstance(eamId, eamCode), "常规信息");
         sbdaOnlineViewAdapter.addFragment(SubsidiaryFragment.newInstance(eamId), "附属设备");
         sbdaOnlineViewAdapter.addFragment(SparePartFragment.newInstance(eamId), "备件清单");
+        sbdaOnlineViewAdapter.addFragment(ParamFragment.newInstance(eamId), "技术参数");
         sbdaOnlineViewAdapter.addFragment(LubricationFragment.newInstance(eamId), "润滑信息");
         sbdaOnlineViewAdapter.addFragment(MaintenanceFragment.newInstance(eamId), "维保信息");
         sbdaOnlineViewAdapter.addFragment(RepairFragment.newInstance(eamId), "维修信息");

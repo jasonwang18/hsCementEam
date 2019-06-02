@@ -154,6 +154,9 @@ public interface Constant {
         String DELAYDIALOG = "DELAYDIALOG";//延期弹出框
         String DELAY_RECORD = "DELAY_RECORD";//延期记录
         String GENERATE_WORK_DIALOG = "GENERATE_WORK_DIALOG";//派单弹出框
+
+
+        String SCORE_PERFORMANCE = "SCORE_PERFORMANCE";//评分绩效
     }
 
 
@@ -287,6 +290,7 @@ public interface Constant {
         int LUBRICATION_EARLY_WARN = 24;//润滑预警
         int DAILY_LUBRICATION_EARLY_WARN = 25;//日常润滑预警
         int MAINTENANCE_EARLY_WARN = 26;//维保预警
+        int SCORE_PERFORMANCE = 27;//评分
     }
 
     interface SPKey {

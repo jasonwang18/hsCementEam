@@ -151,6 +151,7 @@ public class SBDAOnlineListActivity extends BaseRefreshRecyclerActivity<SBDAOnli
             if (!TextUtils.isEmpty(selecStr)) {
                 queryParam.put(Constant.BAPQuery.EAM_CODE, selecStr);
             }
+            queryParam.put(Constant.BAPQuery.IS_MAIN_EQUIP, "1");
             presenterRouter.create(SBDAOnlineListAPI.class).getSearchSBDA(queryParam, page);
         });
         //点击触发事件跳转界面

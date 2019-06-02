@@ -162,6 +162,7 @@ public class WorkAdapter extends HeaderRecyclerViewAdapter<WorkInfo> {
                         case Constant.Router.LUBRICATION_EARLY_WARN:
                         case Constant.Router.DAILY_LUBRICATION_EARLY_WARN:
                         case Constant.Router.MAINTENANCE_EARLY_WARN:
+                        case Constant.Router.SCORE_PERFORMANCE:
                             break;
                         default:
                             ToastUtils.show(context,"暂无数据！");

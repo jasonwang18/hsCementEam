@@ -150,6 +150,7 @@ dependencies {
         implementation project(':module_tsd')
         implementation project(':module_sbda_online')
         implementation project(':module_zz')
+        implementation project(':module_score')
         implementation project(':mogu_viber')
     }
     implementation project(':middleware')
