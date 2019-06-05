@@ -62,7 +62,7 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
     private Map<String, Object> queryParam = new HashMap<>();
     private DatePickController datePickController;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-    SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd hh:m");
+    SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 
     @Override
     protected IListAdapter createAdapter() {

@@ -10,4 +10,13 @@ public class EamType extends BaseEntity {
     public long id;
     public String code;
     public String name;
+
+    public Department useDept;
+
+    public Department getUseDept() {
+        if (useDept == null) {
+            useDept = new Department();
+        }
+        return useDept;
+    }
 }

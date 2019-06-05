@@ -156,7 +156,10 @@ public interface Constant {
         String GENERATE_WORK_DIALOG = "GENERATE_WORK_DIALOG";//派单弹出框
 
 
+        String SCORE_LIST = "SCORE_LIST";//评分绩效列表
         String SCORE_PERFORMANCE = "SCORE_PERFORMANCE";//评分绩效
+
+        String EAM = "EAM";//设备搜索
     }
 
 
@@ -250,6 +253,8 @@ public interface Constant {
 
         String EAM_CODE = "EAM_CODE";//EAM_CODE
         String isEdit = "isEdit";//是否能编辑
+
+        String SCORE_ENTITY = "SCORE_ENTITY";//评分记录
     }
 
     interface FilterSearchParam {
@@ -290,7 +295,7 @@ public interface Constant {
         int LUBRICATION_EARLY_WARN = 24;//润滑预警
         int DAILY_LUBRICATION_EARLY_WARN = 25;//日常润滑预警
         int MAINTENANCE_EARLY_WARN = 26;//维保预警
-        int SCORE_PERFORMANCE = 27;//评分
+        int SCORE_LIST = 27;//评分
     }
 
     interface SPKey {
@@ -477,6 +482,10 @@ public interface Constant {
         String startDate = "startDate";
         String endDate = "endDate";
         String repairGroupId = "repairGroupId";
+
+        String SCORE_TIME_START = "SCORE_TIME_START";//时间
+        String SCORE_TIME_STOP = "SCORE_TIME_STOP";//时间
+        String SCORE_TIME = "SCORE_TIME";//时间
     }
 
 
@@ -620,5 +629,10 @@ public interface Constant {
     interface ZZ {
         String IP = "IP";
         String PORT = "PORT";
+    }
+
+    interface AttrMap {
+        String SCORE_FRACTION = "BEAM_1_0_0_scoreStandard_itemDetailList_LISTPT_ASSO_8395ad9a_dea0_4fb2_aad1_78cb7ef73cea";
+        String SCORE_ITEM = "BEAM_1_0_0_scoreStandard_itemDetailList_LISTPT_ASSO_3e07e500_557f_4b41_9c6b_1396785b8113";
     }
 }

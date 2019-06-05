@@ -50,7 +50,7 @@ public class DailyLubricationWarnPresenter extends DailyLubricationWarnContract.
         }
         fastQuery.modelAlias = "jWXItem";
 
-        pageQueryParams.put("page.pageSize", 100);
+        pageQueryParams.put("page.pageSize", 500);
         pageQueryParams.put("page.maxPageSize", 500);
 
         mCompositeSubscription.add(EarlyWarnHttpClient.getLubrications(fastQuery, pageQueryParams)

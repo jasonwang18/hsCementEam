@@ -7,6 +7,7 @@ import com.supcon.mes.middleware.model.bean.ValueEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEam;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,11 +33,11 @@ public class DailyLubricateTaskEntity extends BaseEntity {
 
     //责任人设备数量
     @Expose
-    public Map<String, DailyLubricateTaskEntity> lubricationMap = new HashMap<>();
+    public Map<String, DailyLubricateTaskEntity> lubricationMap = new LinkedHashMap<>();
 
     //当前设备润滑部位
     @Expose
-    public Map<String, List<DailyLubricateTaskEntity>> lubricationPartMap = new HashMap<>();
+    public Map<String, List<DailyLubricateTaskEntity>> lubricationPartMap = new LinkedHashMap<>();
 
     public WXGDEam getEamID() {
         if (eamID == null) {
