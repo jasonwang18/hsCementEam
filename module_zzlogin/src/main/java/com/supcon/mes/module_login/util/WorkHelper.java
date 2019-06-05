@@ -154,10 +154,10 @@ public class WorkHelper {
                     workInfo.iconResId = R.drawable.ic_work_mainten_warn;
                     workInfo.router = Constant.Router.MAINTENANCE_EARLY_WARN;
                     break;
-                case Constant.WorkType.SCORE_PERFORMANCE:
+                case Constant.WorkType.SCORE_LIST:
 
                     workInfo.iconResId = R.drawable.ic_work_pf;
-                    workInfo.router = Constant.Router.SCORE_PERFORMANCE;
+                    workInfo.router = Constant.Router.SCORE_LIST;
                     break;
                 case Constant.WorkType.JXJH:
 
