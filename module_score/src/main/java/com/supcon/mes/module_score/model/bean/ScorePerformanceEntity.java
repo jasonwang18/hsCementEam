@@ -19,8 +19,8 @@ public class ScorePerformanceEntity extends BaseEntity {
     public String scoreStandard;//标题
     public String scoreItem;//选项内容
 
-    public String accidentStopTime;//停机时长
-    public String totalRunTime;//累计运行时长
+    public Float accidentStopTime;//停机时长
+    public Float totalRunTime;//累计运行时长
     public float resultValue;//结果
 
     @Expose
@@ -32,11 +32,17 @@ public class ScorePerformanceEntity extends BaseEntity {
     @Expose
     public Map<String, Boolean> marksState = new LinkedHashMap<>();//多选项状态
     @Expose
+    public Map<String, ScorePerformanceEntity> scorePerformanceEntityMap = new LinkedHashMap<>();//重复的项
+
+    @Expose
     public ScorePerformanceEntity scorePerformanceEntity;
     @Expose
-    public Integer totalScore;//总分数
+    public Integer totalScore;//单项总分数
 
     public int defaultTotalScore;//默认总分数
+
+    @Expose
+    public Integer totalHightScore;//单项最高总分数
     //子布局
     @Expose
     public Set<ScorePerformanceEntity> scorePerformanceEntities = new HashSet<>();
@@ -48,7 +54,18 @@ public class ScorePerformanceEntity extends BaseEntity {
         return totalScore;
     }
 
-    public void setTotalScore(int totalScore) {
+    public void setTotalScore(Integer totalScore) {
         this.totalScore = totalScore;
+    }
+
+    public Integer getTotalHightScore() {
+        if (totalHightScore == null) {
+            totalHightScore = defaultTotalScore;
+        }
+        return totalHightScore;
+    }
+
+    public void setTotalHightScore(Integer totalHightScore) {
+        this.totalHightScore = totalHightScore;
     }
 }

@@ -24,24 +24,11 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/scoreTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:gravity="center_horizontal"
-                android:paddingTop="@dimen/dp_8"
-                android:paddingBottom="@dimen/dp_8"
-                android:tag="scoreTitle"
-                android:text="@string/device_style1" />
-
-            <include layout="@layout/ly_line_light" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:padding="@dimen/dp_5">
+                android:padding="@dimen/dp_3">
 
                 <com.supcon.mes.mbap.view.CustomVerticalTextView
                     android:id="@+id/eamCode"
@@ -52,7 +39,7 @@
                     android:tag="eamCode"
                     app:content_hint="NFC刷卡获取设备"
                     app:editable="true"
-                    app:key="设备编码" />
+                    app:key="设备编码:" />
 
                 <include layout="@layout/ly_vertical_line" />
 
@@ -65,7 +52,7 @@
                     android:tag="eamName"
                     app:content_hint="NFC刷卡获取设备"
                     app:editable="true"
-                    app:text="设备名称" />
+                    app:text="设备名称:" />
             </LinearLayout>
 
             <include layout="@layout/ly_line_light" />
@@ -74,7 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:padding="@dimen/dp_5">
+                android:padding="@dimen/dp_3">
 
                 <com.supcon.mes.mbap.view.CustomVerticalTextView
                     android:id="@+id/eamDept"
@@ -84,7 +71,7 @@
                     android:paddingLeft="@dimen/dp_10"
                     android:tag="eamDept"
                     app:content_hint="--"
-                    app:key="所属车间" />
+                    app:key="所属车间:" />
 
                 <include layout="@layout/ly_vertical_line" />
 
@@ -96,7 +83,36 @@
                     android:paddingLeft="@dimen/dp_10"
                     android:tag="eamScore"
                     app:content_value="100"
-                    app:text="设备得分" />
+                    app:text="设备得分:" />
+            </LinearLayout>
+
+            <include layout="@layout/ly_line_light" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:padding="@dimen/dp_3">
+
+                <com.supcon.mes.mbap.view.CustomVerticalTextView
+                    android:id="@+id/scoreStaff"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/dp_10"
+                    android:tag="scoreStaff"
+                    app:key="评分人:" />
+
+                <include layout="@layout/ly_vertical_line" />
+
+                <com.supcon.mes.mbap.view.CustomVerticalTextView
+                    android:id="@+id/scoreTime"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/dp_10"
+                    android:tag="scoreTime"
+                    app:text="评分时间:" />
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView

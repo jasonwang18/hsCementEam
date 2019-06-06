@@ -365,6 +365,22 @@ public class Util {
     }
 
     /**
+     * 浮点型保留两位小数
+     *
+     * @param d
+     * @return
+     */
+    public static float big2Float(Float d) {
+        if (d == null || d == 0) {
+            return 0;
+        }
+        BigDecimal d1 = new BigDecimal(Double.toString(d));
+        BigDecimal d2 = new BigDecimal(Integer.toString(1));
+        // 四舍五入,保留2位小数
+        return d1.divide(d2, 2, BigDecimal.ROUND_HALF_UP).floatValue();
+    }
+
+    /**
      * 判断str1中包含str2的个数
      *
      * @param str1

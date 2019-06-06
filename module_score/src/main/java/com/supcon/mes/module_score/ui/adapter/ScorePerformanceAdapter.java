@@ -5,6 +5,9 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.os.Handler;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -20,9 +23,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.mbap.constant.ListType;
+import com.supcon.mes.mbap.view.CustomEditText;
+import com.supcon.mes.middleware.model.bean.RepairStaffEntity;
+import com.supcon.mes.middleware.util.EditInputFilter;
 import com.supcon.mes.middleware.util.HtmlParser;
 import com.supcon.mes.middleware.util.HtmlTagHandler;
 import com.supcon.mes.middleware.util.Util;
@@ -30,9 +37,12 @@ import com.supcon.mes.module_score.R;
 import com.supcon.mes.module_score.model.bean.ScorePerformanceEntity;
 import com.supcon.mes.module_score.ui.view.FlowLayout;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
+
+import io.reactivex.functions.Predicate;
 
 public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<ScorePerformanceEntity> {
 
@@ -133,8 +143,12 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
                         ScorePerformanceEntity item = getItem(getLayoutPosition());
                         item.result = !item.result;
                         if (item.result) {
-                            item.scorePerformanceEntity.setTotalScore(item.scorePerformanceEntity.getTotalScore() + item.score);
+                            item.scorePerformanceEntity.setTotalHightScore(item.scorePerformanceEntity.getTotalHightScore() + item.score);
+                            if (item.scorePerformanceEntity.totalHightScore > 0) {
+                                item.scorePerformanceEntity.setTotalScore(item.scorePerformanceEntity.getTotalScore() + item.score);
+                            }
                         } else {
+                            item.scorePerformanceEntity.setTotalHightScore(item.scorePerformanceEntity.getTotalHightScore() - item.score);
                             item.scorePerformanceEntity.setTotalScore(item.scorePerformanceEntity.getTotalScore() - item.score);
                         }
                         if (item.scorePerformanceEntity.getTotalScore() < 0) {
@@ -145,6 +159,7 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
                         List<ScorePerformanceEntity> list = getList();
                         int position = list.indexOf(item.scorePerformanceEntity);
                         notifyItemChanged(position);
+                        onItemChildViewClick(scoreRadioGroup, 0, item.scorePerformanceEntity);
                     }
                 }
             });
@@ -179,10 +194,15 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
             Boolean result = item.marksState.get(buttonView.getText().toString());
             result = !result;
             item.marksState.put(buttonView.getText().toString(), result);
+
             if (result) {
+                item.scorePerformanceEntity.setTotalHightScore(item.scorePerformanceEntity.getTotalHightScore() - item.marks.get(buttonView.getText().toString()));
                 item.scorePerformanceEntity.setTotalScore(item.scorePerformanceEntity.getTotalScore() - item.marks.get(buttonView.getText().toString()));
             } else {
-                item.scorePerformanceEntity.setTotalScore(item.scorePerformanceEntity.getTotalScore() + item.marks.get(buttonView.getText().toString()));
+                item.scorePerformanceEntity.setTotalHightScore(item.scorePerformanceEntity.getTotalHightScore() + item.marks.get(buttonView.getText().toString()));
+                if (item.scorePerformanceEntity.totalHightScore > 0) {
+                    item.scorePerformanceEntity.setTotalScore(item.scorePerformanceEntity.getTotalScore() + item.marks.get(buttonView.getText().toString()));
+                }
             }
             if (item.scorePerformanceEntity.getTotalScore() < 0) {
                 item.scorePerformanceEntity.setTotalScore(0);
@@ -192,6 +212,7 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
             List<ScorePerformanceEntity> list = getList();
             int position = list.indexOf(item.scorePerformanceEntity);
             notifyItemChanged(position);
+            onItemChildViewClick(scoreRadioGroup, 0, item.scorePerformanceEntity);
         }
 
         //动态添加视图
@@ -226,6 +247,8 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
         }
     }
 
+    private boolean isWrite;
+
     class HeadViewHolder extends BaseRecyclerViewHolder<ScorePerformanceEntity> {
 
         @BindByTag("itemIndex")
@@ -243,9 +266,9 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
         @BindByTag("timeLayout")
         LinearLayout timeLayout;
         @BindByTag("cumulativeRunTime")
-        TextView cumulativeRunTime;
+        CustomEditText cumulativeRunTime;
         @BindByTag("cumulativeDownTime")
-        TextView cumulativeDownTime;
+        CustomEditText cumulativeDownTime;
 
 
         public HeadViewHolder(Context context) {
@@ -258,6 +281,17 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
         }
 
         @Override
+        protected void initView() {
+            super.initView();
+            EditInputFilter editInputFilter = new EditInputFilter(24);
+            editInputFilter.setTip("停机时长不能大于24小时!");
+            cumulativeDownTime.editText().setFilters(new InputFilter[]{editInputFilter});
+            cumulativeRunTime.setEditable(false);
+            cumulativeDownTime.setEditable(isEdit);
+        }
+
+        @SuppressLint("CheckResult")
+        @Override
         protected void initListener() {
             super.initListener();
             titleLayout.setOnClickListener(v -> {
@@ -269,6 +303,48 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
                     timeLayout.setVisibility(View.VISIBLE);
                 }
             });
+
+            RxTextView.textChanges(cumulativeDownTime.editText())
+                    .skipInitialValue()
+                    .filter(new Predicate<CharSequence>() {
+                        @Override
+                        public boolean test(CharSequence charSequence) throws Exception {
+                            if (!isWrite) {
+                                isWrite = true;
+                                return false;
+                            } else {
+                                return isWrite;
+                            }
+                        }
+                    })
+                    .subscribe(charSequence -> {
+                        ScorePerformanceEntity item = getItem(getAdapterPosition());
+                        item.totalRunTime = 24f;
+                        if (!TextUtils.isEmpty(charSequence.toString())) {
+                            float stopTime = new BigDecimal(charSequence.toString()).floatValue();
+                            item.accidentStopTime = stopTime;
+                            item.totalRunTime = 24 - stopTime;
+                        } else if (item.accidentStopTime != null) {
+                            item.accidentStopTime = 0f;
+                        }
+                        item.resultValue = item.totalRunTime / 24 * 100;
+                        scoreRight.setText(Util.big(item.resultValue) + "%");
+                        cumulativeRunTime.setContent(Util.big(item.totalRunTime));
+
+                        if (item.accidentStopTime != null) {
+                            if (item.accidentStopTime > 0 && item.accidentStopTime <= 1) {
+                                item.scorePerformanceEntity.setTotalScore(item.scorePerformanceEntity.defaultTotalScore - 5);
+                            } else if (item.accidentStopTime > 1) {
+                                item.scorePerformanceEntity.setTotalScore(item.scorePerformanceEntity.defaultTotalScore - 10);
+                            } else if (item.accidentStopTime == 0) {
+                                item.scorePerformanceEntity.setTotalScore(item.scorePerformanceEntity.defaultTotalScore);
+                            }
+                            List<ScorePerformanceEntity> list = getList();
+                            int position = list.indexOf(item.scorePerformanceEntity);
+                            notifyItemChanged(position);
+                            onItemChildViewClick(cumulativeDownTime, 0, item.scorePerformanceEntity);
+                        }
+                    });
         }
 
         @SuppressLint({"SetTextI18n", "StringFormatInvalid", "StringFormatMatches"})
@@ -276,16 +352,11 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
         protected void update(ScorePerformanceEntity data) {
             itemIndex.setText(data.Index + ".");
             scoreItem.setText(data.itemDetail + (data.marks.size() > 0 ? "" : "(" + data.score + ")"));
+            scoreRight.setText(Util.big(data.resultValue) + "%");
 
-            scoreRight.setText(Util.big2(data.resultValue) + "%");
-
-            String runTime = String.format(context.getString(R.string.device_style14), "累计运行时间:"
-                    , Util.strFormat2(data.totalRunTime));
-            cumulativeRunTime.setText(HtmlParser.buildSpannedText(runTime, new HtmlTagHandler()));
-
-            String stopTime = String.format(context.getString(R.string.device_style14), "累计停机时间:"
-                    , Util.strFormat2(data.accidentStopTime));
-            cumulativeDownTime.setText(HtmlParser.buildSpannedText(stopTime, new HtmlTagHandler()));
+            cumulativeRunTime.setContent(data.totalRunTime == null ? "24" : Util.big(data.totalRunTime));
+            isWrite = false;
+            cumulativeDownTime.setContent(Util.big(data.accidentStopTime));
         }
 
         @TargetApi(Build.VERSION_CODES.HONEYCOMB)
