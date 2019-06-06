@@ -14,13 +14,13 @@ public class ScoreEntity extends BaseEntity {
     public Long scoreTime;//评分时间
 
     //得分
-    public int scoreNum;//得分
-    public int operationRate;//设备运转率
-    public int highQualityOperation;//高质量运行
-    public int security;//安全防护
-    public int appearanceLogo;//外观标识
-    public int beamHeath;//设备卫生
-    public int beamEstimate;//档案管理
+    public int scoreNum = 100;//得分
+    public Integer operationRate;//设备运转率
+    public Integer highQualityOperation;//高质量运行
+    public Integer security;//安全防护
+    public Integer appearanceLogo;//外观标识
+    public Integer beamHeath;//设备卫生
+    public Integer beamEstimate;//档案管理
 
     public EamType getBeamId() {
         if (beamId == null) {

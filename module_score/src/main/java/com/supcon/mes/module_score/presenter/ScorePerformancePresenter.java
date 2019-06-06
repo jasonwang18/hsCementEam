@@ -67,10 +67,14 @@ public class ScorePerformancePresenter extends ScorePerformanceContract.Presente
                         position++;
                         scorePerformanceOldTitleEntity = scorePerformanceEntity;
                     }
+
                     if (TextUtils.isEmpty(scorePerformanceOldTitleEntity.isItemValue)) {
                         scorePerformanceOldTitleEntity.marks.put(scorePerformanceEntity.scoreItem + "(" + scorePerformanceEntity.score + ")"
                                 , scorePerformanceEntity.score);
-                        scorePerformanceOldTitleEntity.marksState.put(scorePerformanceEntity.scoreItem + "(" + scorePerformanceEntity.score + ")", scorePerformanceEntity.result);
+                        scorePerformanceOldTitleEntity.marksState.put(scorePerformanceEntity.scoreItem + "(" + scorePerformanceEntity.score + ")"
+                                , scorePerformanceEntity.result);
+                        scorePerformanceOldTitleEntity.scorePerformanceEntityMap.put(scorePerformanceEntity.scoreItem + "(" + scorePerformanceEntity.score + ")"
+                                , scorePerformanceEntity);
                     }
                     scorePerformanceOldTitleEntity.Index = position;
 

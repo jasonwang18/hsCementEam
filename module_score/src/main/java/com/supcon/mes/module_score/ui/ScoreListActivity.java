@@ -127,11 +127,10 @@ public class ScoreListActivity extends BaseRefreshRecyclerActivity implements Sc
         customSearchView.setHint("请输入设备");
         searchTitleBar.enableRightBtn();
         searchTitleBar.setTitleText("设备评分绩效");
-
-        startTime.setDate(DateUtil.dateFormat(System.currentTimeMillis(), "yyyy-MM-dd 00:00:00"));
+        startTime.setDate(getYesterday());
         stopTime.setDate(dateFormat.format(System.currentTimeMillis()));
 
-        queryParam.put(Constant.BAPQuery.SCORE_TIME_START, DateUtil.dateFormat(System.currentTimeMillis(), "yyyy-MM-dd 00:00:00"));
+        queryParam.put(Constant.BAPQuery.SCORE_TIME_START, getYesterday());
         queryParam.put(Constant.BAPQuery.SCORE_TIME_STOP, dateFormat.format(System.currentTimeMillis()));
     }
 
@@ -187,6 +186,7 @@ public class ScoreListActivity extends BaseRefreshRecyclerActivity implements Sc
                 ScoreEntity item = scoreListAdapter.getItem(position);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(Constant.IntentKey.SCORE_ENTITY, item);
+                bundle.putBoolean(Constant.IntentKey.isEdit, compareTimeIsEdit(item.scoreTime != null ? item.scoreTime : 0));
                 IntentRouter.go(ScoreListActivity.this, Constant.Router.SCORE_PERFORMANCE, bundle);
             }
         });
@@ -203,7 +203,7 @@ public class ScoreListActivity extends BaseRefreshRecyclerActivity implements Sc
                     refreshListController.refreshBegin();
                 }
 
-            }).show(System.currentTimeMillis());
+            }).show(DateUtil.dateFormat(getYesterday()));
         });
 
         stopTime.setOnChildViewClickListener((childView, action, obj) ->
@@ -254,6 +254,14 @@ public class ScoreListActivity extends BaseRefreshRecyclerActivity implements Sc
         EventBus.getDefault().unregister(this);
     }
 
+    public String getYesterday() {
+        Calendar ca = Calendar.getInstance();
+        ca.setTime(new Date());
+        ca.add(Calendar.DAY_OF_MONTH, -1);
+        String s = DateUtil.dateFormat(ca.getTimeInMillis(), "yyyy-MM-dd 00:00:00");
+        return s;
+    }
+
     private boolean compareTime(String start, String stop) {
         if (TextUtils.isEmpty(start) || TextUtils.isEmpty(stop)) {
             return false;
@@ -269,5 +277,16 @@ public class ScoreListActivity extends BaseRefreshRecyclerActivity implements Sc
         }
         ToastUtils.show(this, "开始时间不能大于结束时间!");
         return false;
+    }
+
+    private boolean compareTimeIsEdit(long createTime) {
+        long nowTime = DateUtil.dateFormat(getYesterday());
+        if (createTime == 0 || nowTime == 0) {
+            return false;
+        }
+        if (nowTime > createTime) {
+            return false;
+        }
+        return true;
     }
 }

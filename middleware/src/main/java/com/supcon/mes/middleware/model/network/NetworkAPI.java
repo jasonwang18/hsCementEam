@@ -10,7 +10,7 @@ import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.ContractListEntity;
 import com.supcon.mes.middleware.model.bean.DepartmentInfoListEntity;
 import com.supcon.mes.middleware.model.bean.DeviceDCSEntity;
-import com.supcon.mes.middleware.model.bean.EamEntity;
+import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.LinkListEntity;
 import com.supcon.mes.middleware.model.bean.LongResultEntity;
@@ -322,6 +322,6 @@ public interface NetworkAPI {
      * 获取设备
      */
     @GET("/BEAM/baseInfo/baseInfo/baseInfoPartForview-query.action")
-    Flowable<CommonListEntity<EamEntity>> getEam(@Query("advQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+    Flowable<CommonListEntity<EamType>> getEam(@Query("advQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
 }
