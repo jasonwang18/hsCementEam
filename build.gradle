@@ -44,8 +44,8 @@ ext{
 
     minSdkVersion = 19
     targetSdkVersion = 22
-    versionCode = 9
-    versionName = "8.10.07.09"
+    versionCode = 10
+    versionName = "8.10.07.10"
 
 //    aptVersion          = '8.5.911.4'
 //    annotationVersion   = '8.5.911.6'//8.5.911.1
@@ -55,6 +55,6 @@ ext{
 //    mbapVersion         = '8.5.911.142debug52'//8.5.911.57
 //    vibrateVersion      = '8.5.911.36'
     commonVersion       = '1.3.4'
-    bapkitVersion       = '1.3.5'
+    bapkitVersion       = '1.3.5.2'
     isAlone  = false
 }
