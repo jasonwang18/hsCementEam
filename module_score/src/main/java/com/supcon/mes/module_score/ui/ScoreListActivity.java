@@ -257,7 +257,7 @@ public class ScoreListActivity extends BaseRefreshRecyclerActivity implements Sc
     public String getYesterday() {
         Calendar ca = Calendar.getInstance();
         ca.setTime(new Date());
-        ca.add(Calendar.DAY_OF_MONTH, -1);
+        ca.add(Calendar.DAY_OF_MONTH, -3);
         String s = DateUtil.dateFormat(ca.getTimeInMillis(), "yyyy-MM-dd 00:00:00");
         return s;
     }

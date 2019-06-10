@@ -188,6 +188,7 @@ public class ScorePerformanceActivity extends BaseRefreshRecyclerActivity implem
 
         scoreStaff.setContent(scoreEntity.getScoreStaff().name);
         scoreTime.setContent(DateUtil.dateFormat((scoreEntity != null && scoreEntity.scoreTime != null) ? scoreEntity.scoreTime : getYesterday()));
+        scorePerformanceAdapter.updateTotal(scoreEntity.scoreNum);
     }
 
     @SuppressLint("CheckResult")
@@ -241,9 +242,9 @@ public class ScorePerformanceActivity extends BaseRefreshRecyclerActivity implem
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
                 ScorePerformanceEntity scorePerformanceEntity = (ScorePerformanceEntity) obj;
-                int oldTotalScore = scoreEntity.scoreNum - (100 - scorePerformanceEntity.defaultTotalScore);
-                scoreEntity.scoreNum = scoreEntity.scoreNum - oldTotalScore + scorePerformanceEntity.getTotalScore();
+                scoreEntity.scoreNum = scorePerformanceEntity.scoreNum;
                 eamScore.setContent(Util.strFormat2(scoreEntity.scoreNum));
+                scorePerformanceAdapter.updateTotal(scoreEntity.scoreNum);
             }
         });
     }

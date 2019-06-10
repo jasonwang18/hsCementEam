@@ -43,6 +43,11 @@ public class ScorePerformanceEntity extends BaseEntity {
 
     @Expose
     public Integer totalHightScore;//单项最高总分数
+
+     @Expose
+    public Integer scoreNum;//总分
+
+
     //子布局
     @Expose
     public Set<ScorePerformanceEntity> scorePerformanceEntities = new HashSet<>();

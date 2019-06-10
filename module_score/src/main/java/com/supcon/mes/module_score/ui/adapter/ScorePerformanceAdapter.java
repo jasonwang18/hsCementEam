@@ -5,9 +5,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.os.Handler;
 import android.text.InputFilter;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -28,17 +26,13 @@ import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.mbap.constant.ListType;
 import com.supcon.mes.mbap.view.CustomEditText;
-import com.supcon.mes.middleware.model.bean.RepairStaffEntity;
 import com.supcon.mes.middleware.util.EditInputFilter;
-import com.supcon.mes.middleware.util.HtmlParser;
-import com.supcon.mes.middleware.util.HtmlTagHandler;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_score.R;
 import com.supcon.mes.module_score.model.bean.ScorePerformanceEntity;
 import com.supcon.mes.module_score.ui.view.FlowLayout;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +41,7 @@ import io.reactivex.functions.Predicate;
 public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<ScorePerformanceEntity> {
 
     private boolean isEdit = false;
+    private int total;
 
     public ScorePerformanceAdapter(Context context) {
         super(context);
@@ -54,6 +49,9 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
 
     public void setEditable(boolean isEdit) {
         this.isEdit = isEdit;
+    }
+    public void updateTotal(int total) {
+        this.total = total;
     }
 
     @Override
@@ -142,6 +140,7 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
                     if (scoreRadioBtn1.isPressed() || scoreRadioBtn2.isPressed()) {
                         ScorePerformanceEntity item = getItem(getLayoutPosition());
                         item.result = !item.result;
+                        int oldTotal = total - item.scorePerformanceEntity.getTotalScore();
                         if (item.result) {
                             item.scorePerformanceEntity.setTotalHightScore(item.scorePerformanceEntity.getTotalHightScore() + item.score);
                             if (item.scorePerformanceEntity.totalHightScore > 0) {
@@ -159,6 +158,8 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
                         List<ScorePerformanceEntity> list = getList();
                         int position = list.indexOf(item.scorePerformanceEntity);
                         notifyItemChanged(position);
+                        //更新总分数
+                        item.scorePerformanceEntity.scoreNum = oldTotal + item.scorePerformanceEntity.getTotalScore();
                         onItemChildViewClick(scoreRadioGroup, 0, item.scorePerformanceEntity);
                     }
                 }
@@ -194,6 +195,7 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
             Boolean result = item.marksState.get(buttonView.getText().toString());
             result = !result;
             item.marksState.put(buttonView.getText().toString(), result);
+            int oldTotal = total - item.scorePerformanceEntity.getTotalScore();
 
             if (result) {
                 item.scorePerformanceEntity.setTotalHightScore(item.scorePerformanceEntity.getTotalHightScore() - item.marks.get(buttonView.getText().toString()));
@@ -212,6 +214,8 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
             List<ScorePerformanceEntity> list = getList();
             int position = list.indexOf(item.scorePerformanceEntity);
             notifyItemChanged(position);
+            //更新总分数
+            item.scorePerformanceEntity.scoreNum = oldTotal + item.scorePerformanceEntity.getTotalScore();
             onItemChildViewClick(scoreRadioGroup, 0, item.scorePerformanceEntity);
         }
 
@@ -332,6 +336,8 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
                         cumulativeRunTime.setContent(Util.big(item.totalRunTime));
 
                         if (item.accidentStopTime != null) {
+                            int oldTotal = total - item.scorePerformanceEntity.getTotalScore();
+
                             if (item.accidentStopTime > 0 && item.accidentStopTime <= 1) {
                                 item.scorePerformanceEntity.setTotalScore(item.scorePerformanceEntity.defaultTotalScore - 5);
                             } else if (item.accidentStopTime > 1) {
@@ -342,6 +348,8 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
                             List<ScorePerformanceEntity> list = getList();
                             int position = list.indexOf(item.scorePerformanceEntity);
                             notifyItemChanged(position);
+                            //更新总分数
+                            item.scorePerformanceEntity.scoreNum = oldTotal + item.scorePerformanceEntity.getTotalScore();
                             onItemChildViewClick(cumulativeDownTime, 0, item.scorePerformanceEntity);
                         }
                     });
