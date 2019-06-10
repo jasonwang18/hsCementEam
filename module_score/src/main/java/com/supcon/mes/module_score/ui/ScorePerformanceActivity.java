@@ -271,7 +271,7 @@ public class ScorePerformanceActivity extends BaseRefreshRecyclerActivity implem
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getNFC(CommonSearchEvent commonSearchEvent) {
+    public void getEam(CommonSearchEvent commonSearchEvent) {
         if (commonSearchEvent.commonSearchEntity != null) {
             EamType eamType = (EamType) commonSearchEvent.commonSearchEntity;
             eamCode.setContent(Util.strFormat(commonSearchEvent.commonSearchEntity.getSearchId()));

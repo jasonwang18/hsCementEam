@@ -192,7 +192,7 @@ public class YHGLListActivity extends BaseRefreshRecyclerActivity<YHEntity> impl
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        if (null!=hasAddForumPermission&&hasAddForumPermission) {
+                        if (null != hasAddForumPermission && hasAddForumPermission) {
                             YHGLListActivity.this.createYH();
                         } else {
                             ToastUtils.show(context, "当前用户并未拥有创建单据权限！");
@@ -202,7 +202,7 @@ public class YHGLListActivity extends BaseRefreshRecyclerActivity<YHEntity> impl
 
         refreshListController.setOnRefreshPageListener(
                 pageIndex -> {
-                    if(mAdapter!=null)
+                    if (mAdapter != null)
                         mAdapter.onDestroy();//刷新时暂停下载图片
                     presenterRouter.create(YHListAPI.class).queryYHList(pageIndex, queryParam);
                 });
@@ -339,11 +339,9 @@ public class YHGLListActivity extends BaseRefreshRecyclerActivity<YHEntity> impl
 
             if ("审核".equals(yhEntity.pending.taskDescription)) {
                 IntentRouter.go(context, Constant.Router.YH_VIEW, bundle);
-            }
-            else if("编辑".equals(yhEntity.pending.taskDescription)){
+            } else if ("编辑".equals(yhEntity.pending.taskDescription)) {
                 IntentRouter.go(context, Constant.Router.YH_EDIT, bundle);
-            }
-            else
+            } else
                 IntentRouter.go(context, Constant.Router.YH_VIEW, bundle);
 
         });
@@ -380,6 +378,7 @@ public class YHGLListActivity extends BaseRefreshRecyclerActivity<YHEntity> impl
         yhEntity.findStaffID = EamApplication.me();
         yhEntity.findTime = System.currentTimeMillis();
         yhEntity.cid = SharedPreferencesUtils.getParam(App.getAppContext(), Constant.CID, 0L);
+        yhEntity.id = -1;
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.IntentKey.YHGL_ENTITY, yhEntity);
         bundle.putSerializable(Constant.IntentKey.DEPLOYMENT_ID, deploymentId);
@@ -446,7 +445,6 @@ public class YHGLListActivity extends BaseRefreshRecyclerActivity<YHEntity> impl
         super.onPause();
         isShow = false;
     }
-
 
 
     @Override

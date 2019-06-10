@@ -40,16 +40,15 @@ import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.mbap.view.CustomWorkFlowView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
-import com.supcon.mes.middleware.constant.Module;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.model.bean.Area;
 import com.supcon.mes.middleware.model.bean.AreaDao;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonDeviceEntity;
+import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntity;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntityDao;
-import com.supcon.mes.middleware.model.bean.SparePartEntity;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.UserInfo;
@@ -90,7 +89,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -494,6 +492,9 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
                 WorkFlowVar workFlowVar = (WorkFlowVar) obj;
+                if (workFlowVar == null) {
+                    return;
+                }
                 if ("作废".equals(workFlowVar.dec)) {
                     isCancel = true;
                 } else {
@@ -570,12 +571,13 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
                 yhEditEamName.setValue(null);
                 yhEditEamModel.setValue(null);
             } else {
-                Bundle bundle = new Bundle();
-                bundle.putString(Constant.IntentKey.MODULE, Module.Fault.name());
-//                IntentRouter.go(context, Constant.Router.ADD_DEVICE, bundle);
-                bundle.putString(Constant.IntentKey.COMMON_SAERCH_MODE, Constant.CommonSearchMode.EAM);
-                bundle.putString(Constant.IntentKey.ENTITY_CODE, yhEditArea.getSpinnerValue());
-                IntentRouter.go(context, Constant.Router.COMMON_SEARCH, bundle);
+                IntentRouter.go(this, Constant.Router.EAM);
+//                Bundle bundle = new Bundle();
+//                bundle.putString(Constant.IntentKey.MODULE, Module.Fault.name());
+////                IntentRouter.go(context, Constant.Router.ADD_DEVICE, bundle);
+//                bundle.putString(Constant.IntentKey.COMMON_SAERCH_MODE, Constant.CommonSearchMode.EAM);
+//                bundle.putString(Constant.IntentKey.ENTITY_CODE, yhEditArea.getSpinnerValue());
+//                IntentRouter.go(context, Constant.Router.COMMON_SEARCH, bundle);
             }
         });
 
@@ -601,25 +603,28 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void addDeviceEvent(CommonSearchEvent commonSearchEvent) {
-        if (!(commonSearchEvent.commonSearchEntity instanceof CommonDeviceEntity)) {
+        if (!(commonSearchEvent.commonSearchEntity instanceof EamType)) {
             return;
         }
-        CommonDeviceEntity commonDeviceEntity = (CommonDeviceEntity) commonSearchEvent.commonSearchEntity;
-        if (commonDeviceEntity != null) {
-            yhEditEamName.setValue(commonDeviceEntity.eamName);
-            yhEditEamCode.setValue(commonDeviceEntity.eamCode);
-            yhEditEamModel.setValue(commonDeviceEntity.eamModel);
+        EamType eamType = (EamType) commonSearchEvent.commonSearchEntity;
+        if (eamType != null) {
+            yhEditEamName.setValue(eamType.name);
+            yhEditEamCode.setValue(eamType.code);
+            yhEditEamModel.setValue(eamType.model);
             WXGDEam wxgdEam = new WXGDEam();
-            wxgdEam.name = commonDeviceEntity.eamName;
-            wxgdEam.code = commonDeviceEntity.eamCode;
-            wxgdEam.model = commonDeviceEntity.eamModel;
-            wxgdEam.id = commonDeviceEntity.eamId;
+            wxgdEam.name = eamType.name;
+            wxgdEam.code = eamType.code;
+            wxgdEam.model = eamType.model;
+            wxgdEam.id = eamType.id;
             mYHEntity.eamID = wxgdEam;
+            mSparePartController.upEam(wxgdEam);
+            mLubricateOilsController.upEam(wxgdEam);
+            maintenanceController.upEam(wxgdEam);
 
             //处理区域位置
             yhEditArea.setEditable(false);
-            yhEditArea.setSpinner(commonDeviceEntity.installPlace);
-            mYHEntity.areaInstall = mAreas.get(commonDeviceEntity.installPlace);
+            yhEditArea.setSpinner(eamType.getInstallPlace().name);
+            mYHEntity.areaInstall = eamType.getInstallPlace();
         }
 
     }
@@ -866,9 +871,9 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
         Map<String, Object> map = new HashMap<>();
         map.put("bap_validate_user_id", String.valueOf(EamApplication.getAccountInfo().userId));
-        map.put("faultInfo.createStaffId", (mYHEntity.findStaffID == null || mYHEntity.findStaffID.checkNil()) ? "" :  Util.strFormat2(mYHEntity.findStaffID.id));
+        map.put("faultInfo.createStaffId", (mYHEntity.findStaffID == null || mYHEntity.findStaffID.checkNil()) ? "" : Util.strFormat2(mYHEntity.findStaffID.id));
         map.put("faultInfo.createTime", DateUtil.dateTimeFormat(mYHEntity.findTime));
-        map.put("faultInfo.findStaffID.id", (mYHEntity.findStaffID == null || mYHEntity.findStaffID.checkNil()) ? "" :  Util.strFormat2(mYHEntity.findStaffID.id));
+        map.put("faultInfo.findStaffID.id", (mYHEntity.findStaffID == null || mYHEntity.findStaffID.checkNil()) ? "" : Util.strFormat2(mYHEntity.findStaffID.id));
         map.put("faultInfo.findTime", DateUtil.dateTimeFormat(mYHEntity.findTime));
         map.put("faultInfo.createPositionId", EamApplication.getAccountInfo().positionId);
         map.put("viewselect", "faultInfoEdit");
@@ -876,8 +881,8 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         map.put("faultInfo.id", mYHEntity.id != 0 ? mYHEntity.id : "");
 
         if (mYHEntity.pending != null && mYHEntity.pending.id != null) {
-            map.put("pendingId",  Util.strFormat2(mYHEntity.pending.id));
-            map.put("deploymentId",  Util.strFormat2(mYHEntity.pending.deploymentId));
+            map.put("pendingId", Util.strFormat2(mYHEntity.pending.id));
+            map.put("deploymentId", Util.strFormat2(mYHEntity.pending.deploymentId));
         } else {
             map.put("deploymentId", deploymentId);
             map.put("faultInfo.version", 1);
@@ -885,18 +890,18 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
 
         if (mYHEntity.eamID != null && mYHEntity.eamID.id != null) {
-            map.put("faultInfo.eamID.id",  Util.strFormat2(mYHEntity.eamID.id));
+            map.put("faultInfo.eamID.id", Util.strFormat2(mYHEntity.eamID.id));
         } else {
             map.put("faultInfo.eamID.id", "");
         }
 
         if (mYHEntity.areaInstall != null && mYHEntity.areaInstall.id != 0) {
-            map.put("faultInfo.areaInstall.id",  Util.strFormat2(mYHEntity.areaInstall.id));
+            map.put("faultInfo.areaInstall.id", Util.strFormat2(mYHEntity.areaInstall.id));
         } else {
             map.put("faultInfo.areaInstall.id", "");
         }
         if (mYHEntity.repiarGroup != null && mYHEntity.repiarGroup.id != null) {
-            map.put("faultInfo.repiarGroup.id",  Util.strFormat2(mYHEntity.repiarGroup.id));
+            map.put("faultInfo.repiarGroup.id", Util.strFormat2(mYHEntity.repiarGroup.id));
         } else {
             map.put("faultInfo.repiarGroup.id", "");
         }

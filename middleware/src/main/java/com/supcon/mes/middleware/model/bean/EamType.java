@@ -11,7 +11,11 @@ public class EamType extends BaseEntity implements CommonSearchEntity{
     public String code;
     public String name;
 
+    public String model;//设备型号
+
     public Department useDept;
+
+    public Area installPlace;//区域位置
 
     public Department getUseDept() {
         if (useDept == null) {
@@ -19,7 +23,12 @@ public class EamType extends BaseEntity implements CommonSearchEntity{
         }
         return useDept;
     }
-
+    public Area getInstallPlace() {
+        if (installPlace == null) {
+            installPlace = new Area();
+        }
+        return installPlace;
+    }
     @Override
     public String getSearchId() {
         return code;
