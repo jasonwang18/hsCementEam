@@ -2,9 +2,8 @@ package com.supcon.mes.middleware.presenter;
 
 import android.text.TextUtils;
 
-import com.supcon.common.view.util.LogUtil;
+import com.supcon.mes.mbap.beans.LinkEntity;
 import com.supcon.mes.mbap.utils.GsonUtil;
-import com.supcon.mes.middleware.model.bean.LinkEntity;
 import com.supcon.mes.middleware.model.bean.WorkFlowListEntity;
 import com.supcon.mes.middleware.model.contract.WorkFlowContract;
 import com.supcon.mes.middleware.model.network.MiddlewareHttpClient;

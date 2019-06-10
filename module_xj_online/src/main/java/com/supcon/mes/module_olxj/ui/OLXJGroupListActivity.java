@@ -20,6 +20,7 @@ import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
+import com.supcon.mes.mbap.beans.LinkEntity;
 import com.supcon.mes.mbap.beans.WorkFlowEntity;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.GsonUtil;
@@ -31,10 +32,7 @@ import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.bean.IDEntity;
-import com.supcon.mes.middleware.model.bean.LinkEntity;
-import com.supcon.mes.middleware.model.bean.ResultEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
-import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.module_olxj.R;
 import com.supcon.mes.module_olxj.controller.OLXJWorkItemListRefController;
@@ -56,18 +54,15 @@ import org.greenrobot.eventbus.EventBus;
 import org.reactivestreams.Publisher;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
-import io.reactivex.Scheduler;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
 /**

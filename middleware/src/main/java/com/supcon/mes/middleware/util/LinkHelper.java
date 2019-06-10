@@ -1,8 +1,8 @@
 package com.supcon.mes.middleware.util;
 
+import com.supcon.mes.mbap.beans.LinkEntity;
 import com.supcon.mes.mbap.beans.Transition;
 import com.supcon.mes.middleware.constant.Constant;
-import com.supcon.mes.middleware.model.bean.LinkEntity;
 
 import java.util.ArrayList;
 import java.util.List;

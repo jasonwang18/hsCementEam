@@ -1,5 +1,7 @@
 package com.supcon.mes.middleware.model.bean;
 
+import com.supcon.mes.mbap.beans.LinkEntity;
+
 import java.util.ArrayList;
 import java.util.List;
 
