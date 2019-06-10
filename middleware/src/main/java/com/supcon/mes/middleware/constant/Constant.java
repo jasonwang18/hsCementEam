@@ -252,6 +252,7 @@ public interface Constant {
         String WARN_SOURCE_URL = "WARN_SOURCE_URL";//URL
 
         String EAM_CODE = "EAM_CODE";//EAM_CODE
+        String AREA_NAME = "AREA_NAME";//AREA_NAME
         String isEdit = "isEdit";//是否能编辑
 
         String SCORE_ENTITY = "SCORE_ENTITY";//评分记录

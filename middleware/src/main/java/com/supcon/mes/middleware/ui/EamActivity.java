@@ -67,7 +67,7 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
     private BaseSearchAdapter mBaseSearchAdapter;
 
     private final Map<String, Object> queryParam = new HashMap<>();
-    private String eamCode;
+    private String eamCode, areaName;
 
     @Override
     protected IListAdapter<CommonSearchEntity> createAdapter() {
@@ -82,6 +82,7 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, "没有信息哦~"));
         eamCode = getIntent().getStringExtra(Constant.IntentKey.EAM_CODE);
+        areaName = getIntent().getStringExtra(Constant.IntentKey.AREA_NAME);
     }
 
 
@@ -132,6 +133,9 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
                 }
                 if (!TextUtils.isEmpty(blurMes)) {
                     queryParam.put(Constant.BAPQuery.EAM_CODE, blurMes);
+                }
+                if (!TextUtils.isEmpty(areaName)) {
+                    queryParam.put(Constant.BAPQuery.EAM_AREANAME, areaName);
                 }
                 presenterRouter.create(EamAPI.class).getEam(queryParam, pageIndex);
             }

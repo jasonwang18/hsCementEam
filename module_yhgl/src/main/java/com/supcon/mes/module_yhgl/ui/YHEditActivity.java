@@ -571,7 +571,11 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
                 yhEditEamName.setValue(null);
                 yhEditEamModel.setValue(null);
             } else {
-                IntentRouter.go(this, Constant.Router.EAM);
+                Bundle bundle = new Bundle();
+                if (mYHEntity.areaInstall != null) {
+                    bundle.putString(Constant.IntentKey.AREA_NAME, mYHEntity.areaInstall.name);
+                }
+                IntentRouter.go(this, Constant.Router.EAM, bundle);
 //                Bundle bundle = new Bundle();
 //                bundle.putString(Constant.IntentKey.MODULE, Module.Fault.name());
 ////                IntentRouter.go(context, Constant.Router.ADD_DEVICE, bundle);
@@ -877,8 +881,8 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         map.put("faultInfo.findTime", DateUtil.dateTimeFormat(mYHEntity.findTime));
         map.put("faultInfo.createPositionId", EamApplication.getAccountInfo().positionId);
         map.put("viewselect", "faultInfoEdit");
-        map.put("id", mYHEntity.id != 0 ? mYHEntity.id : "");
-        map.put("faultInfo.id", mYHEntity.id != 0 ? mYHEntity.id : "");
+        map.put("id", mYHEntity.id != -1 ? mYHEntity.id : "");
+        map.put("faultInfo.id", mYHEntity.id != -1 ? mYHEntity.id : "");
 
         if (mYHEntity.pending != null && mYHEntity.pending.id != null) {
             map.put("pendingId", Util.strFormat2(mYHEntity.pending.id));
