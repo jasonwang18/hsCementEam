@@ -128,8 +128,8 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     @BindByTag("yhEditEamName")
     CustomVerticalTextView yhEditEamName;
 
-    @BindByTag("yhEditEamModel")
-    CustomTextView yhEditEamModel;
+//    @BindByTag("yhEditEamModel")
+//    CustomTextView yhEditEamModel;
 
     @BindByTag("yhEditType")
     CustomSpinner yhEditType;
@@ -274,7 +274,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         if (mYHEntity.eamID != null && !TextUtils.isEmpty(mYHEntity.eamID.name)) {
             yhEditEamCode.setValue(mYHEntity.eamID.code);
             yhEditEamName.setValue(mYHEntity.eamID.name);
-            yhEditEamModel.setValue(mYHEntity.eamID.model);
+//            yhEditEamModel.setValue(mYHEntity.eamID.model);
         }
 
         yhEditType.setSpinner(mYHEntity.faultInfoType != null ? mYHEntity.faultInfoType.value : "");
@@ -569,7 +569,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
                 yhEditArea.setEditable(true);
                 yhEditArea.setSpinner(null);
                 yhEditEamName.setValue(null);
-                yhEditEamModel.setValue(null);
+//                yhEditEamModel.setValue(null);
             } else {
                 Bundle bundle = new Bundle();
                 if (mYHEntity.areaInstall != null) {
@@ -614,7 +614,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         if (eamType != null) {
             yhEditEamName.setValue(eamType.name);
             yhEditEamCode.setValue(eamType.code);
-            yhEditEamModel.setValue(eamType.model);
+//            yhEditEamModel.setValue(eamType.model);
             WXGDEam wxgdEam = new WXGDEam();
             wxgdEam.name = eamType.name;
             wxgdEam.code = eamType.code;
@@ -662,6 +662,11 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             sparePartListStr = listEvent.getList().toString();
         } else if ("maintenance".equals(listEvent.getFlag())) {
             maintenanceListStr = listEvent.getList().toString();
+        }
+        if (listEvent.getList().size() > 0) {
+            if (!"repairStaff".equals(listEvent.getFlag())) {
+                yhEditEamCode.setEditable(false);
+            }
         }
     }
 

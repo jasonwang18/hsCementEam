@@ -7,8 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
@@ -35,12 +33,12 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_score.IntentRouter;
 import com.supcon.mes.module_score.R;
-import com.supcon.mes.module_score.model.api.ScoreListAPI;
-import com.supcon.mes.module_score.model.bean.ScoreEntity;
-import com.supcon.mes.module_score.model.bean.ScoreListEntity;
-import com.supcon.mes.module_score.model.contract.ScoreListContract;
-import com.supcon.mes.module_score.presenter.ScoreListPresenter;
-import com.supcon.mes.module_score.ui.adapter.ScoreListAdapter;
+import com.supcon.mes.module_score.model.api.ScoreEamListAPI;
+import com.supcon.mes.module_score.model.bean.ScoreEamEntity;
+import com.supcon.mes.module_score.model.bean.ScoreEamListEntity;
+import com.supcon.mes.module_score.model.contract.ScoreEamListContract;
+import com.supcon.mes.module_score.presenter.ScoreEamListPresenter;
+import com.supcon.mes.module_score.ui.adapter.ScoreEamListAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -52,14 +50,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.functions.Consumer;
 
-@Router(value = Constant.Router.SCORE_LIST)
-@Presenter(value = ScoreListPresenter.class)
-public class ScoreListActivity extends BaseRefreshRecyclerActivity implements ScoreListContract.View {
+@Router(value = Constant.Router.SCORE_EAM_LIST)
+@Presenter(value = ScoreEamListPresenter.class)
+public class ScoreEamListActivity extends BaseRefreshRecyclerActivity implements ScoreEamListContract.View {
 
     @BindByTag("leftBtn")
     AppCompatImageButton leftBtn;
@@ -86,14 +83,14 @@ public class ScoreListActivity extends BaseRefreshRecyclerActivity implements Sc
 
     private final Map<String, Object> queryParam = new HashMap<>();
     private String selecStr;
-    private ScoreListAdapter scoreListAdapter;
+    private ScoreEamListAdapter scoreEamListAdapter;
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
     @Override
     protected IListAdapter createAdapter() {
-        scoreListAdapter = new ScoreListAdapter(this);
-        return scoreListAdapter;
+        scoreEamListAdapter = new ScoreEamListAdapter(this);
+        return scoreEamListAdapter;
     }
 
     @Override
@@ -151,7 +148,7 @@ public class ScoreListActivity extends BaseRefreshRecyclerActivity implements Sc
                 .subscribe(o -> {
                     Bundle bundle = new Bundle();
                     bundle.putBoolean(Constant.IntentKey.isEdit, true);
-                    IntentRouter.go(ScoreListActivity.this, Constant.Router.SCORE_PERFORMANCE, bundle);
+                    IntentRouter.go(ScoreEamListActivity.this, Constant.Router.SCORE_PERFORMANCE, bundle);
                 });
         refreshListController.setOnRefreshPageListener(pageIndex -> {
             if (queryParam.containsKey(Constant.BAPQuery.EAM_NAME)) {
@@ -167,7 +164,7 @@ public class ScoreListActivity extends BaseRefreshRecyclerActivity implements Sc
                     queryParam.put(Constant.BAPQuery.EAM_CODE, selecStr);
                 }
             }
-            presenterRouter.create(ScoreListAPI.class).getScoreList(queryParam, pageIndex);
+            presenterRouter.create(ScoreEamListAPI.class).getScoreList(queryParam, pageIndex);
         });
 
         RxTextView.textChanges(customSearchView.editText())
@@ -180,14 +177,14 @@ public class ScoreListActivity extends BaseRefreshRecyclerActivity implements Sc
         KeyExpandHelper.doActionSearch(customSearchView.editText(), true, () ->
                 doSearchTableNo(customSearchView.getInput()));
 
-        scoreListAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
+        scoreEamListAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-                ScoreEntity item = scoreListAdapter.getItem(position);
+                ScoreEamEntity item = scoreEamListAdapter.getItem(position);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(Constant.IntentKey.SCORE_ENTITY, item);
                 bundle.putBoolean(Constant.IntentKey.isEdit, compareTimeIsEdit(item.scoreTime != null ? item.scoreTime : 0));
-                IntentRouter.go(ScoreListActivity.this, Constant.Router.SCORE_PERFORMANCE, bundle);
+                IntentRouter.go(ScoreEamListActivity.this, Constant.Router.SCORE_PERFORMANCE, bundle);
             }
         });
 
@@ -237,7 +234,7 @@ public class ScoreListActivity extends BaseRefreshRecyclerActivity implements Sc
     }
 
     @Override
-    public void getScoreListSuccess(ScoreListEntity entity) {
+    public void getScoreListSuccess(ScoreEamListEntity entity) {
         refreshListController.refreshComplete(entity.result);
     }
 

@@ -16,6 +16,7 @@ import com.supcon.mes.middleware.model.bean.MaintainEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEam;
 import com.supcon.mes.middleware.model.bean.YHEntity;
 import com.supcon.mes.module_yhgl.IntentRouter;
+import com.supcon.mes.module_yhgl.model.api.LubricateOilsAPI;
 import com.supcon.mes.module_yhgl.model.api.MaintenanceAPI;
 import com.supcon.mes.module_yhgl.model.bean.MaintenanceListEntity;
 import com.supcon.mes.module_yhgl.model.contract.MaintenanceContract;

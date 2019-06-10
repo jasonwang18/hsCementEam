@@ -2,7 +2,6 @@ package com.supcon.mes.module_score.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.view.View;
 
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
@@ -13,19 +12,19 @@ import com.supcon.mes.middleware.util.HtmlParser;
 import com.supcon.mes.middleware.util.HtmlTagHandler;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_score.R;
-import com.supcon.mes.module_score.model.bean.ScoreEntity;
+import com.supcon.mes.module_score.model.bean.ScoreEamEntity;
 
-public class ScoreListAdapter extends BaseListDataRecyclerViewAdapter<ScoreEntity> {
-    public ScoreListAdapter(Context context) {
+public class ScoreEamListAdapter extends BaseListDataRecyclerViewAdapter<ScoreEamEntity> {
+    public ScoreEamListAdapter(Context context) {
         super(context);
     }
 
     @Override
-    protected BaseRecyclerViewHolder<ScoreEntity> getViewHolder(int viewType) {
+    protected BaseRecyclerViewHolder<ScoreEamEntity> getViewHolder(int viewType) {
         return new ViewHolder(context);
     }
 
-    class ViewHolder extends BaseRecyclerViewHolder<ScoreEntity> {
+    class ViewHolder extends BaseRecyclerViewHolder<ScoreEamEntity> {
 
         @BindByTag("itemScoreEam")
         CustomTextView itemScoreEam;
@@ -55,7 +54,7 @@ public class ScoreListAdapter extends BaseListDataRecyclerViewAdapter<ScoreEntit
 
         @SuppressLint("SetTextI18n")
         @Override
-        protected void update(ScoreEntity data) {
+        protected void update(ScoreEamEntity data) {
             String eam = String.format(context.getString(R.string.device_style10), Util.strFormat(data.getBeamId().name)
                     , Util.strFormat(data.getBeamId().code));
             itemScoreEam.contentView().setText(HtmlParser.buildSpannedText(eam, new HtmlTagHandler()));

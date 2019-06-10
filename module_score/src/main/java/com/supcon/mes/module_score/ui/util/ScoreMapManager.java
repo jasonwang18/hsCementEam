@@ -5,9 +5,9 @@ import android.annotation.SuppressLint;
 import com.supcon.mes.mbap.constant.ListType;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.util.Util;
-import com.supcon.mes.module_score.model.bean.ScoreEntity;
-import com.supcon.mes.module_score.model.bean.ScorePerformanceEntity;
-import com.supcon.mes.module_score.model.dto.ScoreDto;
+import com.supcon.mes.module_score.model.bean.ScoreEamEntity;
+import com.supcon.mes.module_score.model.bean.ScoreEamPerformanceEntity;
+import com.supcon.mes.module_score.model.dto.ScoreEamDto;
 
 import org.reactivestreams.Publisher;
 
@@ -24,32 +24,32 @@ public class ScoreMapManager {
     @SuppressLint("SimpleDateFormat")
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-    public static Map<String, Object> createMap(ScoreEntity scoreEntity) {
+    public static Map<String, Object> createMap(ScoreEamEntity scoreEamEntity) {
         Map<String, Object> map = new HashMap<>();
         map.put("viewselect", "beamPerformanceEdit");
         map.put("datagridKey", "BEAM_scorePerformance_scoreHead_beamPerformanceEdit_datagrids");
         map.put("viewCode", "BEAM_1.0.0_scorePerformance_beamPerformanceEdit");
         map.put("modelName", "ScoreHead");
 
-        map.put("scoreHead.beamId.id", Util.strFormat2(scoreEntity.getBeamId().id));
-        map.put("scoreHead.scoreStaff.id", Util.strFormat2(scoreEntity.getScoreStaff().id));
-        map.put("scoreHead.scoreTableNo", Util.strFormat2(scoreEntity.scoreTableNo));
-        map.put("scoreHead.scoreTime", format.format(scoreEntity.scoreTime));
+        map.put("scoreHead.beamId.id", Util.strFormat2(scoreEamEntity.getBeamId().id));
+        map.put("scoreHead.scoreStaff.id", Util.strFormat2(scoreEamEntity.getScoreStaff().id));
+        map.put("scoreHead.scoreTableNo", Util.strFormat2(scoreEamEntity.scoreTableNo));
+        map.put("scoreHead.scoreTime", format.format(scoreEamEntity.scoreTime));
 
-        map.put("scoreHead.scoreNum", Util.strFormat2(scoreEntity.scoreNum));
-        map.put("scoreHead.operationRate", Util.strFormat2(scoreEntity.operationRate));
-        map.put("scoreHead.highQualityOperation", Util.strFormat2(scoreEntity.highQualityOperation));
-        map.put("scoreHead.security", Util.strFormat2(scoreEntity.security));
-        map.put("scoreHead.appearanceLogo", Util.strFormat2(scoreEntity.appearanceLogo));
-        map.put("scoreHead.beamHeath", Util.strFormat2(scoreEntity.beamHeath));
-        map.put("scoreHead.beamEstimate", Util.strFormat2(scoreEntity.beamEstimate));
+        map.put("scoreHead.scoreNum", Util.strFormat2(scoreEamEntity.scoreNum));
+        map.put("scoreHead.operationRate", Util.strFormat2(scoreEamEntity.operationRate));
+        map.put("scoreHead.highQualityOperation", Util.strFormat2(scoreEamEntity.highQualityOperation));
+        map.put("scoreHead.security", Util.strFormat2(scoreEamEntity.security));
+        map.put("scoreHead.appearanceLogo", Util.strFormat2(scoreEamEntity.appearanceLogo));
+        map.put("scoreHead.beamHeath", Util.strFormat2(scoreEamEntity.beamHeath));
+        map.put("scoreHead.beamEstimate", Util.strFormat2(scoreEamEntity.beamEstimate));
 
         map.put("bap_validate_user_id", EamApplication.getAccountInfo().userId);
         return map;
     }
 
     @SuppressLint("CheckResult")
-    public static void dataChange(List<ScorePerformanceEntity> scorePerformanceEntities, ScoreEntity scoreEntity) {
+    public static void dataChange(List<ScoreEamPerformanceEntity> scorePerformanceEntities, ScoreEamEntity scoreEamEntity) {
         Flowable.fromIterable(scorePerformanceEntities)
                 .filter(scorePerformanceEntity -> {
                     if (scorePerformanceEntity.viewType == ListType.TITLE.value()) {
@@ -59,32 +59,32 @@ public class ScoreMapManager {
                 })
                 .subscribe(scorePerformanceEntity -> {
                     if (scorePerformanceEntity.scoreStandard.contains("设备运转率")) {
-                        scoreEntity.operationRate = scorePerformanceEntity.getTotalScore();
+                        scoreEamEntity.operationRate = scorePerformanceEntity.getTotalScore();
                     } else if (scorePerformanceEntity.scoreStandard.contains("高质量运行")) {
-                        scoreEntity.highQualityOperation = scorePerformanceEntity.getTotalScore();
+                        scoreEamEntity.highQualityOperation = scorePerformanceEntity.getTotalScore();
                     } else if (scorePerformanceEntity.scoreStandard.contains("安全防护")) {
-                        scoreEntity.security = scorePerformanceEntity.getTotalScore();
+                        scoreEamEntity.security = scorePerformanceEntity.getTotalScore();
                     } else if (scorePerformanceEntity.scoreStandard.contains("外观标识")) {
-                        scoreEntity.appearanceLogo = scorePerformanceEntity.getTotalScore();
+                        scoreEamEntity.appearanceLogo = scorePerformanceEntity.getTotalScore();
                     } else if (scorePerformanceEntity.scoreStandard.contains("设备卫生")) {
-                        scoreEntity.beamHeath = scorePerformanceEntity.getTotalScore();
+                        scoreEamEntity.beamHeath = scorePerformanceEntity.getTotalScore();
                     } else if (scorePerformanceEntity.scoreStandard.contains("档案管理")) {
-                        scoreEntity.beamEstimate = scorePerformanceEntity.getTotalScore();
+                        scoreEamEntity.beamEstimate = scorePerformanceEntity.getTotalScore();
                     }
                 });
     }
 
     @SuppressLint("CheckResult")
-    public static List<ScoreDto> dataChange(List<ScorePerformanceEntity> scorePerformanceEntities, String contains) {
-        List<ScoreDto> scorePerformanceDto = new ArrayList<>();
+    public static List<ScoreEamDto> dataChange(List<ScoreEamPerformanceEntity> scorePerformanceEntities, String contains) {
+        List<ScoreEamDto> scorePerformanceDto = new ArrayList<>();
         Flowable.fromIterable(scorePerformanceEntities)
                 .filter(scorePerformanceEntity -> {
                     if (scorePerformanceEntity.viewType == ListType.CONTENT.value() || scorePerformanceEntity.viewType == ListType.HEADER.value()) {
                         if (scorePerformanceEntity.scoreStandard.contains(contains)) {
-                            Map<String, ScorePerformanceEntity> scorePerformanceEntityMap = scorePerformanceEntity.scorePerformanceEntityMap;
+                            Map<String, ScoreEamPerformanceEntity> scorePerformanceEntityMap = scorePerformanceEntity.scorePerformanceEntityMap;
                             Map<String, Boolean> marksState = scorePerformanceEntity.marksState;
                             for (String key : scorePerformanceEntityMap.keySet()) {
-                                ScorePerformanceEntity scoreEntity = scorePerformanceEntityMap.get(key);
+                                ScoreEamPerformanceEntity scoreEntity = scorePerformanceEntityMap.get(key);
                                 scoreEntity.result = marksState.get(key);
                             }
                             return true;
@@ -92,7 +92,7 @@ public class ScoreMapManager {
                     }
                     return false;
                 })
-                .flatMap((Function<ScorePerformanceEntity, Publisher<ScorePerformanceEntity>>) scorePerformanceEntity -> {
+                .flatMap((Function<ScoreEamPerformanceEntity, Publisher<ScoreEamPerformanceEntity>>) scorePerformanceEntity -> {
                     if (scorePerformanceEntity.scorePerformanceEntityMap.size() > 0) {
                         return Flowable.fromIterable(scorePerformanceEntity.scorePerformanceEntityMap.values());
                     } else {
@@ -100,19 +100,19 @@ public class ScoreMapManager {
                     }
                 })
                 .subscribe(scorePerformanceEntity -> {
-                    ScoreDto scoreDto = new ScoreDto();
-                    scoreDto.item = scorePerformanceEntity.item;
-                    scoreDto.result = Util.strFormat2(scorePerformanceEntity.result);
-                    scoreDto.score = Util.strFormat2(scorePerformanceEntity.score);
-                    scoreDto.itemDetail = scorePerformanceEntity.itemDetail;
-                    scoreDto.isItemValue = scorePerformanceEntity.isItemValue;
-                    scoreDto.noItemValue = scorePerformanceEntity.noItemValue;
-                    scoreDto.scoreItem = scorePerformanceEntity.scoreItem;
-                    scoreDto.scoreStandard = scorePerformanceEntity.scoreStandard;
-                    scoreDto.resultValue = Util.strFormat2(scorePerformanceEntity.resultValue);
-                    scoreDto.accidentStopTime = Util.strFormat2(scorePerformanceEntity.accidentStopTime);
-                    scoreDto.totalRunTime = Util.strFormat2(scorePerformanceEntity.totalRunTime);
-                    scorePerformanceDto.add(scoreDto);
+                    ScoreEamDto scoreEamDto = new ScoreEamDto();
+                    scoreEamDto.item = scorePerformanceEntity.item;
+                    scoreEamDto.result = Util.strFormat2(scorePerformanceEntity.result);
+                    scoreEamDto.score = Util.strFormat2(scorePerformanceEntity.score);
+                    scoreEamDto.itemDetail = scorePerformanceEntity.itemDetail;
+                    scoreEamDto.isItemValue = scorePerformanceEntity.isItemValue;
+                    scoreEamDto.noItemValue = scorePerformanceEntity.noItemValue;
+                    scoreEamDto.scoreItem = scorePerformanceEntity.scoreItem;
+                    scoreEamDto.scoreStandard = scorePerformanceEntity.scoreStandard;
+                    scoreEamDto.resultValue = Util.strFormat2(scorePerformanceEntity.resultValue);
+                    scoreEamDto.accidentStopTime = Util.strFormat2(scorePerformanceEntity.accidentStopTime);
+                    scoreEamDto.totalRunTime = Util.strFormat2(scorePerformanceEntity.totalRunTime);
+                    scorePerformanceDto.add(scoreEamDto);
                 });
         return scorePerformanceDto;
     }

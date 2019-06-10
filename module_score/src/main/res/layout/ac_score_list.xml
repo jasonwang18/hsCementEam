@@ -13,7 +13,7 @@
         android:tag="searchTitleBar"
         app:title_background_color="@color/themeColor"
         app:title_length="96dp"
-        app:title_text="离线隐患" />
+        app:title_text="评分" />
 
     <LinearLayout
         android:layout_width="match_parent"

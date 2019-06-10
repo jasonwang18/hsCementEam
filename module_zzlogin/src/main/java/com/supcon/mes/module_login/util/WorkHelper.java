@@ -1,17 +1,13 @@
 package com.supcon.mes.module_login.util;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.supcon.common.view.util.SharedPreferencesUtils;
 import com.supcon.mes.mbap.MBapApp;
 import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.middleware.constant.Constant;
-import com.supcon.mes.middleware.model.bean.PendingEntity;
-import com.supcon.mes.middleware.model.bean.PushEntity;
 import com.supcon.mes.middleware.util.Util;
-import com.supcon.mes.module_login.IntentRouter;
 import com.supcon.mes.module_login.R;
 import com.supcon.mes.module_login.model.bean.WorkInfo;
 
@@ -154,10 +150,15 @@ public class WorkHelper {
                     workInfo.iconResId = R.drawable.ic_work_mainten_warn;
                     workInfo.router = Constant.Router.MAINTENANCE_EARLY_WARN;
                     break;
-                case Constant.WorkType.SCORE_LIST:
+                case Constant.WorkType.SCORE_EAM_LIST:
 
                     workInfo.iconResId = R.drawable.ic_work_pf;
-                    workInfo.router = Constant.Router.SCORE_LIST;
+                    workInfo.router = Constant.Router.SCORE_EAM_LIST;
+                    break;
+                case Constant.WorkType.SCORE_PERSON_LIST:
+
+                    workInfo.iconResId = R.drawable.ic_work_rypf;
+                    workInfo.router = Constant.Router.SCORE_PERSON_LIST;
                     break;
                 case Constant.WorkType.JXJH:
 

@@ -3,9 +3,9 @@ package com.supcon.mes.module_score.presenter;
 import android.text.TextUtils;
 
 import com.supcon.mes.mbap.constant.ListType;
-import com.supcon.mes.module_score.model.bean.ScorePerformanceEntity;
-import com.supcon.mes.module_score.model.bean.ScorePerformanceListEntity;
-import com.supcon.mes.module_score.model.contract.ScorePerformanceContract;
+import com.supcon.mes.module_score.model.bean.ScoreEamPerformanceEntity;
+import com.supcon.mes.module_score.model.bean.ScoreEamPerformanceListEntity;
+import com.supcon.mes.module_score.model.contract.ScoreEamPerformanceContract;
 import com.supcon.mes.module_score.model.network.ScoreHttpClient;
 
 import java.util.ArrayList;
@@ -16,11 +16,11 @@ import io.reactivex.Flowable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
 
-public class ScorePerformancePresenter extends ScorePerformanceContract.Presenter {
+public class ScoreEamPerformancePresenter extends ScoreEamPerformanceContract.Presenter {
 
     private int position = 0;
     private String category = "";//评分标题
-    private ScorePerformanceEntity scorePerformanceTitleEntity;
+    private ScoreEamPerformanceEntity scorePerformanceTitleEntity;
 
     @Override
     public void getScoreList(int scoreId) {
@@ -35,17 +35,17 @@ public class ScorePerformancePresenter extends ScorePerformanceContract.Presente
         urls.add("/BEAM/scorePerformance/scoreHead/data-dg1559619724464.action");
         //设备卫生
         urls.add("/BEAM/scorePerformance/scoreHead/data-dg1559631064719.action");
-        LinkedHashMap<String, ScorePerformanceEntity> scoreMap = new LinkedHashMap();
+        LinkedHashMap<String, ScoreEamPerformanceEntity> scoreMap = new LinkedHashMap();
         mCompositeSubscription.add(Flowable.fromIterable(urls)
-                .concatMap((Function<String, Flowable<ScorePerformanceListEntity>>) url -> ScoreHttpClient.getScore(url, scoreId))
+                .concatMap((Function<String, Flowable<ScoreEamPerformanceListEntity>>) url -> ScoreHttpClient.getScore(url, scoreId))
                 .onErrorReturn(throwable -> {
-                    ScorePerformanceListEntity scorePerformanceListEntity = new ScorePerformanceListEntity();
-                    scorePerformanceListEntity.errMsg = throwable.toString();
-                    return scorePerformanceListEntity;
+                    ScoreEamPerformanceListEntity scoreEamPerformanceListEntity = new ScoreEamPerformanceListEntity();
+                    scoreEamPerformanceListEntity.errMsg = throwable.toString();
+                    return scoreEamPerformanceListEntity;
                 })
-                .concatMap((Function<ScorePerformanceListEntity, Flowable<ScorePerformanceEntity>>) scorePerformanceListEntity -> {
-                    if (scorePerformanceListEntity.result != null) {
-                        return Flowable.fromIterable(scorePerformanceListEntity.result);
+                .concatMap((Function<ScoreEamPerformanceListEntity, Flowable<ScoreEamPerformanceEntity>>) scoreEamPerformanceListEntity -> {
+                    if (scoreEamPerformanceListEntity.result != null) {
+                        return Flowable.fromIterable(scoreEamPerformanceListEntity.result);
                     }
                     return Flowable.fromIterable(new ArrayList<>());
                 })
@@ -53,14 +53,14 @@ public class ScorePerformancePresenter extends ScorePerformanceContract.Presente
                     if (!TextUtils.isEmpty(scorePerformanceEntity.scoreStandard) && !scorePerformanceEntity.scoreStandard.equals(category)) {
                         position = 0;
                         category = scorePerformanceEntity.scoreStandard;
-                        scorePerformanceTitleEntity = new ScorePerformanceEntity();
+                        scorePerformanceTitleEntity = new ScoreEamPerformanceEntity();
                         scorePerformanceTitleEntity.scoreStandard = scorePerformanceEntity.scoreStandard;
                         scorePerformanceTitleEntity.defaultTotalScore = scorePerformanceEntity.defaultTotalScore;
                         scorePerformanceTitleEntity.viewType = ListType.TITLE.value();
                         scoreMap.put(scorePerformanceTitleEntity.scoreStandard, scorePerformanceTitleEntity);
                     }
 
-                    ScorePerformanceEntity scorePerformanceOldTitleEntity;
+                    ScoreEamPerformanceEntity scorePerformanceOldTitleEntity;
                     if (scoreMap.containsKey(scorePerformanceEntity.itemDetail)) {
                         scorePerformanceOldTitleEntity = scoreMap.get(scorePerformanceEntity.itemDetail);
                     } else {
@@ -85,7 +85,7 @@ public class ScorePerformancePresenter extends ScorePerformanceContract.Presente
                     }
                     if (scorePerformanceTitleEntity != null) {
                         scorePerformanceTitleEntity.scorePerformanceEntities.add(scorePerformanceOldTitleEntity);
-                        scorePerformanceOldTitleEntity.scorePerformanceEntity = scorePerformanceTitleEntity;
+                        scorePerformanceOldTitleEntity.scoreEamPerformanceEntity = scorePerformanceTitleEntity;
                     }
                     scoreMap.put(scorePerformanceOldTitleEntity.itemDetail, scorePerformanceOldTitleEntity);
                 }, throwable -> {

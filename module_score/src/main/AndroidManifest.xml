@@ -5,13 +5,18 @@
         android:allowBackup="true"
         android:supportsRtl="true">
         <activity
-            android:name=".ui.ScoreListActivity"
+            android:name=".ui.ScoreEamListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleBarTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity
             android:name=".ui.ScorePerformanceActivity"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppNoTitleBarTheme"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+        <activity
+            android:name=".ui.ScorePersonListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleBarTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />

@@ -29,7 +29,7 @@ import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.middleware.util.EditInputFilter;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_score.R;
-import com.supcon.mes.module_score.model.bean.ScorePerformanceEntity;
+import com.supcon.mes.module_score.model.bean.ScoreEamPerformanceEntity;
 import com.supcon.mes.module_score.ui.view.FlowLayout;
 
 import java.math.BigDecimal;
@@ -38,12 +38,12 @@ import java.util.Map;
 
 import io.reactivex.functions.Predicate;
 
-public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<ScorePerformanceEntity> {
+public class ScoreEamPerformanceAdapter extends BaseListDataRecyclerViewAdapter<ScoreEamPerformanceEntity> {
 
     private boolean isEdit = false;
     private int total;
 
-    public ScorePerformanceAdapter(Context context) {
+    public ScoreEamPerformanceAdapter(Context context) {
         super(context);
     }
 
@@ -55,7 +55,7 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
     }
 
     @Override
-    protected BaseRecyclerViewHolder<ScorePerformanceEntity> getViewHolder(int viewType) {
+    protected BaseRecyclerViewHolder<ScoreEamPerformanceEntity> getViewHolder(int viewType) {
         if (viewType == ListType.TITLE.value()) {
             return new TitleViewHolder(context);
         } else if (viewType == ListType.HEADER.value()) {
@@ -65,11 +65,11 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
     }
 
     @Override
-    public int getItemViewType(int position, ScorePerformanceEntity scorePerformanceEntity) {
-        return scorePerformanceEntity.viewType;
+    public int getItemViewType(int position, ScoreEamPerformanceEntity scoreEamPerformanceEntity) {
+        return scoreEamPerformanceEntity.viewType;
     }
 
-    class TitleViewHolder extends BaseRecyclerViewHolder<ScorePerformanceEntity> {
+    class TitleViewHolder extends BaseRecyclerViewHolder<ScoreEamPerformanceEntity> {
 
         @BindByTag("contentTitle")
         TextView contentTitle;
@@ -98,13 +98,13 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
 
         @SuppressLint("StringFormatMatches")
         @Override
-        protected void update(ScorePerformanceEntity data) {
+        protected void update(ScoreEamPerformanceEntity data) {
             contentTitle.setText(data.scoreStandard);
             fraction.setText(data.getTotalScore() + "分");
         }
     }
 
-    class ViewHolder extends BaseRecyclerViewHolder<ScorePerformanceEntity> implements CompoundButton.OnCheckedChangeListener {
+    class ViewHolder extends BaseRecyclerViewHolder<ScoreEamPerformanceEntity> implements CompoundButton.OnCheckedChangeListener {
 
         @BindByTag("itemIndex")
         TextView itemIndex;
@@ -138,29 +138,29 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
                     if (scoreRadioBtn1.isPressed() || scoreRadioBtn2.isPressed()) {
-                        ScorePerformanceEntity item = getItem(getLayoutPosition());
+                        ScoreEamPerformanceEntity item = getItem(getLayoutPosition());
                         item.result = !item.result;
-                        int oldTotal = total - item.scorePerformanceEntity.getTotalScore();
+                        int oldTotal = total - item.scoreEamPerformanceEntity.getTotalScore();
                         if (item.result) {
-                            item.scorePerformanceEntity.setTotalHightScore(item.scorePerformanceEntity.getTotalHightScore() + item.score);
-                            if (item.scorePerformanceEntity.totalHightScore > 0) {
-                                item.scorePerformanceEntity.setTotalScore(item.scorePerformanceEntity.getTotalScore() + item.score);
+                            item.scoreEamPerformanceEntity.setTotalHightScore(item.scoreEamPerformanceEntity.getTotalHightScore() + item.score);
+                            if (item.scoreEamPerformanceEntity.totalHightScore > 0) {
+                                item.scoreEamPerformanceEntity.setTotalScore(item.scoreEamPerformanceEntity.getTotalScore() + item.score);
                             }
                         } else {
-                            item.scorePerformanceEntity.setTotalHightScore(item.scorePerformanceEntity.getTotalHightScore() - item.score);
-                            item.scorePerformanceEntity.setTotalScore(item.scorePerformanceEntity.getTotalScore() - item.score);
+                            item.scoreEamPerformanceEntity.setTotalHightScore(item.scoreEamPerformanceEntity.getTotalHightScore() - item.score);
+                            item.scoreEamPerformanceEntity.setTotalScore(item.scoreEamPerformanceEntity.getTotalScore() - item.score);
                         }
-                        if (item.scorePerformanceEntity.getTotalScore() < 0) {
-                            item.scorePerformanceEntity.setTotalScore(0);
-                        } else if (item.scorePerformanceEntity.getTotalScore() > item.scorePerformanceEntity.defaultTotalScore) {
-                            item.scorePerformanceEntity.setTotalScore(item.scorePerformanceEntity.defaultTotalScore);
+                        if (item.scoreEamPerformanceEntity.getTotalScore() < 0) {
+                            item.scoreEamPerformanceEntity.setTotalScore(0);
+                        } else if (item.scoreEamPerformanceEntity.getTotalScore() > item.scoreEamPerformanceEntity.defaultTotalScore) {
+                            item.scoreEamPerformanceEntity.setTotalScore(item.scoreEamPerformanceEntity.defaultTotalScore);
                         }
-                        List<ScorePerformanceEntity> list = getList();
-                        int position = list.indexOf(item.scorePerformanceEntity);
+                        List<ScoreEamPerformanceEntity> list = getList();
+                        int position = list.indexOf(item.scoreEamPerformanceEntity);
                         notifyItemChanged(position);
                         //更新总分数
-                        item.scorePerformanceEntity.scoreNum = oldTotal + item.scorePerformanceEntity.getTotalScore();
-                        onItemChildViewClick(scoreRadioGroup, 0, item.scorePerformanceEntity);
+                        item.scoreEamPerformanceEntity.scoreNum = oldTotal + item.scoreEamPerformanceEntity.getTotalScore();
+                        onItemChildViewClick(scoreRadioGroup, 0, item.scoreEamPerformanceEntity);
                     }
                 }
             });
@@ -168,7 +168,7 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
 
         @SuppressLint("SetTextI18n")
         @Override
-        protected void update(ScorePerformanceEntity data) {
+        protected void update(ScoreEamPerformanceEntity data) {
             itemIndex.setText(data.Index + ".");
             scoreItem.setText(data.itemDetail + (data.marks.size() > 0 ? "" : "(" + data.score + ")"));
             checkLayout.removeAllViews();
@@ -191,32 +191,32 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
         @SuppressLint("CheckResult")
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            ScorePerformanceEntity item = getItem(getLayoutPosition());
+            ScoreEamPerformanceEntity item = getItem(getLayoutPosition());
             Boolean result = item.marksState.get(buttonView.getText().toString());
             result = !result;
             item.marksState.put(buttonView.getText().toString(), result);
-            int oldTotal = total - item.scorePerformanceEntity.getTotalScore();
+            int oldTotal = total - item.scoreEamPerformanceEntity.getTotalScore();
 
             if (result) {
-                item.scorePerformanceEntity.setTotalHightScore(item.scorePerformanceEntity.getTotalHightScore() - item.marks.get(buttonView.getText().toString()));
-                item.scorePerformanceEntity.setTotalScore(item.scorePerformanceEntity.getTotalScore() - item.marks.get(buttonView.getText().toString()));
+                item.scoreEamPerformanceEntity.setTotalHightScore(item.scoreEamPerformanceEntity.getTotalHightScore() - item.marks.get(buttonView.getText().toString()));
+                item.scoreEamPerformanceEntity.setTotalScore(item.scoreEamPerformanceEntity.getTotalScore() - item.marks.get(buttonView.getText().toString()));
             } else {
-                item.scorePerformanceEntity.setTotalHightScore(item.scorePerformanceEntity.getTotalHightScore() + item.marks.get(buttonView.getText().toString()));
-                if (item.scorePerformanceEntity.totalHightScore > 0) {
-                    item.scorePerformanceEntity.setTotalScore(item.scorePerformanceEntity.getTotalScore() + item.marks.get(buttonView.getText().toString()));
+                item.scoreEamPerformanceEntity.setTotalHightScore(item.scoreEamPerformanceEntity.getTotalHightScore() + item.marks.get(buttonView.getText().toString()));
+                if (item.scoreEamPerformanceEntity.totalHightScore > 0) {
+                    item.scoreEamPerformanceEntity.setTotalScore(item.scoreEamPerformanceEntity.getTotalScore() + item.marks.get(buttonView.getText().toString()));
                 }
             }
-            if (item.scorePerformanceEntity.getTotalScore() < 0) {
-                item.scorePerformanceEntity.setTotalScore(0);
-            } else if (item.scorePerformanceEntity.getTotalScore() > item.scorePerformanceEntity.defaultTotalScore) {
-                item.scorePerformanceEntity.setTotalScore(item.scorePerformanceEntity.defaultTotalScore);
+            if (item.scoreEamPerformanceEntity.getTotalScore() < 0) {
+                item.scoreEamPerformanceEntity.setTotalScore(0);
+            } else if (item.scoreEamPerformanceEntity.getTotalScore() > item.scoreEamPerformanceEntity.defaultTotalScore) {
+                item.scoreEamPerformanceEntity.setTotalScore(item.scoreEamPerformanceEntity.defaultTotalScore);
             }
-            List<ScorePerformanceEntity> list = getList();
-            int position = list.indexOf(item.scorePerformanceEntity);
+            List<ScoreEamPerformanceEntity> list = getList();
+            int position = list.indexOf(item.scoreEamPerformanceEntity);
             notifyItemChanged(position);
             //更新总分数
-            item.scorePerformanceEntity.scoreNum = oldTotal + item.scorePerformanceEntity.getTotalScore();
-            onItemChildViewClick(scoreRadioGroup, 0, item.scorePerformanceEntity);
+            item.scoreEamPerformanceEntity.scoreNum = oldTotal + item.scoreEamPerformanceEntity.getTotalScore();
+            onItemChildViewClick(scoreRadioGroup, 0, item.scoreEamPerformanceEntity);
         }
 
         //动态添加视图
@@ -253,7 +253,7 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
 
     private boolean isWrite;
 
-    class HeadViewHolder extends BaseRecyclerViewHolder<ScorePerformanceEntity> {
+    class HeadViewHolder extends BaseRecyclerViewHolder<ScoreEamPerformanceEntity> {
 
         @BindByTag("itemIndex")
         TextView itemIndex;
@@ -322,7 +322,7 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
                         }
                     })
                     .subscribe(charSequence -> {
-                        ScorePerformanceEntity item = getItem(getAdapterPosition());
+                        ScoreEamPerformanceEntity item = getItem(getAdapterPosition());
                         item.totalRunTime = 24f;
                         if (!TextUtils.isEmpty(charSequence.toString())) {
                             float stopTime = new BigDecimal(charSequence.toString()).floatValue();
@@ -336,28 +336,28 @@ public class ScorePerformanceAdapter extends BaseListDataRecyclerViewAdapter<Sco
                         cumulativeRunTime.setContent(Util.big(item.totalRunTime));
 
                         if (item.accidentStopTime != null) {
-                            int oldTotal = total - item.scorePerformanceEntity.getTotalScore();
+                            int oldTotal = total - item.scoreEamPerformanceEntity.getTotalScore();
 
                             if (item.accidentStopTime > 0 && item.accidentStopTime <= 1) {
-                                item.scorePerformanceEntity.setTotalScore(item.scorePerformanceEntity.defaultTotalScore - 5);
+                                item.scoreEamPerformanceEntity.setTotalScore(item.scoreEamPerformanceEntity.defaultTotalScore - 5);
                             } else if (item.accidentStopTime > 1) {
-                                item.scorePerformanceEntity.setTotalScore(item.scorePerformanceEntity.defaultTotalScore - 10);
+                                item.scoreEamPerformanceEntity.setTotalScore(item.scoreEamPerformanceEntity.defaultTotalScore - 10);
                             } else if (item.accidentStopTime == 0) {
-                                item.scorePerformanceEntity.setTotalScore(item.scorePerformanceEntity.defaultTotalScore);
+                                item.scoreEamPerformanceEntity.setTotalScore(item.scoreEamPerformanceEntity.defaultTotalScore);
                             }
-                            List<ScorePerformanceEntity> list = getList();
-                            int position = list.indexOf(item.scorePerformanceEntity);
+                            List<ScoreEamPerformanceEntity> list = getList();
+                            int position = list.indexOf(item.scoreEamPerformanceEntity);
                             notifyItemChanged(position);
                             //更新总分数
-                            item.scorePerformanceEntity.scoreNum = oldTotal + item.scorePerformanceEntity.getTotalScore();
-                            onItemChildViewClick(cumulativeDownTime, 0, item.scorePerformanceEntity);
+                            item.scoreEamPerformanceEntity.scoreNum = oldTotal + item.scoreEamPerformanceEntity.getTotalScore();
+                            onItemChildViewClick(cumulativeDownTime, 0, item.scoreEamPerformanceEntity);
                         }
                     });
         }
 
         @SuppressLint({"SetTextI18n", "StringFormatInvalid", "StringFormatMatches"})
         @Override
-        protected void update(ScorePerformanceEntity data) {
+        protected void update(ScoreEamPerformanceEntity data) {
             itemIndex.setText(data.Index + ".");
             scoreItem.setText(data.itemDetail + (data.marks.size() > 0 ? "" : "(" + data.score + ")"));
             scoreRight.setText(Util.big(data.resultValue) + "%");

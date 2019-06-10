@@ -7,15 +7,15 @@ import com.supcon.mes.middleware.model.bean.BaseSubcondEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.JoinSubcondEntity;
 import com.supcon.mes.middleware.util.BAPQueryParamsHelper;
-import com.supcon.mes.module_score.model.bean.ScoreListEntity;
-import com.supcon.mes.module_score.model.contract.ScoreListContract;
+import com.supcon.mes.module_score.model.bean.ScoreEamListEntity;
+import com.supcon.mes.module_score.model.contract.ScoreEamListContract;
 import com.supcon.mes.module_score.model.network.ScoreHttpClient;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ScoreListPresenter extends ScoreListContract.Presenter {
+public class ScoreEamListPresenter extends ScoreEamListContract.Presenter {
     @Override
     public void getScoreList(Map<String, Object> param, int page) {
         FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
@@ -42,9 +42,9 @@ public class ScoreListPresenter extends ScoreListContract.Presenter {
         pageQueryParams.put("page.maxPageSize", 500);
         mCompositeSubscription.add(ScoreHttpClient.getScoreList(fastQuery, pageQueryParams)
                 .onErrorReturn(throwable -> {
-                    ScoreListEntity scoreListEntity = new ScoreListEntity();
-                    scoreListEntity.errMsg = throwable.toString();
-                    return scoreListEntity;
+                    ScoreEamListEntity scoreEamListEntity = new ScoreEamListEntity();
+                    scoreEamListEntity.errMsg = throwable.toString();
+                    return scoreEamListEntity;
                 }).subscribe(scoreListEntity -> {
                     if (TextUtils.isEmpty(scoreListEntity.errMsg)) {
                         getView().getScoreListSuccess(scoreListEntity);
