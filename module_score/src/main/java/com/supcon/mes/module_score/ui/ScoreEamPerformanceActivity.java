@@ -76,9 +76,9 @@ import io.reactivex.functions.Consumer;
  * ------------- Description -------------
  * 设备评分
  */
-@Router(value = Constant.Router.SCORE_PERFORMANCE)
+@Router(value = Constant.Router.SCORE_EAM_PERFORMANCE)
 @Presenter(value = {ScoreEamPerformancePresenter.class, ScoreSubmitPresenter.class})
-public class ScorePerformanceActivity extends BaseRefreshRecyclerActivity implements ScoreEamPerformanceContract.View, ScoreSubmitContract.View {
+public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity implements ScoreEamPerformanceContract.View, ScoreSubmitContract.View {
     @BindByTag("leftBtn")
     ImageButton leftBtn;
     @BindByTag("titleText")
@@ -217,7 +217,7 @@ public class ScorePerformanceActivity extends BaseRefreshRecyclerActivity implem
                         .bindView(R.id.grayBtn, "取消")
                         .bindClickListener(R.id.redBtn, v12 -> {
                             if (scoreEamEntity.beamId == null) {
-                                ToastUtils.show(ScorePerformanceActivity.this, "请选择设备进行评分!");
+                                ToastUtils.show(ScoreEamPerformanceActivity.this, "请选择设备进行评分!");
                                 return;
                             }
                             onLoading("正在处理中...");
@@ -228,13 +228,13 @@ public class ScorePerformanceActivity extends BaseRefreshRecyclerActivity implem
         eamCode.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
-                IntentRouter.go(ScorePerformanceActivity.this, Constant.Router.EAM);
+                IntentRouter.go(ScoreEamPerformanceActivity.this, Constant.Router.EAM);
             }
         });
         eamName.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
-                IntentRouter.go(ScorePerformanceActivity.this, Constant.Router.EAM);
+                IntentRouter.go(ScoreEamPerformanceActivity.this, Constant.Router.EAM);
             }
         });
         scoreEamPerformanceAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {

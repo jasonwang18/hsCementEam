@@ -148,7 +148,7 @@ public class ScoreEamListActivity extends BaseRefreshRecyclerActivity implements
                 .subscribe(o -> {
                     Bundle bundle = new Bundle();
                     bundle.putBoolean(Constant.IntentKey.isEdit, true);
-                    IntentRouter.go(ScoreEamListActivity.this, Constant.Router.SCORE_PERFORMANCE, bundle);
+                    IntentRouter.go(ScoreEamListActivity.this, Constant.Router.SCORE_EAM_PERFORMANCE, bundle);
                 });
         refreshListController.setOnRefreshPageListener(pageIndex -> {
             if (queryParam.containsKey(Constant.BAPQuery.EAM_NAME)) {
@@ -184,7 +184,7 @@ public class ScoreEamListActivity extends BaseRefreshRecyclerActivity implements
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(Constant.IntentKey.SCORE_ENTITY, item);
                 bundle.putBoolean(Constant.IntentKey.isEdit, compareTimeIsEdit(item.scoreTime != null ? item.scoreTime : 0));
-                IntentRouter.go(ScoreEamListActivity.this, Constant.Router.SCORE_PERFORMANCE, bundle);
+                IntentRouter.go(ScoreEamListActivity.this, Constant.Router.SCORE_EAM_PERFORMANCE, bundle);
             }
         });
 
