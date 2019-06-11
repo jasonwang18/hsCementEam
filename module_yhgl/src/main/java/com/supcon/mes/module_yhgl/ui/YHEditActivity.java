@@ -46,6 +46,7 @@ import com.supcon.mes.middleware.model.bean.Area;
 import com.supcon.mes.middleware.model.bean.AreaDao;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonDeviceEntity;
+import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntity;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntityDao;
@@ -591,9 +592,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             if (action == -1) {
                 mYHEntity.findStaffID = null;
             } else {
-                Bundle bundle = new Bundle();
-                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
-                IntentRouter.go(context, Constant.Router.COMMON_SEARCH, bundle);
+                IntentRouter.go(context, Constant.Router.STAFF);
             }
         });
 
@@ -635,15 +634,15 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getMaintenanceStaff(CommonSearchEvent commonSearchEvent) {
-        if (!(commonSearchEvent.commonSearchEntity instanceof UserInfo)) {
+        if (!(commonSearchEvent.commonSearchEntity instanceof CommonSearchStaff)) {
             return;
         }
-        UserInfo userInfo = (UserInfo) commonSearchEvent.commonSearchEntity;
-        yhEditFindStaff.setValue(userInfo.staffName);
+        CommonSearchStaff searchStaff = (CommonSearchStaff) commonSearchEvent.commonSearchEntity;
+        yhEditFindStaff.setValue(searchStaff.name);
         mYHEntity.findStaffID = new Staff();
-        mYHEntity.findStaffID.id = userInfo.staffId;
-        mYHEntity.findStaffID.code = userInfo.staffCode;
-        mYHEntity.findStaffID.name = userInfo.staffName;
+        mYHEntity.findStaffID.id = searchStaff.id;
+        mYHEntity.findStaffID.code = searchStaff.code;
+        mYHEntity.findStaffID.name = searchStaff.name;
     }
 
     /**

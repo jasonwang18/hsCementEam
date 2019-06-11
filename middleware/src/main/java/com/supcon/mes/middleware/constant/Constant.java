@@ -158,9 +158,11 @@ public interface Constant {
 
         String SCORE_EAM_LIST = "SCORE_EAM_LIST";//设备评分绩效列表
         String SCORE_EAM_PERFORMANCE = "SCORE_EAM_PERFORMANCE";//评分绩效
-        String SCORE_PERSON_LIST = "SCORE_PERSON_LIST";//人员列表
+        String SCORE_STAFF_LIST = "SCORE_STAFF_LIST";//人员列表
+        String SCORE_STAFF_PERFORMANCE = "SCORE_STAFF_PERFORMANCE";//人员评分绩效
 
         String EAM = "EAM";//设备搜索
+        String STAFF = "STAFF";//人员搜索
     }
 
 

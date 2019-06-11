@@ -15,7 +15,6 @@ import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
-import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.view.CustomSwipeLayout;
@@ -27,7 +26,8 @@ import com.supcon.mes.mbap.utils.controllers.DatePickController;
 import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
-import com.supcon.mes.middleware.model.bean.SparePartEntity;
+import com.supcon.mes.middleware.model.bean.AcceptanceCheckEntity;
+import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntityDao;
@@ -38,9 +38,7 @@ import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.R;
-import com.supcon.mes.middleware.model.bean.AcceptanceCheckEntity;
 import com.supcon.mes.module_wxgd.model.event.AcceptanceEvent;
-import com.supcon.mes.module_wxgd.model.event.SparePartEvent;
 import com.supcon.mes.module_wxgd.ui.adapter.AcceptanceCheckAdapter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -51,8 +49,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import io.reactivex.functions.Consumer;
 
 /**
  * Created by wangshizhan on 2018/9/3
@@ -174,10 +170,7 @@ public class WXGDAcceptanceListActivity extends BaseRefreshRecyclerActivity<Acce
                 switch (tag) {
                     case "acceptanceStaffCode":
                     case "acceptanceStaffName":
-                        Bundle bundle = new Bundle();
-                        bundle.putString(Constant.IntentKey.COMMON_SAERCH_MODE, Constant.CommonSearchMode.STAFF);
-                        bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, childView.getTag().toString());
-                        IntentRouter.go(context, Constant.Router.COMMON_SEARCH, bundle);
+                        IntentRouter.go(context, Constant.Router.STAFF);
                         break;
                     case "acceptanceTime":
                         mDatePickController.listener((year, month, day, hour, minute, second) -> {
@@ -200,13 +193,15 @@ public class WXGDAcceptanceListActivity extends BaseRefreshRecyclerActivity<Acce
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getAcceptChkStaff(CommonSearchEvent event) {
-        UserInfo userInfo = (UserInfo) event.commonSearchEntity;
-        AcceptanceCheckEntity item = mAcceptanceCheckAdapter.getItem(currentPosition);
-        Staff staff = new Staff();
-        staff.name = userInfo.staffName;
-        staff.code = userInfo.staffCode;
-        item.checkStaff = staff;
-        mAcceptanceCheckAdapter.notifyItemChanged(currentPosition);
+        if (event.commonSearchEntity instanceof CommonSearchStaff) {
+            CommonSearchStaff searchStaff = (CommonSearchStaff) event.commonSearchEntity;
+            AcceptanceCheckEntity item = mAcceptanceCheckAdapter.getItem(currentPosition);
+            Staff staff = new Staff();
+            staff.name = searchStaff.name;
+            staff.code = searchStaff.code;
+            item.checkStaff = staff;
+            mAcceptanceCheckAdapter.notifyItemChanged(currentPosition);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

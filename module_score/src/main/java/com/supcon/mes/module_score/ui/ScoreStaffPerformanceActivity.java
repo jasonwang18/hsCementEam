@@ -74,11 +74,11 @@ import io.reactivex.functions.Consumer;
  * @ClassName hongShiCementEam
  * @date 2019/4/29
  * ------------- Description -------------
- * 设备评分
+ * 个人评分
  */
-@Router(value = Constant.Router.SCORE_EAM_PERFORMANCE)
+@Router(value = Constant.Router.SCORE_STAFF_PERFORMANCE)
 @Presenter(value = {ScoreEamPerformancePresenter.class, ScoreSubmitPresenter.class})
-public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity implements ScoreEamPerformanceContract.View, ScoreSubmitContract.View {
+public class ScoreStaffPerformanceActivity extends BaseRefreshRecyclerActivity implements ScoreEamPerformanceContract.View, ScoreSubmitContract.View {
     @BindByTag("leftBtn")
     ImageButton leftBtn;
     @BindByTag("titleText")
@@ -168,7 +168,7 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
     @Override
     protected void initData() {
         super.initData();
-        Spanned title = HtmlParser.buildSpannedText(String.format(getString(R.string.device_style7), "红狮设备评分表",
+        Spanned title = HtmlParser.buildSpannedText(String.format(getString(R.string.device_style7), "巡检工评分表",
                 scoreEamEntity != null ? "(" + scoreEamEntity.scoreTableNo + ")" : ""), new HtmlTagHandler());
         titleText.setText(title);
         if (scoreEamEntity != null) {
@@ -217,7 +217,7 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
                         .bindView(R.id.grayBtn, "取消")
                         .bindClickListener(R.id.redBtn, v12 -> {
                             if (scoreEamEntity.beamId == null) {
-                                ToastUtils.show(ScoreEamPerformanceActivity.this, "请选择设备进行评分!");
+                                ToastUtils.show(ScoreStaffPerformanceActivity.this, "请选择设备进行评分!");
                                 return;
                             }
                             onLoading("正在处理中...");
@@ -228,13 +228,13 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
         eamCode.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
-                IntentRouter.go(ScoreEamPerformanceActivity.this, Constant.Router.EAM);
+                IntentRouter.go(ScoreStaffPerformanceActivity.this, Constant.Router.EAM);
             }
         });
         eamName.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
-                IntentRouter.go(ScoreEamPerformanceActivity.this, Constant.Router.EAM);
+                IntentRouter.go(ScoreStaffPerformanceActivity.this, Constant.Router.EAM);
             }
         });
         scoreEamPerformanceAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
@@ -279,6 +279,8 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
                 eamDept.setContent(Util.strFormat(commonSearchEvent.commonSearchEntity.getSearchProperty()));
                 scoreEamEntity.beamId = eamType;
             }
+
+
         }
     }
 

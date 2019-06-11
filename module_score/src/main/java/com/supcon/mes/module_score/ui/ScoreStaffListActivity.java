@@ -54,9 +54,9 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.functions.Consumer;
 
-@Router(value = Constant.Router.SCORE_PERSON_LIST)
+@Router(value = Constant.Router.SCORE_STAFF_LIST)
 @Presenter(value = ScoreEamListPresenter.class)
-public class ScorePersonListActivity extends BaseRefreshRecyclerActivity implements ScoreEamListContract.View {
+public class ScoreStaffListActivity extends BaseRefreshRecyclerActivity implements ScoreEamListContract.View {
 
     @BindByTag("leftBtn")
     AppCompatImageButton leftBtn;
@@ -148,7 +148,7 @@ public class ScorePersonListActivity extends BaseRefreshRecyclerActivity impleme
                 .subscribe(o -> {
                     Bundle bundle = new Bundle();
                     bundle.putBoolean(Constant.IntentKey.isEdit, true);
-                    IntentRouter.go(ScorePersonListActivity.this, Constant.Router.SCORE_EAM_PERFORMANCE, bundle);
+                    IntentRouter.go(ScoreStaffListActivity.this, Constant.Router.SCORE_STAFF_PERFORMANCE, bundle);
                 });
         refreshListController.setOnRefreshPageListener(pageIndex -> {
             if (queryParam.containsKey(Constant.BAPQuery.EAM_NAME)) {
@@ -184,7 +184,7 @@ public class ScorePersonListActivity extends BaseRefreshRecyclerActivity impleme
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(Constant.IntentKey.SCORE_ENTITY, item);
                 bundle.putBoolean(Constant.IntentKey.isEdit, compareTimeIsEdit(item.scoreTime != null ? item.scoreTime : 0));
-                IntentRouter.go(ScorePersonListActivity.this, Constant.Router.SCORE_EAM_PERFORMANCE, bundle);
+                IntentRouter.go(ScoreStaffListActivity.this, Constant.Router.SCORE_STAFF_PERFORMANCE, bundle);
             }
         });
 

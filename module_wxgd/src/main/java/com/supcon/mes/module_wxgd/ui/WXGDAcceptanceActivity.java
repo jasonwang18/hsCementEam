@@ -39,6 +39,7 @@ import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.RoleController;
 import com.supcon.mes.middleware.model.bean.AccountInfo;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
+import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntityDao;
@@ -337,10 +338,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
                     currentAcceptChkEntity.checkStaff = null;
                     acceptChkStaffCode.setValue(null);
                 } else {
-                    Bundle bundle = new Bundle();
-                    bundle.putString(Constant.IntentKey.COMMON_SAERCH_MODE, Constant.CommonSearchMode.STAFF);
-                    bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, childView.getTag().toString());
-                    IntentRouter.go(context, Constant.Router.COMMON_SEARCH, bundle);
+                    IntentRouter.go(context, Constant.Router.STAFF);
                 }
             }
         });
@@ -399,7 +397,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
 
     private void goSBDA() {
 
-        if (mWXGDEntity.eamID==null || mWXGDEntity.eamID.id == null) {
+        if (mWXGDEntity.eamID == null || mWXGDEntity.eamID.id == null) {
             ToastUtils.show(context, "无设备详情可查看！");
             return;
         }
@@ -604,14 +602,14 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getAcceptChkStaff(CommonSearchEvent event) {
-        if ("acceptChkStaff".equals(event.flag)) {
-            UserInfo userInfo = (UserInfo) event.commonSearchEntity;
-            acceptChkStaff.setValue(userInfo.staffName);
-            acceptChkStaffCode.setValue(userInfo.staffCode);
+        if (event.commonSearchEntity instanceof CommonSearchStaff) {
+            CommonSearchStaff searchStaff = (CommonSearchStaff) event.commonSearchEntity;
+            acceptChkStaff.setValue(searchStaff.name);
+            acceptChkStaffCode.setValue(searchStaff.code);
             currentAcceptChkEntity.checkStaff = new Staff();
-            currentAcceptChkEntity.checkStaff.id = userInfo.staffId;
-            currentAcceptChkEntity.checkStaff.code = userInfo.staffCode;
-            currentAcceptChkEntity.checkStaff.name = userInfo.staffName;
+            currentAcceptChkEntity.checkStaff.id = searchStaff.id;
+            currentAcceptChkEntity.checkStaff.code = searchStaff.code;
+            currentAcceptChkEntity.checkStaff.name = searchStaff.name;
         }
     }
 

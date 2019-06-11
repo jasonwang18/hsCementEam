@@ -23,6 +23,7 @@ import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.utils.controllers.DatePickController;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.UserInfo;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
@@ -87,9 +88,7 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
         editable = getIntent().getBooleanExtra(Constant.IntentKey.IS_EDITABLE, false);
         isAdd = getIntent().getBooleanExtra(Constant.IntentKey.IS_ADD, false);
         if (isAdd) {
-            Bundle bundle = new Bundle();
-            bundle.putString(Constant.IntentKey.COMMON_SAERCH_MODE, Constant.CommonSearchMode.STAFF);
-            IntentRouter.go(context, Constant.Router.COMMON_SEARCH, bundle);
+            IntentRouter.go(context, Constant.Router.STAFF);
         }
         repairSum = getIntent().getLongExtra(Constant.IntentKey.REPAIR_SUM, 1);
         tableStatus = getIntent().getStringExtra(Constant.IntentKey.TABLE_STATUS);
@@ -152,9 +151,7 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        Bundle bundle = new Bundle();
-                        bundle.putString(Constant.IntentKey.COMMON_SAERCH_MODE, Constant.CommonSearchMode.STAFF);
-                        IntentRouter.go(context, Constant.Router.COMMON_SEARCH, bundle);
+                        IntentRouter.go(context, Constant.Router.STAFF);
                     }
                 });
 
@@ -163,10 +160,10 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
             RepairStaffEntity repairStaffEntity = (RepairStaffEntity) obj;
             switch (tag) {
                 case "actualStartTime":
-                    if (action == -1){
+                    if (action == -1) {
                         repairStaffEntity.startTime = null;
                         mRepairStaffAdapter.notifyItemChanged(position);
-                    }else {
+                    } else {
                         mDatePickController.listener((year, month, day, hour, minute, second) -> {
                             String dateTimeStr = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
                             repairStaffEntity.startTime = DateUtil.dateFormat(dateTimeStr, "yyyy-MM-dd HH:mm:ss");
@@ -178,7 +175,7 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
                                     return;
                                 }
                                 //计算工时
-                                repairStaffEntity.workHour = new BigDecimal((repairStaffEntity.endTime - repairStaffEntity.startTime) / (60 * 60 * 1000.00)).setScale(2,BigDecimal.ROUND_HALF_UP);
+                                repairStaffEntity.workHour = new BigDecimal((repairStaffEntity.endTime - repairStaffEntity.startTime) / (60 * 60 * 1000.00)).setScale(2, BigDecimal.ROUND_HALF_UP);
                             }
                             mRepairStaffAdapter.notifyItemChanged(position);
                         }).show(repairStaffEntity.startTime == null ? new Date().getTime() : repairStaffEntity.startTime);
@@ -186,10 +183,10 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
 
                     break;
                 case "actualEndTime":
-                    if (action == -1){
+                    if (action == -1) {
                         repairStaffEntity.endTime = null;
                         mRepairStaffAdapter.notifyItemChanged(position);
-                    }else {
+                    } else {
                         mDatePickController.listener((year, month, day, hour, minute, second) -> {
                             String dateTimeStr = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
                             repairStaffEntity.endTime = DateUtil.dateFormat(dateTimeStr, "yyyy-MM-dd HH:mm:ss");
@@ -201,7 +198,7 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
                                     return;
                                 }
                                 //计算工时
-                                repairStaffEntity.workHour = new BigDecimal((repairStaffEntity.endTime - repairStaffEntity.startTime) / (60 * 60 * 1000.00)).setScale(2,BigDecimal.ROUND_HALF_UP);
+                                repairStaffEntity.workHour = new BigDecimal((repairStaffEntity.endTime - repairStaffEntity.startTime) / (60 * 60 * 1000.00)).setScale(2, BigDecimal.ROUND_HALF_UP);
                             }
                             mRepairStaffAdapter.notifyItemChanged(position);
                         }).show(repairStaffEntity.endTime == null ? new Date().getTime() : repairStaffEntity.endTime);
@@ -234,14 +231,14 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void addStaff(CommonSearchEvent commonSearchEvent) {
-        if(!(commonSearchEvent.commonSearchEntity instanceof UserInfo)){
+        if (!(commonSearchEvent.commonSearchEntity instanceof CommonSearchStaff)) {
             return;
         }
-        UserInfo userInfo = (UserInfo) commonSearchEvent.commonSearchEntity;
+        CommonSearchStaff searchStaff = (CommonSearchStaff) commonSearchEvent.commonSearchEntity;
 
         for (RepairStaffEntity repairStaffEntity : mEntities) {
             if (repairStaffEntity.repairStaff != null && repairStaffEntity.timesNum >= repairSum) {
-                if (repairStaffEntity.repairStaff.id.equals(userInfo.staffId)) {
+                if (repairStaffEntity.repairStaff.id.equals(searchStaff.id)) {
                     ToastUtils.show(context, "请勿重复添加人员!");
                     refreshListController.refreshComplete(mEntities);
                     return;
@@ -251,9 +248,9 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
 
         RepairStaffEntity repairStaffEntity = new RepairStaffEntity();
         repairStaffEntity.repairStaff = new Staff();
-        repairStaffEntity.repairStaff.id =  userInfo.staffId;
-        repairStaffEntity.repairStaff.code =  userInfo.staffCode;
-        repairStaffEntity.repairStaff.name =  userInfo.staffName;
+        repairStaffEntity.repairStaff.id = searchStaff.id;
+        repairStaffEntity.repairStaff.code = searchStaff.code;
+        repairStaffEntity.repairStaff.name = searchStaff.name;
         repairStaffEntity.timesNum = (int) repairSum;
 
         //实际开始/结束时间根据列表最后一项赋值

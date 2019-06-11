@@ -21,12 +21,11 @@ import retrofit2.http.Url;
 @ApiFactory(name = "ScoreHttpClient")
 public interface ScoreService {
 
-
-    //润滑列表
+    //评分列表
     @GET("/BEAM/scorePerformance/scoreHead/beamScoreList-query.action")
     Flowable<ScoreEamListEntity> getScoreList(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
-    //润滑
+    //评分
     @GET
     Flowable<ScoreEamPerformanceListEntity> getScore(@Url String url, @Query("scoreHead.id") int scoreId);
 
@@ -34,5 +33,6 @@ public interface ScoreService {
     @POST("/BEAM/scorePerformance/scoreHead/beamPerformanceEdit/submit.action?__pc__=YmVhbVNjb3JlTGlzdF9hZGRfYWRkX0JFQU1fMS4wLjBfc2NvcmVQZXJmb3JtYW5jZV9iZWFtU2NvcmVMaXN0fA__&_bapFieldPermissonModelCode_=BEAM_1.0.0_scorePerformance_ScoreHead&_bapFieldPermissonModelName_=ScoreHead")
     @Multipart
     Flowable<BapResultEntity> doSubmit(@PartMap Map<String, RequestBody> map);
+
 
 }
