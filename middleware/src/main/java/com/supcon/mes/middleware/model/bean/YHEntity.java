@@ -37,4 +37,11 @@ public class YHEntity extends BaseEntity {
     public RepairGroupEntity repiarGroup;
 
     public List<AttachmentEntity> attachmentEntities;
+
+    public WXGDEam getEamID() {
+        if (eamID == null) {
+            eamID = new WXGDEam();
+        }
+        return eamID;
+    }
 }

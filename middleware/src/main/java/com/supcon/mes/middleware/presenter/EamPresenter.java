@@ -7,6 +7,7 @@ import com.supcon.mes.middleware.model.bean.BaseSubcondEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
+import com.supcon.mes.middleware.model.bean.JoinSubcondEntity;
 import com.supcon.mes.middleware.model.contract.EamContract;
 import com.supcon.mes.middleware.model.network.MiddlewareHttpClient;
 import com.supcon.mes.middleware.util.BAPQueryParamsHelper;
@@ -24,6 +25,12 @@ public class EamPresenter extends EamContract.Presenter {
             codeParam.put(Constant.BAPQuery.EAM_CODE, params.get(Constant.BAPQuery.EAM_CODE));
             List<BaseSubcondEntity> baseSubcondEntities = BAPQueryParamsHelper.crateSubcondEntity(codeParam);
             fastQuery.subconds.addAll(baseSubcondEntities);
+        }
+        if (params.containsKey(Constant.BAPQuery.EAM_AREANAME)) {
+            Map<String, Object> areaParam = new HashMap();
+            areaParam.put(Constant.BAPQuery.EAM_AREANAME, params.get(Constant.BAPQuery.EAM_AREANAME));
+            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(areaParam, "BEAM_AREAS,ID,EAM_BaseInfo,INSTALL_PLACE");
+            fastQuery.subconds.add(joinSubcondEntity);
         }
         fastQuery.modelAlias = "baseInfo";
         Map<String, Object> pageQueryParams = new HashMap<>();

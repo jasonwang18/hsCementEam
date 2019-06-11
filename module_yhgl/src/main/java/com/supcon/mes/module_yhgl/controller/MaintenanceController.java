@@ -9,11 +9,14 @@ import com.app.annotation.Presenter;
 import com.supcon.common.view.base.controller.BaseViewController;
 import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.util.LogUtil;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.view.CustomListWidget;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.MaintainEntity;
+import com.supcon.mes.middleware.model.bean.WXGDEam;
 import com.supcon.mes.middleware.model.bean.YHEntity;
 import com.supcon.mes.module_yhgl.IntentRouter;
+import com.supcon.mes.module_yhgl.model.api.LubricateOilsAPI;
 import com.supcon.mes.module_yhgl.model.api.MaintenanceAPI;
 import com.supcon.mes.module_yhgl.model.bean.MaintenanceListEntity;
 import com.supcon.mes.module_yhgl.model.contract.MaintenanceContract;
@@ -63,6 +66,10 @@ public class MaintenanceController extends BaseViewController implements Mainten
         mCustomListWidget.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
+                if (mYHEntity.getEamID().id == null) {
+                    ToastUtils.show(context,"请选择设备！");
+                    return;
+                }
                 Bundle bundle = new Bundle();
                 switch (action) {
                     case CustomListWidget.ACTION_VIEW_ALL:
@@ -70,10 +77,10 @@ public class MaintenanceController extends BaseViewController implements Mainten
                         bundle.putString(Constant.IntentKey.MAINTENANCE_ENTITIES, maintenanceEntities.toString());
                         bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, isEditable);
                         bundle.putBoolean(Constant.IntentKey.IS_ADD, false);
-                        if(mYHEntity.pending!=null) {
+                        if (mYHEntity.pending != null) {
                             bundle.putString(Constant.IntentKey.TABLE_STATUS, mYHEntity.pending.taskDescription);
                         }
-                        bundle.putLong(Constant.IntentKey.EAM_ID, mYHEntity.eamID.id);
+                        bundle.putLong(Constant.IntentKey.EAM_ID, mYHEntity.getEamID().id);
                         IntentRouter.go(context, Constant.Router.YHGL_MAINTENANCE_STAFF_LIST, bundle);
                         break;
                     default:
@@ -158,5 +165,7 @@ public class MaintenanceController extends BaseViewController implements Mainten
     public void clear() {
         mCustomListWidget.clear();
     }
-
+    public void upEam(WXGDEam wxgdEam) {
+        mYHEntity.eamID = wxgdEam;
+    }
 }

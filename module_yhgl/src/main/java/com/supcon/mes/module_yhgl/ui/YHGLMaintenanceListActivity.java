@@ -62,7 +62,7 @@ public class YHGLMaintenanceListActivity extends BaseRefreshRecyclerActivity<Mai
     private MaintenanceAdapter maintenanceAdapter;
 
     protected List<MaintainEntity> mEntities = new ArrayList<>();
-    protected boolean editable, isAdd;
+    protected boolean editable;
     private String tableStatus;
     private List<Long> dgDeletedIds = new ArrayList<>(); //表体删除记录ids
     private Long eamID;
@@ -77,13 +77,7 @@ public class YHGLMaintenanceListActivity extends BaseRefreshRecyclerActivity<Mai
         super.onInit();
         EventBus.getDefault().register(context);
         editable = getIntent().getBooleanExtra(Constant.IntentKey.IS_EDITABLE, false);
-        isAdd = getIntent().getBooleanExtra(Constant.IntentKey.IS_ADD, false);
         eamID = getIntent().getLongExtra(Constant.IntentKey.EAM_ID, 0);
-        if (isAdd) {
-            Bundle bundle = new Bundle();
-            bundle.putString(Constant.IntentKey.COMMON_SAERCH_MODE, Constant.CommonSearchMode.STAFF);
-            IntentRouter.go(context, Constant.Router.COMMON_SEARCH, bundle);
-        }
         tableStatus = getIntent().getStringExtra(Constant.IntentKey.TABLE_STATUS);
         maintenanceAdapter.setEditable(editable);
         maintenanceAdapter.setTableStatus(tableStatus);

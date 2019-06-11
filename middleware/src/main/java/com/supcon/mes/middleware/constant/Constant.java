@@ -156,10 +156,13 @@ public interface Constant {
         String GENERATE_WORK_DIALOG = "GENERATE_WORK_DIALOG";//派单弹出框
 
 
-        String SCORE_LIST = "SCORE_LIST";//评分绩效列表
-        String SCORE_PERFORMANCE = "SCORE_PERFORMANCE";//评分绩效
+        String SCORE_EAM_LIST = "SCORE_EAM_LIST";//设备评分绩效列表
+        String SCORE_EAM_PERFORMANCE = "SCORE_EAM_PERFORMANCE";//评分绩效
+        String SCORE_STAFF_LIST = "SCORE_STAFF_LIST";//人员列表
+        String SCORE_STAFF_PERFORMANCE = "SCORE_STAFF_PERFORMANCE";//人员评分绩效
 
         String EAM = "EAM";//设备搜索
+        String STAFF = "STAFF";//人员搜索
     }
 
 
@@ -252,6 +255,7 @@ public interface Constant {
         String WARN_SOURCE_URL = "WARN_SOURCE_URL";//URL
 
         String EAM_CODE = "EAM_CODE";//EAM_CODE
+        String AREA_NAME = "AREA_NAME";//AREA_NAME
         String isEdit = "isEdit";//是否能编辑
 
         String SCORE_ENTITY = "SCORE_ENTITY";//评分记录
@@ -295,7 +299,8 @@ public interface Constant {
         int LUBRICATION_EARLY_WARN = 24;//润滑预警
         int DAILY_LUBRICATION_EARLY_WARN = 25;//日常润滑预警
         int MAINTENANCE_EARLY_WARN = 26;//维保预警
-        int SCORE_LIST = 27;//评分
+        int SCORE_EAM_LIST = 27;//设备评分
+        int SCORE_PERSON_LIST = 28;//人员评分
     }
 
     interface SPKey {

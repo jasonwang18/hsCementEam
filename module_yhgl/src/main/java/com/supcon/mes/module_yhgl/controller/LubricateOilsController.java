@@ -9,9 +9,11 @@ import com.app.annotation.Presenter;
 import com.supcon.common.view.base.controller.BaseViewController;
 import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.util.LogUtil;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.view.CustomListWidget;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.LubricateOilsEntity;
+import com.supcon.mes.middleware.model.bean.WXGDEam;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.bean.YHEntity;
 import com.supcon.mes.middleware.model.event.BaseEvent;
@@ -49,6 +51,7 @@ public class LubricateOilsController extends BaseViewController implements Lubri
     public LubricateOilsController(View rootView) {
         super(rootView);
     }
+
     @Override
     public void onInit() {
         super.onInit();
@@ -60,7 +63,7 @@ public class LubricateOilsController extends BaseViewController implements Lubri
     @Override
     public void initView() {
         super.initView();
-        mCustomListWidget.setAdapter(new LubricateOilsAdapter(context,false));
+        mCustomListWidget.setAdapter(new LubricateOilsAdapter(context, false));
     }
 
     @Override
@@ -69,6 +72,10 @@ public class LubricateOilsController extends BaseViewController implements Lubri
         mCustomListWidget.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
+                if (mYHEntity.getEamID().id == null) {
+                    ToastUtils.show(context,"请选择设备！");
+                    return;
+                }
                 Bundle bundle = new Bundle();
                 switch (action) {
                     case CustomListWidget.ACTION_VIEW_ALL:
@@ -76,10 +83,10 @@ public class LubricateOilsController extends BaseViewController implements Lubri
                         bundle.putString(Constant.IntentKey.LUBRICATE_OIL_ENTITIES, mLubricateOilsEntities.toString());
                         bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, isEditable);
                         bundle.putBoolean(Constant.IntentKey.IS_ADD, false);
-                        if(mYHEntity.pending!=null) {
+                        if (mYHEntity.pending != null) {
                             bundle.putString(Constant.IntentKey.TABLE_STATUS, mYHEntity.pending.taskDescription);
                         }
-                        bundle.putLong(Constant.IntentKey.EAM_ID,mYHEntity.eamID.id);
+                        bundle.putLong(Constant.IntentKey.EAM_ID, mYHEntity.getEamID().id);
                         IntentRouter.go(context, Constant.Router.YHGL_LUBRICATE_OIL_LIST, bundle);
                         break;
 //                    case CustomListWidget.ACTION_ITEM_DELETE:
@@ -123,7 +130,7 @@ public class LubricateOilsController extends BaseViewController implements Lubri
                 mCustomListWidget.setShowText("查看 (" + entity.result.size() + ")");
             }
         }
-        EventBus.getDefault().post(new ListEvent("lubricateOils",mLubricateOilsEntities));
+        EventBus.getDefault().post(new ListEvent("lubricateOils", mLubricateOilsEntities));
     }
 
     @Override
@@ -146,13 +153,16 @@ public class LubricateOilsController extends BaseViewController implements Lubri
         super.initData();
         presenterRouter.create(LubricateOilsAPI.class).listLubricateOilsList(id);
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refresh(BaseEvent baseEvent){}
+    public void refresh(BaseEvent baseEvent) {
+    }
 
     /**
      * @param
@@ -193,7 +203,11 @@ public class LubricateOilsController extends BaseViewController implements Lubri
         this.isEditable = isEditable;
     }
 
-    public void clear(){
+    public void clear() {
         mCustomListWidget.clear();
+    }
+
+    public void upEam(WXGDEam wxgdEam) {
+        mYHEntity.eamID = wxgdEam;
     }
 }

@@ -159,6 +159,7 @@
                     android:tag="yhEditEamModel"
                     app:key="规格型号"
                     app:key_width="100dp"
+                    android:visibility="gone"
                     app:text_size="16" />
 
                 <com.supcon.mes.mbap.view.CustomSpinner

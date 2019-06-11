@@ -8,7 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class ScorePerformanceEntity extends BaseEntity {
+public class ScoreEamPerformanceEntity extends BaseEntity {
 
     public String isItemValue;//是
     public String noItemValue;//否
@@ -32,10 +32,10 @@ public class ScorePerformanceEntity extends BaseEntity {
     @Expose
     public Map<String, Boolean> marksState = new LinkedHashMap<>();//多选项状态
     @Expose
-    public Map<String, ScorePerformanceEntity> scorePerformanceEntityMap = new LinkedHashMap<>();//重复的项
+    public Map<String, ScoreEamPerformanceEntity> scorePerformanceEntityMap = new LinkedHashMap<>();//重复的项
 
     @Expose
-    public ScorePerformanceEntity scorePerformanceEntity;
+    public ScoreEamPerformanceEntity scoreEamPerformanceEntity;
     @Expose
     public Integer totalScore;//单项总分数
 
@@ -50,7 +50,7 @@ public class ScorePerformanceEntity extends BaseEntity {
 
     //子布局
     @Expose
-    public Set<ScorePerformanceEntity> scorePerformanceEntities = new HashSet<>();
+    public Set<ScoreEamPerformanceEntity> scorePerformanceEntities = new HashSet<>();
 
     public int getTotalScore() {
         if (totalScore == null) {

@@ -5,6 +5,6 @@ import com.app.annotation.apt.ContractFactory;
 import java.util.List;
 
 @ContractFactory(entites = {List.class})
-public interface ScorePerformanceAPI {
+public interface ScoreEamPerformanceAPI {
     void getScoreList(int scoreId);
 }

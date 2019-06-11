@@ -3,7 +3,6 @@ package com.supcon.mes.middleware.ui;
 import android.annotation.SuppressLint;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -23,25 +22,28 @@ import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
 import com.supcon.mes.mbap.view.CustomSearchView;
 import com.supcon.mes.middleware.R;
 import com.supcon.mes.middleware.constant.Constant;
-import com.supcon.mes.middleware.model.api.EamAPI;
-import com.supcon.mes.middleware.model.bean.CommonListEntity;
+import com.supcon.mes.middleware.model.api.StaffAPI;
 import com.supcon.mes.middleware.model.bean.CommonSearchEntity;
-import com.supcon.mes.middleware.model.contract.EamContract;
+import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
+import com.supcon.mes.middleware.model.bean.UserInfoListEntity;
+import com.supcon.mes.middleware.model.contract.StaffContract;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
-import com.supcon.mes.middleware.presenter.EamPresenter;
+import com.supcon.mes.middleware.presenter.StaffPresenter;
 import com.supcon.mes.middleware.ui.adapter.BaseSearchAdapter;
 import com.supcon.mes.middleware.ui.view.PinyinSearchBar;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-@Router(value = Constant.Router.EAM)
-@Presenter(value = EamPresenter.class)
-public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity> implements EamContract.View {
+import io.reactivex.Flowable;
+
+@Router(value = Constant.Router.STAFF)
+@Presenter(value = StaffPresenter.class)
+public class StaffActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity> implements StaffContract.View {
     @BindByTag("contentView")
     RecyclerView recyclerView;
 
@@ -66,9 +68,6 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
 
     private BaseSearchAdapter mBaseSearchAdapter;
 
-    private final Map<String, Object> queryParam = new HashMap<>();
-    private String eamCode, areaName;
-
     @Override
     protected IListAdapter<CommonSearchEntity> createAdapter() {
         mBaseSearchAdapter = new BaseSearchAdapter(this, false);
@@ -81,8 +80,6 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
         refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, "没有信息哦~"));
-        eamCode = getIntent().getStringExtra(Constant.IntentKey.EAM_CODE);
-        areaName = getIntent().getStringExtra(Constant.IntentKey.AREA_NAME);
     }
 
 
@@ -100,7 +97,7 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
         titleSearchView = titleBar.searchView();
         titleSearchView.setHint("请输入搜索信息");
 
-        titleBar.setTitleText("设备搜索");
+        titleBar.setTitleText("人员搜索");
         titleBar.disableRightBtn();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -108,7 +105,6 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
         recyclerView.addOnItemTouchListener(new CustomSwipeLayout.OnSwipeItemTouchListener(this));
         recyclerView.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
         recyclerView.setScrollBarSize(2);
-        titleSearchView.setInput(eamCode);
     }
 
     @SuppressLint("CheckResult")
@@ -128,16 +124,7 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
             @Override
             public void onRefresh(int pageIndex) {
                 final String blurMes = titleSearchView.editText().getText().toString().trim();
-                if (queryParam.containsKey(Constant.BAPQuery.EAM_CODE)) {
-                    queryParam.remove(Constant.BAPQuery.EAM_CODE);
-                }
-                if (!TextUtils.isEmpty(blurMes)) {
-                    queryParam.put(Constant.BAPQuery.EAM_CODE, blurMes);
-                }
-                if (!TextUtils.isEmpty(areaName)) {
-                    queryParam.put(Constant.BAPQuery.EAM_AREANAME, areaName);
-                }
-                presenterRouter.create(EamAPI.class).getEam(queryParam, pageIndex);
+                presenterRouter.create(StaffAPI.class).listCommonContractStaff(blurMes, pageIndex);
             }
         });
         RxTextView.textChanges(titleSearchView.editText())
@@ -166,13 +153,29 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
         });
     }
 
+    @SuppressLint("CheckResult")
     @Override
-    public void getEamSuccess(CommonListEntity entity) {
-        refreshListController.refreshComplete(entity.result);
+    public void listCommonContractStaffSuccess(UserInfoListEntity entity) {
+        if (entity.result != null) {
+            List<CommonSearchEntity> commonSearchEntities = new ArrayList<>();
+            Flowable.fromIterable(entity.result)
+                    .subscribe(userInfo -> {
+                        CommonSearchStaff commonSearchStaff = new CommonSearchStaff();
+                        commonSearchStaff.id = userInfo.staff.id;
+                        commonSearchStaff.code = userInfo.staff.code;
+                        commonSearchStaff.name = userInfo.staff.name;
+                        commonSearchEntities.add(commonSearchStaff);
+                    }, throwable -> {
+                    }, () -> refreshListController.refreshComplete(commonSearchEntities));
+
+
+        } else {
+            refreshListController.refreshComplete(null);
+        }
     }
 
     @Override
-    public void getEamFailed(String errorMsg) {
+    public void listCommonContractStaffFailed(String errorMsg) {
         refreshListController.refreshComplete(null);
         ToastUtils.show(context, errorMsg);
     }

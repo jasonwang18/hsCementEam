@@ -212,7 +212,7 @@ public interface NetworkAPI {
      * @return
      */
     @GET("/foundation/staff/common/getDepartmentWorkList.action?departmentWorkPage.pageSize=500&pageOrder=DESC")
-    Flowable<UserInfoListEntity> listCommonContractStaff(@Query("departmentWorkPage.pageNo") int pageNo);
+    Flowable<UserInfoListEntity> listCommonContractStaff(@Query("staff.name") String staffName, @Query("departmentWorkPage.pageNo") int pageNo);
 
     /**
      * 获取通讯录

@@ -4,7 +4,7 @@ import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.bean.Staff;
 
-public class ScoreEntity extends BaseEntity {
+public class ScoreEamEntity extends BaseEntity {
 
     public EamType beamId;
     public int id = -1;

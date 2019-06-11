@@ -23,6 +23,7 @@ import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.utils.controllers.DatePickController;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.RepairStaffEntity;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.UserInfo;
@@ -70,7 +71,7 @@ public class YHGLRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
     private DatePickController mDatePickController;
 
     protected List<RepairStaffEntity> mEntities = new ArrayList<>();
-    protected boolean editable, isAdd;
+    protected boolean editable;
     private String tableStatus;
     private List<Long> dgDeletedIds = new ArrayList<>(); //表体删除记录ids
 
@@ -84,12 +85,6 @@ public class YHGLRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
         super.onInit();
         EventBus.getDefault().register(context);
         editable = getIntent().getBooleanExtra(Constant.IntentKey.IS_EDITABLE, false);
-        isAdd = getIntent().getBooleanExtra(Constant.IntentKey.IS_ADD, false);
-        if (isAdd) {
-            Bundle bundle = new Bundle();
-            bundle.putString(Constant.IntentKey.COMMON_SAERCH_MODE, Constant.CommonSearchMode.STAFF);
-            IntentRouter.go(context, Constant.Router.COMMON_SEARCH, bundle);
-        }
         tableStatus = getIntent().getStringExtra(Constant.IntentKey.TABLE_STATUS);
         mRepairStaffAdapter.setEditable(editable);
         mRepairStaffAdapter.setTableStatus(tableStatus);
@@ -149,9 +144,7 @@ public class YHGLRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        Bundle bundle = new Bundle();
-                        bundle.putString(Constant.IntentKey.COMMON_SAERCH_MODE, Constant.CommonSearchMode.STAFF);
-                        IntentRouter.go(context, Constant.Router.COMMON_SEARCH, bundle);
+                        IntentRouter.go(context, Constant.Router.STAFF);
                     }
                 });
 
@@ -231,14 +224,14 @@ public class YHGLRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void addStaff(CommonSearchEvent commonSearchEvent) {
-        if (!(commonSearchEvent.commonSearchEntity instanceof UserInfo)) {
+        if (!(commonSearchEvent.commonSearchEntity instanceof CommonSearchStaff)) {
             return;
         }
-        UserInfo userInfo = (UserInfo) commonSearchEvent.commonSearchEntity;
+        CommonSearchStaff searchStaff = (CommonSearchStaff) commonSearchEvent.commonSearchEntity;
 
         for (RepairStaffEntity repairStaffEntity : mEntities) {
             if (repairStaffEntity.repairStaff != null) {
-                if (repairStaffEntity.repairStaff.id.equals(userInfo.staffId)) {
+                if (repairStaffEntity.repairStaff.id.equals(searchStaff.id)) {
                     ToastUtils.show(context, "请勿重复添加人员!");
                     refreshListController.refreshComplete(mEntities);
                     return;
@@ -248,9 +241,9 @@ public class YHGLRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
 
         RepairStaffEntity repairStaffEntity = new RepairStaffEntity();
         repairStaffEntity.repairStaff = new Staff();
-        repairStaffEntity.repairStaff.id = userInfo.staffId;
-        repairStaffEntity.repairStaff.code = userInfo.staffCode;
-        repairStaffEntity.repairStaff.name = userInfo.staffName;
+        repairStaffEntity.repairStaff.id = searchStaff.id;
+        repairStaffEntity.repairStaff.code = searchStaff.code;
+        repairStaffEntity.repairStaff.name = searchStaff.name;
 
         //实际开始/结束时间根据列表最后一项赋值
         if (mEntities != null && mEntities.size() > 0) {

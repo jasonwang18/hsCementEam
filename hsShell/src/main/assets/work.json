@@ -31,7 +31,8 @@
   {"name":"润滑预警","viewType":0,"num":0,"type":24,"router":"", "isOpen":true , "pendingUrl":"/BEAM/baseInfo/jWXItem/data-dg1530747504994.action,/BEAM/baseInfo/jWXItem/data-dg1530749613834.action"},
   {"name":"日常润滑任务","viewType":0,"num":0,"type":25,"router":"", "isOpen":true , "pendingUrl":"/BEAM/baseInfo/jWXItem/data-dg1558678704208.action"},
   {"name":"维保预警","viewType":0,"num":0,"type":26,"router":"", "isOpen":true , "pendingUrl":"/BEAM/baseInfo/jWXItem/data-dg1531171100751.action,/BEAM/baseInfo/jWXItem/data-dg1531171100814.action"},
-  {"name":"评分绩效","viewType":0,"num":0,"type":27,"router":"", "isOpen":true}
+  {"name":"设备评分","viewType":0,"num":0,"type":27,"router":"", "isOpen":true},
+  {"name":"人员评分","viewType":0,"num":0,"type":28,"router":"", "isOpen":true}
 
 ]
 }

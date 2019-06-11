@@ -2,7 +2,7 @@ package com.supcon.mes.module_score.model.dto;
 
 import com.supcon.common.com_http.BaseEntity;
 
-public class ScoreDto extends BaseEntity {
+public class ScoreEamDto extends BaseEntity {
 
     public String item;
     public String result;

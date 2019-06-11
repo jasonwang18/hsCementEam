@@ -51,7 +51,7 @@ public interface CommonSearchEntity {
      * @return 返回搜索用首字母
      */
     default String getHeaderLetter() {
-        return PinYinUtils.getHeaderLetter(Objects.requireNonNull(getSearchName())).toString();
+        return PinYinUtils.getHeaderLetter(getSearchName()).toString();
     }
 
     /**

@@ -37,10 +37,12 @@ import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonDeviceEntity;
+import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.UserInfo;
 import com.supcon.mes.middleware.model.bean.WXGDEam;
 import com.supcon.mes.middleware.model.bean.YHEntity;
+import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.DeviceAddEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
@@ -286,10 +288,7 @@ public class YHViewActivity extends BaseRefreshActivity implements YHSubmitContr
         yhViewFindStaff.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
-
-                Bundle bundle = new Bundle();
-                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
-                IntentRouter.go(context, Constant.Router.COMMON_SEARCH, bundle);
+                IntentRouter.go(context, Constant.Router.STAFF);
             }
         });
     }
@@ -318,13 +317,17 @@ public class YHViewActivity extends BaseRefreshActivity implements YHSubmitContr
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getMaintenanceStaff(UserInfo staffInfo) {
-        yhViewFindStaff.setValue(staffInfo.name);
-        Staff staff = new Staff();
-        staff.id = staffInfo.id;
-        staff.code = staffInfo.staff.code;
-        staff.name = staffInfo.name;
-        mYHEntity.findStaffID = staff;
+    public void getMaintenanceStaff(CommonSearchEvent event) {
+        if (event.commonSearchEntity instanceof CommonSearchStaff) {
+            CommonSearchStaff searchStaff = (CommonSearchStaff) event.commonSearchEntity;
+            yhViewFindStaff.setValue(searchStaff.name);
+            Staff staff = new Staff();
+            staff.id = searchStaff.id;
+            staff.code = searchStaff.code;
+            staff.name = searchStaff.name;
+            mYHEntity.findStaffID = staff;
+        }
+
     }
 
     @Override

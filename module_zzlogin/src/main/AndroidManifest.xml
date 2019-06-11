@@ -19,7 +19,15 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme"
-            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden">
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.LoginActivity"
             android:launchMode="singleTask"
@@ -46,6 +54,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleBarTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+
         <service android:name=".service.HeartBeatService" />
         <service android:name=".service.PushService" />
 

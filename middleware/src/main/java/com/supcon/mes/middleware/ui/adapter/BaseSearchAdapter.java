@@ -1,6 +1,7 @@
 package com.supcon.mes.middleware.ui.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -47,7 +48,7 @@ public class BaseSearchAdapter extends BaseListDataRecyclerViewAdapter<CommonSea
     public int getPos(String word) {
         final List<CommonSearchEntity> list = getList();
         //如果adapter中并没有任何数据，list获取的结果就为0，获取迭代器就会报错，所以这里如果为null直接返回
-        if(null == list) return -1;
+        if (null == list) return -1;
         for (CommonSearchEntity commonSearchEntity : list) {
             if (commonSearchEntity.compareWithLetter(word) >= 0) {
                 return list.indexOf(commonSearchEntity);
@@ -119,8 +120,8 @@ public class BaseSearchAdapter extends BaseListDataRecyclerViewAdapter<CommonSea
             firstLetter.setVisibility((!currLetter.equals(lastLetter)) ? View.VISIBLE : View.INVISIBLE);
             firstLetter.setText(currLetter);
 
-            final String searchName = data.getSearchName().trim();
-            customCircleTextImageView.setText(searchName.length() > 0 ? searchName.charAt(0) + "" : "");
+            final String searchName = !TextUtils.isEmpty(data.getSearchName()) ? data.getSearchName().trim() : "";
+            customCircleTextImageView.setText(!TextUtils.isEmpty(searchName) ? searchName.charAt(0) + "" : "");
 
             //设置图标颜色为依次渐变
             customCircleTextImageView.setImageResource(COLORS[pos % 3]);

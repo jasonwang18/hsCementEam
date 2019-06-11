@@ -41,10 +41,13 @@ import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.RoleController;
+import com.supcon.mes.middleware.model.bean.AcceptanceCheckEntity;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
+import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntity;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntityDao;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
+import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.UserInfo;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
@@ -415,11 +418,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
                 if (action == -1) {
                     mWXGDEntity.chargeStaff.id = null;
                 } else {
-                    Bundle bundle = new Bundle();
-                    bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, childView.getTag().toString());
-//                bundle.putString(Constant.IntentKey.ENTITY_CODE, Constant.CommonSearchMode.STAFF);
-                    bundle.putBoolean(Constant.IntentKey.IS_STAFF, true);
-                    IntentRouter.go(context, Constant.Router.COMMON_SEARCH, bundle);
+                    IntentRouter.go(context, Constant.Router.STAFF);
                 }
             }
         });
@@ -514,7 +513,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
 
     private void goSBDA() {
 
-        if (mWXGDEntity.eamID==null  || mWXGDEntity.eamID.id == null) {
+        if (mWXGDEntity.eamID == null || mWXGDEntity.eamID.id == null) {
             ToastUtils.show(context, "无设备详情可查看！");
             return;
         }
@@ -789,10 +788,10 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getStaffInfo(CommonSearchEvent commonSearchEvent) {
-        if ("chargeStaff".equals(commonSearchEvent.flag)) {
-            UserInfo userInfo = (UserInfo) commonSearchEvent.commonSearchEntity;
-            chargeStaff.setValue(userInfo.staffName);
-            mWXGDEntity.chargeStaff.id = userInfo.staffId;
+        if (commonSearchEvent.commonSearchEntity instanceof CommonSearchStaff) {
+            CommonSearchStaff searchStaff = (CommonSearchStaff) commonSearchEvent.commonSearchEntity;
+            chargeStaff.setValue(searchStaff.name);
+            mWXGDEntity.chargeStaff.id = searchStaff.id;
         }
     }
 
