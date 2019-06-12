@@ -76,6 +76,20 @@
         </com.supcon.mes.module_score.ui.view.FlowLayout>
     </LinearLayout>
 
+    <com.supcon.mes.mbap.view.CustomNumView
+        android:id="@+id/sum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_25"
+        android:layout_marginRight="@dimen/dp_15"
+        android:background="@color/white"
+        android:padding="@dimen/dp_5"
+        android:tag="sum"
+        android:visibility="gone"
+        app:editable="true"
+        app:num="0"
+        app:text="数量:" />
+
     <com.supcon.mes.module_score.ui.view.FlowLayout
         android:id="@+id/checkLayout"
         android:layout_width="match_parent"

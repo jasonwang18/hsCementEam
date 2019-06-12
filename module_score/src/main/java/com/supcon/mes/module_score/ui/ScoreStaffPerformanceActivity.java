@@ -24,6 +24,7 @@ import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
+import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.constant.ListType;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.GsonUtil;
@@ -52,6 +53,7 @@ import com.supcon.mes.module_score.IntentRouter;
 import com.supcon.mes.module_score.R;
 import com.supcon.mes.module_score.model.api.ScoreEamPerformanceAPI;
 import com.supcon.mes.module_score.model.api.ScoreStaffPerformanceAPI;
+import com.supcon.mes.module_score.model.api.ScoreStaffSubmitAPI;
 import com.supcon.mes.module_score.model.api.ScoreSubmitAPI;
 import com.supcon.mes.module_score.model.bean.ScoreDutyEamEntity;
 import com.supcon.mes.module_score.model.bean.ScoreEamEntity;
@@ -60,9 +62,11 @@ import com.supcon.mes.module_score.model.bean.ScoreStaffEntity;
 import com.supcon.mes.module_score.model.bean.ScoreStaffPerformanceEntity;
 import com.supcon.mes.module_score.model.contract.ScoreEamPerformanceContract;
 import com.supcon.mes.module_score.model.contract.ScoreStaffPerformanceContract;
+import com.supcon.mes.module_score.model.contract.ScoreStaffSubmitContract;
 import com.supcon.mes.module_score.model.contract.ScoreSubmitContract;
 import com.supcon.mes.module_score.presenter.ScoreEamPerformancePresenter;
 import com.supcon.mes.module_score.presenter.ScoreStaffPerformancePresenter;
+import com.supcon.mes.module_score.presenter.ScoreStaffSubmitPresenter;
 import com.supcon.mes.module_score.presenter.ScoreSubmitPresenter;
 import com.supcon.mes.module_score.ui.adapter.ScoreEamPerformanceAdapter;
 import com.supcon.mes.module_score.ui.adapter.ScoreStaffEamAdapter;
@@ -91,8 +95,8 @@ import io.reactivex.functions.Consumer;
  * 个人评分
  */
 @Router(value = Constant.Router.SCORE_STAFF_PERFORMANCE)
-@Presenter(value = {ScoreStaffPerformancePresenter.class, ScoreSubmitPresenter.class})
-public class ScoreStaffPerformanceActivity extends BaseRefreshActivity implements ScoreStaffPerformanceContract.View, ScoreSubmitContract.View {
+@Presenter(value = {ScoreStaffPerformancePresenter.class, ScoreStaffSubmitPresenter.class})
+public class ScoreStaffPerformanceActivity extends BaseRefreshActivity implements ScoreStaffPerformanceContract.View, ScoreStaffSubmitContract.View {
     @BindByTag("leftBtn")
     ImageButton leftBtn;
     @BindByTag("titleText")
@@ -169,7 +173,7 @@ public class ScoreStaffPerformanceActivity extends BaseRefreshActivity implement
             scoreStaffEntity.patrolWorker.id = EamApplication.getAccountInfo().staffId;
         }
         scoreStaff.setContent(scoreStaffEntity.getPatrolWorker().name);
-        staffScore.setContent(Util.strFormat2(scoreStaffEntity.score));
+        staffScore.setContent(Util.big(scoreStaffEntity.score));
         scoreStaffPerformanceAdapter.updateTotal(scoreStaffEntity.score);
         scoreStaffEntity.scoreData = (scoreStaffEntity.scoreData != null) ? scoreStaffEntity.scoreData : System.currentTimeMillis();
         scoreTime.setContent(DateUtil.dateFormat(scoreStaffEntity.scoreData));
@@ -228,7 +232,11 @@ public class ScoreStaffPerformanceActivity extends BaseRefreshActivity implement
             }
         });
     }
-    
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLogin(LoginEvent loginEvent) {
+
+        refreshController.refreshBegin();
+    }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void search(CommonSearchEvent commonSearchEvent) {
         if (commonSearchEvent.commonSearchEntity != null) {
@@ -285,41 +293,35 @@ public class ScoreStaffPerformanceActivity extends BaseRefreshActivity implement
     }
 
     private void doSubmit() {
-//        ScoreMapManager.dataChange(scoreStaffPerformanceAdapter.getList(), scoreEamEntity);
-//        Map map = ScoreMapManager.createMap(scoreEamEntity);
-//
-//        List list1 = ScoreMapManager.dataChange(scoreStaffPerformanceAdapter.getList(), "设备运转率");
-//        map.put("dg1559647635248ModelCode", "BEAM_1.0.0_scorePerformance_OperateRate");
-//        map.put("dg1559647635248ListJson", list1.toString());
-//        map.put("dgLists['dg1559647635248']", list1.toString());
-//
-//        List list2 = ScoreMapManager.dataChange(scoreStaffPerformanceAdapter.getList(), "高质量运行");
-//        map.put("dg1559291491380ModelCode", "BEAM_1.0.0_scorePerformance_HighQualityRun");
-//        map.put("dg1559291491380ListJson", list2.toString());
-//        map.put("dgLists['dg1559291491380']", list2.toString());
-//
-//        List list3 = ScoreMapManager.dataChange(scoreStaffPerformanceAdapter.getList(), "安全防护");
-//        map.put("dg1559560003995ModelCode", "BEAM_1.0.0_scorePerformance_Security");
-//        map.put("dg1559560003995ListJson", list3.toString());
-//        map.put("dgLists['dg1559560003995']", list3.toString());
-//
-//        List list4 = ScoreMapManager.dataChange(scoreStaffPerformanceAdapter.getList(), "外观标识");
-//        map.put("dg1559619724464ModelCode", "BEAM_1.0.0_scorePerformance_OutwardMark");
-//        map.put("dg1559619724464ListJson", list4.toString());
-//        map.put("dgLists['dg1559619724464']", list4.toString());
-//
-//        List list5 = ScoreMapManager.dataChange(scoreStaffPerformanceAdapter.getList(), "设备卫生");
-//        map.put("dg1559631064719ModelCode", "BEAM_1.0.0_scorePerformance_Health");
-//        map.put("dg1559631064719ListJson", list5.toString());
-//        map.put("dgLists['dg1559631064719']", list5.toString());
-//
-//        List list6 = ScoreMapManager.dataChange(scoreStaffPerformanceAdapter.getList(), "档案管理");
-//        map.put("dg1559636766020ModelCode", "BEAM_1.0.0_scorePerformance_OutwardMark");
-//        map.put("dg1559636766020ListJson", list6.toString());
-//        map.put("dgLists['dg1559636766020']", list6.toString());
 
-//        map.put("operateType", Constant.Transition.SUBMIT);
-//        presenterRouter.create(ScoreSubmitAPI.class).doSubmit(map);
+        Map map = ScoreMapManager.createMap(scoreStaffEntity);
+        if (scoreStaffEamAdapter.getList() != null) {
+            ScoreMapManager.addAvg(scoreStaffEamAdapter.getList(), map);
+        }
+
+        List list1 = ScoreMapManager.dataStaffChange(scoreStaffPerformanceAdapter.getList(), "设备运行");
+        map.put("dg1560145365044ModelCode", "BEAM_1.0.0_patrolWorkerScore_Running");
+        map.put("dg1560145365044ListJson", list1.toString());
+        map.put("dgLists['dg1560145365044']", list1.toString());
+
+        List list2 = ScoreMapManager.dataStaffChange(scoreStaffPerformanceAdapter.getList(), "规范化管理");
+        map.put("dg1560222990407ModelCode", "BEAM_1.0.0_patrolWorkerScore_Standardized");
+        map.put("dg1560222990407ListJson", list2.toString());
+        map.put("dgLists['dg1560222990407']", list2.toString());
+
+        List list3 = ScoreMapManager.dataStaffChange(scoreStaffPerformanceAdapter.getList(), "安全生产");
+        map.put("dg1560223948889ModelCode", "BEAM_1.0.0_patrolWorkerScore_SafeProduction");
+        map.put("dg1560223948889ListJson", list3.toString());
+        map.put("dgLists['dg1560223948889']", list3.toString());
+
+        List list4 = ScoreMapManager.dataStaffChange(scoreStaffPerformanceAdapter.getList(), "工作表现");
+        map.put("dg1560224145331ModelCode", "BBEAM_1.0.0_patrolWorkerScore_WorkePerformance");
+        map.put("dg1560224145331ListJson", list4.toString());
+        map.put("dgLists['dg1560224145331']", list4.toString());
+
+
+        map.put("operateType", Constant.Transition.SUBMIT);
+        presenterRouter.create(ScoreStaffSubmitAPI.class).doStaffSubmit(map);
     }
 
 
@@ -331,7 +333,7 @@ public class ScoreStaffPerformanceActivity extends BaseRefreshActivity implement
     }
 
     @Override
-    public void doSubmitSuccess(BapResultEntity entity) {
+    public void doStaffSubmitSuccess(BapResultEntity entity) {
         onLoadSuccessAndExit("评分成功", new OnLoaderFinishListener() {
             @Override
             public void onLoaderFinished() {
@@ -342,7 +344,7 @@ public class ScoreStaffPerformanceActivity extends BaseRefreshActivity implement
     }
 
     @Override
-    public void doSubmitFailed(String errorMsg) {
+    public void doStaffSubmitFailed(String errorMsg) {
         if ("本数据已经被其他人修改或删除，请刷页面后重试".equals(errorMsg)) {
             loaderController.showMsgAndclose(ErrorMsgHelper.msgParse(errorMsg), false, 5000);
         } else if (errorMsg.contains("com.supcon.orchid.BEAM2.entities.BEAM2SparePart")) {
@@ -358,5 +360,6 @@ public class ScoreStaffPerformanceActivity extends BaseRefreshActivity implement
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
 
 }

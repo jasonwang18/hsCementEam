@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -354,6 +355,22 @@ public class Util {
      * @param d
      * @return
      */
+    public static String big0(Float d) {
+        if (d == null || d == 0) {
+            return "0";
+        }
+        BigDecimal d1 = new BigDecimal(Double.toString(d));
+        BigDecimal d2 = new BigDecimal(Integer.toString(1));
+        // 四舍五入,保留2位小数
+        return d1.divide(d2, 2, BigDecimal.ROUND_HALF_UP).toString();
+    }
+
+    /**
+     * 浮点型保留两位小数
+     *
+     * @param d
+     * @return
+     */
     public static String big2(Float d) {
         if (d == null || d == 0) {
             return "--";
@@ -376,7 +393,6 @@ public class Util {
         }
         BigDecimal d1 = new BigDecimal(Double.toString(d));
         BigDecimal d2 = new BigDecimal(Integer.toString(1));
-        // 四舍五入,保留2位小数
         return d1.divide(d2, 2, BigDecimal.ROUND_HALF_UP).floatValue();
     }
 

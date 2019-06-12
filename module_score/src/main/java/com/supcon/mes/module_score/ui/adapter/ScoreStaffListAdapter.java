@@ -57,7 +57,7 @@ public class ScoreStaffListAdapter extends BaseListDataRecyclerViewAdapter<Score
                     , Util.strFormat(data.getPatrolWorker().code));
             itemScoreStaff.contentView().setText(HtmlParser.buildSpannedText(staff, new HtmlTagHandler()));
 
-            itemScoreNum.setValue(Util.strFormat2(data.score));
+            itemScoreNum.setValue(Util.big(data.score));
             itemScoreTime.setValue(data.scoreData != null ? DateUtil.dateFormat(data.scoreData) : "");
         }
     }

@@ -85,7 +85,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -494,7 +493,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
                 isActionSop = true;
                 int screenWidth = DisplayUtil.getScreenWidth(WXGDExecuteActivity.this);
                 int i = DisplayUtil.dip2px(40, WXGDExecuteActivity.this);
-                customDialog = new CustomDialog(context).layout(R.layout.item_dialog, screenWidth - i, WRAP_CONTENT)
+                customDialog = new CustomDialog(context).layout(R.layout.item_stop_dialog, screenWidth - i, WRAP_CONTENT)
                         .bindView(R.id.blueBtn, "确定")
                         .bindView(R.id.grayBtn, "取消")
                         .bindTextChangeListener(R.id.reason, new OnTextListener() {

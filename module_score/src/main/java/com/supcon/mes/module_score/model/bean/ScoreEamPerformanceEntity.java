@@ -15,7 +15,7 @@ public class ScoreEamPerformanceEntity extends BaseEntity {
     public String item;
     public String itemDetail;//评分详情
     public boolean result;//选中结果
-    public int score;//分数
+    public float score;//分数
     public String scoreStandard;//标题
     public String scoreItem;//选项内容
 
@@ -28,7 +28,7 @@ public class ScoreEamPerformanceEntity extends BaseEntity {
     @Expose
     public int Index = 0;
     @Expose
-    public Map<String, Integer> marks = new LinkedHashMap<>();//多选项
+    public Map<String, Float> marks = new LinkedHashMap<>();//多选项
     @Expose
     public Map<String, Boolean> marksState = new LinkedHashMap<>();//多选项状态
     @Expose
@@ -37,12 +37,12 @@ public class ScoreEamPerformanceEntity extends BaseEntity {
     @Expose
     public ScoreEamPerformanceEntity scoreEamPerformanceEntity;
     @Expose
-    public Integer totalScore;//单项总分数
+    public Float totalScore;//单项总分数
 
-    public int defaultTotalScore;//默认总分数
+    public float defaultTotalScore;//默认总分数
 
     @Expose
-    private Integer totalHightScore;//单项最高总分数
+    private Float totalHightScore;//单项最高总分数
 
      @Expose
     public Float scoreNum;//总分
@@ -52,25 +52,25 @@ public class ScoreEamPerformanceEntity extends BaseEntity {
     @Expose
     public Set<ScoreEamPerformanceEntity> scorePerformanceEntities = new HashSet<>();
 
-    public int getTotalScore() {
+    public Float getTotalScore() {
         if (totalScore == null) {
             totalScore = defaultTotalScore;
         }
         return totalScore;
     }
 
-    public void setTotalScore(Integer totalScore) {
+    public void setTotalScore(Float totalScore) {
         this.totalScore = totalScore;
     }
 
-    public Integer getTotalHightScore() {
+    public Float getTotalHightScore() {
         if (totalHightScore == null) {
             totalHightScore = defaultTotalScore;
         }
         return totalHightScore;
     }
 
-    public void setTotalHightScore(Integer totalHightScore) {
+    public void setTotalHightScore(Float totalHightScore) {
         this.totalHightScore = totalHightScore;
     }
 }

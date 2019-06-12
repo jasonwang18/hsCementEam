@@ -22,6 +22,7 @@ import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
+import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.constant.ListType;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.GsonUtil;
@@ -175,7 +176,6 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
             eamCode.setContent(Util.strFormat(scoreEamEntity.getBeamId().code));
             eamName.setContent(Util.strFormat(scoreEamEntity.getBeamId().name));
             eamDept.setContent(Util.strFormat(scoreEamEntity.getBeamId().getUseDept().name));
-            eamScore.setContent(Util.strFormat2(scoreEamEntity.scoreNum));
         } else {
             scoreEamEntity = new ScoreEamEntity();
             scoreEamEntity.scoreStaff = new Staff();
@@ -184,7 +184,7 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
             scoreEamEntity.scoreStaff.id = EamApplication.getAccountInfo().staffId;
         }
         scoreEamEntity.scoreTime = (scoreEamEntity != null && scoreEamEntity.scoreTime != null) ? scoreEamEntity.scoreTime : getYesterday();
-
+        eamScore.setContent(Util.big(scoreEamEntity.scoreNum));
         scoreStaff.setContent(scoreEamEntity.getScoreStaff().name);
         scoreTime.setContent(DateUtil.dateFormat(scoreEamEntity.scoreTime));
         scoreEamPerformanceAdapter.updateTotal(scoreEamEntity.scoreNum);
@@ -267,6 +267,12 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
             bundle.putString(Constant.IntentKey.EAM_CODE, (String) nfcJson.get("textRecord"));
             IntentRouter.go(this, Constant.Router.EAM, bundle);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLogin(LoginEvent loginEvent) {
+
+        refreshListController.refreshBegin();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
