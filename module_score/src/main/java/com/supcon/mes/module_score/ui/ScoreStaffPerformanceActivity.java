@@ -24,6 +24,7 @@ import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
+import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.constant.ListType;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.GsonUtil;
@@ -231,7 +232,11 @@ public class ScoreStaffPerformanceActivity extends BaseRefreshActivity implement
             }
         });
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLogin(LoginEvent loginEvent) {
 
+        refreshController.refreshBegin();
+    }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void search(CommonSearchEvent commonSearchEvent) {
         if (commonSearchEvent.commonSearchEntity != null) {

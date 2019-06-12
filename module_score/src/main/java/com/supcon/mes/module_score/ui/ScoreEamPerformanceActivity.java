@@ -22,6 +22,7 @@ import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
+import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.constant.ListType;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.GsonUtil;
@@ -266,6 +267,12 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
             bundle.putString(Constant.IntentKey.EAM_CODE, (String) nfcJson.get("textRecord"));
             IntentRouter.go(this, Constant.Router.EAM, bundle);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLogin(LoginEvent loginEvent) {
+
+        refreshListController.refreshBegin();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

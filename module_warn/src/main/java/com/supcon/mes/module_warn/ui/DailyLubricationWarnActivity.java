@@ -18,6 +18,7 @@ import com.supcon.mes.module_warn.model.event.TabEvent;
 import com.supcon.mes.module_warn.ui.adapter.DailyLubricationWarnAdapter;
 import com.supcon.mes.module_warn.ui.fragment.DailyLubricateReceiveTaskFragment;
 import com.supcon.mes.module_warn.ui.fragment.DailyLubricateTaskFragment;
+import com.supcon.mes.module_warn.ui.fragment.TemporaryTaskFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -80,6 +81,7 @@ public class DailyLubricationWarnActivity extends BaseFragmentActivity {
         DailyLubricationWarnAdapter dailyLubricationWarnAdapter = new DailyLubricationWarnAdapter(getSupportFragmentManager());
         dailyLubricationWarnAdapter.addFragment(DailyLubricateTaskFragment.newInstance(), "日常润滑任务领取");
         dailyLubricationWarnAdapter.addFragment(DailyLubricateReceiveTaskFragment.newInstance(), "日常润滑任务执行");
+        dailyLubricationWarnAdapter.addFragment(TemporaryTaskFragment.newInstance(), "临时润滑任务");
         sbdaViewPager.setAdapter(dailyLubricationWarnAdapter);
     }
 
