@@ -91,7 +91,7 @@ public class ScoreStaffPerformanceAdapter extends BaseListDataRecyclerViewAdapte
         @Override
         protected void update(ScoreStaffPerformanceEntity data) {
             contentTitle.setText(data.project);
-            fraction.setText(Util.big2Float(data.fraction) + "分");
+            fraction.setText(Util.big0(data.fraction) + "分");
         }
     }
 
@@ -188,7 +188,7 @@ public class ScoreStaffPerformanceAdapter extends BaseListDataRecyclerViewAdapte
         @Override
         protected void update(ScoreStaffPerformanceEntity data) {
             itemIndex.setText(data.Index + ".");
-            Spanned item = HtmlParser.buildSpannedText(String.format(context.getString(R.string.device_style12), data.item, Util.big2Float(data.itemScore)), new HtmlTagHandler());
+            Spanned item = HtmlParser.buildSpannedText(String.format(context.getString(R.string.device_style12), data.item, Util.big0(data.itemScore)), new HtmlTagHandler());
             scoreItem.setText(item);
             scoreRadioGroup.setVisibility(View.VISIBLE);
             sum.setVisibility(View.VISIBLE);
