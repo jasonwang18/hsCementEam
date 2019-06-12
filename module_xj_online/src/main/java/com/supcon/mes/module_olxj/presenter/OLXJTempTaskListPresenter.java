@@ -7,6 +7,7 @@ import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
+import com.supcon.mes.middleware.model.bean.JoinSubcondEntity;
 import com.supcon.mes.middleware.util.BAPQueryParamsHelper;
 import com.supcon.mes.module_olxj.model.bean.OLXJTaskEntity;
 import com.supcon.mes.module_olxj.model.contract.OLXJTempTaskContract;
@@ -32,6 +33,11 @@ public class OLXJTempTaskListPresenter extends OLXJTempTaskContract.Presenter {
         queryParam.put(Constant.BAPQuery.LINK_STATE, "LinkState/02");//LinkState/01 未下发 LinkState/02 已下发
         FastQueryCondEntity fastQueryCondEntity = BAPQueryParamsHelper.createSingleFastQueryCond(queryParam);
         fastQueryCondEntity.modelAlias = "potrolTaskWF";
+
+        Map<String, Object> paramsName = new HashMap<>();
+        paramsName.put(Constant.BAPQuery.NAME, EamApplication.getAccountInfo().staffName);
+        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(paramsName, "base_staff,ID,MOBILEEAM_POTROL_TASKWFS,RESSTAFFID");
+        fastQueryCondEntity.subconds.add(joinSubcondEntity);
 
         Map<String, Object> pageQueryParams = new HashMap<>();
         pageQueryParams.put("page.pageNo", 1);

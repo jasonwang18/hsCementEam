@@ -41,7 +41,7 @@ import io.reactivex.functions.Predicate;
 public class ScoreEamPerformanceAdapter extends BaseListDataRecyclerViewAdapter<ScoreEamPerformanceEntity> {
 
     private boolean isEdit = false;
-    private int total;
+    private float total;
 
     public ScoreEamPerformanceAdapter(Context context) {
         super(context);
@@ -50,7 +50,8 @@ public class ScoreEamPerformanceAdapter extends BaseListDataRecyclerViewAdapter<
     public void setEditable(boolean isEdit) {
         this.isEdit = isEdit;
     }
-    public void updateTotal(int total) {
+
+    public void updateTotal(float total) {
         this.total = total;
     }
 
@@ -140,11 +141,11 @@ public class ScoreEamPerformanceAdapter extends BaseListDataRecyclerViewAdapter<
                     if (scoreRadioBtn1.isPressed() || scoreRadioBtn2.isPressed()) {
                         ScoreEamPerformanceEntity item = getItem(getLayoutPosition());
                         item.result = !item.result;
-                        int oldTotal = total - item.scoreEamPerformanceEntity.getTotalScore();
+                        float oldTotal = total - item.scoreEamPerformanceEntity.getTotalScore();
                         if (item.result) {
                             item.scoreEamPerformanceEntity.setTotalHightScore(item.scoreEamPerformanceEntity.getTotalHightScore() + item.score);
-                            if (item.scoreEamPerformanceEntity.totalHightScore > 0) {
-                                item.scoreEamPerformanceEntity.setTotalScore(item.scoreEamPerformanceEntity.getTotalScore() + item.score);
+                            if (item.scoreEamPerformanceEntity.getTotalHightScore() > 0) {
+                                item.scoreEamPerformanceEntity.setTotalScore(item.scoreEamPerformanceEntity.getTotalHightScore());
                             }
                         } else {
                             item.scoreEamPerformanceEntity.setTotalHightScore(item.scoreEamPerformanceEntity.getTotalHightScore() - item.score);
@@ -195,15 +196,15 @@ public class ScoreEamPerformanceAdapter extends BaseListDataRecyclerViewAdapter<
             Boolean result = item.marksState.get(buttonView.getText().toString());
             result = !result;
             item.marksState.put(buttonView.getText().toString(), result);
-            int oldTotal = total - item.scoreEamPerformanceEntity.getTotalScore();
+            float oldTotal = total - item.scoreEamPerformanceEntity.getTotalScore();
 
             if (result) {
                 item.scoreEamPerformanceEntity.setTotalHightScore(item.scoreEamPerformanceEntity.getTotalHightScore() - item.marks.get(buttonView.getText().toString()));
                 item.scoreEamPerformanceEntity.setTotalScore(item.scoreEamPerformanceEntity.getTotalScore() - item.marks.get(buttonView.getText().toString()));
             } else {
                 item.scoreEamPerformanceEntity.setTotalHightScore(item.scoreEamPerformanceEntity.getTotalHightScore() + item.marks.get(buttonView.getText().toString()));
-                if (item.scoreEamPerformanceEntity.totalHightScore > 0) {
-                    item.scoreEamPerformanceEntity.setTotalScore(item.scoreEamPerformanceEntity.getTotalScore() + item.marks.get(buttonView.getText().toString()));
+                if (item.scoreEamPerformanceEntity.getTotalHightScore() > 0) {
+                    item.scoreEamPerformanceEntity.setTotalScore(item.scoreEamPerformanceEntity.getTotalHightScore());
                 }
             }
             if (item.scoreEamPerformanceEntity.getTotalScore() < 0) {
@@ -336,7 +337,7 @@ public class ScoreEamPerformanceAdapter extends BaseListDataRecyclerViewAdapter<
                         cumulativeRunTime.setContent(Util.big(item.totalRunTime));
 
                         if (item.accidentStopTime != null) {
-                            int oldTotal = total - item.scoreEamPerformanceEntity.getTotalScore();
+                            float oldTotal = total - item.scoreEamPerformanceEntity.getTotalScore();
 
                             if (item.accidentStopTime > 0 && item.accidentStopTime <= 1) {
                                 item.scoreEamPerformanceEntity.setTotalScore(item.scoreEamPerformanceEntity.defaultTotalScore - 5);

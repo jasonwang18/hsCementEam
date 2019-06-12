@@ -1,9 +1,11 @@
 package com.supcon.mes.module_olxj.presenter;
 
 import com.supcon.common.view.util.LogUtil;
+import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
+import com.supcon.mes.middleware.model.bean.JoinSubcondEntity;
 import com.supcon.mes.middleware.util.BAPQueryParamsHelper;
 import com.supcon.mes.module_olxj.model.bean.OLXJTaskEntity;
 import com.supcon.mes.module_olxj.model.contract.OLXJTaskContract;
@@ -35,7 +37,7 @@ public class OLXJTaskListPresenter extends OLXJTaskContract.Presenter {
         pageQueryParams.put("page.pageNo", 1);
         pageQueryParams.put("page.pageSize", 100);
         pageQueryParams.put("page.maxPageSize", 500);
-        LogUtil.d("fastQueryCondEntity:"+fastQueryCondEntity);
+        LogUtil.d("fastQueryCondEntity:" + fastQueryCondEntity);
 
         mCompositeSubscription.add(
                 OLXJClient.queryPotrolTaskList(pageQueryParams, fastQueryCondEntity)
@@ -69,11 +71,11 @@ public class OLXJTaskListPresenter extends OLXJTaskContract.Presenter {
     private List<OLXJTaskEntity> filterTask(List<OLXJTaskEntity> result) {
         List<OLXJTaskEntity> taskEntities = new ArrayList<>();
         long currentTime = System.currentTimeMillis();
-        for(OLXJTaskEntity taskEntity : result){
-            if(taskEntity.starTime == null || taskEntity.endTime == null){
+        for (OLXJTaskEntity taskEntity : result) {
+            if (taskEntity.starTime == null || taskEntity.endTime == null) {
                 continue;
             }
-            if(taskEntity.starTime <= currentTime && taskEntity.endTime >= currentTime){
+            if (taskEntity.starTime <= currentTime && taskEntity.endTime >= currentTime) {
                 taskEntities.add(taskEntity);
             }
 
@@ -87,11 +89,17 @@ public class OLXJTaskListPresenter extends OLXJTaskContract.Presenter {
         FastQueryCondEntity fastQueryCondEntity = BAPQueryParamsHelper.createJoinFastQueryCond(queryParam);
         fastQueryCondEntity.modelAlias = "potrolTaskWF";
 
+        Map<String, Object> paramsName = new HashMap<>();
+        paramsName.put(Constant.BAPQuery.NAME, EamApplication.getAccountInfo().staffName);
+        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(paramsName, "base_staff,ID,MOBILEEAM_POTROL_TASKWFS,RESSTAFFID");
+        fastQueryCondEntity.subconds.add(joinSubcondEntity);
+
+
         Map<String, Object> pageQueryParams = new HashMap<>();
         pageQueryParams.put("page.pageNo", 1);
         pageQueryParams.put("page.pageSize", 20);
         pageQueryParams.put("page.maxPageSize", 500);
-        LogUtil.d("fastQueryCondEntity:"+fastQueryCondEntity);
+        LogUtil.d("fastQueryCondEntity:" + fastQueryCondEntity);
 
         mCompositeSubscription.add(
                 OLXJClient.queryPotrolTaskList(pageQueryParams, fastQueryCondEntity)
@@ -109,7 +117,7 @@ public class OLXJTaskListPresenter extends OLXJTaskContract.Presenter {
                             public void accept(CommonBAPListEntity<OLXJTaskEntity> olxjTaskEntityCommonBAPListEntity) throws Exception {
                                 if (olxjTaskEntityCommonBAPListEntity.result != null) {
                                     List<OLXJTaskEntity> taskEntities = new ArrayList<>();
-                                    if(olxjTaskEntityCommonBAPListEntity.result.size()!=0) {
+                                    if (olxjTaskEntityCommonBAPListEntity.result.size() != 0) {
                                         taskEntities.add(olxjTaskEntityCommonBAPListEntity.result.get(0));
                                     }
                                     Objects.requireNonNull(getView()).getOJXJLastTaskListSuccess(taskEntities);

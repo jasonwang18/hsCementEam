@@ -193,8 +193,8 @@ public class ScoreEamListActivity extends BaseRefreshRecyclerActivity implements
                 String date = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
                 startTime.setDate(date);
                 if (compareTime(startTime.getContent(), stopTime.getContent())) {
-                    if (!queryParam.containsKey(Constant.BAPQuery.OPEN_TIME_START)) {
-                        queryParam.remove(Constant.BAPQuery.OPEN_TIME_START);
+                    if (!queryParam.containsKey(Constant.BAPQuery.SCORE_TIME_START)) {
+                        queryParam.remove(Constant.BAPQuery.SCORE_TIME_START);
                     }
                     queryParam.put(Constant.BAPQuery.SCORE_TIME_START, date);
                     refreshListController.refreshBegin();
@@ -208,8 +208,8 @@ public class ScoreEamListActivity extends BaseRefreshRecyclerActivity implements
                     String date = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
                     stopTime.setDate(date);
                     if (compareTime(startTime.getContent(), stopTime.getContent())) {
-                        if (!queryParam.containsKey(Constant.BAPQuery.OPEN_TIME_STOP)) {
-                            queryParam.remove(Constant.BAPQuery.OPEN_TIME_STOP);
+                        if (!queryParam.containsKey(Constant.BAPQuery.SCORE_TIME_STOP)) {
+                            queryParam.remove(Constant.BAPQuery.SCORE_TIME_STOP);
                         }
                         queryParam.put(Constant.BAPQuery.SCORE_TIME_STOP, date);
                         refreshListController.refreshBegin();

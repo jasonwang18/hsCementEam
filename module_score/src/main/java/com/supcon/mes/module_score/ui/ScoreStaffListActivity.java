@@ -26,19 +26,21 @@ import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
 import com.supcon.mes.mbap.view.CustomSearchView;
 import com.supcon.mes.mbap.view.CustomVerticalDateView;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.KeyExpandHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
-import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_score.IntentRouter;
 import com.supcon.mes.module_score.R;
 import com.supcon.mes.module_score.model.api.ScoreEamListAPI;
-import com.supcon.mes.module_score.model.bean.ScoreEamEntity;
+import com.supcon.mes.module_score.model.api.ScoreStaffListAPI;
 import com.supcon.mes.module_score.model.bean.ScoreEamListEntity;
-import com.supcon.mes.module_score.model.contract.ScoreEamListContract;
+import com.supcon.mes.module_score.model.bean.ScoreStaffEntity;
+import com.supcon.mes.module_score.model.contract.ScoreStaffListContract;
 import com.supcon.mes.module_score.presenter.ScoreEamListPresenter;
-import com.supcon.mes.module_score.ui.adapter.ScoreEamListAdapter;
+import com.supcon.mes.module_score.presenter.ScoreStaffListPresenter;
+import com.supcon.mes.module_score.ui.adapter.ScoreStaffListAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -55,8 +57,8 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.functions.Consumer;
 
 @Router(value = Constant.Router.SCORE_STAFF_LIST)
-@Presenter(value = ScoreEamListPresenter.class)
-public class ScoreStaffListActivity extends BaseRefreshRecyclerActivity implements ScoreEamListContract.View {
+@Presenter(value = ScoreStaffListPresenter.class)
+public class ScoreStaffListActivity extends BaseRefreshRecyclerActivity implements ScoreStaffListContract.View {
 
     @BindByTag("leftBtn")
     AppCompatImageButton leftBtn;
@@ -83,14 +85,14 @@ public class ScoreStaffListActivity extends BaseRefreshRecyclerActivity implemen
 
     private final Map<String, Object> queryParam = new HashMap<>();
     private String selecStr;
-    private ScoreEamListAdapter scoreEamListAdapter;
+    private ScoreStaffListAdapter scoreStaffListAdapter;
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
     @Override
     protected IListAdapter createAdapter() {
-        scoreEamListAdapter = new ScoreEamListAdapter(this);
-        return scoreEamListAdapter;
+        scoreStaffListAdapter = new ScoreStaffListAdapter(this);
+        return scoreStaffListAdapter;
     }
 
     @Override
@@ -121,14 +123,14 @@ public class ScoreStaffListActivity extends BaseRefreshRecyclerActivity implemen
         datePickController.setSecondVisible(true);
         datePickController.textSize(18);
 
-        customSearchView.setHint("请输入设备");
+        customSearchView.setHint("请输入巡检工名字");
         searchTitleBar.enableRightBtn();
         searchTitleBar.setTitleText("人员评分绩效");
         startTime.setDate(getYesterday());
         stopTime.setDate(dateFormat.format(System.currentTimeMillis()));
 
-        queryParam.put(Constant.BAPQuery.SCORE_TIME_START, getYesterday());
-        queryParam.put(Constant.BAPQuery.SCORE_TIME_STOP, dateFormat.format(System.currentTimeMillis()));
+        queryParam.put(Constant.BAPQuery.SCORE_DATA_START, getYesterday());
+        queryParam.put(Constant.BAPQuery.SCORE_DATA_STOP, dateFormat.format(System.currentTimeMillis()));
     }
 
     @SuppressLint("CheckResult")
@@ -137,12 +139,7 @@ public class ScoreStaffListActivity extends BaseRefreshRecyclerActivity implemen
         super.initListener();
         RxView.clicks(leftBtn)
                 .throttleFirst(2, TimeUnit.SECONDS)
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-                        onBackPressed();
-                    }
-                });
+                .subscribe(o -> onBackPressed());
         RxView.clicks(rightBtn)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
@@ -151,20 +148,13 @@ public class ScoreStaffListActivity extends BaseRefreshRecyclerActivity implemen
                     IntentRouter.go(ScoreStaffListActivity.this, Constant.Router.SCORE_STAFF_PERFORMANCE, bundle);
                 });
         refreshListController.setOnRefreshPageListener(pageIndex -> {
-            if (queryParam.containsKey(Constant.BAPQuery.EAM_NAME)) {
-                queryParam.remove(Constant.BAPQuery.EAM_NAME);
-            }
-            if (queryParam.containsKey(Constant.BAPQuery.EAM_CODE)) {
-                queryParam.remove(Constant.BAPQuery.EAM_CODE);
+            if (queryParam.containsKey(Constant.BAPQuery.NAME)) {
+                queryParam.remove(Constant.BAPQuery.NAME);
             }
             if (!TextUtils.isEmpty(selecStr)) {
-                if (Util.isContainChinese(selecStr)) {
-                    queryParam.put(Constant.BAPQuery.EAM_NAME, selecStr);
-                } else {
-                    queryParam.put(Constant.BAPQuery.EAM_CODE, selecStr);
-                }
+                queryParam.put(Constant.BAPQuery.NAME, selecStr);
             }
-            presenterRouter.create(ScoreEamListAPI.class).getScoreList(queryParam, pageIndex);
+            presenterRouter.create(ScoreStaffListAPI.class).patrolScore(queryParam, pageIndex);
         });
 
         RxTextView.textChanges(customSearchView.editText())
@@ -177,13 +167,13 @@ public class ScoreStaffListActivity extends BaseRefreshRecyclerActivity implemen
         KeyExpandHelper.doActionSearch(customSearchView.editText(), true, () ->
                 doSearchTableNo(customSearchView.getInput()));
 
-        scoreEamListAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
+        scoreStaffListAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-                ScoreEamEntity item = scoreEamListAdapter.getItem(position);
+                ScoreStaffEntity item = scoreStaffListAdapter.getItem(position);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(Constant.IntentKey.SCORE_ENTITY, item);
-                bundle.putBoolean(Constant.IntentKey.isEdit, compareTimeIsEdit(item.scoreTime != null ? item.scoreTime : 0));
+                bundle.putBoolean(Constant.IntentKey.isEdit, compareTimeIsEdit(item.scoreData != null ? item.scoreData : 0));
                 IntentRouter.go(ScoreStaffListActivity.this, Constant.Router.SCORE_STAFF_PERFORMANCE, bundle);
             }
         });
@@ -193,10 +183,10 @@ public class ScoreStaffListActivity extends BaseRefreshRecyclerActivity implemen
                 String date = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
                 startTime.setDate(date);
                 if (compareTime(startTime.getContent(), stopTime.getContent())) {
-                    if (!queryParam.containsKey(Constant.BAPQuery.OPEN_TIME_START)) {
-                        queryParam.remove(Constant.BAPQuery.OPEN_TIME_START);
+                    if (!queryParam.containsKey(Constant.BAPQuery.SCORE_DATA_START)) {
+                        queryParam.remove(Constant.BAPQuery.SCORE_DATA_START);
                     }
-                    queryParam.put(Constant.BAPQuery.SCORE_TIME_START, date);
+                    queryParam.put(Constant.BAPQuery.SCORE_DATA_START, date);
                     refreshListController.refreshBegin();
                 }
 
@@ -208,10 +198,10 @@ public class ScoreStaffListActivity extends BaseRefreshRecyclerActivity implemen
                     String date = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
                     stopTime.setDate(date);
                     if (compareTime(startTime.getContent(), stopTime.getContent())) {
-                        if (!queryParam.containsKey(Constant.BAPQuery.OPEN_TIME_STOP)) {
-                            queryParam.remove(Constant.BAPQuery.OPEN_TIME_STOP);
+                        if (!queryParam.containsKey(Constant.BAPQuery.SCORE_DATA_STOP)) {
+                            queryParam.remove(Constant.BAPQuery.SCORE_DATA_STOP);
                         }
-                        queryParam.put(Constant.BAPQuery.SCORE_TIME_STOP, date);
+                        queryParam.put(Constant.BAPQuery.SCORE_DATA_STOP, date);
                         refreshListController.refreshBegin();
                     }
                 }).show(System.currentTimeMillis()));
@@ -234,16 +224,15 @@ public class ScoreStaffListActivity extends BaseRefreshRecyclerActivity implemen
     }
 
     @Override
-    public void getScoreListSuccess(ScoreEamListEntity entity) {
+    public void patrolScoreSuccess(CommonBAPListEntity entity) {
         refreshListController.refreshComplete(entity.result);
     }
 
     @Override
-    public void getScoreListFailed(String errorMsg) {
+    public void patrolScoreFailed(String errorMsg) {
         SnackbarHelper.showError(rootView, errorMsg);
         refreshListController.refreshComplete(null);
     }
-
 
     @Override
     protected void onDestroy() {
@@ -286,4 +275,6 @@ public class ScoreStaffListActivity extends BaseRefreshRecyclerActivity implemen
         }
         return true;
     }
+
+
 }

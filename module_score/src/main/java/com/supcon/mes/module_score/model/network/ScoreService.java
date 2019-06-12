@@ -2,9 +2,14 @@ package com.supcon.mes.module_score.model.network;
 
 import com.app.annotation.apt.ApiFactory;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
+import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
+import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
+import com.supcon.mes.module_score.model.bean.ScoreDutyEamEntity;
 import com.supcon.mes.module_score.model.bean.ScoreEamListEntity;
 import com.supcon.mes.module_score.model.bean.ScoreEamPerformanceListEntity;
+import com.supcon.mes.module_score.model.bean.ScoreStaffEntity;
+import com.supcon.mes.module_score.model.bean.ScoreStaffPerformanceListEntity;
 
 import java.util.Map;
 
@@ -35,4 +40,15 @@ public interface ScoreService {
     Flowable<BapResultEntity> doSubmit(@PartMap Map<String, RequestBody> map);
 
 
+    //巡检工评分列表
+    @GET("/BEAM/patrolWorkerScore/workerScoreHead/patrolScore-query.action")
+    Flowable<CommonBAPListEntity<ScoreStaffEntity>> patrolScore(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+
+    //人员评分
+    @GET
+    Flowable<ScoreStaffPerformanceListEntity> getStaffScore(@Url String url, @Query("workerScoreHead.id") int scoreId);
+
+    //人员设备评分
+    @GET("/BEAM/patrolWorkerScore/workerScoreHead/getResponsityBeam.action")
+    Flowable<CommonListEntity<ScoreDutyEamEntity>> getDutyEam(@Query("staffId") long staffId);
 }
