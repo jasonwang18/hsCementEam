@@ -18,6 +18,11 @@ import com.supcon.mes.middleware.model.contract.DeviceDCSParamQueryContract;
 import com.supcon.mes.middleware.presenter.DeviceDCSParamQueryPresenter;
 import com.supcon.mes.module_olxj.ui.adapter.DeviceDCSParamAdapter;
 
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Flowable;
+import io.reactivex.disposables.Disposable;
+
 /**
  * Created by wangshizhan on 2019/5/28
  * Email:wangshizhan@supcom.com
@@ -31,6 +36,8 @@ public class DeviceDCSParamController extends BaseViewController implements Devi
     private DeviceDCSParamAdapter mDeviceDCSParamAdapter;
 
     private Long eamId;
+    private boolean isSwitching = false;
+    Disposable timer;
 
     public DeviceDCSParamController(View rootView, Long eamId) {
         this(rootView);
@@ -66,6 +73,7 @@ public class DeviceDCSParamController extends BaseViewController implements Devi
 
     @Override
     public void getDeviceDCSParamsSuccess(CommonListEntity entity) {
+
         mDeviceDCSParamAdapter.setList(entity.result);
         mDeviceDCSParamAdapter.notifyDataSetChanged();
 
@@ -74,6 +82,31 @@ public class DeviceDCSParamController extends BaseViewController implements Devi
 //            lp.height = DisplayUtil.dip2px(20 * entity.result.size(), context);
 //            contentView.setLayoutParams(lp);
 //        }
+        if(!isSwitching) {
+            resetTimer();
+        }
+    }
+
+
+    private void startTimer() {
+        LogUtil.i("DeviceDCSParamController startTimer");
+        timer = Flowable.timer(10, TimeUnit.SECONDS)
+                .subscribe(aLong ->
+                        presenterRouter.create(DeviceDCSParamQueryAPI.class).getDeviceDCSParams(eamId));
+    }
+
+    private void stopTimer() {
+        LogUtil.i("DeviceDCSParamController stopTimer");
+        if(timer!=null){
+            timer.dispose();
+            timer = null;
+        }
+    }
+
+    private void resetTimer(){
+        LogUtil.i("DeviceDCSParamController resetTimer");
+        stopTimer();
+        startTimer();
     }
 
     @Override
@@ -89,8 +122,11 @@ public class DeviceDCSParamController extends BaseViewController implements Devi
 
     public void getDeviceParams(Long eamId){
         if(eamId!=null && !eamId.equals(this.eamId)){
+            isSwitching = true;
             clear();
+            stopTimer();
             presenterRouter.create(DeviceDCSParamQueryAPI.class).getDeviceDCSParams(eamId);
+            isSwitching = false;
         }
 
     }

@@ -41,6 +41,7 @@
         android:layout_height="wrap_content"
         android:overScrollMode="never"
         android:scrollbars="vertical"
+        android:paddingBottom="@dimen/dp_2"
     />
 
 </LinearLayout>

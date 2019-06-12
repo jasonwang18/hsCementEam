@@ -62,14 +62,31 @@ public class DeviceDCSParamAdapter extends BaseListDataRecyclerViewAdapter<Devic
 
         @Override
         protected void update(DeviceDCSEntity data) {
+            itemDCSParam.setContentTextColor(context.getResources().getColor(R.color.customGreen));
             itemDCSParam.setKey(data.name);
 //            itemDCSParam.setKey(String.format(context.getString(R.string.dcs_param), data.name, data.itemNumber));
             itemDCSParam.setContent(data.latestValue);
+
+            if(!TextUtils.isEmpty(data.latestValue) && data.latestValue.contains("关")){
+                itemDCSParam.setContentTextColor(context.getResources().getColor(R.color.customRed));
+            }
+
             if(!TextUtils.isEmpty(data.maxValue)){
                 itemDCSParamMax.setContent(data.maxValue);
+                if(TextUtils.isDigitsOnly(data.latestValue) && TextUtils.isDigitsOnly(data.maxValue)){
+                    if(Long.parseLong(data.latestValue) > Long.parseLong(data.maxValue)){
+                        itemDCSParam.setContentTextColor(context.getResources().getColor(R.color.customRed));
+                    }
+                }
             }
             if(!TextUtils.isEmpty(data.minValue)){
                 itemDCSParamMin.setContent(data.minValue);
+
+                if(TextUtils.isDigitsOnly(data.latestValue) && TextUtils.isDigitsOnly(data.minValue)){
+                    if(Long.parseLong(data.latestValue) < Long.parseLong(data.minValue)){
+                        itemDCSParam.setContentTextColor(context.getResources().getColor(R.color.customRed));
+                    }
+                }
             }
         }
     }
