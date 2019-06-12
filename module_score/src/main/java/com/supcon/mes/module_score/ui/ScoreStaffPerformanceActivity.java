@@ -290,7 +290,9 @@ public class ScoreStaffPerformanceActivity extends BaseRefreshActivity implement
     private void doSubmit() {
 
         Map map = ScoreMapManager.createMap(scoreStaffEntity);
-        ScoreMapManager.addAvg(scoreStaffEamAdapter.getList(), map);
+        if (scoreStaffEamAdapter.getList() != null) {
+            ScoreMapManager.addAvg(scoreStaffEamAdapter.getList(), map);
+        }
 
         List list1 = ScoreMapManager.dataStaffChange(scoreStaffPerformanceAdapter.getList(), "设备运行");
         map.put("dg1560145365044ModelCode", "BEAM_1.0.0_patrolWorkerScore_Running");

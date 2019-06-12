@@ -1,6 +1,7 @@
 package com.supcon.mes.module_score.model.dto;
 
 import com.supcon.common.com_http.BaseEntity;
+import com.supcon.mes.middleware.model.bean.ValueEntity;
 
 public class ScoreStaffDto extends BaseEntity {
 
@@ -15,4 +16,6 @@ public class ScoreStaffDto extends BaseEntity {
     public String isItemValue;
     public String noItemValue;
 
+    public String defaultNumVal;
+    public ValueEntity defaultValueType;
 }

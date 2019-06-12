@@ -101,7 +101,7 @@ public class ScoreEamPerformanceAdapter extends BaseListDataRecyclerViewAdapter<
         @Override
         protected void update(ScoreEamPerformanceEntity data) {
             contentTitle.setText(data.scoreStandard);
-            fraction.setText(Util.big0(data.getTotalScore()) + "分");
+            fraction.setText(Util.big2Float(data.getTotalScore()) + "分");
         }
     }
 

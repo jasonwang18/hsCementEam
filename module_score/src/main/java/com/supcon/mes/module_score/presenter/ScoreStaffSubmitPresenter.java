@@ -17,7 +17,7 @@ public class ScoreStaffSubmitPresenter extends ScoreStaffSubmitContract.Presente
     public void doStaffSubmit(Map<String, Object> map) {
         Map<String, RequestBody> formBody = FormDataHelper.createDataFormBody(map);
         mCompositeSubscription.add(
-                ScoreHttpClient.doSubmit(formBody)
+                ScoreHttpClient.doStaffSubmit(formBody)
                         .onErrorReturn(new Function<Throwable, BapResultEntity>() {
                             @Override
                             public BapResultEntity apply(Throwable throwable) throws Exception {

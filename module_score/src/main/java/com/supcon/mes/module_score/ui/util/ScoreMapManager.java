@@ -131,7 +131,7 @@ public class ScoreMapManager {
         map.put("workerScoreHead.patrolWorker.id", Util.strFormat2(scoreStaffEntity.getPatrolWorker().id));
         map.put("workerScoreHead.scoreData", format.format(scoreStaffEntity.scoreData));
         map.put("workerScoreHead.score", Util.big(scoreStaffEntity.score));
-
+        map.put("workerScoreHead.siteScore", "30");
         map.put("bap_validate_user_id", EamApplication.getAccountInfo().userId);
         return map;
     }
@@ -156,7 +156,7 @@ public class ScoreMapManager {
         Flowable.fromIterable(scorePerformanceEntities)
                 .filter(scorePerformanceEntity -> {
                     if (scorePerformanceEntity.viewType == ListType.CONTENT.value()) {
-                        if (scorePerformanceEntity.category.contains(contains)) {
+                        if (scorePerformanceEntity.project.contains(contains)) {
                             return true;
                         }
                     }
@@ -174,6 +174,8 @@ public class ScoreMapManager {
                     scoreEamDto.fraction = Util.big(scorePerformanceEntity.fraction);
                     scoreEamDto.isItemValue = scorePerformanceEntity.isItemValue;
                     scoreEamDto.noItemValue = scorePerformanceEntity.noItemValue;
+                    scoreEamDto.defaultNumVal = scorePerformanceEntity.defaultNumVal > 0 ? Util.strFormat2(scorePerformanceEntity.defaultNumVal) : "";
+                    scoreEamDto.defaultValueType = scorePerformanceEntity.defaultValueType;
                     scorePerformanceDto.add(scoreEamDto);
                 });
         return scorePerformanceDto;
