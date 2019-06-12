@@ -15,12 +15,12 @@ public class ScoreEamEntity extends BaseEntity {
 
     //得分
     public float scoreNum = 100;//得分
-    public Integer operationRate;//设备运转率
-    public Integer highQualityOperation;//高质量运行
-    public Integer security;//安全防护
-    public Integer appearanceLogo;//外观标识
-    public Integer beamHeath;//设备卫生
-    public Integer beamEstimate;//档案管理
+    public Float operationRate;//设备运转率
+    public Float highQualityOperation;//高质量运行
+    public Float security;//安全防护
+    public Float appearanceLogo;//外观标识
+    public Float beamHeath;//设备卫生
+    public Float beamEstimate;//档案管理
 
     public EamType getBeamId() {
         if (beamId == null) {

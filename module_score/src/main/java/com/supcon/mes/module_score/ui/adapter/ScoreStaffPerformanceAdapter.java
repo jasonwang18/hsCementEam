@@ -2,19 +2,28 @@ package com.supcon.mes.module_score.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.v7.widget.AppCompatEditText;
 import android.text.Spanned;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.mbap.constant.ListType;
+import com.supcon.mes.mbap.listener.OnTextListener;
+import com.supcon.mes.mbap.view.CustomNumView;
 import com.supcon.mes.middleware.util.HtmlParser;
 import com.supcon.mes.middleware.util.HtmlTagHandler;
+import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_score.R;
 import com.supcon.mes.module_score.model.bean.ScoreEamPerformanceEntity;
 import com.supcon.mes.module_score.model.bean.ScoreStaffPerformanceEntity;
@@ -82,7 +91,7 @@ public class ScoreStaffPerformanceAdapter extends BaseListDataRecyclerViewAdapte
         @Override
         protected void update(ScoreStaffPerformanceEntity data) {
             contentTitle.setText(data.project);
-            fraction.setText(data.fraction + "分");
+            fraction.setText(Util.big0(data.fraction) + "分");
         }
     }
 
@@ -100,6 +109,10 @@ public class ScoreStaffPerformanceAdapter extends BaseListDataRecyclerViewAdapte
         @BindByTag("scoreRadioBtn2")
         RadioButton scoreRadioBtn2;
 
+        @BindByTag("sum")
+        CustomNumView sum;
+
+
         public ViewHolder(Context context) {
             super(context, parent);
         }
@@ -108,6 +121,7 @@ public class ScoreStaffPerformanceAdapter extends BaseListDataRecyclerViewAdapte
         protected int layoutId() {
             return R.layout.item_score_performance_content;
         }
+
 
         @Override
         protected void initListener() {
@@ -121,7 +135,7 @@ public class ScoreStaffPerformanceAdapter extends BaseListDataRecyclerViewAdapte
                         float oldTotal = total - item.scoreEamPerformanceEntity.fraction;
                         if (!item.result) {
                             item.scoreEamPerformanceEntity.setTotalHightScore(item.scoreEamPerformanceEntity.getTotalHightScore() + item.itemScore);
-                            if (item.scoreEamPerformanceEntity.getTotalHightScore() > 0) {
+                            if (item.scoreEamPerformanceEntity.getTotalHightScore() >= 0) {
                                 item.scoreEamPerformanceEntity.fraction = item.scoreEamPerformanceEntity.getTotalHightScore();
                             }
                         } else {
@@ -142,14 +156,48 @@ public class ScoreStaffPerformanceAdapter extends BaseListDataRecyclerViewAdapte
                     }
                 }
             });
+            sum.setTextListener(new OnTextListener() {
+                @Override
+                public void onText(String text) {
+                    ScoreStaffPerformanceEntity item = getItem(getLayoutPosition());
+                    if (Util.strToInt(text) == item.defaultNumVal) {
+                        return;
+                    }
+                    float oldTotal = total - item.scoreEamPerformanceEntity.fraction;
+                    float score = item.itemScore * (Util.strToInt(text) - item.defaultNumVal);
+                    item.scoreEamPerformanceEntity.setTotalHightScore(item.scoreEamPerformanceEntity.getTotalHightScore() - score);
+                    if (item.scoreEamPerformanceEntity.getTotalHightScore() >= 0) {
+                        item.scoreEamPerformanceEntity.fraction = item.scoreEamPerformanceEntity.getTotalHightScore();
+                    }
+                    if (item.scoreEamPerformanceEntity.fraction > item.scoreEamPerformanceEntity.score) {
+                        item.scoreEamPerformanceEntity.fraction = item.scoreEamPerformanceEntity.score;
+                    }
+
+                    item.defaultNumVal = Util.strToInt(text);
+                    List<ScoreStaffPerformanceEntity> list = getList();
+                    int position = list.indexOf(item.scoreEamPerformanceEntity);
+                    notifyItemChanged(position);
+                    //更新总分数
+                    item.scoreEamPerformanceEntity.scoreNum = oldTotal + item.scoreEamPerformanceEntity.fraction;
+                    onItemChildViewClick(scoreRadioGroup, 0, item.scoreEamPerformanceEntity);
+                }
+            });
         }
 
         @SuppressLint({"StringFormatMatches", "SetTextI18n"})
         @Override
         protected void update(ScoreStaffPerformanceEntity data) {
             itemIndex.setText(data.Index + ".");
-            Spanned item = HtmlParser.buildSpannedText(String.format(context.getString(R.string.device_style12), data.item, data.itemScore), new HtmlTagHandler());
+            Spanned item = HtmlParser.buildSpannedText(String.format(context.getString(R.string.device_style12), data.item, Util.big0(data.itemScore)), new HtmlTagHandler());
             scoreItem.setText(item);
+            scoreRadioGroup.setVisibility(View.VISIBLE);
+            sum.setVisibility(View.VISIBLE);
+            if (data.isEdit()) {
+                scoreRadioGroup.setVisibility(View.GONE);
+                sum.setNum(data.defaultNumVal);
+            } else {
+                sum.setVisibility(View.GONE);
+            }
             scoreRadioBtn1.setEnabled(isEdit);
             scoreRadioBtn2.setEnabled(isEdit);
             scoreRadioBtn1.setText(data.isItemValue);

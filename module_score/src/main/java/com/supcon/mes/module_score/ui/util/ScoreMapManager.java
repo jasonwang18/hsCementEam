@@ -5,9 +5,13 @@ import android.annotation.SuppressLint;
 import com.supcon.mes.mbap.constant.ListType;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.util.Util;
+import com.supcon.mes.module_score.model.bean.ScoreDutyEamEntity;
 import com.supcon.mes.module_score.model.bean.ScoreEamEntity;
 import com.supcon.mes.module_score.model.bean.ScoreEamPerformanceEntity;
+import com.supcon.mes.module_score.model.bean.ScoreStaffEntity;
+import com.supcon.mes.module_score.model.bean.ScoreStaffPerformanceEntity;
 import com.supcon.mes.module_score.model.dto.ScoreEamDto;
+import com.supcon.mes.module_score.model.dto.ScoreStaffDto;
 
 import org.reactivestreams.Publisher;
 
@@ -103,15 +107,73 @@ public class ScoreMapManager {
                     ScoreEamDto scoreEamDto = new ScoreEamDto();
                     scoreEamDto.item = scorePerformanceEntity.item;
                     scoreEamDto.result = Util.strFormat2(scorePerformanceEntity.result);
-                    scoreEamDto.score = Util.strFormat2(scorePerformanceEntity.score);
+                    scoreEamDto.score = Util.big(scorePerformanceEntity.score);
                     scoreEamDto.itemDetail = scorePerformanceEntity.itemDetail;
                     scoreEamDto.isItemValue = scorePerformanceEntity.isItemValue;
                     scoreEamDto.noItemValue = scorePerformanceEntity.noItemValue;
                     scoreEamDto.scoreItem = scorePerformanceEntity.scoreItem;
                     scoreEamDto.scoreStandard = scorePerformanceEntity.scoreStandard;
-                    scoreEamDto.resultValue = Util.strFormat2(scorePerformanceEntity.resultValue);
-                    scoreEamDto.accidentStopTime = Util.strFormat2(scorePerformanceEntity.accidentStopTime);
-                    scoreEamDto.totalRunTime = Util.strFormat2(scorePerformanceEntity.totalRunTime);
+                    scoreEamDto.resultValue = Util.big(scorePerformanceEntity.resultValue);
+                    scoreEamDto.accidentStopTime = Util.big(scorePerformanceEntity.accidentStopTime);
+                    scoreEamDto.totalRunTime = Util.big(scorePerformanceEntity.totalRunTime);
+                    scorePerformanceDto.add(scoreEamDto);
+                });
+        return scorePerformanceDto;
+    }
+
+    public static Map<String, Object> createMap(ScoreStaffEntity scoreStaffEntity) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("viewselect", "patrolScoreEdit");
+        map.put("datagridKey", "BEAM_patrolWorkerScore_workerScoreHead_patrolScoreEdit_datagrids");
+        map.put("viewCode", "BEAM_1.0.0_patrolWorkerScore_patrolScoreEdit");
+        map.put("modelName", "WorkerScoreHead");
+
+        map.put("workerScoreHead.patrolWorker.id", Util.strFormat2(scoreStaffEntity.getPatrolWorker().id));
+        map.put("workerScoreHead.scoreData", format.format(scoreStaffEntity.scoreData));
+        map.put("workerScoreHead.score", Util.big(scoreStaffEntity.score));
+
+        map.put("bap_validate_user_id", EamApplication.getAccountInfo().userId);
+        return map;
+    }
+
+    @SuppressLint("CheckResult")
+    public static void addAvg(List<ScoreDutyEamEntity> scoreDutyEamEntities, Map<String, Object> map) {
+        Flowable.fromIterable(scoreDutyEamEntities)
+                .filter(scorePerformanceEntity -> {
+                    if (scorePerformanceEntity.viewType == ListType.TITLE.value()) {
+                        return true;
+                    }
+                    return false;
+                })
+                .subscribe(scorePerformanceEntity -> {
+                    map.put("workerScoreHead.siteScore", Util.big(scorePerformanceEntity.avgScore));
+                });
+    }
+
+    @SuppressLint("CheckResult")
+    public static List<ScoreStaffDto> dataStaffChange(List<ScoreStaffPerformanceEntity> scorePerformanceEntities, String contains) {
+        List<ScoreStaffDto> scorePerformanceDto = new ArrayList<>();
+        Flowable.fromIterable(scorePerformanceEntities)
+                .filter(scorePerformanceEntity -> {
+                    if (scorePerformanceEntity.viewType == ListType.CONTENT.value()) {
+                        if (scorePerformanceEntity.category.contains(contains)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })
+                .subscribe(scorePerformanceEntity -> {
+                    ScoreStaffDto scoreEamDto = new ScoreStaffDto();
+                    scoreEamDto.category = scorePerformanceEntity.category;
+                    scoreEamDto.project = scorePerformanceEntity.project;
+                    scoreEamDto.score = Util.big(scorePerformanceEntity.score);
+                    scoreEamDto.grade = scorePerformanceEntity.grade;
+                    scoreEamDto.item = scorePerformanceEntity.item;
+                    scoreEamDto.itemScore = Util.big(scorePerformanceEntity.itemScore);
+                    scoreEamDto.result = Util.strFormat2(scorePerformanceEntity.result);
+                    scoreEamDto.fraction = Util.big(scorePerformanceEntity.fraction);
+                    scoreEamDto.isItemValue = scorePerformanceEntity.isItemValue;
+                    scoreEamDto.noItemValue = scorePerformanceEntity.noItemValue;
                     scorePerformanceDto.add(scoreEamDto);
                 });
         return scorePerformanceDto;

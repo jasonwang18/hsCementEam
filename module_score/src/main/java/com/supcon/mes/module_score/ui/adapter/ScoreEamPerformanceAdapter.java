@@ -101,7 +101,7 @@ public class ScoreEamPerformanceAdapter extends BaseListDataRecyclerViewAdapter<
         @Override
         protected void update(ScoreEamPerformanceEntity data) {
             contentTitle.setText(data.scoreStandard);
-            fraction.setText(data.getTotalScore() + "分");
+            fraction.setText(Util.big0(data.getTotalScore()) + "分");
         }
     }
 
@@ -144,7 +144,7 @@ public class ScoreEamPerformanceAdapter extends BaseListDataRecyclerViewAdapter<
                         float oldTotal = total - item.scoreEamPerformanceEntity.getTotalScore();
                         if (item.result) {
                             item.scoreEamPerformanceEntity.setTotalHightScore(item.scoreEamPerformanceEntity.getTotalHightScore() + item.score);
-                            if (item.scoreEamPerformanceEntity.getTotalHightScore() > 0) {
+                            if (item.scoreEamPerformanceEntity.getTotalHightScore() >= 0) {
                                 item.scoreEamPerformanceEntity.setTotalScore(item.scoreEamPerformanceEntity.getTotalHightScore());
                             }
                         } else {
@@ -152,7 +152,7 @@ public class ScoreEamPerformanceAdapter extends BaseListDataRecyclerViewAdapter<
                             item.scoreEamPerformanceEntity.setTotalScore(item.scoreEamPerformanceEntity.getTotalScore() - item.score);
                         }
                         if (item.scoreEamPerformanceEntity.getTotalScore() < 0) {
-                            item.scoreEamPerformanceEntity.setTotalScore(0);
+                            item.scoreEamPerformanceEntity.setTotalScore(0f);
                         } else if (item.scoreEamPerformanceEntity.getTotalScore() > item.scoreEamPerformanceEntity.defaultTotalScore) {
                             item.scoreEamPerformanceEntity.setTotalScore(item.scoreEamPerformanceEntity.defaultTotalScore);
                         }
@@ -171,7 +171,7 @@ public class ScoreEamPerformanceAdapter extends BaseListDataRecyclerViewAdapter<
         @Override
         protected void update(ScoreEamPerformanceEntity data) {
             itemIndex.setText(data.Index + ".");
-            scoreItem.setText(data.itemDetail + (data.marks.size() > 0 ? "" : "(" + data.score + ")"));
+            scoreItem.setText(data.itemDetail + (data.marks.size() > 0 ? "" : "(" + Util.big(data.score) + ")"));
             checkLayout.removeAllViews();
             scoreRadioGroup.setVisibility(View.VISIBLE);
             checkLayout.setVisibility(View.VISIBLE);
@@ -203,12 +203,12 @@ public class ScoreEamPerformanceAdapter extends BaseListDataRecyclerViewAdapter<
                 item.scoreEamPerformanceEntity.setTotalScore(item.scoreEamPerformanceEntity.getTotalScore() - item.marks.get(buttonView.getText().toString()));
             } else {
                 item.scoreEamPerformanceEntity.setTotalHightScore(item.scoreEamPerformanceEntity.getTotalHightScore() + item.marks.get(buttonView.getText().toString()));
-                if (item.scoreEamPerformanceEntity.getTotalHightScore() > 0) {
+                if (item.scoreEamPerformanceEntity.getTotalHightScore() >= 0) {
                     item.scoreEamPerformanceEntity.setTotalScore(item.scoreEamPerformanceEntity.getTotalHightScore());
                 }
             }
             if (item.scoreEamPerformanceEntity.getTotalScore() < 0) {
-                item.scoreEamPerformanceEntity.setTotalScore(0);
+                item.scoreEamPerformanceEntity.setTotalScore(0f);
             } else if (item.scoreEamPerformanceEntity.getTotalScore() > item.scoreEamPerformanceEntity.defaultTotalScore) {
                 item.scoreEamPerformanceEntity.setTotalScore(item.scoreEamPerformanceEntity.defaultTotalScore);
             }
@@ -221,9 +221,9 @@ public class ScoreEamPerformanceAdapter extends BaseListDataRecyclerViewAdapter<
         }
 
         //动态添加视图
-        public void addview(Context context, FlowLayout layout, Map<String, Integer> marks, Map<String, Boolean> marksState) {
+        public void addview(Context context, FlowLayout layout, Map<String, Float> marks, Map<String, Boolean> marksState) {
             int index = 0;
-            for (Map.Entry<String, Integer> mark : marks.entrySet()) {
+            for (Map.Entry<String, Float> mark : marks.entrySet()) {
                 String ss = mark.getKey();
                 CheckBox checkBox = new CheckBox(context);
                 checkBox.setEnabled(isEdit);
