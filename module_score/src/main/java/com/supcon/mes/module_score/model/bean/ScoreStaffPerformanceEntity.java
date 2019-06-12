@@ -56,7 +56,7 @@ public class ScoreStaffPerformanceEntity extends BaseEntity {
     }
 
     public boolean isEdit() {
-        if (defaultValueType.id.equals("BEAM_066/01")) {
+        if (defaultValueType != null && defaultValueType.id.equals("BEAM_066/01")) {
             return true;
         }
         return false;
