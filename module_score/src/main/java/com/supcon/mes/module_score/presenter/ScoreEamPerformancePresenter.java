@@ -3,6 +3,7 @@ package com.supcon.mes.module_score.presenter;
 import android.text.TextUtils;
 
 import com.supcon.mes.mbap.constant.ListType;
+import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_score.model.bean.ScoreEamPerformanceEntity;
 import com.supcon.mes.module_score.model.bean.ScoreEamPerformanceListEntity;
 import com.supcon.mes.module_score.model.contract.ScoreEamPerformanceContract;
@@ -69,11 +70,11 @@ public class ScoreEamPerformancePresenter extends ScoreEamPerformanceContract.Pr
                     }
 
                     if (TextUtils.isEmpty(scorePerformanceOldTitleEntity.isItemValue)) {
-                        scorePerformanceOldTitleEntity.marks.put(scorePerformanceEntity.scoreItem + "(" + scorePerformanceEntity.score + ")"
+                        scorePerformanceOldTitleEntity.marks.put(scorePerformanceEntity.scoreItem + "(" + Util.big(scorePerformanceEntity.score) + ")"
                                 , scorePerformanceEntity.score);
-                        scorePerformanceOldTitleEntity.marksState.put(scorePerformanceEntity.scoreItem + "(" + scorePerformanceEntity.score + ")"
+                        scorePerformanceOldTitleEntity.marksState.put(scorePerformanceEntity.scoreItem + "(" +  Util.big(scorePerformanceEntity.score) + ")"
                                 , scorePerformanceEntity.result);
-                        scorePerformanceOldTitleEntity.scorePerformanceEntityMap.put(scorePerformanceEntity.scoreItem + "(" + scorePerformanceEntity.score + ")"
+                        scorePerformanceOldTitleEntity.scorePerformanceEntityMap.put(scorePerformanceEntity.scoreItem + "(" +  Util.big(scorePerformanceEntity.score) + ")"
                                 , scorePerformanceEntity);
                     }
                     scorePerformanceOldTitleEntity.Index = position;

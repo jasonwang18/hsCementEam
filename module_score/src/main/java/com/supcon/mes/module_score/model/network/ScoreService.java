@@ -51,4 +51,9 @@ public interface ScoreService {
     //人员设备评分
     @GET("/BEAM/patrolWorkerScore/workerScoreHead/getResponsityBeam.action")
     Flowable<CommonListEntity<ScoreDutyEamEntity>> getDutyEam(@Query("staffId") long staffId);
+
+    //提交
+    @POST("/BEAM/patrolWorkerScore/workerScoreHead/patrolScoreEdit/submit.action?__pc__=cGF0cm9sU2NvcmVfYWRkX2FkZF9CRUFNXzEuMC4wX3BhdHJvbFdvcmtlclNjb3JlX3BhdHJvbFNjb3JlfA__&_bapFieldPermissonModelCode_=BEAM_1.0.0_patrolWorkerScore_WorkerScoreHead&_bapFieldPermissonModelName_=WorkerScoreHead")
+    @Multipart
+    Flowable<BapResultEntity> doStaffSubmit(@PartMap Map<String, RequestBody> map);
 }
