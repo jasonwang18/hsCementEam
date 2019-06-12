@@ -14,7 +14,7 @@ public class ScoreEamEntity extends BaseEntity {
     public Long scoreTime;//评分时间
 
     //得分
-    public int scoreNum = 100;//得分
+    public float scoreNum = 100;//得分
     public Integer operationRate;//设备运转率
     public Integer highQualityOperation;//高质量运行
     public Integer security;//安全防护

@@ -11,7 +11,7 @@
     <string name="device_style8"><![CDATA[<font color="#000000" size="16">%1$s</font><font color="#222222" size="16"> %2$s</font><font color="#2f22f1" size="12"> (%3$s)</font>]]></string>
     <string name="device_style10"><![CDATA[<font color="#222222" size="16">%1$s</font><font color="#2f22f1" size="12"> (%2$s)</font>]]></string>
     <string name="device_style11"><![CDATA[<font color="#222222" size="16">%1$s</font><font color="#2f22f1" size="12"> (%2$s)</font><font color="#2f22f1" size="12"> (%3$s)</font>]]></string>
-    <string name="device_style12"><![CDATA[<font color="#222222" size="16">%1$s</font><font color="#2f22f1" size="12"> (%2$s)</font>]]></string>
+    <string name="device_style12"><![CDATA[<font color="#222222" size="14">%1$s</font><font color="#2f22f1" size="12"> (%2$s)</font>]]></string>
     <string name="device_style13"><![CDATA[<font color="#000000" size="16"><b>%1$s</b></font><font color="#222222" size="16"> %2$s</font>]]></string>
 
     <string name="device_style14"><![CDATA[<font color="#000000" size="16"><b>%1$s</b></font><font color="#222222" size="14">【 %2$s 】</font>]]></string>

@@ -186,7 +186,7 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
         scoreEamEntity.scoreTime = (scoreEamEntity != null && scoreEamEntity.scoreTime != null) ? scoreEamEntity.scoreTime : getYesterday();
 
         scoreStaff.setContent(scoreEamEntity.getScoreStaff().name);
-        scoreTime.setContent(DateUtil.dateFormat((scoreEamEntity != null && scoreEamEntity.scoreTime != null) ? scoreEamEntity.scoreTime : getYesterday()));
+        scoreTime.setContent(DateUtil.dateFormat(scoreEamEntity.scoreTime));
         scoreEamPerformanceAdapter.updateTotal(scoreEamEntity.scoreNum);
     }
 

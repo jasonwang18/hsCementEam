@@ -13,29 +13,27 @@ import com.supcon.mes.middleware.util.HtmlTagHandler;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_score.R;
 import com.supcon.mes.module_score.model.bean.ScoreEamEntity;
+import com.supcon.mes.module_score.model.bean.ScoreStaffEntity;
 
-public class ScoreEamListAdapter extends BaseListDataRecyclerViewAdapter<ScoreEamEntity> {
-    public ScoreEamListAdapter(Context context) {
+public class ScoreStaffListAdapter extends BaseListDataRecyclerViewAdapter<ScoreStaffEntity> {
+    public ScoreStaffListAdapter(Context context) {
         super(context);
     }
 
     @Override
-    protected BaseRecyclerViewHolder<ScoreEamEntity> getViewHolder(int viewType) {
+    protected BaseRecyclerViewHolder<ScoreStaffEntity> getViewHolder(int viewType) {
         return new ViewHolder(context);
     }
 
-    class ViewHolder extends BaseRecyclerViewHolder<ScoreEamEntity> {
+    class ViewHolder extends BaseRecyclerViewHolder<ScoreStaffEntity> {
 
-        @BindByTag("itemScoreEam")
-        CustomTextView itemScoreEam;
+        @BindByTag("itemScoreStaff")
+        CustomTextView itemScoreStaff;
         @BindByTag("itemScoreNum")
         CustomTextView itemScoreNum;
         @BindByTag("itemScoreTime")
         CustomTextView itemScoreTime;
-        @BindByTag("itemScoreStaff")
-        CustomTextView itemScoreStaff;
-        @BindByTag("itemScoreDept")
-        CustomTextView itemScoreDept;
+
 
         public ViewHolder(Context context) {
             super(context, parent);
@@ -43,7 +41,7 @@ public class ScoreEamListAdapter extends BaseListDataRecyclerViewAdapter<ScoreEa
 
         @Override
         protected int layoutId() {
-            return R.layout.item_eam_score;
+            return R.layout.item_staff_score;
         }
 
         @Override
@@ -54,16 +52,13 @@ public class ScoreEamListAdapter extends BaseListDataRecyclerViewAdapter<ScoreEa
 
         @SuppressLint("SetTextI18n")
         @Override
-        protected void update(ScoreEamEntity data) {
-            String eam = String.format(context.getString(R.string.device_style10), Util.strFormat(data.getBeamId().name)
-                    , Util.strFormat(data.getBeamId().code));
-            itemScoreEam.contentView().setText(HtmlParser.buildSpannedText(eam, new HtmlTagHandler()));
+        protected void update(ScoreStaffEntity data) {
+            String staff = String.format(context.getString(R.string.device_style10), Util.strFormat(data.getPatrolWorker().name)
+                    , Util.strFormat(data.getPatrolWorker().code));
+            itemScoreStaff.contentView().setText(HtmlParser.buildSpannedText(staff, new HtmlTagHandler()));
 
-            itemScoreNum.setValue(Util.strFormat2(data.scoreNum));
-            itemScoreTime.setValue(data.scoreTime != null ? DateUtil.dateTimeFormat(data.scoreTime) : "");
-            itemScoreStaff.setContent(Util.strFormat(data.getScoreStaff().name));
-            itemScoreDept.setContent(Util.strFormat(data.getBeamId().getUseDept().name));
-
+            itemScoreNum.setValue(Util.strFormat2(data.score));
+            itemScoreTime.setValue(data.scoreData != null ? DateUtil.dateFormat(data.scoreData) : "");
         }
     }
 }

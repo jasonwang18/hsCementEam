@@ -42,10 +42,10 @@ public class ScoreEamPerformanceEntity extends BaseEntity {
     public int defaultTotalScore;//默认总分数
 
     @Expose
-    public Integer totalHightScore;//单项最高总分数
+    private Integer totalHightScore;//单项最高总分数
 
      @Expose
-    public Integer scoreNum;//总分
+    public Float scoreNum;//总分
 
 
     //子布局

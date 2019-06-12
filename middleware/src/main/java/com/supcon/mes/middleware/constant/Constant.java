@@ -491,6 +491,10 @@ public interface Constant {
         String SCORE_TIME_START = "SCORE_TIME_START";//时间
         String SCORE_TIME_STOP = "SCORE_TIME_STOP";//时间
         String SCORE_TIME = "SCORE_TIME";//时间
+
+        String SCORE_DATA_START = "SCORE_DATA_START";//时间
+        String SCORE_DATA_STOP = "SCORE_DATA_STOP";//时间
+        String SCORE_DATA = "SCORE_DATA";//时间
     }
 
 
