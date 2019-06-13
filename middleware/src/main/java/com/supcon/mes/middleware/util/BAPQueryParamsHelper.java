@@ -293,7 +293,7 @@ public class BAPQueryParamsHelper {
                 break;
             case Constant.BAPQuery.EAM_EXACT_CODE:
                 subcondEntity = new SubcondEntity();
-                subcondEntity.columnName = key;
+                subcondEntity.columnName = Constant.BAPQuery.EAM_CODE;
                 subcondEntity.type = TYPE_NORMAL;
                 subcondEntity.dbColumnType = Constant.BAPQuery.BAPCODE;
                 subcondEntity.operator = Constant.BAPQuery.BE;
