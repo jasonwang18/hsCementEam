@@ -1,6 +1,7 @@
 package com.supcon.mes.module_warn.model.network;
 
 import com.app.annotation.apt.ApiFactory;
+import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.module_warn.model.bean.DailyLubricateTaskListEntity;
 import com.supcon.mes.module_warn.model.bean.DelayEntity;
@@ -8,6 +9,7 @@ import com.supcon.mes.module_warn.model.bean.DelayRecordListEntity;
 import com.supcon.mes.module_warn.model.bean.LubricationWarnListEntity;
 import com.supcon.mes.module_warn.model.bean.MaintenanceWarnListEntity;
 import com.supcon.mes.module_warn.model.bean.SparePartWarnListEntity;
+import com.supcon.mes.module_warn.model.bean.TemLubricateTaskEntity;
 
 import java.util.Map;
 
@@ -64,5 +66,9 @@ public interface ApiService {
     //领取润滑任务
     @GET("/BEAM/baseInfo/jWXItem/ReceiveLubTask.action")
     Flowable<DelayEntity> receiveTask(@QueryMap Map<String, Object> pageQueryMap);
+
+    //临时润滑
+    @GET("/BEAM/baseInfo/jWXItem/data-dg1560391643861.action")
+    Flowable<CommonBAPListEntity<TemLubricateTaskEntity>> getTempLubrications(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
 }
