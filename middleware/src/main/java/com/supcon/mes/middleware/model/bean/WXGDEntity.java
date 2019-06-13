@@ -94,6 +94,8 @@ public class WXGDEntity extends BaseEntity implements Cloneable {
 
     public String repairAdvise; //维修建议
 
+    public String workOrderContext; //工单内容
+
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();

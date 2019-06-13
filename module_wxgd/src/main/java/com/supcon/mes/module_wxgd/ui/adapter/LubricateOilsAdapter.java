@@ -37,7 +37,6 @@ import java.util.List;
  */
 public class LubricateOilsAdapter extends BaseListDataRecyclerViewAdapter<LubricateOilsEntity> {
     private boolean editable;
-    private long repairSum;
     private String tableStatus; //单据状态
 
     public LubricateOilsAdapter(Context context, boolean isEditable) {
@@ -48,16 +47,6 @@ public class LubricateOilsAdapter extends BaseListDataRecyclerViewAdapter<Lubric
     @Override
     protected BaseRecyclerViewHolder<LubricateOilsEntity> getViewHolder(int viewType) {
         return new ViewHolder(context);
-    }
-
-    /**
-     * @param
-     * @return
-     * @description 设置工单维修次数变量，用于判断数量是否可编辑
-     * @author zhangwenshuai1 2018/9/5
-     */
-    public void setRepairSum(int repairSum) {
-        this.repairSum = repairSum;
     }
 
     public void setEditable(boolean editable) {

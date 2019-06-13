@@ -157,6 +157,8 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     @BindByTag("transition")
     CustomWorkFlowView transition;
 
+    @BindByTag("workContext")
+    CustomVerticalTextView workContext;
 
     private LinkController mLinkController;
 
@@ -332,6 +334,8 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         repairGroup.setValue(mWXGDEntity.repairGroup == null ? "" : mWXGDEntity.repairGroup.name);
         planStartTime.setDate(mWXGDEntity.planStartDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.planStartDate, "yyyy-MM-dd HH:mm:ss"));
         planEndTime.setDate(mWXGDEntity.planEndDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.planEndDate, "yyyy-MM-dd HH:mm:ss"));
+
+        workContext.setContent(mWXGDEntity.workOrderContext);
     }
 
     @SuppressLint("CheckResult")

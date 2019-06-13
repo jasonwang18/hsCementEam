@@ -77,7 +77,6 @@ public class WXGDLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
     protected List<LubricateOilsEntity> mEntities = new ArrayList<>();
     protected boolean editable = false, isAdd = false;
     protected CustomDialog mCustomDialog;
-    private long repairSum; // 工单执行次数
     private String tableStatus;
     private SinglePickController mSinglePickController;
     private List<SystemCodeEntity> oilTypeList = new ArrayList<>();  //加换油
@@ -100,11 +99,9 @@ public class WXGDLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
         if (isAdd) {
             IntentRouter.go(context, Constant.Router.LUBRICATE_REF);
         }
-        repairSum = getIntent().getLongExtra(Constant.IntentKey.REPAIR_SUM, 1);
         tableStatus = getIntent().getStringExtra(Constant.IntentKey.TABLE_STATUS);
         eamID = getIntent().getLongExtra(Constant.IntentKey.EAM_ID, 0);
         mLubricateOilsAdapter.setEditable(editable);
-        mLubricateOilsAdapter.setRepairSum((int) repairSum);
         mLubricateOilsAdapter.setTableStatus(tableStatus);
         String entityInfo = getIntent().getStringExtra(Constant.IntentKey.LUBRICATE_OIL_ENTITIES);
         if (TextUtils.isEmpty(entityInfo)) {
@@ -262,7 +259,6 @@ public class WXGDLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
         jwxItem.sparePartId = refLubricateEntity.sparePartId;
         lubricateOilsEntity.jwxItemID = jwxItem;
 
-        mLubricateOilsAdapter.setRepairSum((int) repairSum);
         mEntities.add(lubricateOilsEntity);
         refreshListController.refreshComplete(mEntities);
     }

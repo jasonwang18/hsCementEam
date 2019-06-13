@@ -101,7 +101,6 @@ public class RepairStaffController extends BaseViewController implements RepairS
                         bundle.putString(Constant.IntentKey.REPAIR_STAFF_ENTITIES, staffEntities.toString());
                         bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, isEditable);
                         bundle.putBoolean(Constant.IntentKey.IS_ADD, false);
-                        bundle.putLong(Constant.IntentKey.REPAIR_SUM, mWXGDEntity.repairSum);
                         bundle.putString(Constant.IntentKey.TABLE_STATUS, mWXGDEntity.pending.taskDescription);
                         IntentRouter.go(context, Constant.Router.WXGD_REPAIR_STAFF_LIST, bundle);
                         break;
