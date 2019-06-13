@@ -49,6 +49,13 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
 
+/**
+ * @author yangfei.cao
+ * @ClassName hongShiCementEam
+ * @date 2019/4/29
+ * ------------- Description -------------
+ * 手动确认延期
+ */
 @Router(Constant.Router.DAILY_LUBRICATION_EARLY_PART_WARN)
 @Presenter(value = {DailyLubricationWarnPresenter.class, CompletePresenter.class})
 public class DailyLubricationPartActivity extends BaseRefreshRecyclerActivity<DailyLubricateTaskEntity> implements DailyLubricationWarnContract.View, CompleteContract.View {
@@ -148,6 +155,7 @@ public class DailyLubricationPartActivity extends BaseRefreshRecyclerActivity<Da
                                 if (!TextUtils.isEmpty(sourceIds)) {
                                     Map<String, Object> param = new HashMap<>();
                                     param.put(Constant.BAPQuery.sourceIds, sourceIds);
+                                    param.put("taskType", "BEAM_067/01");
                                     onLoading("处理中...");
                                     presenterRouter.create(CompleteAPI.class).dailyComplete(param);
                                 } else {
