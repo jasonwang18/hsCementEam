@@ -2,7 +2,6 @@ package com.supcon.mes.module_score.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spanned;
@@ -74,6 +73,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -436,9 +436,6 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
     public void doSubmitFailed(String errorMsg) {
         if ("本数据已经被其他人修改或删除，请刷页面后重试".equals(errorMsg)) {
             loaderController.showMsgAndclose(ErrorMsgHelper.msgParse(errorMsg), false, 5000);
-        } else if (errorMsg.contains("com.supcon.orchid.BEAM2.entities.BEAM2SparePart")) {
-            //error : Row was updated or deleted by another transaction (or unsaved-value mapping was incorrect): [com.supcon.orchid.BEAM2.entities.BEAM2SparePart#1211]
-            loaderController.showMsgAndclose("请刷新备件表体数据！", false, 4000);
         } else {
             onLoadFailed(ErrorMsgHelper.msgParse(errorMsg));
         }
