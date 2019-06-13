@@ -9,7 +9,7 @@ public class ScoreStaffEntity extends BaseEntity {
 
     public Long cid;//评分时间
     public Long createTime;//创建时间
-    public int id;
+    public int id = -1;
     public Staff patrolWorker;//巡检工
     public float score = 100;//分数
     public Long scoreData;//评分时间

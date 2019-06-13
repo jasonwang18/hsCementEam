@@ -119,7 +119,6 @@ public class ScoreStaffPerformanceActivity extends BaseRefreshActivity implement
 
     private ScoreStaffPerformanceAdapter scoreStaffPerformanceAdapter;
     private ScoreStaffEntity scoreStaffEntity;
-    private int scoreId = -1;
     private boolean isEdit;
     private ScoreStaffEamAdapter scoreStaffEamAdapter;
 
@@ -134,9 +133,6 @@ public class ScoreStaffPerformanceActivity extends BaseRefreshActivity implement
         EventBus.getDefault().register(this);
         scoreStaffEntity = (ScoreStaffEntity) getIntent().getSerializableExtra(Constant.IntentKey.SCORE_ENTITY);
         isEdit = getIntent().getBooleanExtra(Constant.IntentKey.isEdit, false);
-        if (scoreStaffEntity != null) {
-            scoreId = scoreStaffEntity.id;
-        }
     }
 
     @Override
@@ -171,6 +167,8 @@ public class ScoreStaffPerformanceActivity extends BaseRefreshActivity implement
             scoreStaffEntity.patrolWorker.name = EamApplication.getAccountInfo().staffName;
             scoreStaffEntity.patrolWorker.code = EamApplication.getAccountInfo().staffCode;
             scoreStaffEntity.patrolWorker.id = EamApplication.getAccountInfo().staffId;
+        } else {
+            scoreStaff.setEnabled(false);
         }
         scoreStaff.setContent(scoreStaffEntity.getPatrolWorker().name);
         staffScore.setContent(Util.big(scoreStaffEntity.score));
@@ -187,8 +185,8 @@ public class ScoreStaffPerformanceActivity extends BaseRefreshActivity implement
         refreshController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenterRouter.create(ScoreStaffPerformanceAPI.class).getStaffScore(scoreId);
-                presenterRouter.create(ScoreStaffPerformanceAPI.class).getDutyEam(scoreStaffEntity.getPatrolWorker().id);
+                presenterRouter.create(ScoreStaffPerformanceAPI.class).getStaffScore(scoreStaffEntity.id);
+                presenterRouter.create(ScoreStaffPerformanceAPI.class).getDutyEam(scoreStaffEntity.getPatrolWorker().id != null ? scoreStaffEntity.getPatrolWorker().id : -1);
             }
         });
         RxView.clicks(leftBtn)
@@ -217,6 +215,7 @@ public class ScoreStaffPerformanceActivity extends BaseRefreshActivity implement
             public void onChildViewClick(View childView, int action, Object obj) {
                 if (action == -1) {
                     scoreStaffEntity.patrolWorker = null;
+                    scoreStaffEntity.id = -1;
                 }
                 IntentRouter.go(ScoreStaffPerformanceActivity.this, Constant.Router.STAFF);
             }
@@ -232,11 +231,13 @@ public class ScoreStaffPerformanceActivity extends BaseRefreshActivity implement
             }
         });
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogin(LoginEvent loginEvent) {
 
         refreshController.refreshBegin();
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void search(CommonSearchEvent commonSearchEvent) {
         if (commonSearchEvent.commonSearchEntity != null) {
