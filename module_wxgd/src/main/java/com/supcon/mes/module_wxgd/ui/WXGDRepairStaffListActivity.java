@@ -72,7 +72,6 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
 
     protected List<RepairStaffEntity> mEntities = new ArrayList<>();
     protected boolean editable, isAdd;
-    private long repairSum; // 工单执行次数
     private String tableStatus;
     private List<Long> dgDeletedIds = new ArrayList<>(); //表体删除记录ids
 
@@ -90,10 +89,8 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
         if (isAdd) {
             IntentRouter.go(context, Constant.Router.STAFF);
         }
-        repairSum = getIntent().getLongExtra(Constant.IntentKey.REPAIR_SUM, 1);
         tableStatus = getIntent().getStringExtra(Constant.IntentKey.TABLE_STATUS);
         mRepairStaffAdapter.setEditable(editable);
-        mRepairStaffAdapter.setRepairSum((int) repairSum);
         mRepairStaffAdapter.setTableStatus(tableStatus);
         String staffInfo = getIntent().getStringExtra(Constant.IntentKey.REPAIR_STAFF_ENTITIES);
         if (TextUtils.isEmpty(staffInfo)) {
@@ -237,7 +234,7 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
         CommonSearchStaff searchStaff = (CommonSearchStaff) commonSearchEvent.commonSearchEntity;
 
         for (RepairStaffEntity repairStaffEntity : mEntities) {
-            if (repairStaffEntity.repairStaff != null && repairStaffEntity.timesNum >= repairSum) {
+            if (repairStaffEntity.repairStaff != null) {
                 if (repairStaffEntity.repairStaff.id.equals(searchStaff.id)) {
                     ToastUtils.show(context, "请勿重复添加人员!");
                     refreshListController.refreshComplete(mEntities);
@@ -251,7 +248,6 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
         repairStaffEntity.repairStaff.id = searchStaff.id;
         repairStaffEntity.repairStaff.code = searchStaff.code;
         repairStaffEntity.repairStaff.name = searchStaff.name;
-        repairStaffEntity.timesNum = (int) repairSum;
 
         //实际开始/结束时间根据列表最后一项赋值
         if (mEntities != null && mEntities.size() > 0) {
@@ -261,7 +257,6 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
             repairStaffEntity.workHour = entity.workHour;
         }
 
-        mRepairStaffAdapter.setRepairSum((int) repairSum);
         mEntities.add(repairStaffEntity);
         refreshListController.refreshComplete(mEntities);
     }

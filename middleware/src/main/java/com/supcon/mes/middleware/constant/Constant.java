@@ -79,6 +79,7 @@ public interface Constant {
         String WXGD_RECEIVE = "WXGD_RECEIVE";//维修工单接单
         String WXGD_EXECUTE = "WXGD_EXECUTE";//维修工单执行
         String WXGD_ACCEPTANCE = "WXGD_ACCEPTANCE";//维修工单验收
+        String WXGD_WARN = "WXGD_WARN";//预警工单pt
 
         String WXGD_REPAIR_STAFF_LIST = "WXGD_REPAIR_STAFF_LIST";//维修工单维修人员
         String WXGD_ACCEPTANCE_LIST = "WXGD_ACCEPTANCE_LIST";//维修工单验收
@@ -464,6 +465,7 @@ public interface Constant {
         /*备件参照快速查询*/
         String BEAM_SPARE_PARTS = "BEAM_SPARE_PARTS";
 
+        String EAM_EXACT_CODE = "EAM_EXACT_CODE";//精确设备编码
         String EAM_CODE = "EAM_CODE";//设备编码
         String EAM_STATE = "EAM_STATE";//设备状态
         String EAM_TYPE = "EAM_TYPE";//设备类型

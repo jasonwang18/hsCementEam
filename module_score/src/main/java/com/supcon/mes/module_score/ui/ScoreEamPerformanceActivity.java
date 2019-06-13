@@ -2,10 +2,10 @@ package com.supcon.mes.module_score.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -31,12 +31,16 @@ import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.api.EamAPI;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
+import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.bean.Staff;
+import com.supcon.mes.middleware.model.contract.EamContract;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.NFCEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.presenter.EamPresenter;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.HtmlParser;
@@ -63,11 +67,13 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -78,8 +84,8 @@ import io.reactivex.functions.Consumer;
  * 设备评分
  */
 @Router(value = Constant.Router.SCORE_EAM_PERFORMANCE)
-@Presenter(value = {ScoreEamPerformancePresenter.class, ScoreSubmitPresenter.class})
-public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity implements ScoreEamPerformanceContract.View, ScoreSubmitContract.View {
+@Presenter(value = {ScoreEamPerformancePresenter.class, ScoreSubmitPresenter.class, EamPresenter.class})
+public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity implements ScoreEamPerformanceContract.View, ScoreSubmitContract.View, EamContract.View {
     @BindByTag("leftBtn")
     ImageButton leftBtn;
     @BindByTag("titleText")
@@ -108,6 +114,7 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
     private int scoreId = -1;
     private boolean isEdit;
     private NFCHelper nfcHelper;
+    private String eamCodeStr;
 
     @Override
     protected IListAdapter createAdapter() {
@@ -197,6 +204,11 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
         refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
+                if (!TextUtils.isEmpty(eamCodeStr)) {
+                    Map<String, Object> params = new HashMap<>();
+                    params.put(Constant.IntentKey.EAM_CODE, eamCodeStr);
+                    presenterRouter.create(EamAPI.class).getEam(params, 1);
+                }
                 presenterRouter.create(ScoreEamPerformanceAPI.class).getScoreList(scoreId);
             }
         });
@@ -263,9 +275,9 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
                 ToastUtils.show(context, "标签内容空！");
                 return;
             }
-            Bundle bundle = new Bundle();
-            bundle.putString(Constant.IntentKey.EAM_CODE, (String) nfcJson.get("textRecord"));
-            IntentRouter.go(this, Constant.Router.EAM, bundle);
+            scoreId = -1;
+            eamCodeStr = (String) nfcJson.get("textRecord");
+            refreshListController.refreshBegin();
         }
     }
 
@@ -286,6 +298,24 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
                 scoreEamEntity.beamId = eamType;
             }
         }
+    }
+
+    @Override
+    public void getEamSuccess(CommonListEntity entity) {
+        if (entity.result.size() > 0) {
+            EamType eamType = (EamType) entity.result.get(0);
+            eamCode.setContent(Util.strFormat(eamType.code));
+            eamName.setContent(Util.strFormat(eamType.name));
+            eamDept.setContent(Util.strFormat(eamType.getUseDept().name));
+            scoreEamEntity.beamId = eamType;
+            return;
+        }
+        SnackbarHelper.showError(rootView, "未查询到设备：" + eamCodeStr);
+    }
+
+    @Override
+    public void getEamFailed(String errorMsg) {
+        SnackbarHelper.showError(rootView, errorMsg);
     }
 
     @SuppressLint("CheckResult")
@@ -406,11 +436,10 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
     public void doSubmitFailed(String errorMsg) {
         if ("本数据已经被其他人修改或删除，请刷页面后重试".equals(errorMsg)) {
             loaderController.showMsgAndclose(ErrorMsgHelper.msgParse(errorMsg), false, 5000);
-        } else if (errorMsg.contains("com.supcon.orchid.BEAM2.entities.BEAM2SparePart")) {
-            //error : Row was updated or deleted by another transaction (or unsaved-value mapping was incorrect): [com.supcon.orchid.BEAM2.entities.BEAM2SparePart#1211]
-            loaderController.showMsgAndclose("请刷新备件表体数据！", false, 4000);
         } else {
             onLoadFailed(ErrorMsgHelper.msgParse(errorMsg));
         }
     }
+
+
 }

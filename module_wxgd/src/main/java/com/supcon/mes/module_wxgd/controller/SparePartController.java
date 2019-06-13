@@ -78,7 +78,6 @@ public class SparePartController extends BaseViewController implements SparePart
                         bundle.putString(Constant.IntentKey.SPARE_PART_ENTITIES, mSparePartEntities.toString());
                         bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, editable);
                         bundle.putBoolean(Constant.IntentKey.IS_ADD, false);
-                        bundle.putLong(Constant.IntentKey.REPAIR_SUM, mWXGDEntity.repairSum);
                         bundle.putString(Constant.IntentKey.TABLE_STATUS, mWXGDEntity.pending.taskDescription);
                         bundle.putString(Constant.IntentKey.TABLE_ACTION,mWXGDEntity.pending.openUrl);
                         bundle.putLong(Constant.IntentKey.LIST_ID,id);

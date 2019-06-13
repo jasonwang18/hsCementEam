@@ -60,7 +60,7 @@ public class ScoreEamListAdapter extends BaseListDataRecyclerViewAdapter<ScoreEa
             itemScoreEam.contentView().setText(HtmlParser.buildSpannedText(eam, new HtmlTagHandler()));
 
             itemScoreNum.setValue(Util.big(data.scoreNum));
-            itemScoreTime.setValue(data.scoreTime != null ? DateUtil.dateTimeFormat(data.scoreTime) : "");
+            itemScoreTime.setValue(data.scoreTime != null ? DateUtil.dateFormat(data.scoreTime) : "");
             itemScoreStaff.setContent(Util.strFormat(data.getScoreStaff().name));
             itemScoreDept.setContent(Util.strFormat(data.getBeamId().getUseDept().name));
 

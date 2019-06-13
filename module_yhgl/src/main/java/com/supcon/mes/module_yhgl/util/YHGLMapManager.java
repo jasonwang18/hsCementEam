@@ -59,7 +59,6 @@ public class YHGLMapManager {
             repairStaffDto.startTime = staffs.get(i).startTime != null ? format.format(staffs.get(i).startTime) : "";
             repairStaffDto.endTime = staffs.get(i).endTime != null ? format.format(staffs.get(i).endTime) : "";
             repairStaffDto.workHour = staffs.get(i).workHour == null ? "" : String.valueOf(staffs.get(i).workHour);
-            repairStaffDto.timesNum = String.valueOf(staffs.get(i).timesNum);
             repairStaffDto.sort = staffs.get(i).sort == null ? "" : String.valueOf(staffs.get(i).sort);
             repairStaffDto.rowIndex = String.valueOf(i);
             repairStaffDto.remark = staffs.get(i).remark;

@@ -1,6 +1,7 @@
 package com.supcon.mes.middleware.ui;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -15,8 +16,10 @@ import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
+import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.CustomSwipeLayout;
+import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
@@ -28,12 +31,16 @@ import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchEntity;
 import com.supcon.mes.middleware.model.contract.EamContract;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
+import com.supcon.mes.middleware.model.event.NFCEvent;
 import com.supcon.mes.middleware.presenter.EamPresenter;
 import com.supcon.mes.middleware.ui.adapter.BaseSearchAdapter;
 import com.supcon.mes.middleware.ui.view.PinyinSearchBar;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
+import com.supcon.mes.middleware.util.NFCHelper;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -69,6 +76,8 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
     private final Map<String, Object> queryParam = new HashMap<>();
     private String eamCode, areaName;
 
+    private NFCHelper nfcHelper;
+
     @Override
     protected IListAdapter<CommonSearchEntity> createAdapter() {
         mBaseSearchAdapter = new BaseSearchAdapter(this, false);
@@ -78,13 +87,32 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
     @Override
     protected void onInit() {
         super.onInit();
+        EventBus.getDefault().register(this);
         refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, "没有信息哦~"));
         eamCode = getIntent().getStringExtra(Constant.IntentKey.EAM_CODE);
         areaName = getIntent().getStringExtra(Constant.IntentKey.AREA_NAME);
+
+        nfcHelper = NFCHelper.getInstance();
+        if (nfcHelper != null) {
+            nfcHelper.setup(this);
+            nfcHelper.setOnNFCListener(new NFCHelper.OnNFCListener() {
+                @Override
+                public void onNFCReceived(String nfc) {
+                    LogUtil.d("NFC Received : " + nfc);
+                    EventBus.getDefault().post(new NFCEvent(nfc));
+                }
+            });
+        }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (nfcHelper != null)
+            nfcHelper.onResumeNFC(this);
+    }
 
     @Override
     protected int getLayoutID() {
@@ -175,5 +203,47 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
     public void getEamFailed(String errorMsg) {
         refreshListController.refreshComplete(null);
         ToastUtils.show(context, errorMsg);
+    }
+
+    /**
+     * @param
+     * @description NFC事件
+     * @author zhangwenshuai1
+     * @date 2018/6/28
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getNFC(NFCEvent nfcEvent) {
+        LogUtil.d("NFC_TAG", nfcEvent.getNfc());
+        Map<String, Object> nfcJson = GsonUtil.gsonToMaps(nfcEvent.getNfc());
+        if (nfcJson.get("textRecord") == null) {
+            ToastUtils.show(context, "标签内容空！");
+            return;
+        }
+        eamCode = (String) nfcJson.get("textRecord");
+        titleSearchView.setInput(eamCode);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        //获取到Tag对象
+        if (nfcHelper != null)
+            nfcHelper.dealNFCTag(intent);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (nfcHelper != null)
+            nfcHelper.onPauseNFC(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+        if (nfcHelper != null) {
+            nfcHelper.release();
+        }
     }
 }

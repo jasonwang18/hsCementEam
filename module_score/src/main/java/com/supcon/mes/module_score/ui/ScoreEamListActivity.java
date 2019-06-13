@@ -124,10 +124,10 @@ public class ScoreEamListActivity extends BaseRefreshRecyclerActivity implements
         customSearchView.setHint("请输入设备");
         searchTitleBar.enableRightBtn();
         searchTitleBar.setTitleText("设备评分绩效");
-        startTime.setDate(getYesterday());
+        startTime.setDate(getThreeDay());
         stopTime.setDate(dateFormat.format(System.currentTimeMillis()));
 
-        queryParam.put(Constant.BAPQuery.SCORE_TIME_START, getYesterday());
+        queryParam.put(Constant.BAPQuery.SCORE_TIME_START, getThreeDay());
         queryParam.put(Constant.BAPQuery.SCORE_TIME_STOP, dateFormat.format(System.currentTimeMillis()));
     }
 
@@ -200,7 +200,7 @@ public class ScoreEamListActivity extends BaseRefreshRecyclerActivity implements
                     refreshListController.refreshBegin();
                 }
 
-            }).show(DateUtil.dateFormat(getYesterday()));
+            }).show(DateUtil.dateFormat(getThreeDay()));
         });
 
         stopTime.setOnChildViewClickListener((childView, action, obj) ->
@@ -251,10 +251,18 @@ public class ScoreEamListActivity extends BaseRefreshRecyclerActivity implements
         EventBus.getDefault().unregister(this);
     }
 
-    public String getYesterday() {
+    public String getThreeDay() {
         Calendar ca = Calendar.getInstance();
         ca.setTime(new Date());
         ca.add(Calendar.DAY_OF_MONTH, -3);
+        String s = DateUtil.dateFormat(ca.getTimeInMillis(), "yyyy-MM-dd 00:00:00");
+        return s;
+    }
+
+    public String getYesterday() {
+        Calendar ca = Calendar.getInstance();
+        ca.setTime(new Date());
+        ca.add(Calendar.DAY_OF_MONTH, -1);
         String s = DateUtil.dateFormat(ca.getTimeInMillis(), "yyyy-MM-dd 00:00:00");
         return s;
     }

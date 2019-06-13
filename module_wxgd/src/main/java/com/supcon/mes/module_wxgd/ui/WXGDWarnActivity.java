@@ -20,13 +20,11 @@ import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.beans.WorkFlowVar;
 import com.supcon.mes.mbap.utils.DateUtil;
-import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.utils.controllers.DatePickController;
 import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomEditText;
-import com.supcon.mes.mbap.view.CustomListWidget;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomVerticalDateView;
 import com.supcon.mes.mbap.view.CustomVerticalEditText;
@@ -35,18 +33,18 @@ import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.mbap.view.CustomWorkFlowView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.controller.EamPicController;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.RoleController;
-import com.supcon.mes.middleware.model.bean.AccountInfo;
+import com.supcon.mes.middleware.model.bean.AcceptanceCheckEntity;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntityDao;
-import com.supcon.mes.middleware.model.bean.UserInfo;
+import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
-import com.supcon.mes.middleware.controller.EamPicController;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_wxgd.IntentRouter;
@@ -58,14 +56,11 @@ import com.supcon.mes.module_wxgd.controller.RepairStaffController;
 import com.supcon.mes.module_wxgd.controller.SparePartController;
 import com.supcon.mes.module_wxgd.controller.WXGDSubmitController;
 import com.supcon.mes.module_wxgd.model.api.WXGDListAPI;
-import com.supcon.mes.middleware.model.bean.AcceptanceCheckEntity;
-import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.module_wxgd.model.bean.WXGDListEntity;
 import com.supcon.mes.module_wxgd.model.contract.WXGDListContract;
 import com.supcon.mes.module_wxgd.model.dto.AcceptanceCheckEntityDto;
 import com.supcon.mes.module_wxgd.model.event.AcceptanceEvent;
 import com.supcon.mes.module_wxgd.model.event.ListEvent;
-import com.supcon.mes.module_wxgd.model.event.MaintenanceEvent;
 import com.supcon.mes.module_wxgd.presenter.WXGDListPresenter;
 import com.supcon.mes.module_wxgd.util.WXGDMapManager;
 
@@ -80,15 +75,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * WXGDDispatcherActivity 验收Activity
- * created by zhangwenshuai1 2018/8/15
- * 待验收
+ * @author yangfei.cao
+ * @ClassName hongShiCementEam
+ * @date 2019/4/29
+ * ------------- Description -------------
+ * 预警工单
  */
-
-@Router(value = Constant.Router.WXGD_ACCEPTANCE)
+@Router(value = Constant.Router.WXGD_WARN)
 @Presenter(value = {WXGDListPresenter.class})
 @Controller(value = {SparePartController.class, RepairStaffController.class, LubricateOilsController.class, MaintenanceController.class, AcceptanceCheckController.class})
-public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDSubmitController.OnSubmitResultListener, WXGDListContract.View {
+public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDSubmitController.OnSubmitResultListener, WXGDListContract.View {
 
     @BindByTag("leftBtn")
     ImageButton leftBtn;
@@ -176,7 +172,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
 
     @Override
     protected int getLayoutID() {
-        return R.layout.ac_wxgd_accptence;
+        return R.layout.ac_wxgd_warn;
     }
 
     @Override

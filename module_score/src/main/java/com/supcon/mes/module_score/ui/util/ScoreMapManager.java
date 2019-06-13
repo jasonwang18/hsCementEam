@@ -34,7 +34,9 @@ public class ScoreMapManager {
         map.put("datagridKey", "BEAM_scorePerformance_scoreHead_beamPerformanceEdit_datagrids");
         map.put("viewCode", "BEAM_1.0.0_scorePerformance_beamPerformanceEdit");
         map.put("modelName", "ScoreHead");
-
+        if (scoreEamEntity.id != -1) {
+            map.put("id", scoreEamEntity.id);
+        }
         map.put("scoreHead.beamId.id", Util.strFormat2(scoreEamEntity.getBeamId().id));
         map.put("scoreHead.scoreStaff.id", Util.strFormat2(scoreEamEntity.getScoreStaff().id));
         map.put("scoreHead.scoreTableNo", Util.strFormat2(scoreEamEntity.scoreTableNo));

@@ -155,6 +155,9 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
     @BindByTag("activate")
     Button activate;
 
+    @BindByTag("workContext")
+    CustomVerticalTextView workContext;
+
     private RepairStaffController mRepairStaffController;
     private SparePartController mSparePartController;
     private LubricateOilsController mLubricateOilsController;
@@ -318,6 +321,8 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         planStartTime.setDate(mWXGDEntity.planStartDate == null ? "" : sdf.format(mWXGDEntity.planStartDate));
         planEndTime.setDate(mWXGDEntity.planEndDate == null ? "" : sdf.format(mWXGDEntity.planEndDate));
         realEndTime.setDate(mWXGDEntity.realEndDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.realEndDate, "yyyy-MM-dd HH:mm:ss"));
+
+        workContext.setContent(mWXGDEntity.workOrderContext);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -640,7 +645,6 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         map.put("datagridKey", "BEAM2_workList_workRecord_workExecuteEdit_datagrids");
         map.put("viewCode", "BEAM2_1.0.0_workList_workExecuteEdit");
         map.put("taskDescription", "BEAM2_1.0.0.work.task1838");
-        map.put("workRecord.repairSum", mWXGDEntity.repairSum);
         map.put("workRecord.workType.id", (mWXGDEntity.workType != null && mWXGDEntity.workType.id != null) ? mWXGDEntity.workType.id : null);
         map.put("workFlowVar.comment", commentInput.getInput());
 

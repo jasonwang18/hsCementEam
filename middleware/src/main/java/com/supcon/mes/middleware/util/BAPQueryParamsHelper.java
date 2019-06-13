@@ -291,6 +291,15 @@ public class BAPQueryParamsHelper {
                 subcondEntity.value = String.valueOf(value);
 
                 break;
+            case Constant.BAPQuery.EAM_EXACT_CODE:
+                subcondEntity = new SubcondEntity();
+                subcondEntity.columnName = Constant.BAPQuery.EAM_CODE;
+                subcondEntity.type = TYPE_NORMAL;
+                subcondEntity.dbColumnType = Constant.BAPQuery.BAPCODE;
+                subcondEntity.operator = Constant.BAPQuery.BE;
+                subcondEntity.paramStr = LIKE_OPT_Q;
+                subcondEntity.value = String.valueOf(value);
+                break;
             case Constant.BAPQuery.EAM_CODE:
                 subcondEntity = new SubcondEntity();
                 subcondEntity.columnName = key;

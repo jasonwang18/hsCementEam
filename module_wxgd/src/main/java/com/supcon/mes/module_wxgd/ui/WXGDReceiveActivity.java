@@ -131,6 +131,9 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
     @BindByTag("transition")
     CustomWorkFlowView transition;
 
+    @BindByTag("workContext")
+    CustomVerticalTextView workContext;
+
     private RepairStaffController mRepairStaffController;
     private SparePartController mSparePartController;
     private LubricateOilsController mLubricateOilsController;
@@ -264,6 +267,8 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
         planStartTime.setDate(mWXGDEntity.planStartDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.planStartDate, "yyyy-MM-dd HH:mm:ss"));
         planEndTime.setDate(mWXGDEntity.planEndDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.planEndDate, "yyyy-MM-dd HH:mm:ss"));
         realEndTime.setDate(mWXGDEntity.realEndDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.realEndDate, "yyyy-MM-dd HH:mm:ss"));
+
+        workContext.setContent(mWXGDEntity.workOrderContext);
     }
 
     @Override
