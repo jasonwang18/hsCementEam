@@ -11,6 +11,7 @@ import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.mes.mbap.view.CustomListWidget;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.LubricateOilsEntity;
 import com.supcon.mes.middleware.model.bean.MaintainEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.bean.YHEntity;
@@ -37,6 +38,7 @@ public class MaintenanceController extends BaseViewController implements Mainten
     CustomListWidget<MaintainEntity> mCustomListWidget;
 
     private long id;
+    private List<MaintainEntity> maintenanceOldEntities = new ArrayList<>();
     private List<MaintainEntity> maintenanceEntities = new ArrayList<>();
     private boolean isEditable;
     private WXGDEntity wxgdEntity;
@@ -64,6 +66,9 @@ public class MaintenanceController extends BaseViewController implements Mainten
         mCustomListWidget.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
+                if (maintenanceOldEntities.size() > 0) {
+                    return;
+                }
                 Bundle bundle = new Bundle();
                 switch (action) {
                     case CustomListWidget.ACTION_VIEW_ALL:
@@ -71,7 +76,7 @@ public class MaintenanceController extends BaseViewController implements Mainten
                         bundle.putString(Constant.IntentKey.MAINTENANCE_ENTITIES, maintenanceEntities.toString());
                         bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, isEditable);
                         bundle.putBoolean(Constant.IntentKey.IS_ADD, false);
-                        bundle.putString(Constant.IntentKey.TABLE_STATUS, wxgdEntity.pending.taskDescription);
+                        bundle.putString(Constant.IntentKey.TABLE_STATUS, wxgdEntity.getPending().taskDescription);
                         bundle.putLong(Constant.IntentKey.EAM_ID, wxgdEntity.eamID.id);
                         IntentRouter.go(context, Constant.Router.WXGD_MAINTENANCE_STAFF_LIST, bundle);
                         break;
@@ -91,6 +96,7 @@ public class MaintenanceController extends BaseViewController implements Mainten
     @Override
     public void listMaintenanceSuccess(MaintenanceListEntity entity) {
         maintenanceEntities = entity.result;
+        maintenanceEntities.addAll(maintenanceOldEntities);
         if (mCustomListWidget != null) {
             mCustomListWidget.setData(entity.result);
             if (isEditable) {
@@ -148,6 +154,12 @@ public class MaintenanceController extends BaseViewController implements Mainten
                 mCustomListWidget.setShowText("查看 (" + list.size() + ")");
             }
         }
+    }
+
+    public void updateOldLubricateOils(List<MaintainEntity> maintainEntities) {
+        if (maintainEntities == null)
+            return;
+        this.maintenanceOldEntities = maintainEntities;
     }
 
     public void setEditable(boolean isEditable) {

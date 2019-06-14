@@ -22,9 +22,11 @@ import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
+import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
 import com.supcon.mes.mbap.view.CustomSearchView;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
@@ -39,6 +41,7 @@ import com.supcon.mes.module_warn.model.bean.SparePartWarnListEntity;
 import com.supcon.mes.module_warn.model.contract.SparePartWarnContract;
 import com.supcon.mes.module_warn.presenter.SparePartWarnPresenter;
 import com.supcon.mes.module_warn.ui.adapter.SparePartWarnAdapter;
+import com.supcon.mes.module_warn.ui.util.WXGDWarnManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -50,6 +53,9 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author yangfei.cao
@@ -94,7 +100,6 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
     private long nextTime = 0;
 
 
-
     @Override
     protected IListAdapter<SparePartWarnEntity> createAdapter() {
         sparePartWarnAdapter = new SparePartWarnAdapter(this);
@@ -116,11 +121,13 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
     public void onRefresh(RefreshEvent event) {
         refreshListController.refreshBegin();
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogin(LoginEvent loginEvent) {
 
         refreshListController.refreshBegin();
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -192,26 +199,29 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
                     List<SparePartWarnEntity> list = sparePartWarnAdapter.getList();
-                    StringBuffer sourceIds = new StringBuffer();
                     Bundle bundle = new Bundle();
                     Flowable.fromIterable(list)
+                            .subscribeOn(Schedulers.io())
                             .filter(sparePartWarnEntity -> sparePartWarnEntity.isCheck)
-                            .subscribe(sparePartWarnEntity -> {
-                                if (TextUtils.isEmpty(sourceIds)) {
-                                    sourceIds.append(sparePartWarnEntity.id);
-                                } else {
-                                    sourceIds.append(",").append(sparePartWarnEntity.id);
-                                }
-                            }, throwable -> {
-                            }, () -> {
-                                if (!TextUtils.isEmpty(sourceIds)) {
-                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_TYPE, "BEAM2003/04");
-                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_IDS, sourceIds.toString());
-                                    IntentRouter.go(this, Constant.Router.GENERATE_WORK_DIALOG, bundle);
-                                } else {
-                                    ToastUtils.show(this, "请选择操作项!");
-                                }
+                            .map(sparePartWarnEntity -> {
+                                WXGDEntity spare = WXGDWarnManager.spare(sparePartWarnEntity);
+                                return spare;
+                            })
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(wxgdEntity -> {
+                                bundle.putSerializable(Constant.IntentKey.WXGD_ENTITY, wxgdEntity);
                             });
+                    new CustomDialog(context)
+                            .twoButtonAlertDialog("确定生成工单?")
+                            .bindView(R.id.redBtn, "确定")
+                            .bindView(R.id.grayBtn, "取消")
+                            .bindClickListener(R.id.redBtn, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v12) {
+                                    IntentRouter.go(SparePartWarnActivity.this, Constant.Router.WXGD_WARN, bundle);
+                                }
+                            }, true)
+                            .bindClickListener(R.id.grayBtn, null, true).show();
 
                 });
         RxView.clicks(delay)

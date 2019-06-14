@@ -66,6 +66,19 @@
             app:max_lines="1" />
 
         <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemSpareAttachEamTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemSpareAttachEamTv"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="附   属   设   备:"
+            app:key_width="110dp"
+            app:max_lines="100" />
+
+
+        <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/itemSpareSpecifLastDateTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

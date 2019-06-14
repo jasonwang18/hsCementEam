@@ -22,9 +22,11 @@ import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
+import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
 import com.supcon.mes.mbap.view.CustomSearchView;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
@@ -39,6 +41,7 @@ import com.supcon.mes.module_warn.model.bean.MaintenanceWarnListEntity;
 import com.supcon.mes.module_warn.model.contract.MaintenanceWarnContract;
 import com.supcon.mes.module_warn.presenter.MaintenanceWarnPresenter;
 import com.supcon.mes.module_warn.ui.adapter.MaintenanceWarnAdapter;
+import com.supcon.mes.module_warn.ui.util.WXGDWarnManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -50,6 +53,9 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author yangfei.cao
@@ -119,6 +125,7 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
 
         refreshListController.refreshBegin();
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -190,26 +197,29 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
                     List<MaintenanceWarnEntity> list = maintenanceWarnAdapter.getList();
-                    StringBuffer sourceIds = new StringBuffer();
                     Bundle bundle = new Bundle();
                     Flowable.fromIterable(list)
+                            .subscribeOn(Schedulers.io())
                             .filter(maintenanceWarnEntity -> maintenanceWarnEntity.isCheck)
-                            .subscribe(maintenanceWarnEntity -> {
-                                if (TextUtils.isEmpty(sourceIds)) {
-                                    sourceIds.append(maintenanceWarnEntity.id);
-                                } else {
-                                    sourceIds.append(",").append(maintenanceWarnEntity.id);
-                                }
-                            }, throwable -> {
-                            }, () -> {
-                                if (!TextUtils.isEmpty(sourceIds)) {
-                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_TYPE, "BEAM2003/03");
-                                    bundle.putString(Constant.IntentKey.WARN_SOURCE_IDS, sourceIds.toString());
-                                    IntentRouter.go(this, Constant.Router.GENERATE_WORK_DIALOG, bundle);
-                                } else {
-                                    ToastUtils.show(this, "请选择操作项!");
-                                }
+                            .map(maintenanceWarnEntity -> {
+                                WXGDEntity mainten = WXGDWarnManager.mainten(maintenanceWarnEntity);
+                                return mainten;
+                            })
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(wxgdEntity -> {
+                                bundle.putSerializable(Constant.IntentKey.WXGD_ENTITY, wxgdEntity);
                             });
+                    new CustomDialog(context)
+                            .twoButtonAlertDialog("确定生成工单?")
+                            .bindView(R.id.redBtn, "确定")
+                            .bindView(R.id.grayBtn, "取消")
+                            .bindClickListener(R.id.redBtn, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v12) {
+                                    IntentRouter.go(MaintenanceWarnActivity.this, Constant.Router.WXGD_WARN, bundle);
+                                }
+                            }, true)
+                            .bindClickListener(R.id.grayBtn, null, true).show();
 
                 });
         RxView.clicks(delay)

@@ -144,15 +144,15 @@ public class LubricationWarnAdapter extends BaseListDataRecyclerViewAdapter<Lubr
                 }
             }
 
-            if (!TextUtils.isEmpty(data.getAccessoryEamId().getAttachEamId().code)) {
+            if (!TextUtils.isEmpty(data.getAccessoryEamId().getAttachEamId().name)) {
                 itemLubriAttachEamTv.setVisibility(View.VISIBLE);
-                itemLubriAttachEamTv.setContent(data.getAccessoryEamId().getAttachEamId().code);
+                itemLubriAttachEamTv.setContent(data.getAccessoryEamId().getAttachEamId().name);
             } else {
                 itemLubriAttachEamTv.setVisibility(View.GONE);
             }
-            if (!TextUtils.isEmpty(data.getSparePartId().getProductID().productCode)) {
+            if (!TextUtils.isEmpty(data.getSparePartId().getProductID().productName)) {
                 itemLubriSparePartIdTv.setVisibility(View.VISIBLE);
-                itemLubriSparePartIdTv.setContent(data.getSparePartId().getProductID().productCode);
+                itemLubriSparePartIdTv.setContent(data.getSparePartId().getProductID().productName);
             } else {
                 itemLubriSparePartIdTv.setVisibility(View.GONE);
             }

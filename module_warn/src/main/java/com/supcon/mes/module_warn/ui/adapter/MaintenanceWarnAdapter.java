@@ -43,6 +43,10 @@ public class MaintenanceWarnAdapter extends BaseListDataRecyclerViewAdapter<Main
 
         @BindByTag("itemMaintenanceEquipmentNameTv")
         CustomTextView itemMaintenanceEquipmentNameTv;
+        @BindByTag("itemMaintenanceAttachEamTv")
+        CustomTextView itemMaintenanceAttachEamTv;
+        @BindByTag("itemMaintenanceSparePartIdTv")
+        CustomTextView itemMaintenanceSparePartIdTv;
         @BindByTag("itemMaintenanceLastDateTv")
         CustomTextView itemMaintenanceLastDateTv;
         @BindByTag("itemMaintenanceNextDateTv")
@@ -97,6 +101,19 @@ public class MaintenanceWarnAdapter extends BaseListDataRecyclerViewAdapter<Main
                     , Util.strFormat(data.getEamID().code));
             itemMaintenanceEquipmentNameTv.contentView().setText(HtmlParser.buildSpannedText(eam, new HtmlTagHandler()));
 
+            if (!TextUtils.isEmpty(data.getAccessoryEamId().getAttachEamId().name)) {
+                itemMaintenanceAttachEamTv.setVisibility(View.VISIBLE);
+                itemMaintenanceAttachEamTv.setContent(data.getAccessoryEamId().getAttachEamId().name);
+            } else {
+                itemMaintenanceAttachEamTv.setVisibility(View.GONE);
+            }
+            if (!TextUtils.isEmpty(data.getSparePartId().getProductID().productName)) {
+                itemMaintenanceSparePartIdTv.setVisibility(View.VISIBLE);
+                itemMaintenanceSparePartIdTv.setContent(data.getSparePartId().getProductID().productName);
+            } else {
+                itemMaintenanceSparePartIdTv.setVisibility(View.GONE);
+            }
+
             itemMaintenanceLastDateTv.setVisibility(View.GONE);
             itemMaintenanceNextDateTv.setVisibility(View.GONE);
             itemMaintenanceLastDurationTv.setVisibility(View.GONE);
@@ -108,7 +125,7 @@ public class MaintenanceWarnAdapter extends BaseListDataRecyclerViewAdapter<Main
                 itemMaintenanceNextDurationTv.setValue(Util.big2(data.nextDuration));
                 if (data.currentDuration > data.nextDuration) {
                     itemMaintenanceNextDurationTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
-                }else {
+                } else {
                     itemMaintenanceNextDurationTv.setContentTextColor(context.getResources().getColor(R.color.textColorGray));
                 }
             } else {
@@ -119,7 +136,7 @@ public class MaintenanceWarnAdapter extends BaseListDataRecyclerViewAdapter<Main
                 long currentTime = System.currentTimeMillis();
                 if (data.nextTime < currentTime) {
                     itemMaintenanceNextDateTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
-                }else {
+                } else {
                     itemMaintenanceNextDateTv.setContentTextColor(context.getResources().getColor(R.color.textColorGray));
                 }
             }

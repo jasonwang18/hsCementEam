@@ -47,6 +47,9 @@ public class SparePartWarnAdapter extends BaseListDataRecyclerViewAdapter<SpareP
         CustomTextView itemSpareProductNameTv;
         @BindByTag("itemSpareSpecifModelTv")
         CustomTextView itemSpareSpecifModelTv;
+        @BindByTag("itemSpareAttachEamTv")
+        CustomTextView itemSpareAttachEamTv;
+
         @BindByTag("itemSpareSpecifLastDateTv")
         CustomTextView itemSpareSpecifLastDateTv;
         @BindByTag("itemSpareSpecifNextDateTv")
@@ -108,6 +111,13 @@ public class SparePartWarnAdapter extends BaseListDataRecyclerViewAdapter<SpareP
                     , Util.strFormat(data.getProductID().productModel));
             itemSpareSpecifModelTv.contentView().setText(HtmlParser.buildSpannedText(specifModel, new HtmlTagHandler()));
 
+            if (!TextUtils.isEmpty(data.getAccessoryEamId().getAttachEamId().name)) {
+                itemSpareAttachEamTv.setVisibility(View.VISIBLE);
+                itemSpareAttachEamTv.setContent(data.getAccessoryEamId().getAttachEamId().name);
+            } else {
+                itemSpareAttachEamTv.setVisibility(View.GONE);
+            }
+
             itemSpareLastDurationTv.setVisibility(View.GONE);
             itemSpareNextDurationTv.setVisibility(View.GONE);
             itemSpareSpecifLastDateTv.setVisibility(View.GONE);
@@ -119,7 +129,7 @@ public class SparePartWarnAdapter extends BaseListDataRecyclerViewAdapter<SpareP
                 itemSpareNextDurationTv.setValue(Util.big2(data.nextDuration));
                 if (data.currentDuration > data.nextDuration) {
                     itemSpareNextDurationTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
-                }else {
+                } else {
                     itemSpareNextDurationTv.setContentTextColor(context.getResources().getColor(R.color.textColorGray));
                 }
             } else {
@@ -130,7 +140,7 @@ public class SparePartWarnAdapter extends BaseListDataRecyclerViewAdapter<SpareP
                 long currentTime = System.currentTimeMillis();
                 if (data.nextTime < currentTime) {
                     itemSpareSpecifNextDateTv.setContentTextColor(context.getResources().getColor(R.color.customRed));
-                }else {
+                } else {
                     itemSpareSpecifNextDateTv.setContentTextColor(context.getResources().getColor(R.color.textColorGray));
                 }
             }

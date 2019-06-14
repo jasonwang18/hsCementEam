@@ -39,6 +39,7 @@ public class SparePartController extends BaseViewController implements SparePart
 
     //    private CustomListWidget<SparePartEntity> mCustomListWidget;
     private long id;
+    private List<SparePartEntity> mSparePartOldEntities = new ArrayList<>();
     private List<SparePartEntity> mSparePartEntities = new ArrayList<>();
     private boolean editable;
     private WXGDEntity mWXGDEntity;
@@ -71,6 +72,9 @@ public class SparePartController extends BaseViewController implements SparePart
         mCustomListWidget.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
+                if (mSparePartOldEntities.size() > 0) {
+                    return;
+                }
                 Bundle bundle = new Bundle();
                 switch (action) {
                     case CustomListWidget.ACTION_VIEW_ALL:
@@ -78,10 +82,10 @@ public class SparePartController extends BaseViewController implements SparePart
                         bundle.putString(Constant.IntentKey.SPARE_PART_ENTITIES, mSparePartEntities.toString());
                         bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, editable);
                         bundle.putBoolean(Constant.IntentKey.IS_ADD, false);
-                        bundle.putString(Constant.IntentKey.TABLE_STATUS, mWXGDEntity.pending.taskDescription);
-                        bundle.putString(Constant.IntentKey.TABLE_ACTION,mWXGDEntity.pending.openUrl);
-                        bundle.putLong(Constant.IntentKey.LIST_ID,id);
-                        bundle.putLong(Constant.IntentKey.EAM_ID,mWXGDEntity.eamID.id);
+                        bundle.putString(Constant.IntentKey.TABLE_STATUS, mWXGDEntity.getPending().taskDescription);
+                        bundle.putString(Constant.IntentKey.TABLE_ACTION, mWXGDEntity.pending.openUrl);
+                        bundle.putLong(Constant.IntentKey.LIST_ID, id);
+                        bundle.putLong(Constant.IntentKey.EAM_ID, mWXGDEntity.eamID.id);
                         IntentRouter.go(context, Constant.Router.WXGD_SPARE_PART_LIST, bundle);
                         break;
                     default:
@@ -100,6 +104,7 @@ public class SparePartController extends BaseViewController implements SparePart
     @Override
     public void listSparePartListSuccess(SparePartListEntity entity) {
         mSparePartEntities = entity.result;
+        mSparePartEntities.addAll(mSparePartOldEntities);
         for (SparePartEntity sparePartEntity : mSparePartEntities) {
             if (sparePartEntity.remark == null) {
                 sparePartEntity.remark = "";
@@ -121,7 +126,7 @@ public class SparePartController extends BaseViewController implements SparePart
                 mCustomListWidget.setShowText("查看 (" + entity.result.size() + ")");
             }
         }
-        EventBus.getDefault().post(new ListEvent("sparePart",mSparePartEntities));
+        EventBus.getDefault().post(new ListEvent("sparePart", mSparePartEntities));
     }
 
     @Override
@@ -146,7 +151,8 @@ public class SparePartController extends BaseViewController implements SparePart
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refresh(BaseEvent baseEvent){}
+    public void refresh(BaseEvent baseEvent) {
+    }
 
     //获取备件数据
     public List<SparePartEntity> getSparePartEntities() {
@@ -174,12 +180,18 @@ public class SparePartController extends BaseViewController implements SparePart
 
     }
 
+    public void updateOldSparePart(List<SparePartEntity> mSparePartOldEntities) {
+        if (mSparePartOldEntities == null)
+            return;
+        this.mSparePartOldEntities = mSparePartOldEntities;
+    }
+
     public void setEditable(boolean isEditable) {
         this.editable = isEditable;
     }
 
-     public void clear(){
-         mCustomListWidget.clear();
-     }
+    public void clear() {
+        mCustomListWidget.clear();
+    }
 
 }

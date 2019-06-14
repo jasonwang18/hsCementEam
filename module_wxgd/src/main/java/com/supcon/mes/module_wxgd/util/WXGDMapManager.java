@@ -51,14 +51,18 @@ public class WXGDMapManager {
         map.put("bap_validate_user_id", EamApplication.getAccountInfo().userId);
         map.put("workRecord.createStaffId", EamApplication.getAccountInfo().staffId);
         map.put("workRecord.createTime", format.format(mWXGDEntity.createTime));
-        map.put("id", mWXGDEntity.id);
+
         map.put("workRecord.version", mWXGDEntity.version);
+        map.put("workRecord.workOrderContext", Util.strFormat2(mWXGDEntity.workOrderContext));
         map.put("deploymentId", mWXGDEntity.pending != null ? Util.strFormat2(mWXGDEntity.pending.deploymentId) : "");
         map.put("webSignetFlag", false);
         map.put("pendingId", mWXGDEntity.pending != null ? Util.strFormat2(mWXGDEntity.pending.id) : "");
         map.put("workRecord.repairGroup.id", mWXGDEntity.repairGroup != null ? Util.strFormat2(mWXGDEntity.repairGroup.id) : "");
         map.put("workRecord.faultInfo.id", mWXGDEntity.faultInfo != null ? Util.strFormat2(mWXGDEntity.faultInfo.id) : "");
-        map.put("workRecord.id", Util.strFormat2(mWXGDEntity.id));
+        if (mWXGDEntity.id != -1) {
+            map.put("id", Util.strFormat2(mWXGDEntity.id));
+            map.put("workRecord.id", Util.strFormat2(mWXGDEntity.id));
+        }
         map.put("workRecord.chargeStaff.id", mWXGDEntity.chargeStaff != null ? Util.strFormat2(mWXGDEntity.chargeStaff.id) : "");
         map.put("workRecord.eamID.id", (mWXGDEntity.eamID != null && mWXGDEntity.eamID.id != null) ? Util.strFormat2(mWXGDEntity.eamID.id) : "");
         map.put("workRecord.planStartDate", mWXGDEntity.planStartDate == null ? "" : format.format(mWXGDEntity.planStartDate));
@@ -78,7 +82,6 @@ public class WXGDMapManager {
         map.put("workRecord.realEndDate", mWXGDEntity.realEndDate == null ? "" : format.format(mWXGDEntity.realEndDate));
         map.put("workRecord.periodUnit.id", mWXGDEntity.periodUnit != null ? Util.strFormat2(mWXGDEntity.periodUnit.id) : "");
         map.put("workRecord.periodUnit.value", mWXGDEntity.periodUnit != null ? Util.strFormat2(mWXGDEntity.periodUnit.value) : "");
-
         map.put("__file_upload", true);
         return map;
     }
