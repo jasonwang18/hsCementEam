@@ -5,6 +5,7 @@ import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.AccessoryEamId;
 import com.supcon.mes.middleware.model.bean.LubricateOil;
 import com.supcon.mes.middleware.model.bean.SparePartId;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.ValueEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEam;
 
@@ -28,7 +29,7 @@ public class LubricationWarnEntity extends BaseEntity {
     public String lubricatePart;
     public ValueEntity generateWorkState;
     public ValueEntity periodUnit;
-    public ValueEntity oilType;
+    public SystemCodeEntity oilType;
     public LubricateOil lubricateOil;
     public Long lastTime;
     public Long nextTime;
@@ -36,6 +37,7 @@ public class LubricationWarnEntity extends BaseEntity {
     public Float lastDuration;//上次润滑时长
     public Float nextDuration;//下次润滑时长
     public ValueEntity periodType;//类型
+    public Long period; //周期
 
     public Float sum;
     public SparePartId sparePartId;//备件编码
@@ -65,9 +67,9 @@ public class LubricationWarnEntity extends BaseEntity {
         return lubricateOil;
     }
 
-    public ValueEntity getOilType() {
+    public SystemCodeEntity getOilType() {
         if (oilType == null) {
-            oilType = new ValueEntity();
+            oilType = new SystemCodeEntity();
         }
         return oilType;
     }

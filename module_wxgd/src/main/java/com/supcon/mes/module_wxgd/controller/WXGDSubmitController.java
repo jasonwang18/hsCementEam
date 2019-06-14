@@ -46,6 +46,11 @@ public class WXGDSubmitController extends BasePresenterController implements WXG
         presenterRouter.create(WXGDSubmitAPI.class).doDispatcherSubmit(map);
     }
 
+    @Override
+    public void doDispatcherWarnSubmit(Map<String, Object> map) {
+        presenterRouter.create(WXGDSubmitAPI.class).doDispatcherWarnSubmit(map);
+    }
+
 
     @Override
     public void doReceiveSubmitSuccess(BapResultEntity entity) {
@@ -74,6 +79,16 @@ public class WXGDSubmitController extends BasePresenterController implements WXG
 
     @Override
     public void doDispatcherSubmitFailed(String errorMsg) {
+        submitResult.submitFailed(errorMsg);
+    }
+
+    @Override
+    public void doDispatcherWarnSubmitSuccess(BapResultEntity entity) {
+        submitResult.submitSuccess(entity);
+    }
+
+    @Override
+    public void doDispatcherWarnSubmitFailed(String errorMsg) {
         submitResult.submitFailed(errorMsg);
     }
 

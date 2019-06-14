@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:descendantFocusability="blocksDescendants"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:descendantFocusability="blocksDescendants">
 
     <CheckBox
         android:id="@+id/chkBox"
@@ -13,8 +13,8 @@
         android:layout_centerVertical="true"
         android:layout_gravity="center_vertical"
         android:button="@drawable/sl_checkbox_selector"
-        android:enabled="false"
         android:clickable="false"
+        android:enabled="false"
         android:tag="chkBox" />
 
     <LinearLayout
@@ -38,6 +38,30 @@
             app:key="设                备:"
             app:key_width="110dp"
             app:max_lines="2" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemMaintenanceAttachEamTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemMaintenanceAttachEamTv"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="附   属   设   备:"
+            app:key_width="110dp"
+            app:max_lines="100" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemMaintenanceSparePartIdTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemMaintenanceSparePartIdTv"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="零      部      件:"
+            app:key_width="110dp"
+            app:max_lines="100" />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/itemMaintenanceLastDateTv"

@@ -12,6 +12,7 @@ import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.mes.mbap.view.CustomListWidget;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.SparePartEntity;
 import com.supcon.mes.middleware.model.event.BaseEvent;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.R;
@@ -43,6 +44,7 @@ public class LubricateOilsController extends BaseViewController implements Lubri
     CustomListWidget<LubricateOilsEntity> mCustomListWidget;
 
     private long id;
+    private List<LubricateOilsEntity> mLubricateOilsOldEntities = new ArrayList<>();
     private List<LubricateOilsEntity> mLubricateOilsEntities = new ArrayList<>();
     private boolean isEditable;
     private WXGDEntity mWXGDEntity;
@@ -71,6 +73,9 @@ public class LubricateOilsController extends BaseViewController implements Lubri
         mCustomListWidget.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
+                if (mLubricateOilsOldEntities.size() > 0) {
+                    return;
+                }
                 Bundle bundle = new Bundle();
                 switch (action) {
                     case CustomListWidget.ACTION_VIEW_ALL:
@@ -78,7 +83,7 @@ public class LubricateOilsController extends BaseViewController implements Lubri
                         bundle.putString(Constant.IntentKey.LUBRICATE_OIL_ENTITIES, mLubricateOilsEntities.toString());
                         bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, isEditable);
                         bundle.putBoolean(Constant.IntentKey.IS_ADD, false);
-                        bundle.putString(Constant.IntentKey.TABLE_STATUS, mWXGDEntity.pending.taskDescription);
+                        bundle.putString(Constant.IntentKey.TABLE_STATUS, mWXGDEntity.getPending().taskDescription);
                         bundle.putLong(Constant.IntentKey.EAM_ID, mWXGDEntity.eamID.id);
                         IntentRouter.go(context, Constant.Router.WXGD_LUBRICATE_OIL_LIST, bundle);
                         break;
@@ -110,6 +115,7 @@ public class LubricateOilsController extends BaseViewController implements Lubri
     @Override
     public void listLubricateOilsListSuccess(LubricateOilsListEntity entity) {
         mLubricateOilsEntities = entity.result;
+        mLubricateOilsEntities.addAll(mLubricateOilsOldEntities);
         for (LubricateOilsEntity lubricateOilsEntity : mLubricateOilsEntities) {
             if (lubricateOilsEntity.remark == null) {
                 lubricateOilsEntity.remark = "";
@@ -188,6 +194,12 @@ public class LubricateOilsController extends BaseViewController implements Lubri
                 mCustomListWidget.setShowText("查看 (" + list.size() + ")");
             }
         }
+    }
+
+    public void updateOldLubricateOils(List<LubricateOilsEntity> mLubricateOilsEntities) {
+        if (mLubricateOilsEntities == null)
+            return;
+        this.mLubricateOilsOldEntities = mLubricateOilsEntities;
     }
 
     public void setEditable(boolean isEditable) {

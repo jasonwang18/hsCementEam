@@ -111,6 +111,7 @@ public interface ApiService {
     @POST("/BEAM2/workList/workRecord/overhaul.action")
     Flowable<ResultEntity> translateRepair(@Query("faultInfoId") long faultInfoId, @Query("repairType") String repairType);
 
+
     /**
      * @param
      * @return
@@ -120,6 +121,16 @@ public interface ApiService {
     @POST("/BEAM2/workList/workRecord/workEdit/submit.action?__pc__=dGFzazMzOHx3b3Jr&_bapFieldPermissonModelCode_=BEAM2_1.0.0_workList_WorkRecord&_bapFieldPermissonModelName_=WorkRecord&superEdit=false")
     @Multipart
     Flowable<BapResultEntity> doSubmitDispatch(@PartMap Map<String, RequestBody> map);
+
+    /**
+     * @param
+     * @return
+     * @description 预警派工
+     * @author zhangwenshuai1 2018/9/11
+     */
+    @POST("/BEAM2/workList/workRecord/workEdit/submit.action?__pc__=c3RhcnQzMTB3b3JrfHdvcms_&_bapFieldPermissonModelCode_=BEAM2_1.0.0_workList_WorkRecord&_bapFieldPermissonModelName_=WorkRecord&superEdit=false")
+    @Multipart
+    Flowable<BapResultEntity> doSubmitDispatchWarn(@PartMap Map<String, RequestBody> map);
 
 
     /**
@@ -151,21 +162,19 @@ public interface ApiService {
     Flowable<CommonListEntity<StandingCropResultEntity>> updateStandingCrop(@Query("productCode") String productCode);
 
     /**
-     * @description 备件参照列表查询
-     * @param 
-     * @return  
-     * @author zhangwenshuai1 2018/10/23
-     *
-     */
-    @POST("/BEAM/baseInfo/sparePart/sparePartRef-query.action?&permissio.0.0_baseInfo_sparePartRef&crossCompanyFlag=false")
-    Flowable<SparePartRefListEntity> listSparePartsRef(@QueryMap Map<String,Object> queryMap, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity);
-
-    /**
-     * @description 备件生成领用出库单
      * @param
      * @return
+     * @description 备件参照列表查询
      * @author zhangwenshuai1 2018/10/23
-     *
+     */
+    @POST("/BEAM/baseInfo/sparePart/sparePartRef-query.action?&permissio.0.0_baseInfo_sparePartRef&crossCompanyFlag=false")
+    Flowable<SparePartRefListEntity> listSparePartsRef(@QueryMap Map<String, Object> queryMap, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity);
+
+    /**
+     * @param
+     * @return
+     * @description 备件生成领用出库单
+     * @author zhangwenshuai1 2018/10/23
      */
     @POST("/BEAM2/workList/sparePart/generateSparePartApply.action")
     Flowable<ResultEntity> generateSparePartApply(@Query("sparePartJsons") String listStr);

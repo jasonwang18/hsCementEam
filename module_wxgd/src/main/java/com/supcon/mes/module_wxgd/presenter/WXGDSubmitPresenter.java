@@ -93,10 +93,36 @@ public class WXGDSubmitPresenter extends WXGDSubmitContract.Presenter {
                         }).subscribe(new Consumer<BapResultEntity>() {
                     @Override
                     public void accept(BapResultEntity bapResultEntity) throws Exception {
-                        if (bapResultEntity.dealSuccessFlag){
+                        if (bapResultEntity.dealSuccessFlag) {
                             getView().doDispatcherSubmitSuccess(bapResultEntity);
-                        }else {
+                        } else {
                             getView().doDispatcherSubmitFailed(bapResultEntity.errMsg);
+                        }
+                    }
+                })
+        );
+    }
+
+    @Override
+    public void doDispatcherWarnSubmit(Map<String, Object> map) {
+        Map<String, RequestBody> formBody = FormDataHelper.createDataFormBody(map);
+        mCompositeSubscription.add(
+                HttpClient.doSubmitDispatchWarn(formBody)
+                        .onErrorReturn(new Function<Throwable, BapResultEntity>() {
+                            @Override
+                            public BapResultEntity apply(Throwable throwable) throws Exception {
+                                BapResultEntity bapResultEntity = new BapResultEntity();
+                                bapResultEntity.dealSuccessFlag = false;
+                                bapResultEntity.errMsg = throwable.toString();
+                                return bapResultEntity;
+                            }
+                        }).subscribe(new Consumer<BapResultEntity>() {
+                    @Override
+                    public void accept(BapResultEntity bapResultEntity) throws Exception {
+                        if (bapResultEntity.dealSuccessFlag) {
+                            getView().doDispatcherWarnSubmitSuccess(bapResultEntity);
+                        } else {
+                            getView().doDispatcherWarnSubmitFailed(bapResultEntity.errMsg);
                         }
                     }
                 })
@@ -109,20 +135,20 @@ public class WXGDSubmitPresenter extends WXGDSubmitContract.Presenter {
         Map<String, RequestBody> formBody = FormDataHelper.createDataFormBody(map);
         mCompositeSubscription.add(
                 HttpClient.doAcceptChk(formBody)
-                .onErrorReturn(new Function<Throwable, BapResultEntity>() {
-                    @Override
-                    public BapResultEntity apply(Throwable throwable) throws Exception {
-                        BapResultEntity bapResultEntity = new BapResultEntity();
-                        bapResultEntity.dealSuccessFlag = false;
-                        bapResultEntity.errMsg = throwable.toString();
-                        return bapResultEntity;
-                    }
-                }).subscribe(new Consumer<BapResultEntity>() {
+                        .onErrorReturn(new Function<Throwable, BapResultEntity>() {
+                            @Override
+                            public BapResultEntity apply(Throwable throwable) throws Exception {
+                                BapResultEntity bapResultEntity = new BapResultEntity();
+                                bapResultEntity.dealSuccessFlag = false;
+                                bapResultEntity.errMsg = throwable.toString();
+                                return bapResultEntity;
+                            }
+                        }).subscribe(new Consumer<BapResultEntity>() {
                     @Override
                     public void accept(BapResultEntity bapResultEntity) throws Exception {
-                        if (bapResultEntity.dealSuccessFlag){
+                        if (bapResultEntity.dealSuccessFlag) {
                             getView().doAcceptChkSubmitSuccess(bapResultEntity);
-                        }else {
+                        } else {
                             getView().doAcceptChkSubmitFailed(bapResultEntity.errMsg);
                         }
                     }

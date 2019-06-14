@@ -88,6 +88,8 @@ public class WXGDEntity extends BaseEntity implements Cloneable {
 
     public List<AcceptanceCheckEntity> accceptanceCheck;  //验收
 
+    public List<MaintainEntity> maintainEntities;//验收
+
     public JWXItem jwxItem; //业务规则
 
     public Boolean whetherBornSparePart; // 是否生成领用单
@@ -99,5 +101,12 @@ public class WXGDEntity extends BaseEntity implements Cloneable {
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
+    }
+
+    public PendingEntity getPending() {
+        if (pending == null) {
+            pending = new PendingEntity();
+        }
+        return pending;
     }
 }

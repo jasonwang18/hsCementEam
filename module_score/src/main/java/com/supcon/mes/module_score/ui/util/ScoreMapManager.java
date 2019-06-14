@@ -130,6 +130,9 @@ public class ScoreMapManager {
         map.put("viewCode", "BEAM_1.0.0_patrolWorkerScore_patrolScoreEdit");
         map.put("modelName", "WorkerScoreHead");
 
+        if (scoreStaffEntity.id != -1) {
+            map.put("id", scoreStaffEntity.id);
+        }
         map.put("workerScoreHead.patrolWorker.id", Util.strFormat2(scoreStaffEntity.getPatrolWorker().id));
         map.put("workerScoreHead.scoreData", format.format(scoreStaffEntity.scoreData));
         map.put("workerScoreHead.score", Util.big(scoreStaffEntity.score));

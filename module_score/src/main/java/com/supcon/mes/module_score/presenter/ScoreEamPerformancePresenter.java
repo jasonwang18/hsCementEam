@@ -36,6 +36,8 @@ public class ScoreEamPerformancePresenter extends ScoreEamPerformanceContract.Pr
         urls.add("/BEAM/scorePerformance/scoreHead/data-dg1559619724464.action");
         //设备卫生
         urls.add("/BEAM/scorePerformance/scoreHead/data-dg1559631064719.action");
+        //档案管理
+        urls.add("/BEAM/scorePerformance/scoreHead/data-dg1559636766020.action");
         LinkedHashMap<String, ScoreEamPerformanceEntity> scoreMap = new LinkedHashMap();
         mCompositeSubscription.add(Flowable.fromIterable(urls)
                 .concatMap((Function<String, Flowable<ScoreEamPerformanceListEntity>>) url -> ScoreHttpClient.getScore(url, scoreId))

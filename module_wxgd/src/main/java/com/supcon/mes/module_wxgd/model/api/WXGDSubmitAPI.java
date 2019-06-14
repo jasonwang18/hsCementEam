@@ -9,7 +9,7 @@ import java.util.Map;
  * Created by wangshizhan on 2018/8/28
  * Email:wangshizhan@supcom.com
  */
-@ContractFactory(entites = {BapResultEntity.class, BapResultEntity.class, BapResultEntity.class, BapResultEntity.class})
+@ContractFactory(entites = {BapResultEntity.class, BapResultEntity.class, BapResultEntity.class, BapResultEntity.class, BapResultEntity.class})
 public interface WXGDSubmitAPI {
 
     void doReceiveSubmit(Map<String, Object> map);
@@ -23,6 +23,14 @@ public interface WXGDSubmitAPI {
      * @author zhangwenshuai1 2018/9/4
      */
     void doDispatcherSubmit(Map<String, Object> map);
+
+    /**
+     * @param
+     * @return
+     * @description 预警派工提交（作废/驳回）
+     * @author zhangwenshuai1 2018/9/4
+     */
+    void doDispatcherWarnSubmit(Map<String, Object> map);
 
     /**
      * @param

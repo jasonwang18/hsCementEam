@@ -100,7 +100,7 @@
             android:tag="itemLubriAttachEamTv"
             app:content_hint="--"
             app:gravity="right"
-            app:key="附 属 设 备:"
+            app:key="附   属   设   备:"
             app:key_width="110dp"
             app:max_lines="100" />
 
@@ -112,7 +112,7 @@
             android:tag="itemLubriSparePartIdTv"
             app:content_hint="--"
             app:gravity="right"
-            app:key="备 件 编 码:"
+            app:key="零      部      件:"
             app:key_width="110dp"
             app:max_lines="100" />
 
