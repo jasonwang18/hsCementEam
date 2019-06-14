@@ -190,7 +190,7 @@ public class TemporaryTaskFragment extends BaseRefreshFragment implements Tempor
     @Override
     public void dailyCompleteSuccess(DelayEntity entity) {
         onLoadSuccessAndExit("任务完成", () -> {
-            temporaryAdapter.notifyDataSetChanged();
+            getActivity().finish();
         });
     }
 

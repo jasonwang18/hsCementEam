@@ -33,13 +33,10 @@ import com.supcon.mes.middleware.util.KeyExpandHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_score.IntentRouter;
 import com.supcon.mes.module_score.R;
-import com.supcon.mes.module_score.model.api.ScoreEamListAPI;
 import com.supcon.mes.module_score.model.api.ScoreStaffListAPI;
-import com.supcon.mes.module_score.model.bean.ScoreEamListEntity;
 import com.supcon.mes.module_score.model.bean.ScoreStaffEntity;
 import com.supcon.mes.module_score.model.contract.ScoreStaffListContract;
-import com.supcon.mes.module_score.presenter.ScoreEamListPresenter;
-import com.supcon.mes.module_score.presenter.ScoreStaffListPresenter;
+import com.supcon.mes.module_score.presenter.ScoreInspectorStaffListPresenter;
 import com.supcon.mes.module_score.ui.adapter.ScoreStaffListAdapter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -54,11 +51,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.functions.Consumer;
-
-@Router(value = Constant.Router.SCORE_STAFF_LIST)
-@Presenter(value = ScoreStaffListPresenter.class)
-public class ScoreStaffListActivity extends BaseRefreshRecyclerActivity implements ScoreStaffListContract.View {
+/**
+ * @author yangfei.cao
+ * @ClassName hongShiCementEam
+ * @date 2019/4/29
+ * ------------- Description -------------
+ * 巡检工列彪哥
+ */
+@Router(value = Constant.Router.SCORE_INSPECTOR_STAFF_LIST)
+@Presenter(value = ScoreInspectorStaffListPresenter.class)
+public class ScoreInspectorStaffListActivity extends BaseRefreshRecyclerActivity implements ScoreStaffListContract.View {
 
     @BindByTag("leftBtn")
     AppCompatImageButton leftBtn;
@@ -126,10 +128,10 @@ public class ScoreStaffListActivity extends BaseRefreshRecyclerActivity implemen
         customSearchView.setHint("请输入巡检工名字");
         searchTitleBar.enableRightBtn();
         searchTitleBar.setTitleText("人员评分绩效");
-        startTime.setDate(getYesterday());
+        startTime.setDate(getThreeDay());
         stopTime.setDate(dateFormat.format(System.currentTimeMillis()));
 
-        queryParam.put(Constant.BAPQuery.SCORE_DATA_START, getYesterday());
+        queryParam.put(Constant.BAPQuery.SCORE_DATA_START, getThreeDay());
         queryParam.put(Constant.BAPQuery.SCORE_DATA_STOP, dateFormat.format(System.currentTimeMillis()));
     }
 
@@ -145,7 +147,7 @@ public class ScoreStaffListActivity extends BaseRefreshRecyclerActivity implemen
                 .subscribe(o -> {
                     Bundle bundle = new Bundle();
                     bundle.putBoolean(Constant.IntentKey.isEdit, true);
-                    IntentRouter.go(ScoreStaffListActivity.this, Constant.Router.SCORE_STAFF_PERFORMANCE, bundle);
+                    IntentRouter.go(ScoreInspectorStaffListActivity.this, Constant.Router.SCORE_INSPECTOR_STAFF_PERFORMANCE, bundle);
                 });
         refreshListController.setOnRefreshPageListener(pageIndex -> {
             if (queryParam.containsKey(Constant.BAPQuery.NAME)) {
@@ -174,7 +176,7 @@ public class ScoreStaffListActivity extends BaseRefreshRecyclerActivity implemen
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(Constant.IntentKey.SCORE_ENTITY, item);
                 bundle.putBoolean(Constant.IntentKey.isEdit, compareTimeIsEdit(item.scoreData != null ? item.scoreData : 0));
-                IntentRouter.go(ScoreStaffListActivity.this, Constant.Router.SCORE_STAFF_PERFORMANCE, bundle);
+                IntentRouter.go(ScoreInspectorStaffListActivity.this, Constant.Router.SCORE_INSPECTOR_STAFF_PERFORMANCE, bundle);
             }
         });
 
@@ -190,7 +192,7 @@ public class ScoreStaffListActivity extends BaseRefreshRecyclerActivity implemen
                     refreshListController.refreshBegin();
                 }
 
-            }).show(DateUtil.dateFormat(getYesterday()));
+            }).show(DateUtil.dateFormat(getThreeDay()));
         });
 
         stopTime.setOnChildViewClickListener((childView, action, obj) ->
@@ -240,10 +242,17 @@ public class ScoreStaffListActivity extends BaseRefreshRecyclerActivity implemen
         EventBus.getDefault().unregister(this);
     }
 
-    public String getYesterday() {
+    public String getThreeDay() {
         Calendar ca = Calendar.getInstance();
         ca.setTime(new Date());
         ca.add(Calendar.DAY_OF_MONTH, -3);
+        String s = DateUtil.dateFormat(ca.getTimeInMillis(), "yyyy-MM-dd 00:00:00");
+        return s;
+    }
+    public String getYesterday() {
+        Calendar ca = Calendar.getInstance();
+        ca.setTime(new Date());
+        ca.add(Calendar.DAY_OF_MONTH, -1);
         String s = DateUtil.dateFormat(ca.getTimeInMillis(), "yyyy-MM-dd 00:00:00");
         return s;
     }

@@ -16,12 +16,12 @@
             android:theme="@style/AppNoTitleBarTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity
-            android:name=".ui.ScoreStaffListActivity"
+            android:name=".ui.ScoreInspectorStaffListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleBarTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity
-            android:name=".ui.ScoreStaffPerformanceActivity"
+            android:name=".ui.ScoreInspectorStaffPerformanceActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleBarTheme"

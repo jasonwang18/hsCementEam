@@ -20,7 +20,7 @@ import java.util.Map;
 
 import io.reactivex.functions.Consumer;
 
-public class ScoreStaffListPresenter extends ScoreStaffListContract.Presenter {
+public class ScoreInspectorStaffListPresenter extends ScoreStaffListContract.Presenter {
     @Override
     public void patrolScore(Map<String, Object> param, int page) {
         FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());

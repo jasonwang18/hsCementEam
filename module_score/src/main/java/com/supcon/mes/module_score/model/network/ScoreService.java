@@ -44,13 +44,13 @@ public interface ScoreService {
     @GET("/BEAM/patrolWorkerScore/workerScoreHead/patrolScore-query.action")
     Flowable<CommonBAPListEntity<ScoreStaffEntity>> patrolScore(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
-    //人员评分
+    //巡检工人员评分
     @GET
     Flowable<ScoreStaffPerformanceListEntity> getStaffScore(@Url String url, @Query("workerScoreHead.id") int scoreId);
 
     //人员设备评分
     @GET("/BEAM/patrolWorkerScore/workerScoreHead/getResponsityBeam.action")
-    Flowable<CommonListEntity<ScoreDutyEamEntity>> getDutyEam(@Query("staffId") long staffId);
+    Flowable<CommonListEntity<ScoreDutyEamEntity>> getDutyEam(@Query("staffId") long staffId, @Query("scoreType") String scoreType);
 
     //提交
     @POST("/BEAM/patrolWorkerScore/workerScoreHead/patrolScoreEdit/submit.action?__pc__=cGF0cm9sU2NvcmVfYWRkX2FkZF9CRUFNXzEuMC4wX3BhdHJvbFdvcmtlclNjb3JlX3BhdHJvbFNjb3JlfA__&_bapFieldPermissonModelCode_=BEAM_1.0.0_patrolWorkerScore_WorkerScoreHead&_bapFieldPermissonModelName_=WorkerScoreHead")

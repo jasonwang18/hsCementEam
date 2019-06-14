@@ -24,7 +24,7 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
-public class ScoreStaffPerformancePresenter extends ScoreStaffPerformanceContract.Presenter {
+public class ScoreInspectorStaffPerformancePresenter extends ScoreStaffPerformanceContract.Presenter {
 
     private int position = 0;
     private String category = "";//评分标题
@@ -32,7 +32,7 @@ public class ScoreStaffPerformancePresenter extends ScoreStaffPerformanceContrac
 
     @Override
     public void getDutyEam(long staffId) {
-        mCompositeSubscription.add(ScoreHttpClient.getDutyEam(staffId)
+        mCompositeSubscription.add(ScoreHttpClient.getDutyEam(staffId,"BEAM_065/02")
                 .onErrorReturn(throwable -> {
                     CommonListEntity commonListEntity = new CommonListEntity();
                     commonListEntity.errMsg = throwable.toString();
