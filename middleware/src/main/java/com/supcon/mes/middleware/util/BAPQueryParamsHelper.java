@@ -417,24 +417,6 @@ public class BAPQueryParamsHelper {
                 subcondEntity.paramStr = LIKE_OPT_Q;
                 subcondEntity.value = String.valueOf(value);
                 break;
-            case Constant.BAPQuery.SCORE_DATA_START:
-                subcondEntity = new SubcondEntity();
-                subcondEntity.columnName = Constant.BAPQuery.SCORE_DATA;
-                subcondEntity.type = TYPE_NORMAL;
-                subcondEntity.dbColumnType = Constant.BAPQuery.DATETIME;
-                subcondEntity.operator = Constant.BAPQuery.GE;
-                subcondEntity.paramStr = LIKE_OPT_Q;
-                subcondEntity.value = String.valueOf(value);
-                break;
-            case Constant.BAPQuery.SCORE_DATA_STOP:
-                subcondEntity = new SubcondEntity();
-                subcondEntity.columnName = Constant.BAPQuery.SCORE_DATA;
-                subcondEntity.type = TYPE_NORMAL;
-                subcondEntity.dbColumnType = Constant.BAPQuery.DATETIME;
-                subcondEntity.operator = Constant.BAPQuery.LE;
-                subcondEntity.paramStr = LIKE_OPT_Q;
-                subcondEntity.value = String.valueOf(value);
-                break;
         }
 
         return subcondEntity;
