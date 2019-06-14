@@ -56,7 +56,7 @@ import java.util.concurrent.TimeUnit;
  * @ClassName hongShiCementEam
  * @date 2019/4/29
  * ------------- Description -------------
- * 巡检工列彪哥
+ * 巡检工 评分
  */
 @Router(value = Constant.Router.SCORE_INSPECTOR_STAFF_LIST)
 @Presenter(value = ScoreInspectorStaffListPresenter.class)
@@ -131,8 +131,8 @@ public class ScoreInspectorStaffListActivity extends BaseRefreshRecyclerActivity
         startTime.setDate(getThreeDay());
         stopTime.setDate(dateFormat.format(System.currentTimeMillis()));
 
-        queryParam.put(Constant.BAPQuery.SCORE_TIME_START, getThreeDay());
-        queryParam.put(Constant.BAPQuery.SCORE_TIME_STOP, dateFormat.format(System.currentTimeMillis()));
+        queryParam.put(Constant.BAPQuery.SCORE_DATA_START, getThreeDay());
+        queryParam.put(Constant.BAPQuery.SCORE_DATA_STOP, dateFormat.format(System.currentTimeMillis()));
     }
 
     @SuppressLint("CheckResult")
@@ -185,10 +185,10 @@ public class ScoreInspectorStaffListActivity extends BaseRefreshRecyclerActivity
                 String date = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
                 startTime.setDate(date);
                 if (compareTime(startTime.getContent(), stopTime.getContent())) {
-                    if (!queryParam.containsKey(Constant.BAPQuery.SCORE_TIME_START)) {
-                        queryParam.remove(Constant.BAPQuery.SCORE_TIME_START);
+                    if (!queryParam.containsKey(Constant.BAPQuery.SCORE_DATA_START)) {
+                        queryParam.remove(Constant.BAPQuery.SCORE_DATA_START);
                     }
-                    queryParam.put(Constant.BAPQuery.SCORE_TIME_START, date);
+                    queryParam.put(Constant.BAPQuery.SCORE_DATA_START, date);
                     refreshListController.refreshBegin();
                 }
 
@@ -200,10 +200,10 @@ public class ScoreInspectorStaffListActivity extends BaseRefreshRecyclerActivity
                     String date = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
                     stopTime.setDate(date);
                     if (compareTime(startTime.getContent(), stopTime.getContent())) {
-                        if (!queryParam.containsKey(Constant.BAPQuery.SCORE_TIME_STOP)) {
-                            queryParam.remove(Constant.BAPQuery.SCORE_TIME_STOP);
+                        if (!queryParam.containsKey(Constant.BAPQuery.SCORE_DATA_STOP)) {
+                            queryParam.remove(Constant.BAPQuery.SCORE_DATA_STOP);
                         }
-                        queryParam.put(Constant.BAPQuery.SCORE_TIME_STOP, date);
+                        queryParam.put(Constant.BAPQuery.SCORE_DATA_STOP, date);
                         refreshListController.refreshBegin();
                     }
                 }).show(System.currentTimeMillis()));

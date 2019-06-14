@@ -24,10 +24,10 @@ public class ScoreInspectorStaffListPresenter extends ScoreStaffListContract.Pre
     @Override
     public void patrolScore(Map<String, Object> param, int page) {
         FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
-        if (param.containsKey(Constant.BAPQuery.SCORE_TIME_START) || param.containsKey(Constant.BAPQuery.SCORE_TIME_STOP)) {
+        if (param.containsKey(Constant.BAPQuery.SCORE_DATA_START) || param.containsKey(Constant.BAPQuery.SCORE_DATA_STOP)) {
             Map<String, Object> timeParam = new HashMap<>();
-            timeParam.put(Constant.BAPQuery.SCORE_TIME_START, param.get(Constant.BAPQuery.SCORE_TIME_START));
-            timeParam.put(Constant.BAPQuery.SCORE_TIME_STOP, param.get(Constant.BAPQuery.SCORE_TIME_STOP));
+            timeParam.put(Constant.BAPQuery.SCORE_DATA_START, param.get(Constant.BAPQuery.SCORE_DATA_START));
+            timeParam.put(Constant.BAPQuery.SCORE_DATA_STOP, param.get(Constant.BAPQuery.SCORE_DATA_STOP));
             List<BaseSubcondEntity> subcondEntities = BAPQueryParamsHelper.crateSubcondEntity(timeParam);
             fastQuery.subconds.addAll(subcondEntities);
         }
