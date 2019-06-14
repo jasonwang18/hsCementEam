@@ -1,8 +1,6 @@
 package com.supcon.mes.module_score.ui;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spanned;
@@ -15,19 +13,15 @@ import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
-import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
-import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
-import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.constant.ListType;
 import com.supcon.mes.mbap.utils.DateUtil;
-import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomTextView;
@@ -37,38 +31,26 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
-import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
-import com.supcon.mes.middleware.model.event.NFCEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.HtmlParser;
 import com.supcon.mes.middleware.util.HtmlTagHandler;
-import com.supcon.mes.middleware.util.NFCHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_score.IntentRouter;
 import com.supcon.mes.module_score.R;
-import com.supcon.mes.module_score.model.api.ScoreEamPerformanceAPI;
 import com.supcon.mes.module_score.model.api.ScoreStaffPerformanceAPI;
 import com.supcon.mes.module_score.model.api.ScoreStaffSubmitAPI;
-import com.supcon.mes.module_score.model.api.ScoreSubmitAPI;
 import com.supcon.mes.module_score.model.bean.ScoreDutyEamEntity;
-import com.supcon.mes.module_score.model.bean.ScoreEamEntity;
-import com.supcon.mes.module_score.model.bean.ScoreEamPerformanceEntity;
 import com.supcon.mes.module_score.model.bean.ScoreStaffEntity;
 import com.supcon.mes.module_score.model.bean.ScoreStaffPerformanceEntity;
-import com.supcon.mes.module_score.model.contract.ScoreEamPerformanceContract;
 import com.supcon.mes.module_score.model.contract.ScoreStaffPerformanceContract;
 import com.supcon.mes.module_score.model.contract.ScoreStaffSubmitContract;
-import com.supcon.mes.module_score.model.contract.ScoreSubmitContract;
-import com.supcon.mes.module_score.presenter.ScoreEamPerformancePresenter;
-import com.supcon.mes.module_score.presenter.ScoreStaffPerformancePresenter;
-import com.supcon.mes.module_score.presenter.ScoreStaffSubmitPresenter;
-import com.supcon.mes.module_score.presenter.ScoreSubmitPresenter;
-import com.supcon.mes.module_score.ui.adapter.ScoreEamPerformanceAdapter;
+import com.supcon.mes.module_score.presenter.ScoreInspectorStaffPerformancePresenter;
+import com.supcon.mes.module_score.presenter.ScoreInspectorStaffSubmitPresenter;
 import com.supcon.mes.module_score.ui.adapter.ScoreStaffEamAdapter;
 import com.supcon.mes.module_score.ui.adapter.ScoreStaffPerformanceAdapter;
 import com.supcon.mes.module_score.ui.util.ScoreMapManager;
@@ -83,20 +65,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Flowable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-
 /**
  * @author yangfei.cao
  * @ClassName hongShiCementEam
  * @date 2019/4/29
  * ------------- Description -------------
- * 个人评分
+ * 巡检工评分
  */
-@Router(value = Constant.Router.SCORE_STAFF_PERFORMANCE)
-@Presenter(value = {ScoreStaffPerformancePresenter.class, ScoreStaffSubmitPresenter.class})
-public class ScoreStaffPerformanceActivity extends BaseRefreshActivity implements ScoreStaffPerformanceContract.View, ScoreStaffSubmitContract.View {
+@Router(value = Constant.Router.SCORE_INSPECTOR_STAFF_PERFORMANCE)
+@Presenter(value = {ScoreInspectorStaffPerformancePresenter.class, ScoreInspectorStaffSubmitPresenter.class})
+public class ScoreInspectorStaffPerformanceActivity extends BaseRefreshActivity implements ScoreStaffPerformanceContract.View, ScoreStaffSubmitContract.View {
     @BindByTag("leftBtn")
     ImageButton leftBtn;
     @BindByTag("titleText")
@@ -217,7 +195,7 @@ public class ScoreStaffPerformanceActivity extends BaseRefreshActivity implement
                     scoreStaffEntity.patrolWorker = null;
                     scoreStaffEntity.id = -1;
                 }
-                IntentRouter.go(ScoreStaffPerformanceActivity.this, Constant.Router.STAFF);
+                IntentRouter.go(ScoreInspectorStaffPerformanceActivity.this, Constant.Router.STAFF);
             }
         });
 

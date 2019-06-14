@@ -12,7 +12,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import okhttp3.RequestBody;
 
-public class ScoreStaffSubmitPresenter extends ScoreStaffSubmitContract.Presenter {
+public class ScoreInspectorStaffSubmitPresenter extends ScoreStaffSubmitContract.Presenter {
     @Override
     public void doStaffSubmit(Map<String, Object> map) {
         Map<String, RequestBody> formBody = FormDataHelper.createDataFormBody(map);

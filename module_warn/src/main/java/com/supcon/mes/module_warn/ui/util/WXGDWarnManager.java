@@ -9,6 +9,8 @@ public class WXGDWarnManager {
 
     public static WXGDEntity lubri(LubricationWarnEntity lubricationWarnEntity) {
         WXGDEntity wxgdEntity = new WXGDEntity();
+        wxgdEntity.eamID = lubricationWarnEntity.eamID;
+
         return wxgdEntity;
     }
 

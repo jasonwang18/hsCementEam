@@ -159,8 +159,8 @@ public interface Constant {
 
         String SCORE_EAM_LIST = "SCORE_EAM_LIST";//设备评分绩效列表
         String SCORE_EAM_PERFORMANCE = "SCORE_EAM_PERFORMANCE";//评分绩效
-        String SCORE_STAFF_LIST = "SCORE_STAFF_LIST";//人员列表
-        String SCORE_STAFF_PERFORMANCE = "SCORE_STAFF_PERFORMANCE";//人员评分绩效
+        String SCORE_INSPECTOR_STAFF_LIST = "SCORE_INSPECTOR_STAFF_LIST";//巡检人员列表
+        String SCORE_INSPECTOR_STAFF_PERFORMANCE = "SCORE_INSPECTOR_STAFF_PERFORMANCE";//人员评分绩效
 
         String EAM = "EAM";//设备搜索
         String STAFF = "STAFF";//人员搜索
@@ -301,7 +301,7 @@ public interface Constant {
         int DAILY_LUBRICATION_EARLY_WARN = 25;//日常润滑预警
         int MAINTENANCE_EARLY_WARN = 26;//维保预警
         int SCORE_EAM_LIST = 27;//设备评分
-        int SCORE_PERSON_LIST = 28;//人员评分
+        int SCORE_INSPECTOR_PERSON_LIST = 28;//巡检人员评分
     }
 
     interface SPKey {
