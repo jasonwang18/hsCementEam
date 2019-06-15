@@ -7,7 +7,7 @@ import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.module_score.model.bean.ScoreDutyEamEntity;
 import com.supcon.mes.module_score.model.bean.ScoreStaffPerformanceEntity;
 import com.supcon.mes.module_score.model.bean.ScoreStaffPerformanceListEntity;
-import com.supcon.mes.module_score.model.contract.ScoreInspectorStaffPerformanceContract;
+import com.supcon.mes.module_score.model.contract.ScoreMechanicStaffPerformanceContract;
 import com.supcon.mes.module_score.model.network.ScoreHttpClient;
 
 import org.reactivestreams.Publisher;
@@ -21,7 +21,7 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
-public class ScoreInspectorStaffPerformancePresenter extends ScoreInspectorStaffPerformanceContract.Presenter {
+public class ScoreMechanicStaffPerformancePresenter extends ScoreMechanicStaffPerformanceContract.Presenter {
 
     private int position = 0;
     private String category = "";//评分标题
@@ -48,19 +48,19 @@ public class ScoreInspectorStaffPerformancePresenter extends ScoreInspectorStaff
     }
 
     @Override
-    public void getInspectorStaffScore(int scoreId) {
+    public void getMechanicStaffScore(int scoreId) {
         List<String> urls = new ArrayList<>();
         //设备运行
-        urls.add("/BEAM/patrolWorkerScore/workerScoreHead/data-dg1560145365044.action");
+        urls.add("/BEAM/patrolWorkerScore/workerScoreHead/data-dg1560475480845.action");
         //规范化管理
-        urls.add("/BEAM/patrolWorkerScore/workerScoreHead/data-dg1560222990407.action");
+        urls.add("/BEAM/patrolWorkerScore/workerScoreHead/data-dg1560475480876.action");
         //安全生产
-        urls.add("/BEAM/patrolWorkerScore/workerScoreHead/data-dg1560223948889.action");
+        urls.add("/BEAM/patrolWorkerScore/workerScoreHead/data-dg1560475480892.action");
         //工作表现
-        urls.add("/BEAM/patrolWorkerScore/workerScoreHead/data-dg1560224145331.action");
+        urls.add("/BEAM/patrolWorkerScore/workerScoreHead/data-dg1560475480986.action");
         LinkedHashMap<String, ScoreStaffPerformanceEntity> scoreMap = new LinkedHashMap();
         mCompositeSubscription.add(Flowable.fromIterable(urls)
-                .concatMap((Function<String, Flowable<ScoreStaffPerformanceListEntity>>) url -> ScoreHttpClient.getInspectorStaffScore(url, scoreId))
+                .concatMap((Function<String, Flowable<ScoreStaffPerformanceListEntity>>) url -> ScoreHttpClient.getMechanicStaffScore(url, scoreId))
                 .onErrorReturn(throwable -> {
                     ScoreStaffPerformanceListEntity scoreStaffPerformanceListEntity = new ScoreStaffPerformanceListEntity();
                     scoreStaffPerformanceListEntity.errMsg = throwable.toString();
@@ -92,11 +92,11 @@ public class ScoreInspectorStaffPerformancePresenter extends ScoreInspectorStaff
                     }
                     scoreMap.put(scoreStaffPerformanceEntity.item, scoreStaffPerformanceEntity);
                 }, throwable -> {
-                    getView().getInspectorStaffScoreFailed(throwable.toString());
+                    getView().getMechanicStaffScoreFailed(throwable.toString());
                 }, new Action() {
                     @Override
                     public void run() throws Exception {
-                        getView().getInspectorStaffScoreSuccess(new ArrayList<>(scoreMap.values()));
+                        getView().getMechanicStaffScoreSuccess(new ArrayList<>(scoreMap.values()));
                     }
                 }));
     }

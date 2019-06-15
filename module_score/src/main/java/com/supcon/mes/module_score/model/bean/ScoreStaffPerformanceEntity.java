@@ -46,7 +46,7 @@ public class ScoreStaffPerformanceEntity extends BaseEntity {
 
     public Float getTotalHightScore() {
         if (totalHightScore == null) {
-            totalHightScore = score;
+            totalHightScore = fraction;
         }
         return totalHightScore;
     }

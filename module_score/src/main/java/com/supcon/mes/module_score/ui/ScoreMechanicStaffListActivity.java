@@ -56,11 +56,11 @@ import java.util.concurrent.TimeUnit;
  * @ClassName hongShiCementEam
  * @date 2019/4/29
  * ------------- Description -------------
- * 巡检工 评分
+ * 机修工 评分
  */
-@Router(value = Constant.Router.SCORE_INSPECTOR_STAFF_LIST)
+@Router(value = Constant.Router.SCORE_MECHANIC_STAFF_LIST)
 @Presenter(value = ScoreStaffListPresenter.class)
-public class ScoreInspectorStaffListActivity extends BaseRefreshRecyclerActivity implements ScoreStaffListContract.View {
+public class ScoreMechanicStaffListActivity extends BaseRefreshRecyclerActivity implements ScoreStaffListContract.View {
 
     @BindByTag("leftBtn")
     AppCompatImageButton leftBtn;
@@ -93,7 +93,7 @@ public class ScoreInspectorStaffListActivity extends BaseRefreshRecyclerActivity
 
     @Override
     protected IListAdapter createAdapter() {
-        scoreStaffListAdapter = new ScoreStaffListAdapter("巡检工", this);
+        scoreStaffListAdapter = new ScoreStaffListAdapter("机修工", this);
         return scoreStaffListAdapter;
     }
 
@@ -125,9 +125,9 @@ public class ScoreInspectorStaffListActivity extends BaseRefreshRecyclerActivity
         datePickController.setSecondVisible(true);
         datePickController.textSize(18);
 
-        customSearchView.setHint("请输入巡检工名字");
+        customSearchView.setHint("请输入机修工名字");
         searchTitleBar.enableRightBtn();
-        searchTitleBar.setTitleText("巡检工评分");
+        searchTitleBar.setTitleText("机修工评分");
         startTime.setDate(getThreeDay());
         stopTime.setDate(dateFormat.format(System.currentTimeMillis()));
 
@@ -147,7 +147,7 @@ public class ScoreInspectorStaffListActivity extends BaseRefreshRecyclerActivity
                 .subscribe(o -> {
                     Bundle bundle = new Bundle();
                     bundle.putBoolean(Constant.IntentKey.isEdit, true);
-                    IntentRouter.go(ScoreInspectorStaffListActivity.this, Constant.Router.SCORE_INSPECTOR_STAFF_PERFORMANCE, bundle);
+                    IntentRouter.go(ScoreMechanicStaffListActivity.this, Constant.Router.SCORE_MECHANIC_STAFF_PERFORMANCE, bundle);
                 });
         refreshListController.setOnRefreshPageListener(pageIndex -> {
             if (queryParam.containsKey(Constant.BAPQuery.NAME)) {
@@ -156,7 +156,7 @@ public class ScoreInspectorStaffListActivity extends BaseRefreshRecyclerActivity
             if (!TextUtils.isEmpty(selecStr)) {
                 queryParam.put(Constant.BAPQuery.NAME, selecStr);
             }
-            String url = "/BEAM/patrolWorkerScore/workerScoreHead/patrolScore-query.action";
+            String url = "/BEAM/patrolWorkerScore/workerScoreHead/repairerScoreList-query.action";
             presenterRouter.create(ScoreStaffListAPI.class).patrolScore(url, queryParam, pageIndex);
         });
 
@@ -177,7 +177,7 @@ public class ScoreInspectorStaffListActivity extends BaseRefreshRecyclerActivity
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(Constant.IntentKey.SCORE_ENTITY, item);
                 bundle.putBoolean(Constant.IntentKey.isEdit, compareTimeIsEdit(item.scoreData != null ? item.scoreData : 0));
-                IntentRouter.go(ScoreInspectorStaffListActivity.this, Constant.Router.SCORE_INSPECTOR_STAFF_PERFORMANCE, bundle);
+                IntentRouter.go(ScoreMechanicStaffListActivity.this, Constant.Router.SCORE_INSPECTOR_STAFF_PERFORMANCE, bundle);
             }
         });
 

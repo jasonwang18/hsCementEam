@@ -6,10 +6,10 @@ import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import java.util.List;
 
 @ContractFactory(entites = {List.class, CommonListEntity.class})
-public interface ScoreStaffPerformanceAPI {
+public interface ScoreMechanicStaffPerformanceAPI {
 
-    void getStaffScore(int scoreId);
+    void getMechanicStaffScore(int scoreId);
 
-    void getDutyEam(long staffId);
+    void getDutyEam(long staffId, String scoreType);
 
 }
