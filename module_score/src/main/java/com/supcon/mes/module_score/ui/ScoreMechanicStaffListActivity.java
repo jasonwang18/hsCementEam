@@ -177,7 +177,7 @@ public class ScoreMechanicStaffListActivity extends BaseRefreshRecyclerActivity 
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(Constant.IntentKey.SCORE_ENTITY, item);
                 bundle.putBoolean(Constant.IntentKey.isEdit, compareTimeIsEdit(item.scoreData != null ? item.scoreData : 0));
-                IntentRouter.go(ScoreMechanicStaffListActivity.this, Constant.Router.SCORE_INSPECTOR_STAFF_PERFORMANCE, bundle);
+                IntentRouter.go(ScoreMechanicStaffListActivity.this, Constant.Router.SCORE_MECHANIC_STAFF_PERFORMANCE, bundle);
             }
         });
 

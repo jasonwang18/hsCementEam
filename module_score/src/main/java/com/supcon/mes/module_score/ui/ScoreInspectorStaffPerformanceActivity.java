@@ -150,7 +150,7 @@ public class ScoreInspectorStaffPerformanceActivity extends BaseRefreshActivity 
         }
         scoreStaff.setKey("巡检工");
         scoreStaff.setContent(scoreStaffEntity.getPatrolWorker().name);
-        staffScore.setContent(Util.big(scoreStaffEntity.score));
+        staffScore.setContent(Util.big0(scoreStaffEntity.score));
         scoreStaffPerformanceAdapter.updateTotal(scoreStaffEntity.score);
         scoreStaffEntity.scoreData = (scoreStaffEntity.scoreData != null) ? scoreStaffEntity.scoreData : System.currentTimeMillis();
         scoreTime.setContent(DateUtil.dateFormat(scoreStaffEntity.scoreData));
@@ -206,7 +206,7 @@ public class ScoreInspectorStaffPerformanceActivity extends BaseRefreshActivity 
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
                 ScoreStaffPerformanceEntity scoreStaffPerformanceEntity = (ScoreStaffPerformanceEntity) obj;
                 scoreStaffEntity.score = scoreStaffPerformanceEntity.scoreNum;
-                staffScore.setContent(Util.strFormat2(scoreStaffEntity.score));
+                staffScore.setContent(Util.big0(scoreStaffEntity.score));
                 scoreStaffPerformanceAdapter.updateTotal(scoreStaffEntity.score);
             }
         });
