@@ -39,7 +39,7 @@ public class SparePartController extends BaseViewController implements SparePart
 
     //    private CustomListWidget<SparePartEntity> mCustomListWidget;
     private long id;
-    private List<SparePartEntity> mSparePartOldEntities = new ArrayList<>();
+    private ArrayList<SparePartEntity> mSparePartOldEntities = new ArrayList<>();
     private List<SparePartEntity> mSparePartEntities = new ArrayList<>();
     private boolean editable;
     private WXGDEntity mWXGDEntity;
@@ -72,9 +72,6 @@ public class SparePartController extends BaseViewController implements SparePart
         mCustomListWidget.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
-                if (mSparePartOldEntities.size() > 0) {
-                    return;
-                }
                 Bundle bundle = new Bundle();
                 switch (action) {
                     case CustomListWidget.ACTION_VIEW_ALL:
@@ -86,6 +83,7 @@ public class SparePartController extends BaseViewController implements SparePart
                         bundle.putString(Constant.IntentKey.TABLE_ACTION, mWXGDEntity.pending.openUrl);
                         bundle.putLong(Constant.IntentKey.LIST_ID, id);
                         bundle.putLong(Constant.IntentKey.EAM_ID, mWXGDEntity.eamID.id);
+                        bundle.putSerializable(Constant.IntentKey.WXGD_WARN_ENTITIES, mSparePartOldEntities);
                         IntentRouter.go(context, Constant.Router.WXGD_SPARE_PART_LIST, bundle);
                         break;
                     default:
@@ -117,8 +115,6 @@ public class SparePartController extends BaseViewController implements SparePart
             }
         }
         if (mCustomListWidget != null) {
-//            mCustomListWidget.setData(entity.result);
-//            mCustomListWidget.setTotal(entity.result.size());
             mCustomListWidget.setData(entity.result);
             if (editable) {
                 mCustomListWidget.setShowText("编辑 (" + entity.result.size() + ")");
@@ -180,7 +176,7 @@ public class SparePartController extends BaseViewController implements SparePart
 
     }
 
-    public void updateOldSparePart(List<SparePartEntity> mSparePartOldEntities) {
+    public void updateOldSparePart(ArrayList<SparePartEntity> mSparePartOldEntities) {
         if (mSparePartOldEntities == null)
             return;
         this.mSparePartOldEntities = mSparePartOldEntities;

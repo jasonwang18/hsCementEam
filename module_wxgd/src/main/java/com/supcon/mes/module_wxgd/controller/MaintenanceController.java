@@ -66,9 +66,6 @@ public class MaintenanceController extends BaseViewController implements Mainten
         mCustomListWidget.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
-                if (maintenanceOldEntities.size() > 0) {
-                    return;
-                }
                 Bundle bundle = new Bundle();
                 switch (action) {
                     case CustomListWidget.ACTION_VIEW_ALL:

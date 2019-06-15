@@ -179,13 +179,13 @@ public class WXGDMapManager {
             lubricateOilsEntityDto.lubricate = idDto;
 
             idDto = new IdDto();
-            idDto.id = lubricateOilsEntity.oilType == null ? "" : lubricateOilsEntity.oilType.id;
+            idDto.id = lubricateOilsEntity.oilType == null ? "" : Util.strFormat2(lubricateOilsEntity.oilType.id);
             lubricateOilsEntityDto.oilType = idDto;
             idDto = new IdDto();
             idDto.id = lubricateOilsEntity.jwxItemID == null ? "" : Util.strFormat2(lubricateOilsEntity.jwxItemID.id);
             lubricateOilsEntityDto.jwxItemID = idDto;
             lubricateOilsEntityDto.oilQuantity = lubricateOilsEntity.oilQuantity == null ? "" : Util.strFormat2(lubricateOilsEntity.oilQuantity);
-            lubricateOilsEntityDto.remark = lubricateOilsEntity.remark;
+            lubricateOilsEntityDto.remark = Util.strFormat2(lubricateOilsEntity.remark);
             lubricateOilsEntityDto.lubricatingPart = Util.strFormat2(lubricateOilsEntity.lubricatingPart);
 
             lubricateOilsEntityDtos.add(lubricateOilsEntityDto);

@@ -108,6 +108,7 @@ public class WXGDSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
     private boolean allUpdateFlag; // 全部备件更新现存量
     private Long workListId; // 工单id
     private Long eamID;
+    private List<SparePartEntity> mSparePartOldEntities;
 
     @Override
     protected int getLayoutID() {
@@ -121,6 +122,7 @@ public class WXGDSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
         EventBus.getDefault().register(context);
         editable = getIntent().getBooleanExtra(Constant.IntentKey.IS_EDITABLE, false);//放在onInit()中会存在迟于创建Adapter
         isAdd = getIntent().getBooleanExtra(Constant.IntentKey.IS_ADD, false);
+        mSparePartOldEntities = (List<SparePartEntity>) getIntent().getSerializableExtra(Constant.IntentKey.WXGD_WARN_ENTITIES);
 
         if (isAdd) {
             IntentRouter.go(context, Constant.Router.SPARE_PART_REF);
@@ -432,12 +434,8 @@ public class WXGDSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
 
     @Override
     public void listSparePartListSuccess(SparePartListEntity entity) {
-//        onLoadSuccess("加载成功！");
-//        if (entity.result.size() >= mSparePartEntityList.size()){ //以数量大者为主
-//            mSparePartEntityList = entity.result;
-//        }
         mSparePartEntityList = entity.result;
-
+        mSparePartEntityList.addAll(mSparePartOldEntities);
         for (SparePartEntity sparePartEntity : mSparePartEntityList) {
 
             if (sparePartEntity.remark == null) {

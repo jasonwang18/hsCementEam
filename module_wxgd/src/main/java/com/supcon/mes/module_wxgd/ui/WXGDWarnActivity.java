@@ -182,13 +182,13 @@ public class WXGDWarnActivity extends BaseControllerActivity implements WXGDSubm
         oldWxgdEntity = GsonUtil.gsonToBean(mWXGDEntity.toString(), WXGDEntity.class);
 
         mSparePartController = getController(SparePartController.class);
-        mSparePartController.setEditable(false);
+        mSparePartController.setEditable(true);
         mRepairStaffController = getController(RepairStaffController.class);
-        mRepairStaffController.setEditable(false);
+        mRepairStaffController.setEditable(true);
         mLubricateOilsController = getController(LubricateOilsController.class);
-        mLubricateOilsController.setEditable(false);
+        mLubricateOilsController.setEditable(true);
         maintenanceController = getController(MaintenanceController.class);
-        maintenanceController.setEditable(false);
+        maintenanceController.setEditable(true);
 
         roleController = new RoleController();  //角色
         roleController.queryRoleList(EamApplication.getUserName());
@@ -524,13 +524,15 @@ public class WXGDWarnActivity extends BaseControllerActivity implements WXGDSubm
         map.put("taskDescription", "BEAM2_1.0.0.work.task338");
         map.put("workRecord.workState.id", "BEAM049/01");
         map.put("workRecord.workState.value", "派工");
+
         //表体dataGrids
+        LinkedList<RepairStaffDto> repairStaffDtos = WXGDMapManager.translateStaffDto(mRepairStaffController.getRepairStaffEntities());
         LinkedList<SparePartEntityDto> sparePartEntityDtos = WXGDMapManager.translateSparePartDto(mSparePartController.getSparePartEntities());
         LinkedList<LubricateOilsEntityDto> lubricateOilsEntityDtos = WXGDMapManager.translateLubricateOilsDto(mLubricateOilsController.getLubricateOilsEntities());
         List<MaintainDto> maintainDtos = WXGDMapManager.translateMaintainDto(maintenanceController.getMaintenanceEntities());
 
         map.put("dg1530830249182ModelCode", "BEAM2_1.0.0_workList_RepairStaff");
-        map.put("dgLists['dg1530830249182']", new LinkedList().toString());
+        map.put("dgLists['dg1530830249182']", repairStaffDtos);
 
         map.put("dg1530827900504ModelCode", "BEAM2_1.0.0_workList_SparePart");
         map.put("dg1530827900504ListJson", sparePartEntityDtos);
@@ -577,6 +579,44 @@ public class WXGDWarnActivity extends BaseControllerActivity implements WXGDSubm
         return workFlowEntities;
     }
 
+    /**
+     * @param
+     * @return
+     * @description 更新备件表体数据
+     * @author zhangwenshuai1 2018/10/30
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshSparePart(SparePartEvent event) {
+        mSparePartController.updateSparePartEntities(event.getList());
+        //若列表数据为list.size=0，CustomListWidget.setData(list) 方法会return导致数据没有清空，现widget.clear()
+        if (event.getList().size() <= 0) {
+            mSparePartController.clear();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshRepairStaff(RepairStaffEvent event) {
+        mRepairStaffController.updateRepairStaffEntiies(event.getList());
+        if (event.getList().size() <= 0) {
+            mRepairStaffController.clear();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshLubricateOils(LubricateOilsEvent event) {
+        mLubricateOilsController.updateLubricateOilsEntities(event.getList());
+        if (event.getList().size() <= 0) {
+            mLubricateOilsController.clear();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshRepairStaff(MaintenanceEvent event) {
+        maintenanceController.updateMaintenanceEntities(event.getList());
+        if (event.getList().size() <= 0) {
+            maintenanceController.clear();
+        }
+    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getStaffInfo(CommonSearchEvent commonSearchEvent) {

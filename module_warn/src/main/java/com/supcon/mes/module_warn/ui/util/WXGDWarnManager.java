@@ -11,7 +11,9 @@ import com.supcon.mes.module_warn.model.bean.LubricationWarnEntity;
 import com.supcon.mes.module_warn.model.bean.MaintenanceWarnEntity;
 import com.supcon.mes.module_warn.model.bean.SparePartWarnEntity;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class WXGDWarnManager {
 
@@ -35,7 +37,7 @@ public class WXGDWarnManager {
         pendingEntity.activityName = "预警";
         wxgdEntity.pending = pendingEntity;
 
-        LinkedList<LubricateOilsEntity> lubricateOilsEntities = new LinkedList<>();
+        List<LubricateOilsEntity> lubricateOilsEntities = new ArrayList<>();
         LubricateOilsEntity lubricateOilsEntity = new LubricateOilsEntity();
         lubricateOilsEntity.lubricate = lubricationWarnEntity.lubricateOil;
         lubricateOilsEntity.oilType = lubricationWarnEntity.oilType;
@@ -80,7 +82,7 @@ public class WXGDWarnManager {
         pendingEntity.activityName = "预警";
         wxgdEntity.pending = pendingEntity;
 
-        LinkedList<MaintainEntity> maintainEntities = new LinkedList<>();
+        List<MaintainEntity> maintainEntities = new ArrayList<>();
         MaintainEntity maintainEntity = new MaintainEntity();
 
         JWXItem jwxItem = new JWXItem();
@@ -122,7 +124,7 @@ public class WXGDWarnManager {
         pendingEntity.activityName = "预警";
         wxgdEntity.pending = pendingEntity;
 
-        LinkedList<SparePartEntity> sparePartEntities = new LinkedList<>();
+        ArrayList<SparePartEntity> sparePartEntities = new ArrayList<>();
         SparePartEntity sparePartEntity = new SparePartEntity();
         sparePartEntity.accessoryName = sparePartWarnEntity.getAccessoryEamId().getAttachEamId().name;
         sparePartEntity.remark = sparePartWarnEntity.remark;

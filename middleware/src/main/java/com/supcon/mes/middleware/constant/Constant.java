@@ -206,6 +206,8 @@ public interface Constant {
         String LUBRICATE_OIL_ENTITIES = "LUBRICATE_OIL_ENTITIES";
         String MAINTENANCE_ENTITIES = "MAINTENANCE_ENTITIES";
         String SPARE_PART_ENTITIES = "SPARE_PART_ENTITIES";
+        String WXGD_WARN_ENTITIES = "WXGD_WARN_ENTITIES";//预警生成工单使用  传预警备件的标体
+
         String IS_EDITABLE = "IS_EDITABLE";
         String IS_ADD = "IS_ADD";
         String REPAIR_SUM = "REPAIR_SUM";  //工单执行次数

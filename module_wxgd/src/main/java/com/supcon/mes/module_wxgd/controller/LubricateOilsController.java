@@ -29,6 +29,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,9 +74,6 @@ public class LubricateOilsController extends BaseViewController implements Lubri
         mCustomListWidget.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
-                if (mLubricateOilsOldEntities.size() > 0) {
-                    return;
-                }
                 Bundle bundle = new Bundle();
                 switch (action) {
                     case CustomListWidget.ACTION_VIEW_ALL:
