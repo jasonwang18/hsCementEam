@@ -14,10 +14,10 @@ import okhttp3.RequestBody;
 
 public class ScoreInspectorStaffSubmitPresenter extends ScoreStaffSubmitContract.Presenter {
     @Override
-    public void doStaffSubmit(Map<String, Object> map) {
+    public void doStaffSubmit(String url, Map<String, Object> map) {
         Map<String, RequestBody> formBody = FormDataHelper.createDataFormBody(map);
         mCompositeSubscription.add(
-                ScoreHttpClient.doStaffSubmit(formBody)
+                ScoreHttpClient.doStaffSubmit(url, formBody)
                         .onErrorReturn(new Function<Throwable, BapResultEntity>() {
                             @Override
                             public BapResultEntity apply(Throwable throwable) throws Exception {

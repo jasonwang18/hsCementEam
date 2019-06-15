@@ -125,11 +125,8 @@ public class ScoreMapManager {
 
     public static Map<String, Object> createMap(ScoreStaffEntity scoreStaffEntity) {
         Map<String, Object> map = new HashMap<>();
-        map.put("viewselect", "patrolScoreEdit");
-        map.put("datagridKey", "BEAM_patrolWorkerScore_workerScoreHead_patrolScoreEdit_datagrids");
-        map.put("viewCode", "BEAM_1.0.0_patrolWorkerScore_patrolScoreEdit");
-        map.put("modelName", "WorkerScoreHead");
 
+        map.put("modelName", "WorkerScoreHead");
         if (scoreStaffEntity.id != -1) {
             map.put("id", scoreStaffEntity.id);
         }
@@ -176,7 +173,7 @@ public class ScoreMapManager {
                     scoreEamDto.item = scorePerformanceEntity.item;
                     scoreEamDto.itemScore = Util.big(scorePerformanceEntity.itemScore);
                     scoreEamDto.result = Util.strFormat2(scorePerformanceEntity.result);
-                    scoreEamDto.fraction = Util.big(scorePerformanceEntity.fraction);
+                    scoreEamDto.fraction = Util.big(scorePerformanceEntity.scoreEamPerformanceEntity.fraction);
                     scoreEamDto.isItemValue = scorePerformanceEntity.isItemValue;
                     scoreEamDto.noItemValue = scorePerformanceEntity.noItemValue;
                     scoreEamDto.defaultNumVal = scorePerformanceEntity.defaultNumVal > 0 ? Util.strFormat2(scorePerformanceEntity.defaultNumVal) : "";

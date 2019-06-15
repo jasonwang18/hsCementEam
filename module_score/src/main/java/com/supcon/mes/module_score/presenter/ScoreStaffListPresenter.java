@@ -20,9 +20,16 @@ import java.util.Map;
 
 import io.reactivex.functions.Consumer;
 
-public class ScoreInspectorStaffListPresenter extends ScoreStaffListContract.Presenter {
+/**
+ * @author yangfei.cao
+ * @ClassName hongShiCementEam
+ * @date 2019/4/29
+ * ------------- Description -------------
+ * 人员评分列表
+ */
+public class ScoreStaffListPresenter extends ScoreStaffListContract.Presenter {
     @Override
-    public void patrolScore(Map<String, Object> param, int page) {
+    public void patrolScore(String url, Map<String, Object> param, int page) {
         FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
         if (param.containsKey(Constant.BAPQuery.SCORE_DATA_START) || param.containsKey(Constant.BAPQuery.SCORE_DATA_STOP)) {
             Map<String, Object> timeParam = new HashMap<>();
@@ -43,7 +50,7 @@ public class ScoreInspectorStaffListPresenter extends ScoreStaffListContract.Pre
         pageQueryParams.put("page.pageNo", page);
         pageQueryParams.put("page.pageSize", 500);
         pageQueryParams.put("page.maxPageSize", 500);
-        mCompositeSubscription.add(ScoreHttpClient.patrolScore(fastQuery, pageQueryParams)
+        mCompositeSubscription.add(ScoreHttpClient.patrolScore(url, fastQuery, pageQueryParams)
                 .onErrorReturn(throwable -> {
                     CommonBAPListEntity commonBAPListEntity = new CommonBAPListEntity();
                     commonBAPListEntity.errMsg = throwable.toString();

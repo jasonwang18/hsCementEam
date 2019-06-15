@@ -16,8 +16,11 @@ import com.supcon.mes.module_score.model.bean.ScoreEamEntity;
 import com.supcon.mes.module_score.model.bean.ScoreStaffEntity;
 
 public class ScoreStaffListAdapter extends BaseListDataRecyclerViewAdapter<ScoreStaffEntity> {
-    public ScoreStaffListAdapter(Context context) {
+    private String title;
+
+    public ScoreStaffListAdapter(String title, Context context) {
         super(context);
+        this.title = title;
     }
 
     @Override
@@ -56,7 +59,8 @@ public class ScoreStaffListAdapter extends BaseListDataRecyclerViewAdapter<Score
             String staff = String.format(context.getString(R.string.device_style10), Util.strFormat(data.getPatrolWorker().name)
                     , Util.strFormat(data.getPatrolWorker().code));
             itemScoreStaff.contentView().setText(HtmlParser.buildSpannedText(staff, new HtmlTagHandler()));
-
+            itemScoreStaff.setKey(title);
+            itemScoreNum.setKey(title + "得分");
             itemScoreNum.setValue(Util.big(data.score));
             itemScoreTime.setValue(data.scoreData != null ? DateUtil.dateFormat(data.scoreData) : "");
         }
