@@ -171,7 +171,7 @@ public class ScoreEamPerformanceAdapter extends BaseListDataRecyclerViewAdapter<
         @Override
         protected void update(ScoreEamPerformanceEntity data) {
             itemIndex.setText(data.Index + ".");
-            scoreItem.setText(data.itemDetail + (data.marks.size() > 0 ? "" : "(" + Util.big(data.score) + ")"));
+            scoreItem.setText(data.itemDetail + (data.marks.size() > 0 ? "" : "(" + Util.big0(data.score) + ")"));
             checkLayout.removeAllViews();
             scoreRadioGroup.setVisibility(View.VISIBLE);
             checkLayout.setVisibility(View.VISIBLE);

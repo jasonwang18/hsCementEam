@@ -72,11 +72,11 @@ public class ScoreEamPerformancePresenter extends ScoreEamPerformanceContract.Pr
                     }
 
                     if (TextUtils.isEmpty(scorePerformanceOldTitleEntity.isItemValue)) {
-                        scorePerformanceOldTitleEntity.marks.put(scorePerformanceEntity.scoreItem + "(" + Util.big(scorePerformanceEntity.score) + ")"
+                        scorePerformanceOldTitleEntity.marks.put(scorePerformanceEntity.scoreItem + "(" + Util.big0(scorePerformanceEntity.score) + ")"
                                 , scorePerformanceEntity.score);
-                        scorePerformanceOldTitleEntity.marksState.put(scorePerformanceEntity.scoreItem + "(" +  Util.big(scorePerformanceEntity.score) + ")"
+                        scorePerformanceOldTitleEntity.marksState.put(scorePerformanceEntity.scoreItem + "(" +  Util.big0(scorePerformanceEntity.score) + ")"
                                 , scorePerformanceEntity.result);
-                        scorePerformanceOldTitleEntity.scorePerformanceEntityMap.put(scorePerformanceEntity.scoreItem + "(" +  Util.big(scorePerformanceEntity.score) + ")"
+                        scorePerformanceOldTitleEntity.scorePerformanceEntityMap.put(scorePerformanceEntity.scoreItem + "(" +  Util.big0(scorePerformanceEntity.score) + ")"
                                 , scorePerformanceEntity);
                     }
                     scorePerformanceOldTitleEntity.Index = position;
