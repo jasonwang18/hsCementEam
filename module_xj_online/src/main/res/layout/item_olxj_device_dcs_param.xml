@@ -1,71 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="45dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingLeft="@dimen/dp_10"
-    android:background="@color/BgXjAreaBlue">
+    android:background="@color/BgXjAreaBlue"
+    android:paddingLeft="@dimen/dp_10">
 
     <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/itemDCSParam"
         android:layout_width="230dp"
         android:layout_height="wrap_content"
-        app:key_width="150dp"
-        app:key_size="12"
-        app:key_color="@color/textColorlightblack"
-        app:content_size="14"
-        app:content_color="@color/customGreen"
-        android:id="@+id/itemDCSParam"
         android:tag="itemDCSParam"
-        />
+        app:content_color="@color/customGreen"
+        app:content_size="14"
+        app:key_color="@color/textColorlightblack"
+        app:key_size="12"
+        app:key_width="150dp" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
         android:layout_toRightOf="@+id/itemDCSParam"
+        android:orientation="horizontal">
 
-        >
         <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemDCSParamMin"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            app:key_width="0dp"
-            app:key_size="10"
+            android:tag="itemDCSParamMin"
             app:content_size="14"
-            app:key_color="@color/textColorlightblack"
-            android:id="@+id/itemDCSParamMax"
-            android:tag="itemDCSParamMax"
             app:content_value=" -- "
             app:gravity="center_vertical|right"
-            />
+            app:key_color="@color/textColorlightblack"
+            app:key_size="10"
+            app:key_width="0dp" />
+
         <TextView
+            android:id="@+id/itemDCSParamMark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="  ~  "
-            android:id="@+id/itemDCSParamMark"
-            android:tag="itemDCSParamMark" />
+            android:tag="itemDCSParamMark"
+            android:text="  ~  " />
+
         <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemDCSParamMax"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            app:key_width="0dp"
-            app:key_size="10"
+            android:tag="itemDCSParamMax"
             app:content_size="14"
-            app:key_color="@color/textColorlightblack"
-            android:id="@+id/itemDCSParamMin"
-            android:tag="itemDCSParamMin"
             app:content_value=" -- "
             app:gravity="center_vertical"
-            />
+            app:key_color="@color/textColorlightblack"
+            app:key_size="10"
+            app:key_width="0dp" />
 
     </LinearLayout>
 
     <ImageView
         android:id="@+id/itemAreaDot"
-        android:tag="itemAreaDot"
         android:layout_width="10dp"
         android:layout_height="10dp"
-        android:src="@drawable/ic_dot"
         android:layout_centerVertical="true"
-        android:scaleType="center"
         android:layout_marginLeft="@dimen/dp_10"
-        android:visibility="gone"
-        />
+        android:scaleType="center"
+        android:src="@drawable/ic_dot"
+        android:tag="itemAreaDot"
+        android:visibility="gone" />
 </RelativeLayout>

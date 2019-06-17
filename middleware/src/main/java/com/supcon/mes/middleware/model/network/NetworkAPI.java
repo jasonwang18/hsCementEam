@@ -321,7 +321,7 @@ public interface NetworkAPI {
     /**
      * 获取设备
      */
-    @GET("/BEAM/baseInfo/baseInfo/baseInfoPart-query.action")
+    @GET("/BEAM/baseInfo/baseInfo/baseInfoPartForview-query.action")
     Flowable<CommonListEntity<EamType>> getEam(@Query("advQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
 }

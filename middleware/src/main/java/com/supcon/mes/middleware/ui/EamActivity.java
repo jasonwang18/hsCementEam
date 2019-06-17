@@ -20,6 +20,7 @@ import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.CustomSwipeLayout;
 import com.supcon.mes.mbap.utils.GsonUtil;
+import com.supcon.mes.mbap.utils.KeyHelper;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
@@ -36,7 +37,9 @@ import com.supcon.mes.middleware.presenter.EamPresenter;
 import com.supcon.mes.middleware.ui.adapter.BaseSearchAdapter;
 import com.supcon.mes.middleware.ui.view.PinyinSearchBar;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
+import com.supcon.mes.middleware.util.KeyExpandHelper;
 import com.supcon.mes.middleware.util.NFCHelper;
+import com.supcon.mes.middleware.util.Util;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -159,8 +162,15 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
                 if (queryParam.containsKey(Constant.BAPQuery.EAM_CODE)) {
                     queryParam.remove(Constant.BAPQuery.EAM_CODE);
                 }
+                if (queryParam.containsKey(Constant.BAPQuery.EAM_NAME)) {
+                    queryParam.remove(Constant.BAPQuery.EAM_NAME);
+                }
                 if (!TextUtils.isEmpty(blurMes)) {
-                    queryParam.put(Constant.BAPQuery.EAM_CODE, blurMes);
+                    if (Util.isContainChinese(blurMes)) {
+                        queryParam.put(Constant.BAPQuery.EAM_NAME, blurMes);
+                    } else {
+                        queryParam.put(Constant.BAPQuery.EAM_CODE, blurMes);
+                    }
                 }
                 if (!TextUtils.isEmpty(areaName)) {
                     queryParam.put(Constant.BAPQuery.EAM_AREANAME, areaName);
@@ -168,12 +178,16 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
                 presenterRouter.create(EamAPI.class).getEam(queryParam, pageIndex);
             }
         });
+        KeyExpandHelper.doActionSearch(titleSearchView.editText(), true, () ->
+                refreshListController.refreshBegin());
+
         RxTextView.textChanges(titleSearchView.editText())
                 .skipInitialValue()
-                .debounce(1, TimeUnit.SECONDS)
+                .debounce(500, TimeUnit.MILLISECONDS)
                 .subscribe(charSequence -> {
-                    mBaseSearchAdapter.clear();
-                    refreshListController.refreshBegin();
+                    if (TextUtils.isEmpty(charSequence)) {
+                        refreshListController.refreshBegin();
+                    }
                 });
 
         leftBtn.setOnClickListener(v -> back());
@@ -221,6 +235,7 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
         }
         eamCode = (String) nfcJson.get("textRecord");
         titleSearchView.setInput(eamCode);
+        refreshListController.refreshBegin();
     }
 
     @Override
