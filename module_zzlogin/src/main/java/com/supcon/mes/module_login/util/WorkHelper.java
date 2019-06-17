@@ -157,12 +157,12 @@ public class WorkHelper {
                     break;
                 case Constant.WorkType.SCORE_INSPECTOR_PERSON_LIST:
 
-                    workInfo.iconResId = R.drawable.ic_work_rypf;
+                    workInfo.iconResId = R.drawable.ic_work_xj;
                     workInfo.router = Constant.Router.SCORE_INSPECTOR_STAFF_LIST;
                     break;
                 case Constant.WorkType.SCORE_MECHANIC_PERSON_LIST:
 
-                    workInfo.iconResId = R.drawable.ic_work_rypf;
+                    workInfo.iconResId = R.drawable.ic_work_jx;
                     workInfo.router = Constant.Router.SCORE_MECHANIC_STAFF_LIST;
                     break;
                 case Constant.WorkType.JXJH:

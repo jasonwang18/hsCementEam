@@ -48,6 +48,9 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
         this.map = map;
     }
 
+    public void resertExpandPosition() {
+        this.expandPosition = -1;
+    }
 //    public void setLisenter(RecyclerView contentView) {
 //        contentView.setOnTouchListener(new RecyclerViewOnTouchListener());
 //
@@ -159,8 +162,7 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
             super.initListener();
 
             taskExpandBtn.setOnClickListener(v -> {
-                if(map)
-                {
+                if (map) {
                     return;
                 }
                 int position = getAdapterPosition();
