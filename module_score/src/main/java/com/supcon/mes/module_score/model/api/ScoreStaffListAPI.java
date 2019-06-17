@@ -8,5 +8,5 @@ import java.util.Map;
 
 @ContractFactory(entites = {CommonBAPListEntity.class})
 public interface ScoreStaffListAPI {
-    void patrolScore(Map<String, Object> param, int page);
+    void patrolScore(String url, Map<String, Object> param, int page);
 }

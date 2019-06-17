@@ -122,6 +122,14 @@ public class ScoreStaffPerformanceAdapter extends BaseListDataRecyclerViewAdapte
             return R.layout.item_score_performance_content;
         }
 
+        @Override
+        protected void initView() {
+            super.initView();
+            sum.setEnabled(isEdit);
+            sum.getNumViewInput().setEnabled(false);
+            scoreRadioBtn1.setEnabled(isEdit);
+            scoreRadioBtn2.setEnabled(isEdit);
+        }
 
         @Override
         protected void initListener() {
@@ -192,14 +200,13 @@ public class ScoreStaffPerformanceAdapter extends BaseListDataRecyclerViewAdapte
             scoreItem.setText(item);
             scoreRadioGroup.setVisibility(View.VISIBLE);
             sum.setVisibility(View.VISIBLE);
+
             if (data.isEdit()) {
                 scoreRadioGroup.setVisibility(View.GONE);
                 sum.setNum(data.defaultNumVal);
             } else {
                 sum.setVisibility(View.GONE);
             }
-            scoreRadioBtn1.setEnabled(isEdit);
-            scoreRadioBtn2.setEnabled(isEdit);
             scoreRadioBtn1.setText(data.isItemValue);
             scoreRadioBtn2.setText(data.noItemValue);
             scoreRadioBtn1.setChecked(data.result);

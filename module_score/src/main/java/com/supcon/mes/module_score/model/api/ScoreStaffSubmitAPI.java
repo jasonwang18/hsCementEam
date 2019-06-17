@@ -7,5 +7,5 @@ import java.util.Map;
 
 @ContractFactory(entites = {BapResultEntity.class})
 public interface ScoreStaffSubmitAPI {
-    void doStaffSubmit(Map<String, Object> map);
+    void doStaffSubmit(String url, Map<String, Object> map);
 }

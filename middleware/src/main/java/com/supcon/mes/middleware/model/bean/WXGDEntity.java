@@ -3,6 +3,7 @@ package com.supcon.mes.middleware.model.bean;
 import com.supcon.common.com_http.BaseEntity;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -80,7 +81,7 @@ public class WXGDEntity extends BaseEntity implements Cloneable {
 
     public Long tableInfoId;//单据ID
 
-    public List<SparePartEntity> sparePart;  //备件
+    public ArrayList<SparePartEntity> sparePart;  //备件
 
     public List<LubricateOilsEntity> lubricateOils;  //润滑
 
@@ -88,7 +89,7 @@ public class WXGDEntity extends BaseEntity implements Cloneable {
 
     public List<AcceptanceCheckEntity> accceptanceCheck;  //验收
 
-    public List<MaintainEntity> maintainEntities;//验收
+    public List<MaintainEntity> maintainEntities;//维保
 
     public JWXItem jwxItem; //业务规则
 

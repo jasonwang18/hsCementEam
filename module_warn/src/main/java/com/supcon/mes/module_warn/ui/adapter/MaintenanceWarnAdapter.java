@@ -143,11 +143,15 @@ public class MaintenanceWarnAdapter extends BaseListDataRecyclerViewAdapter<Main
             if (!TextUtils.isEmpty(data.claim)) {
                 itemMaintenanceClaimTv.setVisibility(View.VISIBLE);
                 itemMaintenanceClaimTv.setContent(data.claim);
+            } else {
+                itemMaintenanceClaimTv.setVisibility(View.GONE);
             }
 
             if (!TextUtils.isEmpty(data.content)) {
                 itemMaintenanceContentTv.setVisibility(View.VISIBLE);
                 itemMaintenanceContentTv.setContent(data.content);
+            } else {
+                itemMaintenanceContentTv.setVisibility(View.GONE);
             }
 
             if (data.isCheck) {

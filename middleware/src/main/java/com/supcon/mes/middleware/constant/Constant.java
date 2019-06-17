@@ -160,7 +160,9 @@ public interface Constant {
         String SCORE_EAM_LIST = "SCORE_EAM_LIST";//设备评分绩效列表
         String SCORE_EAM_PERFORMANCE = "SCORE_EAM_PERFORMANCE";//评分绩效
         String SCORE_INSPECTOR_STAFF_LIST = "SCORE_INSPECTOR_STAFF_LIST";//巡检人员列表
+        String SCORE_MECHANIC_STAFF_LIST = "SCORE_MECHANIC_STAFF_LIST";//机修工列表
         String SCORE_INSPECTOR_STAFF_PERFORMANCE = "SCORE_INSPECTOR_STAFF_PERFORMANCE";//人员评分绩效
+        String SCORE_MECHANIC_STAFF_PERFORMANCE = "SCORE_MECHANIC_STAFF_PERFORMANCE";//机修工评分绩效
 
         String EAM = "EAM";//设备搜索
         String STAFF = "STAFF";//人员搜索
@@ -204,6 +206,8 @@ public interface Constant {
         String LUBRICATE_OIL_ENTITIES = "LUBRICATE_OIL_ENTITIES";
         String MAINTENANCE_ENTITIES = "MAINTENANCE_ENTITIES";
         String SPARE_PART_ENTITIES = "SPARE_PART_ENTITIES";
+        String WXGD_WARN_ENTITIES = "WXGD_WARN_ENTITIES";//预警生成工单使用  传预警备件的标体
+
         String IS_EDITABLE = "IS_EDITABLE";
         String IS_ADD = "IS_ADD";
         String REPAIR_SUM = "REPAIR_SUM";  //工单执行次数
@@ -302,6 +306,7 @@ public interface Constant {
         int MAINTENANCE_EARLY_WARN = 26;//维保预警
         int SCORE_EAM_LIST = 27;//设备评分
         int SCORE_INSPECTOR_PERSON_LIST = 28;//巡检人员评分
+        int SCORE_MECHANIC_PERSON_LIST = 29;//巡检人员评分
     }
 
     interface SPKey {

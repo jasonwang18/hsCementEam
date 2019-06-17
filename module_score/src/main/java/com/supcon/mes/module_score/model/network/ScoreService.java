@@ -39,21 +39,24 @@ public interface ScoreService {
     @Multipart
     Flowable<BapResultEntity> doSubmit(@PartMap Map<String, RequestBody> map);
 
-
-    //巡检工评分列表
-    @GET("/BEAM/patrolWorkerScore/workerScoreHead/patrolScore-query.action")
-    Flowable<CommonBAPListEntity<ScoreStaffEntity>> patrolScore(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+    //人员评分列表
+    @GET
+    Flowable<CommonBAPListEntity<ScoreStaffEntity>> patrolScore(@Url String url, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
     //巡检工人员评分
     @GET
-    Flowable<ScoreStaffPerformanceListEntity> getStaffScore(@Url String url, @Query("workerScoreHead.id") int scoreId);
+    Flowable<ScoreStaffPerformanceListEntity> getInspectorStaffScore(@Url String url, @Query("workerScoreHead.id") int scoreId);
+
+    //机修工人员评分
+    @GET
+    Flowable<ScoreStaffPerformanceListEntity> getMechanicStaffScore(@Url String url, @Query("workerScoreHead.id") int scoreId);
 
     //人员设备评分
     @GET("/BEAM/patrolWorkerScore/workerScoreHead/getResponsityBeam.action")
     Flowable<CommonListEntity<ScoreDutyEamEntity>> getDutyEam(@Query("staffId") long staffId, @Query("scoreType") String scoreType);
 
     //提交
-    @POST("/BEAM/patrolWorkerScore/workerScoreHead/patrolScoreEdit/submit.action?__pc__=cGF0cm9sU2NvcmVfYWRkX2FkZF9CRUFNXzEuMC4wX3BhdHJvbFdvcmtlclNjb3JlX3BhdHJvbFNjb3JlfA__&_bapFieldPermissonModelCode_=BEAM_1.0.0_patrolWorkerScore_WorkerScoreHead&_bapFieldPermissonModelName_=WorkerScoreHead")
+    @POST
     @Multipart
-    Flowable<BapResultEntity> doStaffSubmit(@PartMap Map<String, RequestBody> map);
+    Flowable<BapResultEntity> doStaffSubmit(@Url String url, @PartMap Map<String, RequestBody> map);
 }

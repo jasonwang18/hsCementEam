@@ -11,9 +11,7 @@ public class LubricateOilsEntityDto extends BaseEntity {
 
     public String id;
     public IdDto lubricate;
-    public IdDto lubricatePart;
     public IdDto jwxItemID;
-    public String checkbox;
     public IdDto oilType;//加换油
     public String oilQuantity;
     public String remark;

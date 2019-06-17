@@ -37,7 +37,7 @@
                     android:layout_weight="1"
                     android:paddingLeft="@dimen/dp_10"
                     android:tag="scoreStaff"
-                    app:content_hint="请选择巡检工"
+                    app:content_hint="请选择人员"
                     app:editable="true"
                     app:key="巡检工:" />
 
