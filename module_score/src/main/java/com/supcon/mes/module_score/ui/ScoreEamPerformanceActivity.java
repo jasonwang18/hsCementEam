@@ -191,7 +191,7 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
             scoreEamEntity.scoreStaff.id = EamApplication.getAccountInfo().staffId;
         }
         scoreEamEntity.scoreTime = (scoreEamEntity != null && scoreEamEntity.scoreTime != null) ? scoreEamEntity.scoreTime : getYesterday();
-        eamScore.setContent(Util.big(scoreEamEntity.scoreNum));
+        eamScore.setContent(Util.big0(scoreEamEntity.scoreNum));
         scoreStaff.setContent(scoreEamEntity.getScoreStaff().name);
         scoreTime.setContent(DateUtil.dateFormat(scoreEamEntity.scoreTime));
         scoreEamPerformanceAdapter.updateTotal(scoreEamEntity.scoreNum);
@@ -254,7 +254,7 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
                 ScoreEamPerformanceEntity scoreEamPerformanceEntity = (ScoreEamPerformanceEntity) obj;
                 scoreEamEntity.scoreNum = scoreEamPerformanceEntity.scoreNum;
-                eamScore.setContent(Util.strFormat2(scoreEamEntity.scoreNum));
+                eamScore.setContent(Util.big0(scoreEamEntity.scoreNum));
                 scoreEamPerformanceAdapter.updateTotal(scoreEamEntity.scoreNum);
             }
         });

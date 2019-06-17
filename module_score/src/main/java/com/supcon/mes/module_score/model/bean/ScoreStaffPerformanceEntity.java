@@ -11,6 +11,8 @@ import java.util.Set;
 
 public class ScoreStaffPerformanceEntity extends BaseEntity {
 
+    public Long id;
+
     public String category;//标题
     public String project;//大标题
     public String grade;//评分标准

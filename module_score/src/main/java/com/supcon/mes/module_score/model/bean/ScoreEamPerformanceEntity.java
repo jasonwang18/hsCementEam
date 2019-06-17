@@ -10,6 +10,8 @@ import java.util.Set;
 
 public class ScoreEamPerformanceEntity extends BaseEntity {
 
+    public Long id;
+
     public String isItemValue;//是
     public String noItemValue;//否
     public String item;
@@ -65,7 +67,7 @@ public class ScoreEamPerformanceEntity extends BaseEntity {
 
     public Float getTotalHightScore() {
         if (totalHightScore == null) {
-            totalHightScore = defaultTotalScore;
+            totalHightScore = getTotalScore();
         }
         return totalHightScore;
     }

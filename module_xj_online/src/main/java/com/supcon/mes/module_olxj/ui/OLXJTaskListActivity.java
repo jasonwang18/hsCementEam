@@ -622,6 +622,7 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
 
     @Override
     public void getOJXJLastTaskListSuccess(List entities) {
+        mOLXJTaskListAdapter.resertExpandPosition();
 
         if (entities.size() != 0 && isCurrentTask((OLXJTaskEntity) entities.get(0))) {
             entities.set(0, mOLXJTaskEntity);

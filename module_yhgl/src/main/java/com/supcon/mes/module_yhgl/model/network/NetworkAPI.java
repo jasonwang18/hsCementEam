@@ -106,7 +106,7 @@ public interface NetworkAPI {
      * @description 备件更新现存量
      * @author zhangwenshuai1 2018/10/10
      */
-    @POST("/BEAM2/faultInfo/faultInfo/getNowSum.action")
+    @POST("/BEAM2/workList/workRecord/getNowSum.action")
     Flowable<CommonListEntity<StandingCropResultEntity>> updateStandingCrop(@Query("productCode") String productCode);
 
     /**

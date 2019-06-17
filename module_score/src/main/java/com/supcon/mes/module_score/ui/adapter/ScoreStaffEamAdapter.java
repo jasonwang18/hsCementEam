@@ -70,7 +70,7 @@ public class ScoreStaffEamAdapter extends BaseListDataRecyclerViewAdapter<ScoreD
         @Override
         protected void update(ScoreDutyEamEntity data) {
             contentTitle.setText(data.name);
-            fraction.setText(Util.big(data.avgScore) + "分");
+            fraction.setText(Util.big0(data.avgScore) + "分");
         }
     }
 
@@ -99,7 +99,7 @@ public class ScoreStaffEamAdapter extends BaseListDataRecyclerViewAdapter<ScoreD
         protected void update(ScoreDutyEamEntity data) {
             itemIndex.setText(getLayoutPosition() + ".");
             scoreEam.setText(String.format(context.getString(R.string.device_style1), data.name, data.code));
-            scoreResult.setText(Util.big(data.score) + "分");
+            scoreResult.setText(Util.big0(data.score) + "分");
         }
 
     }
