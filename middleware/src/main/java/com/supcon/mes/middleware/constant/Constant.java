@@ -262,6 +262,7 @@ public interface Constant {
         String EAM_CODE = "EAM_CODE";//EAM_CODE
         String AREA_NAME = "AREA_NAME";//AREA_NAME
         String isEdit = "isEdit";//是否能编辑
+        String IS_MAIN_EAM = "IS_MAIN_EAM";//是否主设备
 
         String SCORE_ENTITY = "SCORE_ENTITY";//评分记录
     }
