@@ -38,6 +38,7 @@
                     android:paddingLeft="@dimen/dp_10"
                     android:tag="eamCode"
                     app:content_hint="NFC刷卡获取设备"
+                    app:editable="true"
                     app:key="设备编码:" />
 
                 <include layout="@layout/ly_vertical_line" />
@@ -50,6 +51,7 @@
                     android:paddingLeft="@dimen/dp_10"
                     android:tag="eamName"
                     app:content_hint="NFC刷卡获取设备"
+                    app:editable="true"
                     app:text="设备名称:" />
             </LinearLayout>
 

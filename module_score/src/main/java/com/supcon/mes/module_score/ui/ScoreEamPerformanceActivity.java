@@ -297,9 +297,9 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
         if (commonSearchEvent.commonSearchEntity != null) {
             if (commonSearchEvent.commonSearchEntity instanceof EamType) {
                 EamType eamType = (EamType) commonSearchEvent.commonSearchEntity;
-                eamCode.setContent(Util.strFormat(commonSearchEvent.commonSearchEntity.getSearchId()));
-                eamName.setContent(Util.strFormat(commonSearchEvent.commonSearchEntity.getSearchName()));
-                eamDept.setContent(Util.strFormat(commonSearchEvent.commonSearchEntity.getSearchProperty()));
+                eamCode.setContent(Util.strFormat(eamType.code));
+                eamName.setContent(Util.strFormat(eamType.name));
+                eamDept.setContent(Util.strFormat(eamType.getUseDept().name));
                 scoreEamEntity.beamId = eamType;
             }
         }
