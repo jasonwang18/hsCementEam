@@ -1,6 +1,7 @@
 package com.supcon.mes.module_warn.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -12,6 +13,7 @@ import com.app.annotation.Presenter;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.fragment.BaseRefreshFragment;
+import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.GsonUtil;
@@ -19,10 +21,14 @@ import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
+import com.supcon.mes.middleware.model.bean.EamType;
+import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.NFCEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
+import com.supcon.mes.middleware.util.Util;
+import com.supcon.mes.module_warn.IntentRouter;
 import com.supcon.mes.module_warn.R;
 import com.supcon.mes.module_warn.model.api.CompleteAPI;
 import com.supcon.mes.module_warn.model.api.TemporaryAPI;
@@ -141,6 +147,22 @@ public class TemporaryTaskFragment extends BaseRefreshFragment implements Tempor
                                 }
                             });
                 });
+        eamCode.setOnChildViewClickListener(new OnChildViewClickListener() {
+            @Override
+            public void onChildViewClick(View childView, int action, Object obj) {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
+                IntentRouter.go(getActivity(), Constant.Router.EAM, bundle);
+            }
+        });
+        eamName.setOnChildViewClickListener(new OnChildViewClickListener() {
+            @Override
+            public void onChildViewClick(View childView, int action, Object obj) {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
+                IntentRouter.go(getActivity(), Constant.Router.EAM, bundle);
+            }
+        });
     }
 
     /**
@@ -161,6 +183,19 @@ public class TemporaryTaskFragment extends BaseRefreshFragment implements Tempor
             eamCode.setContent(String.valueOf(nfcJson.get("textRecord")));
             queryParam.put(Constant.IntentKey.EAM_CODE, nfcJson.get("textRecord"));
             refreshController.refreshBegin();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void search(CommonSearchEvent commonSearchEvent) {
+        if (commonSearchEvent.commonSearchEntity != null) {
+            if (commonSearchEvent.commonSearchEntity instanceof EamType) {
+                EamType eamType = (EamType) commonSearchEvent.commonSearchEntity;
+                eamCode.setContent(Util.strFormat(eamType.code));
+                eamName.setContent(Util.strFormat(eamType.name));
+                queryParam.put(Constant.IntentKey.EAM_CODE, Util.strFormat(eamType.code));
+                refreshController.refreshBegin();
+            }
         }
     }
 

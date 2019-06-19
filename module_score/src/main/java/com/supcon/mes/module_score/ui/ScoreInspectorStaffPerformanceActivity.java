@@ -61,6 +61,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -165,8 +166,8 @@ public class ScoreInspectorStaffPerformanceActivity extends BaseRefreshActivity 
             @Override
             public void onRefresh() {
                 presenterRouter.create(ScoreInspectorStaffPerformanceAPI.class).getInspectorStaffScore(scoreStaffEntity.id);
-                presenterRouter.create(ScoreInspectorStaffPerformanceAPI.class)
-                        .getDutyEam(scoreStaffEntity.getPatrolWorker().id != null ? scoreStaffEntity.getPatrolWorker().id : -1, "BEAM_065/02");
+                long staffId = scoreStaffEntity.getPatrolWorker().id != null ? scoreStaffEntity.getPatrolWorker().id : -1;
+                presenterRouter.create(ScoreInspectorStaffPerformanceAPI.class).getDutyEam(staffId, "BEAM_065/02");
             }
         });
         RxView.clicks(leftBtn)
@@ -263,14 +264,16 @@ public class ScoreInspectorStaffPerformanceActivity extends BaseRefreshActivity 
             scoreDutyEamEntityTitle.avgScore = scoreDutyEamEntity.avgScore;
             scoreDutyEamEntityTitle.viewType = ListType.TITLE.value();
             entity.result.add(0, scoreDutyEamEntityTitle);
-            scoreStaffEamAdapter.setList(entity.result);
-            scoreStaffEamAdapter.notifyDataSetChanged();
         }
+        scoreStaffEamAdapter.setList(entity.result);
+        scoreStaffEamAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void getDutyEamFailed(String errorMsg) {
         SnackbarHelper.showError(rootView, errorMsg);
+        scoreStaffEamAdapter.setList(new LinkedList());
+        scoreStaffEamAdapter.notifyDataSetChanged();
     }
 
     private void doSubmit() {

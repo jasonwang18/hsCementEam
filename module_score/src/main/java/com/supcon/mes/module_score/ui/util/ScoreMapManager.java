@@ -107,6 +107,7 @@ public class ScoreMapManager {
                 })
                 .subscribe(scorePerformanceEntity -> {
                     ScoreEamDto scoreEamDto = new ScoreEamDto();
+                    scoreEamDto.id = Util.strFormat2(scorePerformanceEntity.id);
                     scoreEamDto.item = scorePerformanceEntity.item;
                     scoreEamDto.result = Util.strFormat2(scorePerformanceEntity.result);
                     scoreEamDto.score = Util.big(scorePerformanceEntity.score);
@@ -115,6 +116,8 @@ public class ScoreMapManager {
                     scoreEamDto.noItemValue = scorePerformanceEntity.noItemValue;
                     scoreEamDto.scoreItem = scorePerformanceEntity.scoreItem;
                     scoreEamDto.scoreStandard = scorePerformanceEntity.scoreStandard;
+                    scoreEamDto.defaultTotalScore = Util.big(scorePerformanceEntity.defaultTotalScore);
+
                     scoreEamDto.resultValue = Util.big(scorePerformanceEntity.resultValue);
                     scoreEamDto.accidentStopTime = Util.big(scorePerformanceEntity.accidentStopTime);
                     scoreEamDto.totalRunTime = Util.big(scorePerformanceEntity.totalRunTime);
@@ -166,6 +169,7 @@ public class ScoreMapManager {
                 })
                 .subscribe(scorePerformanceEntity -> {
                     ScoreStaffDto scoreEamDto = new ScoreStaffDto();
+                    scoreEamDto.id = Util.strFormat2(scorePerformanceEntity.id);
                     scoreEamDto.category = scorePerformanceEntity.category;
                     scoreEamDto.project = scorePerformanceEntity.project;
                     scoreEamDto.score = Util.big(scorePerformanceEntity.score);

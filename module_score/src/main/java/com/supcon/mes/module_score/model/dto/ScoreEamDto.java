@@ -4,6 +4,7 @@ import com.supcon.common.com_http.BaseEntity;
 
 public class ScoreEamDto extends BaseEntity {
 
+    public String id;
     public String item;
     public String result;
     public String score;
@@ -12,6 +13,7 @@ public class ScoreEamDto extends BaseEntity {
     public String noItemValue;
     public String scoreItem;
     public String scoreStandard;
+    public String defaultTotalScore;
 
     public String resultValue;
     public String accidentStopTime;

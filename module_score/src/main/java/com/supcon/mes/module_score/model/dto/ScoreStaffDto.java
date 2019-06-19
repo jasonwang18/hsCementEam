@@ -5,6 +5,7 @@ import com.supcon.mes.middleware.model.bean.ValueEntity;
 
 public class ScoreStaffDto extends BaseEntity {
 
+    public String id;
     public String category;
     public String project;
     public String score;

@@ -8,8 +8,10 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -303,7 +305,7 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
 
                     if (count == 0) {
                         height += DisplayUtil.dip2px(ITEM_HEIGHT, context);
-                        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) workLayout.getLayoutParams();
+                        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) workLayout.getLayoutParams();
                         lp.height = height;
                         workLayout.setLayoutParams(lp);
                     }

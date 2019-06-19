@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
@@ -27,11 +28,14 @@ public class OLXJTitleController extends BaseViewController {
     @BindByTag("contentView")
     RecyclerView contentView;
 
-//    ImageView headerView;
+    //    ImageView headerView;
     CustomAdView headerView;
 
     @BindByTag("titleBarLayout")
     RelativeLayout titleBarLayout;
+
+    @BindByTag("titleText")
+    TextView titleText;
 
     @BindByTag("listDeviceFilter")
     CustomFilterView<FilterBean> listDeviceFilter;
@@ -39,7 +43,7 @@ public class OLXJTitleController extends BaseViewController {
     @BindByTag("xjBtnLayout")
     LinearLayout xjBtnLayout;
 
-    private final int headerHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,130,  context.getResources().getDisplayMetrics());
+    private final int headerHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 130, context.getResources().getDisplayMetrics());
 
     private BaseListDataRecyclerViewAdapter<OLXJWorkItemEntity> mAdapter;
 
@@ -57,6 +61,8 @@ public class OLXJTitleController extends BaseViewController {
     public void initView() {
         super.initView();
         xjBtnLayout.setVisibility(View.VISIBLE);
+        titleText.setVisibility(View.GONE);
+        listDeviceFilter.setVisibility(View.GONE);
     }
 
     @Override
@@ -67,7 +73,7 @@ public class OLXJTitleController extends BaseViewController {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 mState = newState;
-                if(headerView == null && contentView.getChildAt(0) != null){
+                if (headerView == null && contentView.getChildAt(0) != null) {
                     headerView = contentView.getChildAt(0).findViewById(R.id.itemRecyclerPic);
                 }
 
@@ -83,21 +89,17 @@ public class OLXJTitleController extends BaseViewController {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if(headerView == null && contentView.getChildAt(0) != null){
+                if (headerView == null && contentView.getChildAt(0) != null) {
                     headerView = contentView.getChildAt(0).findViewById(R.id.itemRecyclerPic);
                 }
 
                 int scroll = getScroll();
                 changeTitle(scroll);
-                if( scroll <= headerHeight){
+                if (scroll <= headerHeight) {
 
-                }
-                else if(mState == RecyclerView.SCROLL_STATE_SETTLING){
-                }
-                else{
-
-                    if(mAdapter ==null)
-                    {
+                } else if (mState == RecyclerView.SCROLL_STATE_SETTLING) {
+                } else {
+                    if (mAdapter == null) {
                         mAdapter = (BaseListDataRecyclerViewAdapter<OLXJWorkItemEntity>) contentView.getAdapter();
                     }
                     LinearLayoutManager linearLayoutManager = (LinearLayoutManager) contentView.getLayoutManager();
@@ -110,72 +112,81 @@ public class OLXJTitleController extends BaseViewController {
 
     /**
      * 获取滚动的高度
+     *
      * @return
      */
-    private int getScroll(){
+    private int getScroll() {
         View v = contentView.getChildAt(0);//获取listVIew的第一个子View
-        if(v instanceof ImageView || v instanceof CustomAdView){//如果是继承自ImageView
-            if(v != null){
+        if (v instanceof ImageView || v instanceof CustomAdView) {//如果是继承自ImageView
+            if (v != null) {
                 int top = v.getTop();//获取图片顶部的坐标
                 return -top;//这里作为我们滚动的值返回
-            }else{
+            } else {
                 return 0;
             }
-        }else{//如果不是继承自ImageView，说明已经把headerView完全滚出了屏幕,这里减去了标题栏的高度
-            return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,131, context.getResources().getDisplayMetrics());
+        } else {//如果不是继承自ImageView，说明已经把headerView完全滚出了屏幕,这里减去了标题栏的高度
+            return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 131, context.getResources().getDisplayMetrics());
 //            return headerView.getHeight() - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,70, context.getResources().getDisplayMetrics());
         }
     }
 
     /**
      * 根据滚动的高度，改变标题栏透明度
+     *
      * @param scroll
      */
-    private void changeTitle(int scroll){
-        if (headerView == null){
+    private void changeTitle(int scroll) {
+        if (headerView == null) {
             return;
         }
-        int height = headerView.getHeight() - (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,70,  context.getResources().getDisplayMetrics());
-        float alpha = 1f/height;
-        float a = alpha*scroll;//这里范围从0~1，0完全透明，1不透明
+        int height = headerView.getHeight() - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 70, context.getResources().getDisplayMetrics());
+        float alpha = 1f / height;
+        float a = alpha * scroll;//这里范围从0~1，0完全透明，1不透明
 
         //滚动变化限制，超过这个值，滚动不做改变
-        if(a >= 1){//不透明
+        if (a >= 1) {//不透明
             titleBarLayout.getBackground().setAlpha(255);
             isTitleVisible = true;
             currentAlpha = 255;
-        }else{
+            if (titleText.getVisibility() == View.GONE) {
+                titleText.setVisibility(View.VISIBLE);
+                listDeviceFilter.setVisibility(View.VISIBLE);
+            }
+        } else {
             a = a * 255;//这里转换成背景透明度的值0~255
-            titleBarLayout.getBackground().setAlpha((int)a);
+            titleBarLayout.getBackground().setAlpha((int) a);
             isTitleVisible = false;
             currentAlpha = a;
+            if (titleText.getVisibility() == View.VISIBLE) {
+                titleText.setVisibility(View.GONE);
+                listDeviceFilter.setVisibility(View.GONE);
+            }
         }
-
     }
 
     /**
      * 根据滚动的高度，改变标题栏透明度
-     *
      */
-    private void changeFilter(int position){
+    private void changeFilter(int position) {
 
-        OLXJWorkItemEntity xjWorkItemEntity = getTitleView(position+1);
+        OLXJWorkItemEntity xjWorkItemEntity = getTitleView(position + 1);
 
-        if(xjWorkItemEntity == null){
+        if (xjWorkItemEntity == null) {
             return;
         }
+
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) contentView.getLayoutManager();
         View view = linearLayoutManager.getChildAt(1);
 
-        if(view == null){
+        if (view == null) {
             return;
         }
 
-        float y1 = view.getY() - contentView.getScrollY()- TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,70,  context.getResources().getDisplayMetrics());
-        float y2 = view.getY() - contentView.getScrollY() - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,100,  context.getResources().getDisplayMetrics());
+        float y1 = view.getY() - contentView.getScrollY() - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 70, context.getResources().getDisplayMetrics());
+        float y2 = view.getY() - contentView.getScrollY() - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, context.getResources().getDisplayMetrics());
 //        LogUtil.d("getScrollY:"+contentView.getScrollY()+" getY:"+view.getY());
 //        LogUtil.d("y1:"+y1+" y2:"+y2);
-        if(y1 > 0 & y2 > 0){
+        if (y1 > 0 & y2 > 0) {
             return;
         }
 
@@ -187,11 +198,10 @@ public class OLXJTitleController extends BaseViewController {
     private OLXJWorkItemEntity getTitleView(int position) {
         OLXJWorkItemEntity xjWorkItemEntity = mAdapter.getList().get(position);
 
-        if(xjWorkItemEntity.viewType == ListType.TITLE.value()){
+        if (xjWorkItemEntity.viewType == ListType.TITLE.value()) {
             return xjWorkItemEntity;
-        }
-        else if(position > 0){
-            return getTitleView(position-1);
+        } else if (position > 0) {
+            return getTitleView(position - 1);
         }
 
 
@@ -202,8 +212,8 @@ public class OLXJTitleController extends BaseViewController {
     @Override
     public void onResume() {
         super.onResume();
-        if(currentAlpha != -1){
-            titleBarLayout.getBackground().setAlpha((int)currentAlpha);
+        if (currentAlpha != -1) {
+            titleBarLayout.getBackground().setAlpha((int) currentAlpha);
         }
     }
 

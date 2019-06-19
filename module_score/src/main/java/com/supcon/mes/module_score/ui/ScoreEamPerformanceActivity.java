@@ -2,6 +2,7 @@ package com.supcon.mes.module_score.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spanned;
@@ -191,7 +192,7 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
             scoreEamEntity.scoreStaff.id = EamApplication.getAccountInfo().staffId;
         }
         scoreEamEntity.scoreTime = (scoreEamEntity != null && scoreEamEntity.scoreTime != null) ? scoreEamEntity.scoreTime : getYesterday();
-        eamScore.setContent(Util.big(scoreEamEntity.scoreNum));
+        eamScore.setContent(Util.big0(scoreEamEntity.scoreNum));
         scoreStaff.setContent(scoreEamEntity.getScoreStaff().name);
         scoreTime.setContent(DateUtil.dateFormat(scoreEamEntity.scoreTime));
         scoreEamPerformanceAdapter.updateTotal(scoreEamEntity.scoreNum);
@@ -240,13 +241,17 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
         eamCode.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
-                IntentRouter.go(ScoreEamPerformanceActivity.this, Constant.Router.EAM);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
+                IntentRouter.go(ScoreEamPerformanceActivity.this, Constant.Router.EAM, bundle);
             }
         });
         eamName.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
-                IntentRouter.go(ScoreEamPerformanceActivity.this, Constant.Router.EAM);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
+                IntentRouter.go(ScoreEamPerformanceActivity.this, Constant.Router.EAM, bundle);
             }
         });
         scoreEamPerformanceAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
@@ -254,7 +259,7 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
                 ScoreEamPerformanceEntity scoreEamPerformanceEntity = (ScoreEamPerformanceEntity) obj;
                 scoreEamEntity.scoreNum = scoreEamPerformanceEntity.scoreNum;
-                eamScore.setContent(Util.strFormat2(scoreEamEntity.scoreNum));
+                eamScore.setContent(Util.big0(scoreEamEntity.scoreNum));
                 scoreEamPerformanceAdapter.updateTotal(scoreEamEntity.scoreNum);
             }
         });
@@ -292,9 +297,9 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
         if (commonSearchEvent.commonSearchEntity != null) {
             if (commonSearchEvent.commonSearchEntity instanceof EamType) {
                 EamType eamType = (EamType) commonSearchEvent.commonSearchEntity;
-                eamCode.setContent(Util.strFormat(commonSearchEvent.commonSearchEntity.getSearchId()));
-                eamName.setContent(Util.strFormat(commonSearchEvent.commonSearchEntity.getSearchName()));
-                eamDept.setContent(Util.strFormat(commonSearchEvent.commonSearchEntity.getSearchProperty()));
+                eamCode.setContent(Util.strFormat(eamType.code));
+                eamName.setContent(Util.strFormat(eamType.name));
+                eamDept.setContent(Util.strFormat(eamType.getUseDept().name));
                 scoreEamEntity.beamId = eamType;
             }
         }
