@@ -70,7 +70,6 @@ android {
         }
         "9" {
             applicationId 'com.supcon.mes.cementEam'
-
             manifestPlaceholders = [UMENG_CHANNEL_VALUE : name,
                                     APP_NAME            : "@string/app_name",
                                     APP_ICON            : "@mipmap/ic_app_launcher",
@@ -152,9 +151,10 @@ dependencies {
         implementation project(':module_zz')
         implementation project(':module_score')
         implementation project(':mogu_viber')
+        implementation project(':module_warn')
     }
     implementation project(':middleware')
-    implementation project(':module_warn')
+
 }
 
 def releaseTime() {
