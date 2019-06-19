@@ -80,6 +80,7 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
     private String eamCode, areaName;
 
     private NFCHelper nfcHelper;
+    private boolean isMainEam;
 
     @Override
     protected IListAdapter<CommonSearchEntity> createAdapter() {
@@ -96,6 +97,7 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, "没有信息哦~"));
         eamCode = getIntent().getStringExtra(Constant.IntentKey.EAM_CODE);
         areaName = getIntent().getStringExtra(Constant.IntentKey.AREA_NAME);
+        isMainEam = getIntent().getBooleanExtra(Constant.IntentKey.IS_MAIN_EAM, false);
 
         nfcHelper = NFCHelper.getInstance();
         if (nfcHelper != null) {
@@ -174,6 +176,9 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
                 }
                 if (!TextUtils.isEmpty(areaName)) {
                     queryParam.put(Constant.BAPQuery.EAM_AREANAME, areaName);
+                }
+                if (isMainEam) {
+                    queryParam.put(Constant.BAPQuery.IS_MAIN_EQUIP, "1");
                 }
                 presenterRouter.create(EamAPI.class).getEam(queryParam, pageIndex);
             }
