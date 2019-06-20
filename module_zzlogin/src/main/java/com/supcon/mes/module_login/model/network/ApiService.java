@@ -1,6 +1,7 @@
 package com.supcon.mes.module_login.model.network;
 
 import com.app.annotation.apt.ApiFactory;
+import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.BooleanEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.ModuleAuthorizationListEntity;
@@ -92,4 +93,11 @@ public interface ApiService {
      */
     @GET("/services/public/foundation/user/time-data")
     Flowable<PendingNumEntity> getPendingNum(@Query("userId") long userId);
+
+    /**
+     * 获取知之配置信息
+     * @return
+     */
+    @GET("/public/foundation/auth/getZhizhiUrl.action")
+    Flowable<BapResultEntity> getZhizhiUrl();
 }

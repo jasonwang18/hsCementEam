@@ -13,10 +13,17 @@ import android.widget.RelativeLayout;
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
+import com.bluetron.rxretrohttp.exception.ApiException;
+import com.bluetron.zhizhi.domain.event.login.LogOutEventSDK;
+import com.bluetron.zhizhi.domain.event.login.LoginEventSDK;
+import com.bluetron.zhizhi.home.presentation.HomeSDK;
+import com.bluetron.zhizhi.login.presentation.LoginUserSDK;
 import com.jakewharton.rxbinding2.view.RxView;
+import com.jdjz.coresdk14.ZZApp;
 import com.supcon.common.view.base.activity.BasePresenterActivity;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.SharedPreferencesUtils;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.MBapApp;
 import com.supcon.mes.mbap.MBapConstant;
 import com.supcon.mes.mbap.beans.LoginEvent;
@@ -29,6 +36,7 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.constant.DataModule;
 import com.supcon.mes.middleware.model.bean.AccountInfo;
 import com.supcon.mes.middleware.model.bean.AccountInfoDao;
+import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.ModuleAuthorization;
 import com.supcon.mes.middleware.model.bean.ModuleAuthorizationListEntity;
 import com.supcon.mes.middleware.util.ChannelUtil;
@@ -39,13 +47,21 @@ import com.supcon.mes.module_login.BuildConfig;
 import com.supcon.mes.module_login.IntentRouter;
 import com.supcon.mes.module_login.R;
 import com.supcon.mes.module_login.model.api.LoginAPI;
+import com.supcon.mes.module_login.model.api.MineAPI;
+import com.supcon.mes.module_login.model.api.ZhiZhiUrlQueryAPI;
 import com.supcon.mes.module_login.model.bean.LicenseEntity;
 import com.supcon.mes.module_login.model.bean.LoginEntity;
 import com.supcon.mes.module_login.model.contract.LoginContract;
+import com.supcon.mes.module_login.model.contract.MineContract;
+import com.supcon.mes.module_login.model.contract.ZhiZhiUrlQueryContract;
 import com.supcon.mes.module_login.presenter.LoginPresenter;
+import com.supcon.mes.module_login.presenter.MinePresenter;
+import com.supcon.mes.module_login.presenter.ZhiZhiUrlQueryPresenter;
 import com.supcon.mes.module_login.service.HeartBeatService;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,8 +76,8 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 @Router(Constant.Router.LOGIN)
-@Presenter(value = {LoginPresenter.class})
-public class LoginActivity extends BasePresenterActivity implements LoginContract.View {
+@Presenter(value = {LoginPresenter.class, ZhiZhiUrlQueryPresenter.class, MinePresenter.class})
+public class LoginActivity extends BasePresenterActivity implements LoginContract.View , ZhiZhiUrlQueryContract.View, MineContract.View {
 
 
     @BindByTag("usernameInput")
@@ -104,7 +120,7 @@ public class LoginActivity extends BasePresenterActivity implements LoginContrac
     @Override
     protected void onInit() {
         super.onInit();
-
+        EventBus.getDefault().register(this);
         loginInvalid = getIntent().getBooleanExtra(Constant.IntentKey.LOGIN_INVALID, false);
         isFirstIn = getIntent().getBooleanExtra(Constant.IntentKey.FIRST_LOGIN, false);
         loginLogoId = getIntent().getIntExtra(Constant.IntentKey.LOGIN_LOGO_ID, 0);
@@ -137,6 +153,12 @@ public class LoginActivity extends BasePresenterActivity implements LoginContrac
 //        }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     @SuppressLint("CheckResult")
     @Override
     protected void initListener() {
@@ -154,40 +176,12 @@ public class LoginActivity extends BasePresenterActivity implements LoginContrac
                         return;
                     }
 
-                    //在线登陆和离线登陆模式不同
-                    //如果是在线登陆, 请求服务器校验
-                    boolean mode = SharedPreferencesUtils.getParam(this, MBapConstant.SPKey.OFFLINE_ENABLE, false);
-                    if (!mode) {
-                        onLoading("正在登陆...");
-                        presenterRouter.create(LoginAPI.class).dologin(usernameInput.getInput().trim(), pwdInput.getInput().trim());
-                    } else {    //否则, 校验缓存中的数据
-
-                        AccountInfoDao accountInfoDao = EamApplication.dao().getAccountInfoDao();
-                        //先校验是否有同步过用户信息
-                        List<AccountInfo> userName = accountInfoDao.queryBuilder()
-                                .where(AccountInfoDao.Properties.UserName.eq(usernameInput.getInput().trim()))
-                                .list();
-                        if (userName.size() == 0) {
-                            SnackbarHelper.showError(rootView, "需要在线登录一次");
-                            return;
-                        }
-
-                        //如果该用户在线登陆过，校验密码
-                        List<AccountInfo> list = accountInfoDao.queryBuilder()
-                                .where(AccountInfoDao.Properties.UserName.eq(usernameInput.getInput().trim()),
-                                        AccountInfoDao.Properties.Password.eq(pwdInput.getInput().trim()))
-                                .list();
-
-                        if (list.size() == 0) {
-                            SnackbarHelper.showError(rootView, "用户名或密码错误");
-                        } else {
-                            //将用户信息保存到全局变量
-                            AccountInfo accountInfo = list.get(0);
-                            EamApplication.setAccountInfo(accountInfo);
-                            //跳转到主页
-                            IntentRouter.go(this, Constant.Router.MAIN);
-                            finish();
-                        }
+                    onLoading("正在登陆...");
+                    if(!TextUtils.isEmpty(ZZApp.getZzUrl())){
+                        doZhiZhiLogin();
+                    }
+                    else{
+                        presenterRouter.create(ZhiZhiUrlQueryAPI.class).getZhizhiUrl();
                     }
 
                 });
@@ -225,6 +219,47 @@ public class LoginActivity extends BasePresenterActivity implements LoginContrac
         versionName.append(BuildConfig.DEBUG ? "(debug)" : "");
 
         buildVersion.setValue(versionName.toString());
+    }
+
+    public void doZhiZhiLogin() {
+        String ip = SharedPreferencesUtils.getParam(ZZApp.getAppContext(), Constant.ZZ.IP, "");
+        String port = SharedPreferencesUtils.getParam(ZZApp.getAppContext(), Constant.ZZ.PORT, "");
+        String url = SharedPreferencesUtils.getParam(context, Constant.ZZ.URL, "");
+        String userName = usernameInput.getContent();
+        String pwd = pwdInput.getContent();
+
+        if(TextUtils.isEmpty(url)){
+            LogUtil.d("zhizhi login ip:" + ip + " port:" + port + " userName:" + userName + " pwd:" + pwd);
+            LoginUserSDK.getInstance().userLogin(TextUtils.isEmpty(userName) ? "admin" : userName, TextUtils.isEmpty(pwd) ? "Supos1304@" : pwd, "http://" + ip + ":" + port + "/");
+        }
+        else{
+            LogUtil.d("zhizhi login url:" + url + " userName:" + userName + " pwd:" + pwd);
+
+            LoginUserSDK.getInstance().userLogin(TextUtils.isEmpty(userName) ? "admin" : userName, TextUtils.isEmpty(pwd) ? "Supos1304@" : pwd, url+"/");
+
+        }
+    }
+
+    //登录,登出,获取minappist时出错返回的内容和code
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(ApiException ex) {
+        ToastUtils.show(context, ex.getCode() + " " + ex.getMessage());
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(LoginEventSDK ex) {
+        LogUtil.d("supos平台登录成功！");
+        HomeSDK.getInstance().getMinppListSDK();
+        String token1 = LoginUserSDK.getInstance().getOSToken();
+        LogUtil.e("zhizhi token1:" + token1);
+//        ToastUtils.show(context, "zhizhi token:"+token1);
+        presenterRouter.create(LoginAPI.class).dologinWithToken(usernameInput.getInput().trim(), pwdInput.getInput().trim(), token1);
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(LogOutEventSDK ex) {
+        LogUtil.d("supos平台登出成功");
     }
 
     @Override
@@ -321,6 +356,22 @@ public class LoginActivity extends BasePresenterActivity implements LoginContrac
     @Override
     public void dologinFailed(String errMsg) {
         onLoadFailed(ErrorMsgHelper.msgParse(errMsg));
+
+    }
+
+    @Override
+    public void dologinWithTokenSuccess(LoginEntity entity) {
+        dologinSuccess(entity);
+    }
+
+    @Override
+    public void dologinWithTokenFailed(String errorMsg) {
+        dologinFailed(ErrorMsgHelper.msgParse(errorMsg));
+
+    }
+
+    private void doLogout(){
+        presenterRouter.create(MineAPI.class).logout();
     }
 
     @Override
@@ -351,14 +402,13 @@ public class LoginActivity extends BasePresenterActivity implements LoginContrac
 
     @Override
     public void getLicenseInfoFailed(String errorMsg) {
-
-
         onLoadFailed(ErrorMsgHelper.msgParse(errorMsg));
+        doLogout();
     }
 
     @Override
     public void getAccountInfoSuccess() {
-        downloadBase();
+//        downloadBase();
         //跳转到主页
         goMain();
     }
@@ -370,6 +420,7 @@ public class LoginActivity extends BasePresenterActivity implements LoginContrac
         }
 
         onLoadFailed(ErrorMsgHelper.msgParse(errorMsg));
+        doLogout();
     }
 
 
@@ -399,5 +450,30 @@ public class LoginActivity extends BasePresenterActivity implements LoginContrac
         bundle.putStringArrayList(Constant.IntentKey.DOWNLOAD_MODULES, (ArrayList<String>) downloadModules);
         bundle.putBoolean(Constant.IntentKey.DOWNLOAD_VISIBLE, false);
         IntentRouter.go(context, Constant.Router.SJXZ, bundle);
+    }
+
+    @Override
+    public void getZhizhiUrlSuccess(BapResultEntity entity) {
+        if(!TextUtils.isEmpty(entity.zhizhiUrl)){
+            ZZApp.setZzUrl(entity.zhizhiUrl);
+
+        }
+
+        doZhiZhiLogin();
+    }
+
+    @Override
+    public void getZhizhiUrlFailed(String errorMsg) {
+        onLoadFailed(ErrorMsgHelper.msgParse(errorMsg));
+    }
+
+    @Override
+    public void logoutSuccess() {
+        LogUtil.d("登出成功");
+    }
+
+    @Override
+    public void logoutFailed(String errorMsg) {
+        LogUtil.d("登出失败");
     }
 }

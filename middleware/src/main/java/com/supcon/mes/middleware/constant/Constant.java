@@ -644,8 +644,9 @@ public interface Constant {
     }
 
     interface ZZ {
-        String IP = "IP";
-        String PORT = "PORT";
+        String IP = "ZZ_IP";
+        String PORT = "ZZ_PORT";
+        String URL = "ZZ_URL";
     }
 
     interface AttrMap {

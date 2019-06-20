@@ -17,4 +17,5 @@ public class BapResultEntity extends BaseEntity {
     public String errMsg;
     public String viewselect;
     public long pendingId;
+    public String zhizhiUrl;
 }

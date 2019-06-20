@@ -29,7 +29,7 @@ import cn.bluetron.zhizhi.BuildConfig;
 
 public class ZZApp extends EamApplication {
     private ApplicationComponent mApplicationComponent;
-
+    private static String zzUrl;
 
 
     @Override
@@ -119,5 +119,21 @@ public class ZZApp extends EamApplication {
 
     public ApplicationComponent getApplicationComponent() {
         return mApplicationComponent;
+    }
+
+
+    public static void setZzUrl(String zzUrl) {
+        if(!TextUtils.isEmpty(zzUrl)) {
+            ZZApp.zzUrl = zzUrl;
+            SharedPreferencesUtils.setParam(getAppContext(), Constant.ZZ.URL, zzUrl);
+        }
+
+    }
+
+    public static String getZzUrl() {
+        if(TextUtils.isEmpty(zzUrl)){
+            zzUrl = SharedPreferencesUtils.getParam(getAppContext(), Constant.ZZ.URL, "");
+        }
+        return zzUrl;
     }
 }

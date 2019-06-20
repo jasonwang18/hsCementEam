@@ -132,27 +132,28 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
     }
 
     public void doZhiZhiLogin() {
-        String ip = SharedPreferencesUtils.getParam(ZZApp.getAppContext(), Constant.ZZ.IP, "");
-        String port = SharedPreferencesUtils.getParam(ZZApp.getAppContext(), Constant.ZZ.PORT, "");
-        String userName = ZZApp.getUserName();
-        String pwd = ZZApp.getPassword();
-        LogUtil.d("zhizhi login ip:" + ip + " port:" + port + " userName:" + userName + " pwd:" + pwd);
-        LoginUserSDK.getInstance().userLogin(TextUtils.isEmpty(userName) ? "admin" : userName, TextUtils.isEmpty(pwd) ? "Supos1304@" : pwd, "Http://" + ip + ":" + port + "/");
-    }
-
-    //登录,登出,获取minappist时出错返回的内容和code
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void Event(ApiException ex) {
-        ToastUtils.show(context, ex.getCode() + " " + ex.getMessage());
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void Event(LoginEventSDK ex) {
-        LogUtil.d("supos平台登录成功！");
+//        String ip = SharedPreferencesUtils.getParam(ZZApp.getAppContext(), Constant.ZZ.IP, "");
+//        String port = SharedPreferencesUtils.getParam(ZZApp.getAppContext(), Constant.ZZ.PORT, "");
+//        String userName = ZZApp.getUserName();
+//        String pwd = ZZApp.getPassword();
+//        LogUtil.d("zhizhi login ip:" + ip + " port:" + port + " userName:" + userName + " pwd:" + pwd);
+//        LoginUserSDK.getInstance().userLogin(TextUtils.isEmpty(userName) ? "admin" : userName, TextUtils.isEmpty(pwd) ? "Supos1304@" : pwd, "Http://" + ip + ":" + port + "/");
         HomeSDK.getInstance().getMinppListSDK();
-        String token1 = LoginUserSDK.getInstance().getOSToken();
-        LogUtil.e("zhizhi token1:" + token1);
     }
+
+//    //登录,登出,获取minappist时出错返回的内容和code
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void Event(ApiException ex) {
+//        ToastUtils.show(context, ex.getCode() + " " + ex.getMessage());
+//    }
+//
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void Event(LoginEventSDK ex) {
+//        LogUtil.d("supos平台登录成功！");
+//        HomeSDK.getInstance().getMinppListSDK();
+//        String token1 = LoginUserSDK.getInstance().getOSToken();
+//        LogUtil.e("zhizhi token1:" + token1);
+//    }
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
