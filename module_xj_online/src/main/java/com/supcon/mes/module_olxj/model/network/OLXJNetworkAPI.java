@@ -66,7 +66,7 @@ public interface OLXJNetworkAPI {
      * @param queryParam  页数相关key
      * @return
      */
-    @GET("/mobileEAM/potrolTaskNew/potrolTaskWF/data-dg1489026162123.action?datagridCode=mobileEAM_1.0.0_potrolTaskNew_tempViewdg1489026162123&rt=json")
+    @GET("/mobileEAM/potrolTaskNew/potrolTaskWF/data-dg1488776891029.action?datagridCode=mobileEAM_1.0.0_potrolTaskNew_tempViewdg1489026162123&rt=json")
     Flowable<CommonBAPListEntity<OLXJWorkItemEntity>> queryWorkList(@QueryMap Map<String, Object> queryParam);
 
 

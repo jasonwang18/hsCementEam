@@ -29,7 +29,7 @@ public class WXGDWarnManager {
         repairType.value = "日常";
         repairType.id = "BEAM2005/01";
         wxgdEntity.repairType = repairType;
-        wxgdEntity.workOrderContext = "设备" + lubricationWarnEntity.getEamID().name
+        wxgdEntity.workOrderContext = lubricationWarnEntity.getEamID().name
                 + "滑部位为" + lubricationWarnEntity.lubricatePart + "的润滑预警";
         wxgdEntity.createTime = System.currentTimeMillis();
         PendingEntity pendingEntity = new PendingEntity();
@@ -74,7 +74,7 @@ public class WXGDWarnManager {
         repairType.value = "日常";
         repairType.id = "BEAM2005/01";
         wxgdEntity.repairType = repairType;
-        wxgdEntity.workOrderContext = "设备" + maintenanceWarnEntity.getEamID().name
+        wxgdEntity.workOrderContext = maintenanceWarnEntity.getEamID().name
                 + "维保内容为" + maintenanceWarnEntity.content + "的维保预警";
         wxgdEntity.createTime = System.currentTimeMillis();
         PendingEntity pendingEntity = new PendingEntity();
@@ -116,7 +116,7 @@ public class WXGDWarnManager {
         repairType.value = "日常";
         repairType.id = "BEAM2005/01";
         wxgdEntity.repairType = repairType;
-        wxgdEntity.workOrderContext = "设备" + sparePartWarnEntity.getEamID().name + "零部件为"
+        wxgdEntity.workOrderContext = sparePartWarnEntity.getEamID().name + "零部件为"
                 + sparePartWarnEntity.getProductID().productName + "的零部件更换预警";
         wxgdEntity.createTime = System.currentTimeMillis();
         PendingEntity pendingEntity = new PendingEntity();

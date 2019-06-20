@@ -47,7 +47,7 @@ public class DeviceDCSParamQueryPresenter extends DeviceDCSParamQueryContract.Pr
                             @Override
                             public CommonListEntity<DeviceDCSEntity> apply(Throwable throwable) throws Exception {
                                 CommonListEntity<DeviceDCSEntity> commonListEntity = new CommonListEntity<>();
-                                commonListEntity.success  = false;
+                                commonListEntity.success = false;
                                 commonListEntity.errMsg = throwable.toString();
                                 return commonListEntity;
                             }
@@ -55,12 +55,13 @@ public class DeviceDCSParamQueryPresenter extends DeviceDCSParamQueryContract.Pr
                         .subscribe(new Consumer<CommonListEntity<DeviceDCSEntity>>() {
                             @Override
                             public void accept(CommonListEntity<DeviceDCSEntity> deviceDCSEntityCommonListEntity) throws Exception {
-                                    if(deviceDCSEntityCommonListEntity.success){
+                                if (getView() != null) {
+                                    if (deviceDCSEntityCommonListEntity.success) {
                                         getView().getDeviceDCSParamsSuccess(deviceDCSEntityCommonListEntity);
-                                    }
-                                    else{
+                                    } else {
                                         getView().getDeviceDCSParamsFailed(deviceDCSEntityCommonListEntity.errMsg);
                                     }
+                                }
                             }
                         }, new Consumer<Throwable>() {
                             @Override

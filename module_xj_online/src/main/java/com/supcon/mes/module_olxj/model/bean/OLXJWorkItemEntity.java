@@ -123,6 +123,7 @@ public class OLXJWorkItemEntity extends BaseEntity implements Comparable<OLXJWor
     public boolean realispass;
     public String xjImgUrl; //图片路径，逗号相隔
     public String realValue;
+    public String itemnumber;//逻辑位号
 
     public long tableInfoId;
     @Expose
