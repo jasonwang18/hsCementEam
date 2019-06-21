@@ -4,9 +4,11 @@ import com.app.annotation.apt.ApiFactory;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
+import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
 import com.supcon.mes.module_olxj.model.bean.OLXJAreaEntity;
+import com.supcon.mes.module_olxj.model.bean.OLXJExemptionEntity;
 import com.supcon.mes.module_olxj.model.bean.OLXJGroupEntity;
 import com.supcon.mes.module_olxj.model.bean.OLXJTaskEntity;
 import com.supcon.mes.module_olxj.model.bean.OLXJWorkItemEntity;
@@ -34,16 +36,17 @@ public interface OLXJNetworkAPI {
 
     /**
      * 获取路线列表
+     *
      * @return
      */
     @GET("/mobileEAM/workGroup/workGroup/workGroupList-query.action?page.pageSize=500&page.maxPageSize=500&page.pageNo=1")
     Flowable<CommonBAPListEntity<OLXJGroupEntity>> queryWorkGroupList();
 
 
-
     /**
      * 获取已下发任务列表
-     * @param queryParam  页数相关key
+     *
+     * @param queryParam          页数相关key
      * @param fastQueryCondEntity 已下发快速查询条件
      * @return
      */
@@ -52,7 +55,8 @@ public interface OLXJNetworkAPI {
 
     /**
      * 获取已下发临时任务列表
-     * @param queryParam  页数相关key
+     *
+     * @param queryParam          页数相关key
      * @param fastQueryCondEntity
      * @return
      */
@@ -60,10 +64,10 @@ public interface OLXJNetworkAPI {
     Flowable<CommonBAPListEntity<OLXJTaskEntity>> queryPotrolTempTaskList(@QueryMap Map<String, Object> queryParam, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity);
 
 
-
     /**
      * 获取任务包含的作业项
-     * @param queryParam  页数相关key
+     *
+     * @param queryParam 页数相关key
      * @return
      */
     @GET("/mobileEAM/potrolTaskNew/potrolTaskWF/data-dg1488776891029.action?datagridCode=mobileEAM_1.0.0_potrolTaskNew_tempViewdg1489026162123&rt=json")
@@ -80,6 +84,7 @@ public interface OLXJNetworkAPI {
 
     /**
      * 创建临时任务
+     *
      * @return
      */
     @Multipart
@@ -88,6 +93,7 @@ public interface OLXJNetworkAPI {
 
     /**
      * 创建临时任务
+     *
      * @return
      */
     @GET("/mobileEAM/MobileInterfaceForAndroidAction/createTempPotrolTask.action")
@@ -105,22 +111,24 @@ public interface OLXJNetworkAPI {
 
     /**
      * 批量取消任务
+     *
      * @param taskIDs
      * @param changeState 1、未下发 LinkState/01 2、已下发 LinkState/02 3、已完成 LinkState/03 4、已取消 LinkState/04
      * @return
      */
     @GET("/mobileEAM/potrolTaskNew/potrolTaskWF/cancelTask.action")
-    Flowable<ResultEntity>  cancelTask(@Query("taskIDs") String taskIDs, @Query("changeState") String changeState);
+    Flowable<ResultEntity> cancelTask(@Query("taskIDs") String taskIDs, @Query("changeState") String changeState);
 
     /**
      * 结束/终止任务
+     *
      * @param taskIDs
      * @param endReason
      * @param isFinish
      * @return
      */
     @GET("/mobileEAM/MobileInterfaceForAndroidAction/endTask.action")
-    Flowable<ResultEntity>  endTask(@Query("taskIDs") String taskIDs, @Query("endReason") String endReason, @Query("type") boolean isFinish);
+    Flowable<ResultEntity> endTask(@Query("taskIDs") String taskIDs, @Query("endReason") String endReason, @Query("type") boolean isFinish);
 
     /**
      * 获取区域列表
@@ -131,6 +139,7 @@ public interface OLXJNetworkAPI {
 
     /**
      * 区域上传数据
+     *
      * @param file    压缩包body
      * @param zipFile 压缩包名字
      */
@@ -138,5 +147,10 @@ public interface OLXJNetworkAPI {
     @POST("/mobileEAM/MobileInterfaceForAndroidAction/submitPotrolTaskByWork.action")
     Flowable<ResultEntity> submitPotrolTaskByWork(@Part List<MultipartBody.Part> file, @Query("zipFile") String zipFile);
 
+    /**
+     * 免检项
+     */
+    @GET("/mobileEAM/work/workItem/data-dg1491444225573.action?dgPage.pageSize=65536")
+    Flowable<CommonBAPListEntity<OLXJExemptionEntity>> getExemptionEam(@Query("workItem.id") long workItemId);
 
 }
