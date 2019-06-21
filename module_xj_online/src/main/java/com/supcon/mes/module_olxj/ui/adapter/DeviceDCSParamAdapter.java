@@ -33,7 +33,7 @@ public class DeviceDCSParamAdapter extends BaseListDataRecyclerViewAdapter<Devic
     }
 
 
-    class ViewHolder extends BaseRecyclerViewHolder<DeviceDCSEntity>{
+    class ViewHolder extends BaseRecyclerViewHolder<DeviceDCSEntity> {
 
         @BindByTag("itemDCSParam")
         CustomTextView itemDCSParam;
@@ -57,7 +57,7 @@ public class DeviceDCSParamAdapter extends BaseListDataRecyclerViewAdapter<Devic
         protected void initView() {
             super.initView();
             itemDCSParam.keyView().setMaxLines(2);
-            itemDCSParam.contentView().setPadding(20,0,0,0);
+            itemDCSParam.contentView().setPadding(20, 0, 0, 0);
         }
 
         @Override
@@ -67,23 +67,24 @@ public class DeviceDCSParamAdapter extends BaseListDataRecyclerViewAdapter<Devic
 //            itemDCSParam.setKey(String.format(context.getString(R.string.dcs_param), data.name, data.itemNumber));
             itemDCSParam.setContent(data.latestValue);
 
-            if(!TextUtils.isEmpty(data.latestValue) && data.latestValue.contains("关")){
+            if (!TextUtils.isEmpty(data.latestValue) && data.latestValue.contains("关")) {
                 itemDCSParam.setContentTextColor(context.getResources().getColor(R.color.customRed));
             }
 
-            if(!TextUtils.isEmpty(data.maxValue)){
+            if (!TextUtils.isEmpty(data.maxValue)) {
                 itemDCSParamMax.setContent(data.maxValue);
-                if(TextUtils.isDigitsOnly(data.latestValue) && TextUtils.isDigitsOnly(data.maxValue)){
-                    if(Long.parseLong(data.latestValue) > Long.parseLong(data.maxValue)){
+                if (!TextUtils.isEmpty(data.latestValue) && !TextUtils.isEmpty(data.minValue)
+                        && TextUtils.isDigitsOnly(data.latestValue) && TextUtils.isDigitsOnly(data.maxValue)) {
+                    if (Long.parseLong(data.latestValue) > Long.parseLong(data.maxValue)) {
                         itemDCSParam.setContentTextColor(context.getResources().getColor(R.color.customRed));
                     }
                 }
             }
-            if(!TextUtils.isEmpty(data.minValue)){
+            if (!TextUtils.isEmpty(data.minValue)) {
                 itemDCSParamMin.setContent(data.minValue);
-
-                if(TextUtils.isDigitsOnly(data.latestValue) && TextUtils.isDigitsOnly(data.minValue)){
-                    if(Long.parseLong(data.latestValue) < Long.parseLong(data.minValue)){
+                if (!TextUtils.isEmpty(data.latestValue) && !TextUtils.isEmpty(data.minValue)
+                        && TextUtils.isDigitsOnly(data.latestValue) && TextUtils.isDigitsOnly(data.minValue)) {
+                    if (Long.parseLong(data.latestValue) < Long.parseLong(data.minValue)) {
                         itemDCSParam.setContentTextColor(context.getResources().getColor(R.color.customRed));
                     }
                 }

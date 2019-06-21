@@ -10,6 +10,7 @@ public class DeviceDCSEntity extends BaseEntity {
 
     public String name;
     public String itemNumber;
+    public String valueType;
     public String latestValue;
     public String maxValue;
     public String minValue;

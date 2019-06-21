@@ -18,6 +18,8 @@ import com.supcon.mes.middleware.model.contract.DeviceDCSParamQueryContract;
 import com.supcon.mes.middleware.presenter.DeviceDCSParamQueryPresenter;
 import com.supcon.mes.module_olxj.ui.adapter.DeviceDCSParamAdapter;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
@@ -67,7 +69,7 @@ public class DeviceDCSParamController extends BaseViewController implements Devi
     public void initData() {
         super.initData();
 
-        if(eamId!=null)
+        if (eamId != null)
             presenterRouter.create(DeviceDCSParamQueryAPI.class).getDeviceDCSParams(eamId);
     }
 
@@ -76,13 +78,13 @@ public class DeviceDCSParamController extends BaseViewController implements Devi
 
         mDeviceDCSParamAdapter.setList(entity.result);
         mDeviceDCSParamAdapter.notifyDataSetChanged();
-
+        EventBus.getDefault().post(entity);
 //        if(entity.result!=null) {
 //            ViewGroup.LayoutParams lp = contentView.getLayoutParams();
 //            lp.height = DisplayUtil.dip2px(20 * entity.result.size(), context);
 //            contentView.setLayoutParams(lp);
 //        }
-        if(!isSwitching) {
+        if (!isSwitching) {
             resetTimer();
         }
     }
@@ -90,20 +92,20 @@ public class DeviceDCSParamController extends BaseViewController implements Devi
 
     private void startTimer() {
         LogUtil.i("DeviceDCSParamController startTimer");
-        timer = Flowable.timer(10, TimeUnit.SECONDS)
+        timer = Flowable.timer(60, TimeUnit.SECONDS)
                 .subscribe(aLong ->
                         presenterRouter.create(DeviceDCSParamQueryAPI.class).getDeviceDCSParams(eamId));
     }
 
     private void stopTimer() {
         LogUtil.i("DeviceDCSParamController stopTimer");
-        if(timer!=null){
+        if (timer != null) {
             timer.dispose();
             timer = null;
         }
     }
 
-    private void resetTimer(){
+    private void resetTimer() {
         LogUtil.i("DeviceDCSParamController resetTimer");
         stopTimer();
         startTimer();
@@ -111,17 +113,17 @@ public class DeviceDCSParamController extends BaseViewController implements Devi
 
     @Override
     public void getDeviceDCSParamsFailed(String errorMsg) {
-        LogUtil.e("errorMsg:"+errorMsg);
+        LogUtil.e("errorMsg:" + errorMsg);
 
     }
 
-    public void clear(){
+    public void clear() {
         mDeviceDCSParamAdapter.clear();
         mDeviceDCSParamAdapter.notifyDataSetChanged();
     }
 
-    public void getDeviceParams(Long eamId){
-        if(eamId!=null && !eamId.equals(this.eamId)){
+    public void getDeviceParams(Long eamId) {
+        if (eamId != null && !eamId.equals(this.eamId)) {
             isSwitching = true;
             clear();
             stopTimer();

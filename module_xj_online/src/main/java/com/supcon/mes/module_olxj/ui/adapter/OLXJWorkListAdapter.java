@@ -161,7 +161,7 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
         Button vibrationBtn;
 
         @BindByTag("ufItemRemarkBtn")
-        Button  ufItemRemarkBtn;
+        Button ufItemRemarkBtn;
 
         @BindByTag("ufItemPart")
         CustomTextView ufItemPart;  //部位
@@ -215,8 +215,8 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
         @Override
         protected void initView() {
             super.initView();
-            mOLXJCameraController = ((OLXJWorkListUnHandledActivity)context).getController(OLXJCameraController.class);
-            mOLXJCameraController.init(Constant.IMAGE_SAVE_XJPATH,Constant.PicType.XJ_PIC);
+            mOLXJCameraController = ((OLXJWorkListUnHandledActivity) context).getController(OLXJCameraController.class);
+            mOLXJCameraController.init(Constant.IMAGE_SAVE_XJPATH, Constant.PicType.XJ_PIC);
         }
 
         @SuppressLint({"CheckResult", "ClickableViewAccessibility"})
@@ -390,7 +390,6 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
             });
 
 
-
             RxTextView.textChanges(ufItemSelectResult.getCustomSpinner())
                     .subscribe(charSequence -> {
                         OLXJWorkItemEntity xjWorkItemEntity = getItem(getAdapterPosition());
@@ -421,10 +420,9 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
 
             ufItemRemarkBtn.setOnClickListener(v -> {
 
-                if(ufItemRemark.getVisibility() != View.VISIBLE){
+                if (ufItemRemark.getVisibility() != View.VISIBLE) {
                     ufItemRemark.setVisibility(View.VISIBLE);
-                }
-                else{
+                } else {
                     ufItemRemark.setVisibility(View.GONE);
                 }
 
@@ -432,13 +430,12 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
 
             ufItemEditBtn.setOnClickListener(v -> {
 
-                if(ufBtnLayout.getVisibility() != View.VISIBLE){
+                if (ufBtnLayout.getVisibility() != View.VISIBLE) {
                     ufBtnLayout.setVisibility(View.VISIBLE);
                     ufResultLayout.setVisibility(View.VISIBLE);
                     ufContentLine.setVisibility(View.VISIBLE);
                     ufResultLine.setVisibility(View.VISIBLE);
-                }
-                else{
+                } else {
                     ufBtnLayout.setVisibility(View.GONE);
                     ufResultLayout.setVisibility(View.GONE);
                     ufContentLine.setVisibility(View.GONE);
@@ -474,34 +471,31 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
         }
 
 
-
         @Override
         protected void update(OLXJWorkItemEntity data) {
             int postion = getAdapterPosition();
             boolean showPart = isNeedPart(postion, data);
 
-            if(showPart){
+            if (showPart) {
                 ufPartLayout.setVisibility(View.VISIBLE);
 
-                if( data.part == null) {
+                if (data.part == null) {
 
-                    if(data.eamID!=null){
+                    if (data.eamID != null) {
                         data.part = data.eamID.name + "的部位";
-                    }
-                    else{
+                    } else {
                         data.part = "无部位";
                     }
 
                 }
 
                 ufItemPart.setValue(data.part);
-            }
-            else{
+            } else {
                 ufItemPart.setValue("");
                 ufPartLayout.setVisibility(View.GONE);
             }
 
-            mOLXJCameraController.addListener(ufItemPics, getAdapterPosition(),OLXJWorkListAdapter.this);
+            mOLXJCameraController.addListener(ufItemPics, getAdapterPosition(), OLXJWorkListAdapter.this);
             ufItemContent.setValue(data.content);
 
             if (TextUtils.isEmpty(data.normalRange)) {
@@ -522,21 +516,18 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
                 if (data.isThermometric) {  //要求测温
                     ufItemInputResult.setEditable(false);
                     ufItemInputResult.setHint("测温值");
-                }
-                else if(data.isSeismic){
+                } else if (data.isSeismic) {
                     ufItemInputResult.setEditable(false);
                     ufItemInputResult.setHint("测振值");
-                }
-                else {
+                } else {
                     ufItemInputResult.setEditable(true);
                     ufItemInputResult.setHint("输入结果");
                 }
 
-                if (data.inputStandardID.unitID!=null && !TextUtils.isEmpty(data.inputStandardID.unitID.name)) {
+                if (data.inputStandardID.unitID != null && !TextUtils.isEmpty(data.inputStandardID.unitID.name)) {
                     ufItemInputResult.setText("结果 (" + data.inputStandardID.unitID.name + ")");
                     ufItemInputResult.setKeyWidth(DisplayUtil.dip2px(80, context));
-                }
-                else{
+                } else {
                     ufItemInputResult.setText("结果");
                     ufItemInputResult.setKeyWidth(DisplayUtil.dip2px(60, context));
                 }
@@ -568,13 +559,13 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
 //                    ufItemSelectResult.setKeyWidth(DisplayUtil.dip2px(60, context));
 //                }
 //                ufItemSelectResult.setNecessary(true);
-                if(!TextUtils.isEmpty(data.inputStandardID.valueName))
-                ufItemSelectResultSwitch.setValues(data.inputStandardID.valueName.split(","));
+                if (!TextUtils.isEmpty(data.inputStandardID.valueName))
+                    ufItemSelectResultSwitch.setValues(data.inputStandardID.valueName.split(","));
                 if (!TextUtils.isEmpty(data.defaultVal) && TextUtils.isEmpty(data.result)) {
-                    ufItemSelectResultSwitch.setSwitchStatus("正常".equals(data.defaultVal)||"是".equals(data.defaultVal)?1:0);
+                    ufItemSelectResultSwitch.setSwitchStatus("正常".equals(data.defaultVal) || "是".equals(data.defaultVal) ? 1 : 0);
                     data.result = data.defaultVal;
                 } else {
-                    ufItemSelectResultSwitch.setSwitchStatus("正常".equals(data.result)||"是".equals(data.result)?1:0);
+                    ufItemSelectResultSwitch.setSwitchStatus("正常".equals(data.result) || "是".equals(data.result) ? 1 : 0);
                 }
 
             } else if (OLXJConstant.MobileEditType.CHECKBOX.equals(data.inputStandardID.editTypeMoblie.id)) {  //多选
@@ -582,11 +573,10 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
                 ufItemSelectResult.setVisibility(View.VISIBLE);
                 ufItemSelectResultSwitchLayout.setVisibility(View.GONE);
 
-                if (data.inputStandardID.unitID != null &&!TextUtils.isEmpty(data.inputStandardID.unitID.name)) {
+                if (data.inputStandardID.unitID != null && !TextUtils.isEmpty(data.inputStandardID.unitID.name)) {
                     ufItemSelectResult.setKey("结果 (" + data.inputStandardID.unitID.name + ")");
                     ufItemSelectResult.setKeyWidth(DisplayUtil.dip2px(80, context));
-                }
-                else{
+                } else {
                     ufItemSelectResult.setText("结果");
                     ufItemSelectResult.setKeyWidth(DisplayUtil.dip2px(60, context));
                 }
@@ -622,11 +612,10 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
                 ufItemPics.setNecessary(false);
             }
 
-            if(!TextUtils.isEmpty(data.realRemark)){
+            if (!TextUtils.isEmpty(data.realRemark)) {
                 ufItemRemark.setInput(data.realRemark);
                 ufItemRemark.setVisibility(View.VISIBLE);
-            }
-            else{
+            } else {
                 ufItemRemark.setInput("");
                 ufItemRemark.setVisibility(View.GONE);
             }
@@ -643,11 +632,9 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
                 FaultPicHelper.initPics(Arrays.asList(data.xjImgUrl.split(",")), ufItemPics);
                 oldImgUrl = data.xjImgUrl;
                 ufItemPics.setTextHeight(DisplayUtil.dip2px(0, context));
-            }
-            else if(data.isphone){
+            } else if (data.isphone) {
                 ufItemPics.setTextHeight(DisplayUtil.dip2px(30, context));
-            }
-            else {
+            } else {
 
                 ufItemPics.setTextHeight(DisplayUtil.dip2px(0, context));
                 ufItemPics.setPadding(0, 0, 10, 0);
@@ -679,36 +666,34 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
                 return true;
             }
 
-            OLXJWorkItemEntity preEntity = getItem(postion-1);
+            OLXJWorkItemEntity preEntity = getItem(postion - 1);
 
             String prePart = null;
             String curPart = null;
             String preEam = null;
             String curEam = null;
 
-            if(preEntity.eamID != null){
+            if (preEntity.eamID != null) {
                 preEam = preEntity.eamID.name;
             }
 
-            if(curEntity.eamID != null){
+            if (curEntity.eamID != null) {
                 curEam = curEntity.eamID.name;
             }
 
-            if(preEntity.part == null){
-                prePart = ""+preEam+"的部位";
-            }
-            else {
+            if (preEntity.part == null) {
+                prePart = "" + preEam + "的部位";
+            } else {
                 prePart = preEntity.part;
             }
 
-            if(curEntity.part == null){
-                curPart = ""+curEam+"的部位";
-            }
-            else {
+            if (curEntity.part == null) {
+                curPart = "" + curEam + "的部位";
+            } else {
                 curPart = curEntity.part;
             }
 
-            if(preEam!=null && preEam.equals(curEam) && prePart.equals(curPart)){
+            if (preEam != null && preEam.equals(curEam) && prePart.equals(curPart)) {
                 return false;
             }
 
@@ -1016,7 +1001,7 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
 
         @Override
         protected void update(OLXJWorkItemEntity data) {
-            mOLXJCameraController.addListener(fItemPics, getAdapterPosition(),OLXJWorkListAdapter.this);
+            mOLXJCameraController.addListener(fItemPics, getAdapterPosition(), OLXJWorkListAdapter.this);
             xjItemContent.setValue(data.content);
             fItemRemark.setEditable(false);
             fItemRemark.setInput(data.realRemark);
@@ -1124,7 +1109,7 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
             pic.setOnChildViewClickListener(new OnChildViewClickListener() {
                 @Override
                 public void onChildViewClick(View childView, int action, Object obj) {
-                    if (!getItem(getAdapterPosition()).headerPicPath.contains("jpg") ){
+                    if (!getItem(getAdapterPosition()).headerPicPath.contains("jpg")) {
                         ToastUtils.show(context, "无图片显示！");
                         return;
                     }
@@ -1152,30 +1137,29 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
         @Override
 
         protected void update(OLXJWorkItemEntity data) {
-            if(pic.getItemCount()!=0) {
+            if (pic.getItemCount() != 0) {
                 pic.clear();
             }
             ads = new ArrayList<>();
             GalleryBean galleryBean;
 
-            if (data.headerPicPath.contains("jpg") ){
+            if (data.headerPicPath.contains("jpg")) {
                 String[] picUrls = data.headerPicPath.split(",");
                 File file;
                 for (String url : picUrls) {
                     file = new File(url);
-                    if (file.exists() && file.isFile()){
+                    if (file.exists() && file.isFile()) {
                         galleryBean = new GalleryBean();
                         galleryBean.localPath = url;
                         ads.add(galleryBean);
-                    }
-                    else{//巡检图片被清除了，必须放一个临时的图片
+                    } else {//巡检图片被清除了，必须放一个临时的图片
                         galleryBean = new GalleryBean();
                         galleryBean.resId = R.drawable.ic_zwtp;
                         ads.add(galleryBean);
                     }
 
                 }
-            }else {
+            } else {
                 galleryBean = new GalleryBean();
                 galleryBean.resId = R.drawable.ic_zwtp;
                 ads.add(galleryBean);
@@ -1237,12 +1221,11 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
             } else {
                 itemRecyclerTitle.setText(data.eamID.name);
 
-                if(mDeviceDCSParamController==null){
+                if (mDeviceDCSParamController == null) {
                     mDeviceDCSParamController = new DeviceDCSParamController(itemView, data.eamID.id);
                     mDeviceDCSParamController.initView();
                     mDeviceDCSParamController.initData();
-                }
-                else {
+                } else {
                     mDeviceDCSParamController.getDeviceParams(data.eamID.id);
 
                 }

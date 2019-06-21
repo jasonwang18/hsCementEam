@@ -9,71 +9,74 @@ import com.supcon.mes.middleware.model.bean.WXGDEam;
 
 import org.greenrobot.greendao.annotation.Transient;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by wangshizhan on 2019/4/1
  * Email:wangshizhan@supcom.com
  */
-public class OLXJWorkItemEntity extends BaseEntity implements Comparable<OLXJWorkItemEntity>{
+public class OLXJWorkItemEntity extends BaseEntity implements Comparable<OLXJWorkItemEntity> {
 
     /**
      * "autoAanalysis": false,
-     "autoGetValue": false,
-     "autoJudge": true,
-     "claim": null,
-     "content": "无漏灰",
-     "control": true,
-     "defaultVal": "正常",
-     "eamID": {
-        "code": "BEAM_TZ_002",
-        "id": 1005,
-        "name": "8#磨1#废石秤"
-     },
-     "id": 36176,
-     "inputStandardID": {
-         "decimalPlace": null,
-         "editTypeMoblie": {
-            "id": "mobileEAM054/02",
-            "value": "单选"
-         },
-         "id": 1011,
-         "name": "是否正常",
-         "standardCode": "BZ006",
-         "unitID": null,
-         "valueName": "正常,不正常",
-         "valueTypeMoblie": {
-            "id": "mobileEAM055/01",
-            "value": "字符"
-         }
-     },
-     "isSeismic": false,
-     "isThermometric": false,
-     "ispass": true,
-     "isphone": false,
-     "limitValue": null,
-     "llimitValue": null,
-     "normalRange": "正常",
-     "part": "斜槽管道",
-     "pstaffid": null,
-     "publicItemID": null,
-     "remark": null,
-     "signWorkID": {
-        "id": 1354,
-        "name":"区域名称"
-     },
-     "sort": 1,
-     "taskID": {
-        "id": 1190
-     },
-     "taskSignID": null,
-     "version": 1,
-     "workID": {
-        "id": 1354,
-        "name":"区域名称"
-     },
-     "workItemID": {
-        "id": 1967,
-        "remark": null
-     }
+     * "autoGetValue": false,
+     * "autoJudge": true,
+     * "claim": null,
+     * "content": "无漏灰",
+     * "control": true,
+     * "defaultVal": "正常",
+     * "eamID": {
+     * "code": "BEAM_TZ_002",
+     * "id": 1005,
+     * "name": "8#磨1#废石秤"
+     * },
+     * "id": 36176,
+     * "inputStandardID": {
+     * "decimalPlace": null,
+     * "editTypeMoblie": {
+     * "id": "mobileEAM054/02",
+     * "value": "单选"
+     * },
+     * "id": 1011,
+     * "name": "是否正常",
+     * "standardCode": "BZ006",
+     * "unitID": null,
+     * "valueName": "正常,不正常",
+     * "valueTypeMoblie": {
+     * "id": "mobileEAM055/01",
+     * "value": "字符"
+     * }
+     * },
+     * "isSeismic": false,
+     * "isThermometric": false,
+     * "ispass": true,
+     * "isphone": false,
+     * "limitValue": null,
+     * "llimitValue": null,
+     * "normalRange": "正常",
+     * "part": "斜槽管道",
+     * "pstaffid": null,
+     * "publicItemID": null,
+     * "remark": null,
+     * "signWorkID": {
+     * "id": 1354,
+     * "name":"区域名称"
+     * },
+     * "sort": 1,
+     * "taskID": {
+     * "id": 1190
+     * },
+     * "taskSignID": null,
+     * "version": 1,
+     * "workID": {
+     * "id": 1354,
+     * "name":"区域名称"
+     * },
+     * "workItemID": {
+     * "id": 1967,
+     * "remark": null
+     * }
      */
 
     public long id;
@@ -103,13 +106,13 @@ public class OLXJWorkItemEntity extends BaseEntity implements Comparable<OLXJWor
 
     public OLXJArea workID;
     public OLXJWorkItem workItemID;
-    public OLXJTaskEntity  taskID;
+    public OLXJTaskEntity taskID;
 
     public String remark;
 
     public String concluse;
     public long concluseTime;
-    public String result ;   //结果
+    public String result;   //结果
     public String conclusionID;  //结论ID
     public String conclusionName;  //结论名称
     public String realRemark;  //备注
@@ -134,15 +137,14 @@ public class OLXJWorkItemEntity extends BaseEntity implements Comparable<OLXJWor
     public String headerPicPath;
 
 
-
     @Override
     public int compareTo(@NonNull OLXJWorkItemEntity o) {
 
-        if(this.eamID == null || o.eamID == null){
+        if (this.eamID == null || o.eamID == null) {
             return 0;
         }
 
-        if(this.eamID.id.equals(o.eamID.id) && this.part!=null){
+        if (this.eamID.id.equals(o.eamID.id) && this.part != null) {
             return this.part.compareTo(o.part);
         }
 
