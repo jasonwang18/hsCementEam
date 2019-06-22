@@ -672,7 +672,7 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
 
     @Override
     public void getOJXJLastTaskListFailed(String errorMsg) {
-        refreshListController.refreshComplete();
+        refreshListController.refreshComplete(null);
         LogUtil.e(ErrorMsgHelper.msgParse(errorMsg));
     }
 

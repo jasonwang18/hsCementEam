@@ -677,7 +677,7 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
     @Override
     public void getOJXJTempTaskListFailed(String errorMsg) {
 //        onLoadFailed(ErrorMsgHelper.msgParse(errorMsg));
-        refreshListController.refreshComplete();
+        refreshListController.refreshComplete(null);
         LogUtil.e(ErrorMsgHelper.msgParse(errorMsg));
     }
 
